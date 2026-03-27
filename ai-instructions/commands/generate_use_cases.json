@@ -1,0 +1,24 @@
+{
+  "name": "generate_use_cases",
+  "label": "Generate Use Cases",
+  "phase": "business_analysis",
+  "intent": "generate",
+  "ai": "required",
+  "skill": "use_case_generation",
+  "requires": [
+    "ba/requirements.md",
+    "ba/business-functions.json"
+  ],
+  "produces": [
+    "ba/use-cases/uc-*.md"
+  ],
+  "tools": [
+    "file_manager"
+  ],
+  "rules": [
+    "Use consistent UC numbering and naming.",
+    "Each use case must include actors, preconditions, main flow, and postconditions.",
+    "AI drafts content first, then persist normalized markdown files.",
+    "Do not overwrite existing use cases unless explicitly requested."
+  ]
+}

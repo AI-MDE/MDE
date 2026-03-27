@@ -1,0 +1,381 @@
+{
+  "findingsSummary": {
+    "status": "non_compliant",
+    "errors": 3,
+    "warnings": 8,
+    "info": 4,
+    "notes": [
+      "Validation used only provided artifacts: design/application_architecture.json and design/modules/module-catalog.json",
+      "Codebase, detailed adapters/ports, events catalog, and integration contracts were not provided (missing inputs)"
+    ]
+  },
+  "outputs": [
+    {
+      "path": "../../work/architecture-validation-report.json",
+      "content": {
+        "project": "Claims Management System",
+        "validatedAt": "2026-03-26T00:00:00.000Z",
+        "inputs": {
+          "declaredPatterns": [
+            "../../design/application_architecture.json",
+            "../../design/modules/module-catalog.json"
+          ],
+          "analyzedFiles": [
+            "design/application_architecture.json",
+            "design/modules/module-catalog.json"
+          ],
+          "missingInputs": [
+            "Module interface/contract definitions (APIs, DTOs, domain events)",
+            "Layer assignment for each module",
+            "Domain ports and infrastructure adapter specs (e.g., repositories, messaging)",
+            "Event catalog and messaging topology",
+            "Integration points (external systems for payouts, comms, reporting)",
+            "Requirements catalog (BR-### details) and use-case-to-module mapping"
+          ]
+        },
+        "declaredArchitecture": {
+          "architectureStyle": "modular_monolith",
+          "patterns": [
+            "Layered Architecture",
+            "Domain-Oriented Modules",
+            "Event-Driven Notifications"
+          ],
+          "layers": [
+            "Experience",
+            "Application",
+            "Domain",
+            "Infrastructure"
+          ],
+          "dependencyRules": [
+            "Experience depends on Application only",
+            "Application depends on Domain and Infrastructure abstractions",
+            "Domain does not depend on Infrastructure implementation details",
+            "Cross-module calls must go through module contracts"
+          ],
+          "modules": [
+            "Claim Intake",
+            "Assignment",
+            "Claim Review",
+            "Decisioning",
+            "Fraud Review",
+            "Payout",
+            "Notifications",
+            "Reporting"
+          ]
+        },
+        "overallAssessment": {
+          "summary": "Core modular decomposition is sensible, but critical contract, dependency, and adapter definitions are missing, preventing enforcement of declared layer and dependency rules and the event-driven pattern.",
+          "maintainability": "At risk due to lack of explicit contracts and dependency mapping.",
+          "extensibility": "Constrained until ports/adapters and events are defined.",
+          "testability": "Impaired without clear module interfaces and ports for isolation/mocking.",
+          "operability": "Underspecified (observability, reliability, integration error handling not defined)."
+        },
+        "findings": [
+          {
+            "id": "F-001",
+            "severity": "error",
+            "title": "Module interface contracts are not defined; cross-module calls cannot go through contracts",
+            "evidence": [
+              {
+                "file": "design/modules/module-catalog.json",
+                "path": "$.modules[*].interfaces",
+                "valueExample": []
+              },
+              {
+                "file": "design/application_architecture.json",
+                "path": "$.dependency_rules[3]",
+                "value": "Cross-module calls must go through module contracts"
+              }
+            ],
+            "ruleViolated": "Check layer rules and adapter rules; Cross-module calls via contracts",
+            "recommendation": "Define public interfaces for each module’s application API and published domain events. For each module, add an 'interfaces' section with operations (names, input/output DTOs, error semantics, versioning) and 'publishedEvents'. Update 'dependencies' to reference other modules’ interfaces rather than direct calls."
+          },
+          {
+            "id": "F-002",
+            "severity": "error",
+            "title": "Dependencies between modules and abstractions are undefined",
+            "evidence": [
+              {
+                "file": "design/modules/module-catalog.json",
+                "path": "$.modules[*].dependencies",
+                "valueExample": []
+              },
+              {
+                "file": "design/application_architecture.json",
+                "path": "$.dependency_rules",
+                "value": [
+                  "Experience depends on Application only",
+                  "Application depends on Domain and Infrastructure abstractions",
+                  "Domain does not depend on Infrastructure implementation details"
+                ]
+              }
+            ],
+            "ruleViolated": "Check layer rules and adapter rules",
+            "recommendation": "Populate 'dependencies' for each module to declare: (a) consumed module interfaces (application-level contracts), (b) consumed domain ports (e.g., repository interfaces), and (c) infrastructure abstractions (e.g., MessageBus, EmailGateway). Ensure no module references implementation details across layers."
+          },
+          {
+            "id": "F-003",
+            "severity": "error",
+            "title": "Ports and Adapters not specified; Domain/Infrastructure dependency rules unenforceable",
+            "evidence": [
+              {
+                "file": "design/application_architecture.json",
+                "path": "$.dependency_rules[1..2]",
+                "value": [
+                  "Application depends on Domain and Infrastructure abstractions",
+                  "Domain does not depend on Infrastructure implementation details"
+                ]
+              },
+              {
+                "file": "design/modules/module-catalog.json",
+                "path": "$.modules[*]",
+                "valueExample": {
+                  "type": "service",
+                  "interfaces": [],
+                  "dependencies": []
+                }
+              }
+            ],
+            "ruleViolated": "Check layer rules and adapter rules",
+            "recommendation": "Introduce explicit domain ports (e.g., ClaimRepository, PaymentPort, NotificationPort) and define infrastructure adapters that implement them. Document these in the catalog as interfaces under 'Domain' (ports) and as 'Infrastructure' adapters bound at composition time."
+          },
+          {
+            "id": "F-004",
+            "severity": "warning",
+            "title": "Modules are not mapped to architecture layers",
+            "evidence": [
+              {
+                "file": "design/application_architecture.json",
+                "path": "$.layers"
+              },
+              {
+                "file": "design/modules/module-catalog.json",
+                "path": "$.modules[*].layer",
+                "value": "missing"
+              }
+            ],
+            "ruleViolated": "Check layer rules",
+            "recommendation": "Add a 'layer' attribute per module (Experience, Application, Domain, Infrastructure). Example: Application layer for use-case orchestration (Claim Intake, Assignment, etc.), Domain layer for aggregates/rules, Infrastructure layer for repositories/messaging, Experience for UI."
+          },
+          {
+            "id": "F-005",
+            "severity": "warning",
+            "title": "Event-Driven Notifications pattern under-specified (no event catalog or messaging topology)",
+            "evidence": [
+              {
+                "file": "design/application_architecture.json",
+                "path": "$.patterns[2]",
+                "value": "Event-Driven Notifications"
+              },
+              {
+                "file": "design/application_architecture.json",
+                "path": "$.integrationPoints",
+                "value": []
+              },
+              {
+                "file": "design/modules/module-catalog.json",
+                "path": "$.modules[?(@.moduleName=='Notifications')]",
+                "valueExample": {
+                  "interfaces": [],
+                  "dependencies": []
+                }
+              }
+            ],
+            "ruleViolated": "Check architectural pattern stack",
+            "recommendation": "Define domain event catalog (names, payloads, versioning, producers/consumers), messaging abstractions (MessageBus, topics/queues), and delivery guarantees (at-least-once, idempotency). Add corresponding module interfaces and dependencies."
+          },
+          {
+            "id": "F-006",
+            "severity": "warning",
+            "title": "Traceability gaps: use cases and requirements not mapped to modules",
+            "evidence": [
+              {
+                "file": "design/application_architecture.json",
+                "path": "$.useCases[*]"
+              },
+              {
+                "file": "design/modules/module-catalog.json",
+                "path": "$.modules[?(@.moduleName in ['Payout','Notifications','Reporting'])].requirements",
+                "valueExample": []
+              }
+            ],
+            "ruleViolated": "Verify traceability from requirements to architecture and module boundaries",
+            "recommendation": "Create a traceability matrix linking each use case to participating modules and underlying requirements (BR-###). Populate missing requirements for Payout, Notifications, Reporting. Ensure bidirectional traceability (requirement -> module -> interface/use case)."
+          },
+          {
+            "id": "F-007",
+            "severity": "warning",
+            "title": "Quality attributes (auditability, workflow_traceability) not operationalized",
+            "evidence": [
+              {
+                "file": "design/application_architecture.json",
+                "path": "$.qualityAttributes",
+                "value": [
+                  "auditability",
+                  "workflow_traceability",
+                  "maintainability"
+                ]
+              },
+              {
+                "file": "design/application_architecture.json",
+                "path": "$.layers[?(@.name=='Infrastructure')].responsibilities",
+                "value": [
+                  "Persistence",
+                  "Messaging",
+                  "Audit logging"
+                ]
+              }
+            ],
+            "ruleViolated": "Evaluate maintainability, operability implications",
+            "recommendation": "Define an Audit Logging component/interface (e.g., AuditLogPort) and standardize correlation IDs, event envelopes, and immutable audit store. Ensure key state transitions emit auditable events consumed by Reporting."
+          },
+          {
+            "id": "F-008",
+            "severity": "warning",
+            "title": "Security and privacy are not addressed in the architecture artifacts",
+            "evidence": [
+              {
+                "file": "design/application_architecture.json",
+                "path": "$",
+                "note": "No authentication/authorization, PII handling, or data protection noted"
+              }
+            ],
+            "ruleViolated": "Highlight risks related to security",
+            "recommendation": "Add cross-cutting security architecture: authentication/authorization at Experience/Application layers, least-privilege access per module, PII classification and masking, encryption at rest/in transit, audit of access, fraud-sensitive data retention policies."
+          },
+          {
+            "id": "F-009",
+            "severity": "warning",
+            "title": "Integration points are empty though external systems are implied",
+            "evidence": [
+              {
+                "file": "design/application_architecture.json",
+                "path": "$.integrationPoints",
+                "value": []
+              },
+              {
+                "file": "design/modules/module-catalog.json",
+                "path": "$.modules[?(@.moduleName in ['Payout','Notifications'])]"
+              }
+            ],
+            "ruleViolated": "Check architectural pattern stack; operability and reliability risks",
+            "recommendation": "List external integrations (e.g., payment processor, email/SMS providers, identity provider). For each, define an abstraction (port), SLAs, error handling (retry, backoff, DLQ), and observability."
+          },
+          {
+            "id": "F-010",
+            "severity": "info",
+            "title": "Experience layer has no modules defined",
+            "evidence": [
+              {
+                "file": "design/application_architecture.json",
+                "path": "$.layers[?(@.name=='Experience')]"
+              },
+              {
+                "file": "design/modules/module-catalog.json",
+                "path": "$.modules[*].moduleName",
+                "note": "No UI/Experience modules listed"
+              }
+            ],
+            "ruleViolated": "Check layer rules",
+            "recommendation": "If UI is in scope, add Experience modules (e.g., Claims Portal) consuming only Application layer interfaces; otherwise, note explicitly that Experience is out-of-scope for this iteration."
+          },
+          {
+            "id": "F-011",
+            "severity": "info",
+            "title": "Observability (metrics, tracing, health) not specified",
+            "evidence": [
+              {
+                "file": "design/application_architecture.json",
+                "path": "$",
+                "note": "No explicit observability mechanisms"
+              }
+            ],
+            "ruleViolated": "Highlight risks related to observability and operability",
+            "recommendation": "Adopt standard observability: structured logs, metrics per module (latency, error rate, throughput), distributed tracing (correlation IDs), health/readiness endpoints, and dashboards/alerts aligned to business KPIs."
+          },
+          {
+            "id": "F-012",
+            "severity": "info",
+            "title": "Reliability/performance concerns unaddressed for messaging and payouts",
+            "evidence": [
+              {
+                "file": "design/application_architecture.json",
+                "path": "$.patterns[?(@=='Event-Driven Notifications')]"
+              }
+            ],
+            "ruleViolated": "Highlight risks related to performance and reliability",
+            "recommendation": "Define delivery guarantees, idempotency keys for payout and notification processing, retry/backoff policies, DLQs, and throughput targets for each event/topic."
+          },
+          {
+            "id": "F-013",
+            "severity": "info",
+            "title": "Module ID scheme has an out-of-band variant (M04B)",
+            "evidence": [
+              {
+                "file": "design/modules/module-catalog.json",
+                "path": "$.modules[*].moduleId",
+                "value": ["M04", "M04B"]
+              }
+            ],
+            "ruleViolated": "Evaluate maintainability (naming consistency)",
+            "recommendation": "Adopt a consistent module ID convention (e.g., sequential or semantic) to avoid ambiguity in dependencies and documentation."
+          },
+          {
+            "id": "F-014",
+            "severity": "warning",
+            "title": "Reporting KPIs depend on workflow events not yet defined",
+            "evidence": [
+              {
+                "file": "design/application_architecture.json",
+                "path": "$.businessGoals",
+                "value": [
+                  "Open claims by status",
+                  "Average processing time",
+                  "Approval vs denial ratio"
+                ]
+              },
+              {
+                "file": "design/modules/module-catalog.json",
+                "path": "$.modules[?(@.moduleName=='Reporting')].interfaces",
+                "valueExample": []
+              }
+            ],
+            "ruleViolated": "Verify traceability and quality attributes",
+            "recommendation": "Ensure each state transition emits events with required timestamps and claim identifiers. Define Reporting’s read models and its subscriptions to these events."
+          }
+        ],
+        "positiveObservations": [
+          {
+            "id": "P-001",
+            "title": "Domain-oriented modular decomposition aligns with core workflows",
+            "evidence": [
+              {
+                "file": "design/application_architecture.json",
+                "path": "$.modules[*].name",
+                "value": [
+                  "Claim Intake",
+                  "Assignment",
+                  "Claim Review",
+                  "Decisioning",
+                  "Fraud Review",
+                  "Payout",
+                  "Notifications",
+                  "Reporting"
+                ]
+              }
+            ],
+            "implication": "Good separation of concerns baseline for cohesive modules."
+          }
+        ],
+        "recommendedNextSteps": [
+          "Define module interfaces and events; update dependencies to consume contracts only (resolves F-001, F-002, F-005).",
+          "Introduce domain ports and infrastructure adapters; add layer mapping per module (resolves F-003, F-004).",
+          "Produce a traceability matrix linking use cases and requirements to modules and interfaces (resolves F-006, F-014).",
+          "Document integration points and cross-cutting quality attributes (security, audit, observability) with concrete mechanisms and SLAs (resolves F-007, F-008, F-009, F-011, F-012).",
+          "Decide on Experience layer scope and reflect it in the module catalog (resolves F-010).",
+          "Standardize module identifiers (resolves F-013)."
+        ]
+      }
+    }
+  ]
+}

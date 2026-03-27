@@ -1,0 +1,70 @@
+Skill Debug Prompt
+Skill: business_analysis_from_sources
+GeneratedAt: 2026-03-26T03:26:52.105Z
+
+Purpose: Analyze mixed project inputs, derive a clean requirements baseline, maintain a separate analysis status record for sources, history, and open issues, and generate targeted clarification questions with prefilled default answers the user can keep, edit, or delete.
+MappedCommands: perform_business_analysis
+
+Input Files Included:
+- (none)
+
+Missing Input Patterns:
+- requirements.json
+- use-cases.md
+- business-functions.json
+- open-issues.json
+- clarification-queue.json
+- questions.json
+
+AI Task Prompt
+You are executing the following skill in this workspace.
+Skill Name: business_analysis_from_sources
+Objective: Analyze mixed project inputs, derive a clean requirements baseline, maintain a separate analysis status record for sources, history, and open issues, and generate targeted clarification questions with prefilled default answers the user can keep, edit, or delete.
+
+Methodology:
+- Use source artifacts as the primary evidence base
+- When ../../project/questions.json exists, examine each question response before generating new analysis and treat answered items as clarified input
+- Move a question into ../../project/completed-Questions.json only when its answer is accepted into the baseline as satisfactory
+- Do not assume the user can provide a formal requirements document
+- Start with discovery, not architecture
+- Extract what is explicit first
+- Label each significant item as explicit, inferred, assumed, conflicting, or unresolved
+- Ask only the next highest-value questions, not an exhaustive questionnaire
+- For each question, explain why it matters and what gap it resolves
+- When possible, prefill the response field with the best default answer or answer set to reduce user effort
+- Allow the user to keep, edit, partially delete, fully clear, or defer the prefilled response
+- Track unresolved items in a queue instead of inventing certainty
+- Preserve traceability between sources, findings, questions, answers, requirements, and BA sections
+- Keep the requirements document focused on requirements content and store source inventory, history, blockers, and status in a separate BA status document
+- After a source document has been analyzed and incorporated, move it from the discovery folder into an analyzed folder so future runs focus on new material
+- Do not move to architecture recommendations unless BA readiness is sufficient
+
+Constraints:
+- Do not jump directly to architecture or implementation
+- Do not fabricate requirements that are not supported by evidence or clarified by the user
+- Do not overwhelm the user with broad questionnaires
+- Do not hide uncertainty
+- Do not ignore populated responses in ../../project/questions.json on subsequent business-analysis runs
+- Do not emit a separate suggested_answers field in ../../project/questions.json; use response as the default answer payload
+- Do not move unanswered, partial, conflicting, or unsatisfactory questions to ../../project/completed-Questions.json
+- Do not keep satisfactorily completed questions in the active questions.json once they have been accepted; move them to ../../project/completed-Questions.json
+- Do not leave already processed source documents in discovery when they should be moved to analyzed
+- Do not discard unanswered questions; queue them
+
+Expected Outputs:
+- source_inventory
+- discovery_findings
+- terminology_map
+- clarification_question_batch
+- clarification_queue_updates
+- completed_questions_archive_updates
+- assumptions_register
+- conflict_register
+- requirements_baseline_updates
+- business_rules_catalog_updates
+- entity_artifact_catalog_updates
+- business_analysis_document_updates
+- business_analysis_status_document_updates
+- design_readiness_summary
+
+Use the included input files as your evidence base and produce outputs exactly at the expected paths.

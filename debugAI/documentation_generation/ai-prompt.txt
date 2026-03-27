@@ -1,0 +1,25 @@
+Skill Debug Prompt
+Skill: documentation_generation
+GeneratedAt: 2026-03-26T03:27:02.452Z
+
+Purpose: Render documentation using templates and artifacts
+
+Input Files Included:
+- configuration.json
+
+Missing Input Patterns:
+- (none)
+
+AI Task Prompt
+You are executing the following skill in this workspace.
+Skill Name: documentation_generation
+Objective: Render documentation using templates and artifacts
+
+Rules:
+- Use registered templates
+- Do not overwrite canonical sources
+
+Expected Outputs:
+- ../../output/docs/*.md
+
+Use the included input files as your evidence base and produce outputs exactly at the expected paths.

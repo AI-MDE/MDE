@@ -1,0 +1,62 @@
+{
+  "_note": "Test fixture for architecture_validation command. Points to the canonical architecture file.",
+  "_source": "mde/architecture/architecture.json",
+  "system_name": "Employee Onboarding Platform",
+  "name": "employee-onboarding-platform",
+  "version": "1.2",
+  "date": "2026-03-27",
+  "purpose": "Root architectural policy manifest. Defines the layer stack, module types, tech stack, codegen conventions, and references to rule files. All generation phases read this file first.",
+  "patterns": [
+    "modular_monolith",
+    "layered",
+    "workflow_driven",
+    "event_driven_notifications"
+  ],
+  "layers": [
+    "view",
+    "controller",
+    "service",
+    "query_service",
+    "domain",
+    "data_access",
+    "adapter"
+  ],
+  "dependency_model": "view -> controller -> service -> domain -> data_access; service -> adapter; controller -> query_service -> data_access",
+  "module_types": [
+    "workflow",
+    "master_data",
+    "integration",
+    "reporting",
+    "rule_engine"
+  ],
+  "rule_files": {
+    "layer_rules":       "../../../architecture/layer-rules.json",
+    "module_type_rules": "../../../architecture/module-type-rules.json",
+    "interface_rules":   "../../../architecture/interface-rules.json",
+    "data_rules":        "../../../architecture/data-rules.json",
+    "concurrency_rules": "../../../architecture/concurrency-rules.json",
+    "audit_rules":       "../../../architecture/audit-rules.json"
+  },
+  "global_rules": [
+    "No module may violate declared layer dependencies.",
+    "Global design and persistence conventions are resolved from referenced rule files.",
+    "Module-level overrides are allowed only when explicitly declared and justified.",
+    "Each public method on a Service class corresponds to exactly one use case — do not aggregate unrelated operations into one service.",
+    "Reads (QueryService) bypass the domain layer and go directly to data_access. Writes (Service) must pass through the domain layer."
+  ],
+  "tech": {
+    "language": "TypeScript",
+    "runtime": "Node.js",
+    "dataAccess": "raw-sql",
+    "database": "MySQL",
+    "packageManager": "npm"
+  },
+  "codegen": {
+    "dal": {
+      "style": "raw-sql",
+      "generateTests": true,
+      "wiring": "svc-uses-dal",
+      "generateServiceStubs": true
+    }
+  }
+}

@@ -1,0 +1,82 @@
+{
+  "methodology": "Model-Driven",
+  "version": "1.0",
+  "title": "Model-Driven Development Methodology",
+  "pipeline": [
+    "Business Analysis",
+    "System Design",
+    "Module Definition",
+    "Module Specification",
+    "Tests",
+    "Development",
+    "Governance"
+  ],
+  "principles": [
+    "Dual Artifacts",
+    "Progressive Refinement",
+    "No Phase Skipping",
+    "Traceability",
+    "Separation of Concerns",
+    "Single Source of Truth",
+    "Stable IDs"
+  ],
+  "phases": [
+    {
+      "name": "business_analysis",
+      "required_artifacts": [
+        "ba/requirements.md",
+        "ba/use-cases/*.md",
+        "ba/business-functions.json",
+        "ba/glossary.md"
+      ]
+    },
+    {
+      "name": "system_design",
+      "required_artifacts": [
+        "design/application_architecture.json",
+        "ba/data-model/logical-data-model.json",
+        "design/data-model/physical-data-model.json",
+        "design/modules/module-catalog.json"
+      ]
+    },
+    {
+      "name": "module_definition",
+      "required_artifacts": [
+        "design/modules/svc/module-charter-<module>.md",
+        "design/modules/svc/module-<module>.json",
+        "design/modules/dal/module-charter-<module>.md",
+        "design/modules/dal/module-<module>.json"
+      ]
+    },
+    {
+      "name": "module_specification",
+      "required_artifacts": [
+        "design/modules/<type>/<module>/schema.json",
+        "design/modules/<type>/<module>/rules.json",
+        "design/modules/<type>/<module>/state-machine.json",
+        "design/modules/<type>/<module>/api.yaml"
+      ]
+    },
+    {
+      "name": "tests",
+      "required_artifacts": [
+        "design/modules/module-tests.json"
+      ]
+    },
+    {
+      "name": "development",
+      "required_artifacts": [
+        "src/**/*.ts",
+        "generated-manifest.json"
+      ]
+    },
+    {
+      "name": "governance",
+      "required_artifacts": [
+        "design/trace-matrix.json",
+        "design/traceability-validation-report.json",
+        "project/phase-status-report.json"
+      ]
+    }
+  ]
+}

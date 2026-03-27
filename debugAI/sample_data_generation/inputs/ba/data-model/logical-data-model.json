@@ -1,0 +1,137 @@
+{
+  "system_name": "Claims Management System",
+  "version": "0.1.0",
+  "source": {
+    "requirements": "ba/requirements.md",
+    "application_definition": "application/application.json"
+  },
+  "entities": [
+    {
+      "id": "ent-claimant",
+      "name": "Claimant",
+      "description": "Party submitting the insurance claim.",
+      "owner_module": "claims-intake",
+      "attributes": [
+        "claimant_id",
+        "full_name",
+        "email",
+        "phone",
+        "preferred_contact_method"
+      ]
+    },
+    {
+      "id": "ent-claim",
+      "name": "Claim",
+      "description": "Central business record for an insurance claim lifecycle.",
+      "owner_module": "claims-processing",
+      "attributes": [
+        "claim_id",
+        "claim_number",
+        "claimant_id",
+        "status",
+        "submission_date",
+        "incident_date",
+        "claim_type",
+        "claim_amount",
+        "approved_amount",
+        "requires_supervisor_approval",
+        "assigned_agent_id"
+      ]
+    },
+    {
+      "id": "ent-supporting-document",
+      "name": "SupportingDocument",
+      "description": "Document attached to support claim validation and review.",
+      "owner_module": "claims-intake",
+      "attributes": [
+        "document_id",
+        "claim_id",
+        "document_type",
+        "file_name",
+        "uploaded_at",
+        "is_mandatory"
+      ]
+    },
+    {
+      "id": "ent-review-decision",
+      "name": "ReviewDecision",
+      "description": "Recorded decision outcome and rationale for a claim review.",
+      "owner_module": "claims-review",
+      "attributes": [
+        "decision_id",
+        "claim_id",
+        "decision",
+        "reason_code",
+        "reviewed_by",
+        "reviewed_at",
+        "supervisor_approved"
+      ]
+    },
+    {
+      "id": "ent-payout",
+      "name": "Payout",
+      "description": "Approved payout calculation and settlement details for a claim.",
+      "owner_module": "claims-settlement",
+      "attributes": [
+        "payout_id",
+        "claim_id",
+        "currency",
+        "gross_amount",
+        "net_amount",
+        "calculated_at",
+        "status"
+      ]
+    },
+    {
+      "id": "ent-notification",
+      "name": "Notification",
+      "description": "Notification event sent to participants during claim workflow.",
+      "owner_module": "claims-notifications",
+      "attributes": [
+        "notification_id",
+        "claim_id",
+        "recipient_type",
+        "channel",
+        "template_code",
+        "sent_at",
+        "delivery_status"
+      ]
+    }
+  ],
+  "relationships": [
+    {
+      "from": "Claimant",
+      "type": "1-to-many",
+      "to": "Claim",
+      "label": "submits"
+    },
+    {
+      "from": "Claim",
+      "type": "1-to-many",
+      "to": "SupportingDocument",
+      "label": "includes"
+    },
+    {
+      "from": "Claim",
+      "type": "1-to-many",
+      "to": "ReviewDecision",
+      "label": "has review decisions"
+    },
+    {
+      "from": "Claim",
+      "type": "1-to-1",
+      "to": "Payout",
+      "label": "results in payout when approved"
+    },
+    {
+      "from": "Claim",
+      "type": "1-to-many",
+      "to": "Notification",
+      "label": "triggers notifications"
+    }
+  ],
+  "assumptions": [
+    "Fraud decisioning detail is deferred beyond phase 1 baseline.",
+    "No external integrations are included in phase 1."
+  ]
+}

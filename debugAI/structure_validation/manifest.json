@@ -1,0 +1,21 @@
+{
+  "skill": "structure_validation",
+  "generatedAt": "2026-03-26T03:27:18.092Z",
+  "config": "configuration.json",
+  "commandMappings": [],
+  "inputs": {
+    "declaredPatterns": [
+      "../../configuration.json"
+    ],
+    "includedFiles": [
+      "configuration.json"
+    ],
+    "missingPatterns": []
+  },
+  "outputPaths": {
+    "debugDir": "debug/structure_validation",
+    "prompt": "debug/structure_validation/ai-prompt.txt",
+    "zip": "debug/structure_validation/inputs.zip"
+  },
+  "project": "Claims Management System"
+}

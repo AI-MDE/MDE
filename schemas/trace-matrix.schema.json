@@ -1,0 +1,144 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "trace-matrix.schema.json",
+  "title": "Traceability Matrix",
+  "description": "Schema for the traceability matrix produced in Phase 7 (Traceability & Governance). Links every requirement through business function → use case → module → spec artifact → test → acceptance criterion, and reports coverage gaps.",
+  "type": "object",
+  "required": ["project", "version", "date", "traces", "summary"],
+  "additionalProperties": false,
+
+  "properties": {
+
+    "project":     { "type": "string" },
+    "version":     { "type": "string", "pattern": "^\\d+\\.\\d+(\\.\\d+)?$" },
+    "date":        { "type": "string", "format": "date" },
+    "description": { "type": "string" },
+
+    "traces": {
+      "type": "array",
+      "minItems": 1,
+      "items": { "$ref": "#/$defs/TraceEntry" }
+    },
+
+    "summary": { "$ref": "#/$defs/Summary" }
+  },
+
+  "$defs": {
+
+    "TraceEntry": {
+      "type": "object",
+      "required": ["requirementId", "requirementText", "businessFunction", "useCases", "modules", "specArtifacts", "tests", "acceptanceCriteria", "status", "gaps"],
+      "additionalProperties": false,
+      "properties": {
+
+        "requirementId": {
+          "type": "string",
+          "pattern": "^BR-\\d+$",
+          "description": "Business requirement ID this trace row covers"
+        },
+        "requirementText": {
+          "type": "string",
+          "minLength": 5,
+          "description": "Verbatim requirement description copied from requirements.json"
+        },
+        "businessFunction": {
+          "type": "string",
+          "description": "High-level business capability this requirement belongs to"
+        },
+        "useCases": {
+          "type": "array",
+          "items": { "type": "string" },
+          "description": "Use case IDs (UC-xx) or labels that realise this requirement"
+        },
+        "modules": {
+          "type": "array",
+          "items": { "type": "string", "pattern": "^MOD-\\d+$" },
+          "description": "Module IDs responsible for implementing this requirement"
+        },
+        "specArtifacts": {
+          "type": "array",
+          "items": { "$ref": "#/$defs/SpecArtifact" },
+          "description": "Pointers to module-spec artefacts (entity, rule, endpoint, event, etc.) that implement this requirement"
+        },
+        "tests": {
+          "type": "array",
+          "items": { "type": "string", "pattern": "^TC-[A-Z]+-\\d{2}-\\d{2}$" },
+          "description": "Test case IDs from module-tests.json that verify this requirement"
+        },
+        "acceptanceCriteria": {
+          "type": "array",
+          "items": { "type": "string", "pattern": "^AC-\\d+$" },
+          "description": "Acceptance criterion IDs from requirements.json that sign off this requirement"
+        },
+        "status": {
+          "type": "string",
+          "enum": ["traced", "partial", "untraced"],
+          "description": "traced = every required link exists; partial = some links missing; untraced = no links at all"
+        },
+        "gaps": {
+          "type": "array",
+          "items": { "type": "string" },
+          "description": "Free-text descriptions of missing links. Empty array when status is 'traced'."
+        }
+      }
+    },
+
+    "SpecArtifact": {
+      "type": "object",
+      "required": ["type", "ref"],
+      "additionalProperties": false,
+      "properties": {
+        "type": {
+          "type": "string",
+          "enum": [
+            "entity", "field", "rule", "state", "state-transition",
+            "api-endpoint", "event", "bpmn-gateway", "bpmn-element",
+            "task", "sub-process"
+          ],
+          "description": "Kind of spec artefact being referenced"
+        },
+        "ref": {
+          "type": "string",
+          "description": "Identifier or label of the artefact within its module spec"
+        }
+      }
+    },
+
+    "Summary": {
+      "type": "object",
+      "required": ["totalRequirements", "fullyTraced", "partiallyTraced", "untraced", "testCoverage"],
+      "additionalProperties": false,
+      "properties": {
+        "totalRequirements":  { "type": "integer", "minimum": 1 },
+        "fullyTraced":        { "type": "integer", "minimum": 0 },
+        "partiallyTraced":    { "type": "integer", "minimum": 0 },
+        "untraced":           { "type": "integer", "minimum": 0 },
+
+        "testCoverage": {
+          "type": "object",
+          "required": ["requirementsWithTests", "requirementsWithoutTests", "totalTestCases"],
+          "additionalProperties": false,
+          "properties": {
+            "requirementsWithTests":    { "type": "integer", "minimum": 0 },
+            "requirementsWithoutTests": { "type": "integer", "minimum": 0 },
+            "totalTestCases":           { "type": "integer", "minimum": 0 }
+          }
+        },
+
+        "openGaps": {
+          "type": "array",
+          "description": "Consolidated list of all gaps across all trace entries",
+          "items": {
+            "type": "object",
+            "required": ["requirementId", "gap"],
+            "additionalProperties": false,
+            "properties": {
+              "requirementId": { "type": "string", "pattern": "^BR-\\d+$" },
+              "gap":           { "type": "string", "minLength": 5 }
+            }
+          }
+        }
+      }
+    }
+  }
+}

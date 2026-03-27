@@ -1,0 +1,23 @@
+{
+    "name":  "structure_validation",
+    "purpose":  "Validate that the physical folder structure matches the configuration",
+    "inputs":  [
+                   "configuration.json"
+               ],
+    "outputs":  [
+                    "output/work/structure-validation-report.json"
+                ],
+    "artifacts":  [
+                      "output/work/structure-validation-report.json"
+                  ],
+    "rules":  [
+                  "Fail if critical root folders are missing",
+                  "Warn if optional folders are missing"
+              ],
+    "uses_tools":  [
+                       "file_manager"
+                   ],
+    "next_phase":  null
+}
+
+

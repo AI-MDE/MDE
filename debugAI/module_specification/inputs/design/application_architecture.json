@@ -1,0 +1,132 @@
+{
+  "project": "Claims Management System",
+  "version": "0.1.0",
+  "architectureStyle": "modular_monolith",
+  "patterns": [
+    "Layered Architecture",
+    "Domain-Oriented Modules",
+    "Event-Driven Notifications"
+  ],
+  "layers": [
+    {
+      "name": "Experience",
+      "responsibilities": [
+        "Workflow UI",
+        "Task views"
+      ]
+    },
+    {
+      "name": "Application",
+      "responsibilities": [
+        "Use-case orchestration",
+        "Policy enforcement"
+      ]
+    },
+    {
+      "name": "Domain",
+      "responsibilities": [
+        "Claim lifecycle logic",
+        "Decision rules"
+      ]
+    },
+    {
+      "name": "Infrastructure",
+      "responsibilities": [
+        "Persistence",
+        "Messaging",
+        "Audit logging"
+      ]
+    }
+  ],
+  "modules": [
+    {
+      "name": "Claim Intake",
+      "responsibilities": [
+        "Capture claim submission",
+        "Validate mandatory fields and documents"
+      ],
+      "requirements": [
+        "BR-001"
+      ]
+    },
+    {
+      "name": "Assignment",
+      "responsibilities": [
+        "Assign claim to processing queue",
+        "Balance workload across agents"
+      ],
+      "requirements": [
+        "BR-002"
+      ]
+    },
+    {
+      "name": "Claim Review",
+      "responsibilities": [
+        "Review claim details",
+        "Handle additional information requests"
+      ],
+      "requirements": [
+        "BR-003"
+      ]
+    },
+    {
+      "name": "Decisioning",
+      "responsibilities": [
+        "Apply business rules",
+        "Approve or deny claim"
+      ],
+      "requirements": [
+        "BR-004"
+      ]
+    },
+    {
+      "name": "Payout",
+      "responsibilities": [
+        "Calculate payout amount",
+        "Initiate approved payout flow"
+      ],
+      "requirements": [
+        "BR-005"
+      ]
+    },
+    {
+      "name": "Notifications",
+      "responsibilities": [
+        "Publish workflow events",
+        "Notify participants on status changes"
+      ],
+      "requirements": []
+    },
+    {
+      "name": "Reporting",
+      "responsibilities": [
+        "Provide operational KPIs",
+        "Expose status and throughput views"
+      ],
+      "requirements": []
+    }
+  ],
+  "useCases": [],
+  "dependency_rules": [
+    "Experience depends on Application only",
+    "Application depends on Domain and Infrastructure abstractions",
+    "Domain does not depend on Infrastructure implementation details",
+    "Cross-module calls must go through module contracts"
+  ],
+  "qualityAttributes": [
+    "auditability",
+    "workflow_traceability",
+    "maintainability"
+  ],
+  "businessGoals": [
+    "Improve claim intake consistency",
+    "Reduce delays caused by incomplete submissions",
+    "Enforce escalation for high-value or risky claims",
+    "Maintain auditable claim history",
+    "Support timely notifications to participants",
+    "Open claims by status",
+    "Average processing time",
+    "Approval vs denial ratio"
+  ],
+  "integrationPoints": []
+}

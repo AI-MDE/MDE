@@ -1,0 +1,202 @@
+{
+  "name": "claims-management-system",
+  "version": "1.2",
+  "date": "2026-03-27",
+  "purpose": "Root architectural policy manifest. Defines the layer stack, module types, tech stack, codegen conventions, and references to rule files. All generation phases read this file first.",
+  "patterns": [
+    "modular_monolith",
+    "layered",
+    "workflow_driven",
+    "event_driven_notifications"
+  ],
+  "layers": [
+    "view",
+    "controller",
+    "service",
+    "domain",
+    "data_access",
+    "adapter"
+  ],
+  "dependency_model": "view -> controller -> service -> domain -> data_access; service -> adapter; controller -> query_service -> data_access",
+  "module_types": [
+    "workflow",
+    "master_data",
+    "integration",
+    "reporting",
+    "rule_engine"
+  ],
+  "rule_files": {
+    "layer_rules":       "layer-rules.json",
+    "module_type_rules": "module-type-rules.json",
+    "interface_rules":   "interface-rules.json",
+    "data_rules":        "data-rules.json",
+    "concurrency_rules": "concurrency-rules.json",
+    "audit_rules":       "audit-rules.json"
+  },
+  "global_rules": [
+    "No module may violate declared layer dependencies.",
+    "Global design and persistence conventions are resolved from referenced rule files.",
+    "Module-level overrides are allowed only when explicitly declared and justified.",
+    "Each public method on a Service class corresponds to exactly one use case — do not aggregate unrelated operations into one service.",
+    "Reads (QueryService) bypass the domain layer and go directly to data_access. Writes (Service) must pass through the domain layer."
+  ],
+  "tech": {
+    "language": "TypeScript",
+    "runtime": "Node.js",
+    "dataAccess": "raw-sql",
+    "database": "MySQL",
+    "packageManager": "npm"
+  },
+  "codegen": {
+    "naming": {
+      "module_folder": "kebab-case",
+      "file": "kebab-case",
+      "class": "PascalCase",
+      "interface": "PascalCase with I prefix",
+      "examples": {
+        "module_folder": "fraud-review/",
+        "service_class": "FraudReviewService",
+        "service_interface": "IFraudReviewService",
+        "query_service_class": "FraudReviewQueryService",
+        "repository_class": "FraudReviewRepository",
+        "repository_interface": "IFraudReviewRepository",
+        "mapper_class": "FraudReviewMapper",
+        "command_class": "ApproveFraudReviewCommand",
+        "request_dto": "FraudReviewRequestDto",
+        "response_dto": "FraudReviewResponseDto",
+        "read_dto": "FraudReviewReadDto",
+        "event_type": "FraudReviewDecidedEvent",
+        "event_publisher_interface": "DomainEventPublisher",
+        "event_publisher_impl": "OutboxEventPublisher"
+      }
+    },
+    "shared": {
+      "events": {
+        "base_type_file": "src/shared/events/domain-event.ts",
+        "publisher_interface_file": "src/shared/events/domain-event-publisher.ts",
+        "description": "DomainEvent<T> base type and DomainEventPublisher interface live in shared — not per module"
+      }
+    },
+    "structure": {
+      "module_root": "src/{module}/",
+      "layers": {
+        "dto":          "src/{module}/dto/",
+        "data_access":  "src/{module}/data_access/",
+        "domain":       "src/{module}/domain/",
+        "service":      "src/{module}/service/",
+        "query_service":"src/{module}/queries/",
+        "controller":   "src/{module}/controller/"
+      }
+    },
+    "layers": {
+      "dto": {
+        "artifacts": [
+          { "type": "class", "name": "{Module}RequestDto",   "file": "{module}.request.dto.ts",   "description": "Input shape for create and update operations" },
+          { "type": "class", "name": "{Module}ResponseDto",  "file": "{module}.response.dto.ts",  "description": "Output shape returned by write operations" },
+          { "type": "class", "name": "{Module}ReadDto",      "file": "{module}.read.dto.ts",      "description": "Read model returned by QueryService; shaped for the consuming screen or endpoint" },
+          { "type": "class", "name": "{Verb}{Module}Command","file": "{verb}-{module}.command.ts","description": "Typed input for a single write operation; one command per use case" },
+          { "type": "type",  "name": "{Module}Events",       "file": "{module}.events.ts",        "description": "Specific event payload types for this module; each is a typed alias of DomainEvent<T>" }
+        ],
+        "rules": [
+          "No business logic",
+          "No direct entity exposure outside this layer",
+          "RequestDto and ResponseDto suffix for write operations",
+          "ReadDto suffix for query results",
+          "Command suffix for write operation inputs — one Command per Service method",
+          "Event types are typed aliases of DomainEvent<T> — no extra classes; suffix with Event (e.g. ClaimDeniedEvent)",
+          "Base DomainEvent<T> lives in shared/events/domain-event.ts — not per module"
+        ]
+      },
+      "data_access": {
+        "artifacts": [
+          { "type": "interface", "name": "I{Module}Repository", "file": "{module}.repository.interface.ts", "description": "Repository contract consumed by the service layer; defines write and load operations" },
+          { "type": "class",     "name": "{Module}Repository",  "file": "{module}.repository.ts",           "description": "Raw SQL implementation of the repository interface" },
+          { "type": "class",     "name": "{Module}Mapper",      "file": "{module}.mapper.ts",               "description": "Translates between DB rows and domain entities; owns column-name mapping" }
+        ],
+        "rules": [
+          "Raw SQL only — no ORM",
+          "Parameterized queries always — no string concatenation",
+          "Repository maps rows to domain entities via Mapper; never exposes raw DB rows",
+          "Mapper handles all snake_case to camelCase translation and type coercions",
+          "Mapper must not contain business logic — field translation only",
+          "No business logic in Repository",
+          "Default columns on every insert: id (UUID), created_at, updated_at",
+          "Add version_no integer (default 0) when module requires optimistic locking"
+        ]
+      },
+      "domain": {
+        "artifacts": [
+          { "type": "class", "name": "{Module}Entity",      "file": "{module}.entity.ts",        "description": "Domain entity owning object state, invariants, and state transitions" },
+          { "type": "class", "name": "{Module}Validator",   "file": "{module}.validator.ts",      "description": "Pure business validation rules; throws domain errors on violation" },
+          { "type": "class", "name": "{Module}StateMachine","file": "{module}.state-machine.ts",  "description": "Lifecycle state transition guards (workflow modules only)" },
+          { "type": "class", "name": "{Module}Rules",       "file": "{module}.rules.ts",          "description": "Decision and policy evaluation logic (rule_engine modules only)" }
+        ],
+        "rules": [
+          "Pure business logic only — no DB calls, no HTTP calls",
+          "No dependency on data_access, service, controller, or adapter layers",
+          "Entity owns object identity, state, invariants, and legal state transitions",
+          "Entity exposes a rehydrate() factory for repository reconstruction and a create() factory for new instances",
+          "StateMachine artifact required for workflow module type",
+          "Rules artifact required for rule_engine module type"
+        ]
+      },
+      "service": {
+        "description": "Write-side orchestration. Each class method corresponds to exactly one use case (e.g. DenyClaimService.execute()). For reads, use QueryService instead.",
+        "artifacts": [
+          { "type": "interface", "name": "I{Module}Service", "file": "{module}.service.interface.ts", "description": "Public write contract exposed to controllers and other modules" },
+          { "type": "class",     "name": "{Module}Service",  "file": "{module}.service.ts",           "description": "Write use-case orchestration: authorize → load → domain behavior → save → emit event" }
+        ],
+        "rules": [
+          "One public method per use case — do not add unrelated methods to the same service class",
+          "Receives I{Module}Repository via constructor injection",
+          "Receives domain classes via constructor injection",
+          "Cross-module calls via the target module's service interface only — never its repository or domain directly",
+          "Owns transaction boundary — controllers must not manage transactions",
+          "Emits business events for workflow_state_changes, approval_decisions, policy_exceptions (see business-events.md)",
+          "Authorization checks performed here — never in controller or domain",
+          "Must not perform reads for response shaping — delegate to QueryService after write completes"
+        ]
+      },
+      "query_service": {
+        "description": "Read-side only. Bypasses the domain layer and queries data_access directly. Returns read DTOs shaped for the consuming screen or endpoint.",
+        "artifacts": [
+          { "type": "class", "name": "{Module}QueryService", "file": "{module}.query-service.ts", "description": "Stateless read orchestration; queries data_access directly and returns ReadDto" }
+        ],
+        "rules": [
+          "Stateless — no per-request mutable state",
+          "Reads only — must not write to the database",
+          "Bypasses domain layer — no entity rehydration unless domain behavior is genuinely needed for the read",
+          "Returns ReadDto shaped for the consuming screen — not the domain entity",
+          "Cross-module reads via the target module's QueryService only",
+          "Constructor may receive: db client, logger, config, cache — nothing else"
+        ]
+      },
+      "controller": {
+        "artifacts": [
+          { "type": "class", "name": "{Module}Controller", "file": "{module}.controller.ts", "description": "HTTP request handler; parses input, calls service or query_service, shapes response" }
+        ],
+        "rules": [
+          "Receives I{Module}Service via constructor injection for writes",
+          "Receives {Module}QueryService via constructor injection for reads",
+          "Uses Command for write inputs and ReadDto for read responses",
+          "Input validation at this boundary only — DTO-level, not business validation",
+          "No business logic",
+          "No transaction management",
+          "Authentication handled here or at gateway — not in service or domain"
+        ]
+      }
+    },
+    "wiring": {
+      "pattern": "constructor_injection",
+      "order": "Controller <- Service <- Repository + Domain; Controller <- QueryService <- Repository"
+    },
+    "tests": {
+      "generateTests": true,
+      "data_access": "integration test against real database",
+      "service": "unit test with repository mock and domain mock",
+      "domain": "unit test — pure functions, no mocks needed",
+      "query_service": "integration test against real database",
+      "controller": "integration test via HTTP"
+    }
+  }
+}

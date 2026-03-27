@@ -1,0 +1,30 @@
+{
+    "name":  "initiate_project",
+    "label":  "Initiate Project",
+    "phase":  "Project Initiation",
+    "intent":  "create templates",
+    "ai":  "none",
+    "requires":  [
+
+                 ],
+    "produces":  [
+                     "ba/requirements.md",
+                     "design/application_architecture.json",
+                     "package.json",
+                     "tsconfig.json",
+                     ".env",
+                     "project/project-state.json"
+                 ],
+    "calls":  [
+                  "initiate_project"
+              ],
+    "tools":  [
+                  "file_manager",
+                  "json_validator"
+              ],
+    "rules":  [
+
+              ]
+}
+
+

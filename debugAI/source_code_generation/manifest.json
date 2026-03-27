@@ -1,0 +1,27 @@
+{
+  "skill": "source_code_generation",
+  "generatedAt": "2026-03-26T03:27:16.939Z",
+  "config": "configuration.json",
+  "commandMappings": [],
+  "inputs": {
+    "declaredPatterns": [
+      "../../design/modules/<type>/<module>/schema.json",
+      "../../design/modules/<type>/<module>/rules.json",
+      "../../design/modules/<type>/<module>/state-machine.json",
+      "../../design/modules/<type>/<module>/api.yaml"
+    ],
+    "includedFiles": [],
+    "missingPatterns": [
+      "../../design/modules/<type>/<module>/schema.json",
+      "../../design/modules/<type>/<module>/rules.json",
+      "../../design/modules/<type>/<module>/state-machine.json",
+      "../../design/modules/<type>/<module>/api.yaml"
+    ]
+  },
+  "outputPaths": {
+    "debugDir": "debug/source_code_generation",
+    "prompt": "debug/source_code_generation/ai-prompt.txt",
+    "zip": "debug/source_code_generation/inputs.zip"
+  },
+  "project": "Claims Management System"
+}

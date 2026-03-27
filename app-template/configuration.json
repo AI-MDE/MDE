@@ -1,0 +1,59 @@
+{
+  "project": {
+    "name": "My Project",
+    "type": "application",
+    "version": "0.1.0",
+    "methodology": "Model-Driven Engineering",
+    "description": "",
+    "author": ""
+  },
+
+  "mde": {
+    "path":         "mde",
+    "orchestrator": "mde/ai-instructions/orchestrator.json",
+    "commands":     "mde/ai-instructions/commands",
+    "skills":       "mde/ai-instructions/skills",
+    "architecture": "mde/architecture/architecture.json",
+    "methodology":  "mde/methodology/methodology.json"
+  },
+
+  "ba": {
+    "requirements":      "ba/requirements.md",
+    "analysisStatus":    "ba/analysis-status.md",
+    "discovery":         "ba/discovery",
+    "analyzed":          "ba/analyzed",
+    "useCases":          "ba/use-cases",
+    "useCasePattern":    "ba/use-cases/uc-*.md",
+    "businessFunctions": "ba/business-functions.json"
+  },
+
+  "design": {
+    "entities":        "design/entities",
+    "entityPattern":   "design/entities/ent-*.json",
+    "appArchitecture": "design/application_architecture.json",
+    "moduleCatalog":   "design/modules/module-catalog.json",
+    "modules":         "design/modules",
+    "ldm":             "design/ldm",
+    "sql":             "design/sql",
+    "schema":          "design/sql/schema.json"
+  },
+
+  "project_state": {
+    "state":              "project/project-state.json",
+    "questions":          "project/questions.json",
+    "openQueue":          "project/open-queue.json",
+    "completedQuestions": "project/completed-Questions.json",
+    "commandLog":         "project/logs/command-log.json",
+    "methodology":        "project/methodology.json"
+  },
+
+  "application": {
+    "definition": "application/application.json"
+  },
+
+  "output": {
+    "src":      "src",
+    "commands": "output/commands",
+    "docs":     "output/docs"
+  }
+}

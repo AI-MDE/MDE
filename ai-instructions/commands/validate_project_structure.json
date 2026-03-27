@@ -1,0 +1,25 @@
+{
+    "name":  "validate_project_structure",
+    "label":  "Validate Project Structure",
+    "phase":  "governance",
+    "intent":  "validate",
+    "ai":  "none",
+    "requires":  [
+                     "configuration.json"
+                 ],
+    "produces":  [
+                     "output/work/structure-validation-report.json"
+                 ],
+    "calls":  [
+                  "structure_validation"
+              ],
+    "tools":  [
+                  "file_manager"
+              ],
+    "rules":  [
+                  "Verify all configured paths exist",
+                  "Report missing folders as blockers"
+              ]
+}
+
+

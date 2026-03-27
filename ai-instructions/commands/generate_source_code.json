@@ -1,0 +1,29 @@
+{
+    "name":  "generate_source_code",
+    "label":  "Generate Source Code",
+    "phase":  "development",
+    "intent":  "generate",
+    "ai":  "required",
+    "requires":  [
+                     "design/modules/\u003ctype\u003e/\u003cmodule\u003e/schema.json",
+                     "design/modules/\u003ctype\u003e/\u003cmodule\u003e/rules.json",
+                     "design/modules/\u003ctype\u003e/\u003cmodule\u003e/state-machine.json",
+                     "design/modules/\u003ctype\u003e/\u003cmodule\u003e/api.yaml"
+                 ],
+    "produces":  [
+                     "src/\u003clayer\u003e/**/*.ts",
+                     "generated-manifest.json"
+                 ],
+    "calls":  [
+                  "source_code_generation"
+              ],
+    "tools":  [
+                  "file_manager"
+              ],
+    "rules":  [
+                  "Generate code from module specs",
+                  "Respect architecture layer rules"
+              ]
+}
+
+

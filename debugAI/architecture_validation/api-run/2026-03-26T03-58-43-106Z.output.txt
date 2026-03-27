@@ -1,0 +1,303 @@
+Action: validate_architecture
+Skill: architecture_validation
+
+Missing inputs or ambiguities identified (based on provided evidence):
+- No explicit module interface/contract definitions (module-catalog shows interfaces: [])
+- No declared module-to-layer mapping (no “layer” attribute per module)
+- No dependency graph between modules (dependencies: [] across all modules)
+- No definition of infrastructure abstractions/ports (e.g., repositories, messaging, audit ports)
+- No event contracts/schemas, topics, or delivery mechanisms for “Event-Driven Notifications”
+- No mapping from use cases to modules/operations
+- Requirements not defined for some modules (Payout, Notifications, Reporting)
+- No security non-functional requirements, threat model, or authz/authn approach in provided artifacts
+- No observability/telemetry design beyond high-level “Audit logging”
+- integrationPoints is empty despite modules that commonly integrate externally (unclear if out of scope)
+
+Concise findings summary:
+- Errors: 2
+- Warnings: 9
+- Info: 5
+Top risks: Missing module contracts and dependency mapping; incomplete layering/ports; undefined event model; traceability gaps; lack of security and observability design.
+
+Outputs:
+- Path: ../../work/architecture-validation-report.json
+  Content:
+  {
+    "reportVersion": "1.0",
+    "project": "Claims Management System",
+    "generatedAt": "2026-03-26T00:00:00Z",
+    "sources": {
+      "architecture": {
+        "path": "design/application_architecture.json",
+        "version": "0.1.0",
+        "architectureStyle": "modular_monolith",
+        "patterns": ["Layered Architecture", "Domain-Oriented Modules", "Event-Driven Notifications"]
+      },
+      "moduleCatalog": {
+        "path": "design/modules/module-catalog.json",
+        "version": "0.1.0"
+      }
+    },
+    "summary": {
+      "errors": 2,
+      "warnings": 9,
+      "info": 5
+    },
+    "complianceChecks": [
+      {
+        "area": "Architectural pattern stack",
+        "rule": "Layered Architecture declared and enforced",
+        "status": "warning",
+        "evidence": ["design/application_architecture.json#layers", "design/modules/module-catalog.json#modules[*].type"],
+        "observation": "Layers are declared, but modules do not specify their assigned layer and there are no adapters/ports defined.",
+        "recommendation": "Add a 'layer' attribute per module; define ports/adapters for inter-layer communication and enforce layer rules."
+      },
+      {
+        "area": "Architectural pattern stack",
+        "rule": "Domain-Oriented Modules",
+        "status": "warning",
+        "evidence": ["design/application_architecture.json#modules", "design/modules/module-catalog.json#modules"],
+        "observation": "Modules exist and are domain-named, but domain layer artifacts (aggregates/entities, domain services) are not defined.",
+        "recommendation": "Document domain model boundaries and key aggregates; separate application services from domain model and define their contracts."
+      },
+      {
+        "area": "Architectural pattern stack",
+        "rule": "Event-Driven Notifications",
+        "status": "warning",
+        "evidence": ["design/application_architecture.json#patterns", "design/application_architecture.json#modules[Notifications]", "design/modules/module-catalog.json#modules[?moduleName=='Notifications'].interfaces"],
+        "observation": "Notifications module lacks event contracts, topics/channels, and delivery semantics; integrationPoints is empty.",
+        "recommendation": "Define event types/schemas, topics, and delivery guarantees; specify outbox/idempotency strategy; declare integration point to the messaging infrastructure."
+      },
+      {
+        "area": "Dependency rules",
+        "rule": "Experience depends on Application only",
+        "status": "warning",
+        "evidence": ["design/application_architecture.json#dependency_rules", "design/modules/module-catalog.json#modules"],
+        "observation": "No Experience-layer components are listed in module catalog to validate this rule.",
+        "recommendation": "If Experience layer is in scope, add its modules/components and declare their dependencies to Application only."
+      },
+      {
+        "area": "Dependency rules",
+        "rule": "Application depends on Domain and Infrastructure abstractions",
+        "status": "warning",
+        "evidence": ["design/application_architecture.json#dependency_rules", "design/modules/module-catalog.json#modules[*].interfaces"],
+        "observation": "No abstractions/ports are defined for Infrastructure; interfaces arrays are empty.",
+        "recommendation": "Define infrastructure abstractions (e.g., RepositoryPort, MessageBusPort, AuditLogPort) and reference them from Application modules."
+      },
+      {
+        "area": "Dependency rules",
+        "rule": "Domain does not depend on Infrastructure implementation details",
+        "status": "warning",
+        "evidence": ["design/application_architecture.json#dependency_rules"],
+        "observation": "Without defined domain-owned ports and infra adapters, this constraint cannot be verified.",
+        "recommendation": "Place port interfaces in Domain (or a shared contracts package) and implement in Infrastructure; document adapters."
+      },
+      {
+        "area": "Dependency rules",
+        "rule": "Cross-module calls must go through module contracts",
+        "status": "error",
+        "evidence": ["design/application_architecture.json#dependency_rules", "design/modules/module-catalog.json#modules[*].interfaces"],
+        "observation": "All modules have empty 'interfaces'; no contracts are defined.",
+        "recommendation": "Define explicit module interfaces (operations, DTOs, invariants) per module; ensure all cross-module interactions use these contracts."
+      },
+      {
+        "area": "Module alignment",
+        "rule": "Module catalog aligns with declared architecture modules",
+        "status": "info",
+        "evidence": ["design/application_architecture.json#modules", "design/modules/module-catalog.json#modules"],
+        "observation": "Module names and responsibilities match across both artifacts."
+      }
+    ],
+    "moduleAnalysis": {
+      "alignment": [
+        {"name": "Claim Intake", "status": "aligned"},
+        {"name": "Assignment", "status": "aligned"},
+        {"name": "Claim Review", "status": "aligned"},
+        {"name": "Decisioning", "status": "aligned"},
+        {"name": "Fraud Review", "status": "aligned"},
+        {"name": "Payout", "status": "aligned"},
+        {"name": "Notifications", "status": "aligned"},
+        {"name": "Reporting", "status": "aligned"}
+      ],
+      "gaps": [
+        {
+          "issue": "No interfaces defined for any module",
+          "severity": "error",
+          "evidence": ["design/modules/module-catalog.json#modules[*].interfaces"]
+        },
+        {
+          "issue": "No declared dependencies between modules",
+          "severity": "warning",
+          "evidence": ["design/modules/module-catalog.json#modules[*].dependencies"]
+        },
+        {
+          "issue": "Module-to-layer mapping is undefined",
+          "severity": "warning",
+          "evidence": ["design/application_architecture.json#layers", "design/modules/module-catalog.json#modules[*]"]
+        }
+      ]
+    },
+    "traceability": {
+      "useCases": {
+        "declared": [
+          "uc-001-submit-claim",
+          "uc-002-assign-claim-to-agent",
+          "uc-003-review-claim",
+          "uc-004-request-additional-information",
+          "uc-005-perform-fraud-review",
+          "uc-006-approve-or-deny-claim",
+          "uc-007-calculate-and-execute-payout",
+          "uc-008-send-claim-notifications"
+        ],
+        "mappingToModules": "missing",
+        "finding": {
+          "severity": "warning",
+          "observation": "No mapping from use cases to module interfaces/operations.",
+          "recommendation": "Create a use case → module contract matrix covering invoked operations and expected outcomes."
+        }
+      },
+      "requirements": {
+        "moduleCoverage": [
+          {"module": "Claim Intake", "requirements": ["BR-001"]},
+          {"module": "Assignment", "requirements": ["BR-002"]},
+          {"module": "Claim Review", "requirements": ["BR-003"]},
+          {"module": "Decisioning", "requirements": ["BR-004"]},
+          {"module": "Fraud Review", "requirements": ["BR-005"]},
+          {"module": "Payout", "requirements": []},
+          {"module": "Notifications", "requirements": []},
+          {"module": "Reporting", "requirements": []}
+        ],
+        "gaps": [
+          {
+            "severity": "warning",
+            "observation": "Payout, Notifications, and Reporting have no requirement IDs; yet use cases uc-007 and uc-008 reference their domains.",
+            "recommendation": "Assign requirement IDs to these modules and ensure traceability to use cases and business goals."
+          }
+        ]
+      },
+      "businessGoals": {
+        "declared": [
+          "Improve claim intake consistency",
+          "Reduce delays caused by incomplete submissions",
+          "Enforce escalation for high-value or risky claims",
+          "Maintain auditable claim history",
+          "Support timely notifications to participants",
+          "Open claims by status",
+          "Average processing time",
+          "Approval vs denial ratio"
+        ],
+        "mappingToModules": "partial",
+        "observation": "Goals imply reporting and notifications; explicit linkage to module KPIs is not provided.",
+        "recommendation": "Add goal → metric → module ownership mapping (e.g., Reporting owns KPI generation; Notifications owns SLA of notification delivery)."
+      }
+    },
+    "qualityAttributes": {
+      "declared": ["auditability", "workflow_traceability", "maintainability"],
+      "assessment": [
+        {
+          "attribute": "auditability",
+          "status": "warning",
+          "evidence": ["design/application_architecture.json#layers[Infrastructure].responsibilities includes 'Audit logging'"],
+          "observation": "No audit event model, retention policy, or append-only strategy specified.",
+          "recommendation": "Define audit event schema, correlation IDs, retention, tamper-evidence; ensure all state changes are audited."
+        },
+        {
+          "attribute": "workflow_traceability",
+          "status": "warning",
+          "observation": "No correlation/causation IDs or event sourcing/read model strategy specified.",
+          "recommendation": "Add tracing IDs to commands/events, and define how workflow steps are linked for end-to-end traceability."
+        },
+        {
+          "attribute": "maintainability",
+          "status": "warning",
+          "observation": "Lack of module contracts, ports, and dependency declarations will harm modularity and testability.",
+          "recommendation": "Introduce contracts and ports; enforce boundaries via CI checks and architecture tests."
+        }
+      ]
+    },
+    "risks": [
+      {
+        "category": "Security",
+        "severity": "warning",
+        "observation": "No security NFRs, authn/authz, or data protection controls are specified in provided artifacts.",
+        "recommendation": "Define security requirements (PII handling, RBAC/ABAC, encryption at rest/in transit, audit of privileged actions) and integrate into architecture."
+      },
+      {
+        "category": "Reliability",
+        "severity": "warning",
+        "observation": "No failure handling/retry/idempotency details for events or payouts.",
+        "recommendation": "Specify retry policies, idempotency keys, dead-letter handling; document transaction boundaries (e.g., outbox pattern)."
+      },
+      {
+        "category": "Performance",
+        "severity": "info",
+        "observation": "No performance SLAs or capacity assumptions provided.",
+        "recommendation": "Define SLAs for intake throughput, assignment latency, notification delivery; capacity plan for reporting queries."
+      },
+      {
+        "category": "Observability",
+        "severity": "warning",
+        "observation": "Only 'Audit logging' is mentioned; no metrics/tracing/logging standards.",
+        "recommendation": "Define metrics, structured logging, and distributed tracing; add correlation IDs and dashboards for KPIs."
+      },
+      {
+        "category": "External integrations",
+        "severity": "warning",
+        "observation": "integrationPoints is empty; modules like Payout/Notifications/Reporting often integrate externally.",
+        "note": "If no external systems are involved, this may be acceptable; otherwise, capture integrations explicitly.",
+        "recommendation": "List external systems, protocols, and contracts; define anti-corruption/adapters as needed."
+      }
+    ],
+    "additionalFindings": [
+      {
+        "id": "F-ID-SCHEME",
+        "severity": "info",
+        "observation": "Module IDs use mixed patterns (M04 and M04B).",
+        "recommendation": "Adopt a consistent module ID scheme (e.g., M04 and M05 or M04 and M04-2) to avoid confusion."
+      },
+      {
+        "id": "F-EXPERIENCE-LAYER",
+        "severity": "info",
+        "observation": "Experience layer components are not present in the module catalog.",
+        "recommendation": "If in scope, add Experience/UI modules and their contracts; otherwise, document that they are out of scope."
+      },
+      {
+        "id": "F-REPORTING-DATA-SOURCE",
+        "severity": "info",
+        "observation": "Reporting responsibilities are defined without data sourcing/read model design.",
+        "recommendation": "Define reporting data sources (e.g., read models, ETL) and ownership of KPIs to avoid coupling to OLTP models."
+      }
+    ],
+    "prioritizedActions": [
+      {
+        "priority": 1,
+        "action": "Define module contracts (interfaces, operations, DTOs) for all modules and map use cases to these contracts.",
+        "addresses": ["Cross-module contracts", "Traceability", "Maintainability"]
+      },
+      {
+        "priority": 2,
+        "action": "Introduce ports/adapters: define infrastructure abstractions (repos, messaging, audit) and assign implementations to Infrastructure.",
+        "addresses": ["Layer rules", "Domain-Infra dependency rule"]
+      },
+      {
+        "priority": 3,
+        "action": "Annotate each module with its layer and declare intended dependencies per use case flow.",
+        "addresses": ["Layered architecture enforcement", "Dependency visibility"]
+      },
+      {
+        "priority": 4,
+        "action": "Design event model for Notifications (event types, topics, delivery guarantees, outbox/idempotency) and add integration points.",
+        "addresses": ["Event-driven notifications", "Reliability", "Observability"]
+      },
+      {
+        "priority": 5,
+        "action": "Complete traceability: map use cases to module operations; add requirement IDs for Payout, Notifications, Reporting.",
+        "addresses": ["Traceability", "Governance"]
+      },
+      {
+        "priority": 6,
+        "action": "Add security and observability NFRs and realization mechanisms (authn/authz, encryption, metrics, tracing, audit model).",
+        "addresses": ["Security", "Observability", "Auditability"]
+      }
+    ]
+  }

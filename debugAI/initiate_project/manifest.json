@@ -1,0 +1,17 @@
+{
+  "skill": "initiate_project",
+  "generatedAt": "2026-03-26T03:27:05.959Z",
+  "config": "configuration.json",
+  "commandMappings": [],
+  "inputs": {
+    "declaredPatterns": [],
+    "includedFiles": [],
+    "missingPatterns": []
+  },
+  "outputPaths": {
+    "debugDir": "debug/initiate_project",
+    "prompt": "debug/initiate_project/ai-prompt.txt",
+    "zip": "debug/initiate_project/inputs.zip"
+  },
+  "project": "Claims Management System"
+}

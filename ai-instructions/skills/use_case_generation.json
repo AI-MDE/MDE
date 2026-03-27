@@ -1,0 +1,45 @@
+{
+  "name": "use_case_generation",
+  "label": "Use Case Generation",
+  "category": "business_analysis",
+  "purpose": "Generate business use cases from requirements and lifecycle context, then normalize output to repository standards.",
+  "when_to_use": [
+    "User asks to generate initial use cases from BA baseline",
+    "Requirements exist but BA/use-cases are incomplete",
+    "Need to refresh use-case docs after baseline changes"
+  ],
+  "requires": [
+    "ba/requirements.md"
+  ],
+  "optional_inputs": [
+    "ba/use-cases/*.md",
+    "ba/business-functions.json",
+    "project/project-state.json"
+  ],
+  "methodology": [
+    "Read requirements baseline and identify core user/system goals, actors, and workflow steps.",
+    "Draft concise use cases with consistent numbering and naming.",
+    "Ensure each use case includes: Description, Actors, Preconditions, Main Flow, Postconditions.",
+    "Prefer incremental creation; keep existing files unless overwrite is explicitly requested.",
+    "After AI drafting, run tool normalization/write flow to persist consistent markdown."
+  ],
+  "outputs": [
+    "ba/use-cases/uc-*.md"
+  ],
+  "tooling": {
+    "primary_tool": "mde/tools/generate-use-cases.js",
+    "mode": "ai_first_with_fallback",
+    "fallback_behavior": "When AI is unavailable, tool generates deterministic baseline use cases."
+  },
+  "completion_criteria": [
+    "At least one use case is generated when baseline supports it.",
+    "Output files follow uc-###-<slug>.md naming.",
+    "All generated use cases contain required sections.",
+    "Project state is updated with generated artifacts."
+  ],
+  "constraints": [
+    "Do not invent domain-critical constraints not present in baseline.",
+    "Do not overwrite existing use-case files unless force/explicit overwrite is requested.",
+    "Do not emit partial documents missing required sections."
+  ]
+}

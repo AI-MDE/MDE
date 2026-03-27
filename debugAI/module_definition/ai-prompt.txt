@@ -1,0 +1,29 @@
+Skill Debug Prompt
+Skill: module_definition
+GeneratedAt: 2026-03-26T03:27:10.717Z
+
+Purpose: Define buildable modules with boundaries, responsibilities, interfaces, and dependencies
+
+Input Files Included:
+- ba/requirements.md
+- design/application_architecture.json
+- design/modules/module-catalog.json
+
+Missing Input Patterns:
+- (none)
+
+AI Task Prompt
+You are executing the following skill in this workspace.
+Skill Name: module_definition
+Objective: Define buildable modules with boundaries, responsibilities, interfaces, and dependencies
+
+Rules:
+- Each module must have clear ownership
+- No overlapping responsibilities
+- Dependencies must be explicit and directional
+
+Expected Outputs:
+- ../../design/modules/<type>/module-charter-<module>.md
+- ../../design/modules/<type>/module-<module>.json
+
+Use the included input files as your evidence base and produce outputs exactly at the expected paths.

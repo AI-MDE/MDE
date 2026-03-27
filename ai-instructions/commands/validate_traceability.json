@@ -1,0 +1,28 @@
+{
+    "name":  "validate_traceability",
+    "label":  "Validate Traceability",
+    "phase":  "governance",
+    "intent":  "validate",
+    "ai":  "optional",
+    "requires":  [
+                     "ba/requirements.md",
+                     "design/modules/module-catalog.json",
+                     "design/modules/module-tests.json"
+                 ],
+    "produces":  [
+                     "design/traceability-validation-report.json",
+                     "design/trace-matrix.json"
+                 ],
+    "calls":  [
+                  "governance_validation"
+              ],
+    "tools":  [
+                  "traceability_engine",
+                  "file_manager"
+              ],
+    "rules":  [
+                  "Every requirement must map to at least one module and one test"
+              ]
+}
+
+

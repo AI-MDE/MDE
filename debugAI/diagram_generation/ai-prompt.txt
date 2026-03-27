@@ -1,0 +1,28 @@
+Skill Debug Prompt
+Skill: diagram_generation
+GeneratedAt: 2026-03-26T03:27:00.260Z
+
+Purpose: Generate diagrams from core artifacts
+
+Input Files Included:
+- ba/data-model/logical-data-model.json
+- design/application_architecture.json
+- design/modules/module-catalog.json
+
+Missing Input Patterns:
+- (none)
+
+AI Task Prompt
+You are executing the following skill in this workspace.
+Skill Name: diagram_generation
+Objective: Generate diagrams from core artifacts
+
+Rules:
+- Render LDM, architecture, interaction, and dataflow diagrams
+- Use canonical sources as inputs
+
+Expected Outputs:
+- ../../output/docs/diagrams/*.md
+- ../../output/docs/diagrams/*.svg
+
+Use the included input files as your evidence base and produce outputs exactly at the expected paths.

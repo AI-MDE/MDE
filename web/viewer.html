@@ -1,0 +1,134 @@
+﻿<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>EOP Design Docs</title>
+
+<!-- marked.js for Markdown rendering -->
+<script src="https://cdn.jsdelivr.net/npm/marked/marked.min.js"></script>
+<!-- mermaid.js for diagram rendering -->
+<script src="https://cdn.jsdelivr.net/npm/mermaid@11/dist/mermaid.min.js" defer></script>
+<!-- highlight.js for JSON syntax highlighting -->
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/styles/github.min.css">
+<script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/highlight.min.js"></script>
+<!-- cytoscape for interactive ERD -->
+<script src="https://cdn.jsdelivr.net/npm/cytoscape@3/dist/cytoscape.min.js"></script>
+
+<link rel="stylesheet" href="/style.css">
+</head>
+<body>
+
+<div id="topbar">
+  <div class="logo">EOP <span>Design</span> Docs</div>
+
+  <div class="menu-wrap" id="menu-wrap">
+    <button class="menu-btn" id="menu-btn" onclick="toggleMenu()" aria-haspopup="true" aria-expanded="false" title="Menu">&#9776;</button>
+    <div class="menu-dropdown" id="menu-dropdown" role="menu">
+      <button class="menu-item" role="menuitem" onclick="openProject()">Project</button>
+      <div class="menu-section">Developer</div>
+      <button class="menu-item" role="menuitem" onclick="openMethodology()">Methodology</button>
+      <button class="menu-item" role="menuitem" onclick="openAIInstructions()">AI Instructions</button>
+    </div>
+  </div>
+
+  <div class="cmd-bar">
+    <select id="cmd-select"></select>
+    <button id="cmd-run" class="btn-edit">Run</button>
+    <button id="cmd-copy" class="btn-edit">Copy Prompt</button>
+    <button id="cmd-ai-run" class="btn-edit">Run with AI</button>
+    <div id="cmd-options" class="cmd-options">
+      <label><input type="checkbox" id="opt-dal-tests" checked> DAL tests</label>
+      <label><input type="checkbox" id="opt-dal-services" checked> Service stubs</label>
+    </div>
+    <span id="cmd-status" class="cmd-status"></span>
+  </div>
+  <div class="breadcrumb" id="breadcrumb">Select a document from the sidebar</div>
+</div>
+<div id="cmd-output" class="cmd-output" style="display:none"></div>
+
+<div id="layout">
+
+  <aside id="sidebar">
+    <div id="search-wrap">
+      <input id="search" type="search" placeholder="Search documents..." autocomplete="off">
+    </div>
+    <nav id="nav"></nav>
+    <div id="sidebar-new">
+      <button class="new-btn" onclick="promptNew('use-case')" title="Create a new use case file">+ Use Case</button>
+      <button class="new-btn" onclick="promptNew('entity')"   title="Create a new entity file">+ Entity</button>
+    </div>
+  </aside>
+
+  <div id="content">
+    <div id="welcome">
+      <div class="icon icon-app" aria-hidden="true"></div>
+      <h2>Employee Onboarding Platform</h2>
+      <p>Select a document from the sidebar to view it here. Documents are organized by pipeline phase.</p>
+    </div>
+    <div id="loading">Loading...</div>
+    <div id="doc-meta" style="display:none"></div>
+    <div id="doc-body"></div>
+
+    <!-- Editor panel (use-cases only) -->
+    <div id="editor-wrap">
+      <div id="editor-toolbar">
+        <button class="editor-tab active" onclick="switchEditorTab('edit')">Edit</button>
+        <button class="editor-tab" onclick="switchEditorTab('preview')">Preview</button>
+        <span id="save-status"></span>
+        <span class="editor-spacer"></span>
+        <button class="btn btn-cancel" onclick="cancelEdit()">Cancel</button>
+        <button class="btn btn-save" id="btn-save" onclick="saveDoc()">Save</button>
+      </div>
+      <textarea id="editor-textarea" spellcheck="false"></textarea>
+      <div id="editor-preview" class="md-body"></div>
+    </div>
+  </div>
+
+</div>
+
+<!-- Node resize overlay (shown when a Cytoscape node is selected) -->
+<div id="node-resize-overlay">
+  <div id="node-resize-handle" title="Drag to resize"></div>
+</div>
+
+<!-- Entity popover (shared, repositioned on hover) -->
+<div id="entity-popover" role="tooltip"
+     onmouseenter="cancelHidePopover()"
+     onmouseleave="scheduleHidePopover()">
+  <div class="pop-name" id="pop-name"></div>
+  <div class="pop-meta" id="pop-meta"></div>
+  <div class="pop-desc" id="pop-desc"></div>
+  <div class="pop-stats" id="pop-stats"></div>
+  <div class="pop-goto" id="pop-goto" style="cursor:pointer">Click to navigate -></div>
+</div>
+
+<div id="mod-popover" style="display:none;position:fixed;z-index:1200;background:#fff;border:1px solid var(--border);border-radius:10px;padding:14px 16px;width:340px;box-shadow:0 8px 24px rgba(0,0,0,.12);font-size:13px">
+  <div style="font-size:15px;font-weight:700;color:var(--text);margin-bottom:6px" id="mpop-name"></div>
+  <div style="display:flex;flex-wrap:wrap;gap:6px;margin-bottom:8px" id="mpop-meta"></div>
+  <div style="color:var(--muted);font-size:12.5px;margin-bottom:10px" id="mpop-desc"></div>
+  <div style="font-size:11.5px;margin-bottom:4px"><span style="color:var(--muted);font-weight:600">Depends on: </span><span id="mpop-deps"></span></div>
+  <div style="font-size:11.5px"><span style="color:var(--muted);font-weight:600">Requirements: </span><span id="mpop-reqs"></span></div>
+</div>
+
+<script src="/viewer-client.js" defer></script>
+
+
+<!-- New document modal -->
+<div id="new-doc-modal" onclick="if(event.target===this)closeNewModal()">
+  <div id="new-doc-box">
+    <h3 id="new-doc-title">New Use Case</h3>
+    <label for="new-doc-name">Name (kebab-case slug)</label>
+    <input id="new-doc-name" type="text" placeholder="e.g. approve-background-check" autocomplete="off"
+           onkeydown="if(event.key==='Enter')submitNew();if(event.key==='Escape')closeNewModal()">
+    <div id="new-doc-hint"></div>
+    <div id="new-doc-err"></div>
+    <div class="new-doc-actions">
+      <button onclick="closeNewModal()">Cancel</button>
+      <button class="btn-primary" onclick="submitNew()">Create</button>
+    </div>
+  </div>
+</div>
+</body>
+</html>
+

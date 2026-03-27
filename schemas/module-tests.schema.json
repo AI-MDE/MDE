@@ -1,0 +1,181 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "module-tests.schema.json",
+  "title": "Module Test & Contract Pack",
+  "description": "Schema for the test and contract pack produced in Phase 5. Defines fixtures, test suites, and individual test cases in Given-When-Then format.",
+  "type": "object",
+  "required": ["moduleId", "moduleName", "version", "date", "framework", "fixtures", "suites"],
+  "additionalProperties": false,
+
+  "properties": {
+
+    "moduleId":   { "type": "string", "pattern": "^MOD-\\d+$" },
+    "moduleName": { "type": "string", "pattern": "^[a-z0-9-]+$" },
+    "version":    { "type": "string", "pattern": "^\\d+\\.\\d+(\\.\\d+)?$" },
+    "date":       { "type": "string", "format": "date" },
+    "framework":  { "type": "string", "description": "Test framework used to run these tests, e.g. 'mocha + chai'" },
+
+    "fixtures": {
+      "type": "object",
+      "description": "Named fixture collections used as preconditions in test cases",
+      "properties": {
+        "employees": {
+          "type": "array",
+          "items": { "$ref": "#/$defs/EmployeeFixture" }
+        },
+        "instances": {
+          "type": "array",
+          "items": { "$ref": "#/$defs/InstanceFixture" }
+        },
+        "tasks": {
+          "type": "array",
+          "items": { "$ref": "#/$defs/TaskFixture" }
+        },
+        "actors": {
+          "type": "object",
+          "description": "Named actor definitions keyed by role alias",
+          "additionalProperties": { "$ref": "#/$defs/ActorFixture" }
+        }
+      },
+      "additionalProperties": {
+        "description": "Any additional fixture collection"
+      }
+    },
+
+    "suites": {
+      "type": "array",
+      "minItems": 1,
+      "items": { "$ref": "#/$defs/TestSuite" }
+    }
+  },
+
+  "$defs": {
+
+    "EmployeeFixture": {
+      "type": "object",
+      "required": ["id", "name", "email", "grade", "roleId", "managerId", "startDate"],
+      "additionalProperties": false,
+      "properties": {
+        "id":        { "type": "string" },
+        "name":      { "type": "string" },
+        "email":     { "type": "string", "format": "email" },
+        "grade":     { "type": "string" },
+        "roleId":    { "type": "string" },
+        "managerId": { "type": "string" },
+        "startDate": { "type": "string", "format": "date" }
+      }
+    },
+
+    "InstanceFixture": {
+      "type": "object",
+      "required": ["id", "employeeId", "status", "startDate"],
+      "additionalProperties": false,
+      "properties": {
+        "id":         { "type": "string" },
+        "employeeId": { "type": "string" },
+        "status":     { "type": "string", "enum": ["active", "day0-ready", "complete", "suspended"] },
+        "startDate":  { "type": "string", "format": "date" }
+      }
+    },
+
+    "TaskFixture": {
+      "type": "object",
+      "required": ["id", "instanceId", "trackId", "elementId", "name", "status"],
+      "additionalProperties": false,
+      "properties": {
+        "id":          { "type": "string" },
+        "instanceId":  { "type": "string" },
+        "trackId":     { "type": "string" },
+        "elementId":   { "type": "string" },
+        "name":        { "type": "string" },
+        "status":      { "type": "string", "enum": ["wait", "in-progress", "end", "blocked", "cancelled"] },
+        "assignee":    { "type": ["string", "null"] },
+        "dueDate":     { "type": "string" },
+        "priority":    { "type": "integer", "minimum": 1, "maximum": 10 },
+        "completedAt": { "type": "string" }
+      }
+    },
+
+    "ActorFixture": {
+      "type": "object",
+      "required": ["userId", "roles"],
+      "additionalProperties": false,
+      "properties": {
+        "userId": { "type": "string" },
+        "roles":  { "type": "array", "items": { "type": "string" } }
+      }
+    },
+
+    "TestSuite": {
+      "type": "object",
+      "required": ["id", "name", "tests"],
+      "additionalProperties": false,
+      "properties": {
+        "id":             { "type": "string", "pattern": "^TS-[A-Z]+-\\d+$" },
+        "name":           { "type": "string" },
+        "type":           { "type": "string", "enum": ["unit", "integration", "acceptance", "contract"], "default": "unit" },
+        "requirementIds": { "type": "array", "items": { "type": "string", "pattern": "^BR-\\d+$" } },
+        "ruleIds":        { "type": "array", "items": { "type": "string" } },
+        "tests": {
+          "type": "array",
+          "minItems": 1,
+          "items": { "$ref": "#/$defs/TestCase" }
+        }
+      }
+    },
+
+    "TestCase": {
+      "type": "object",
+      "required": ["id", "name", "given", "when", "then"],
+      "additionalProperties": false,
+      "properties": {
+        "id":   { "type": "string", "pattern": "^TC-[A-Z]+-\\d{2}-\\d{2}$" },
+        "name": { "type": "string", "minLength": 5 },
+
+        "given": {
+          "type": "object",
+          "description": "Precondition state: fixture references and any field overrides",
+          "additionalProperties": true
+        },
+
+        "when": {
+          "type": "object",
+          "description": "The action being tested",
+          "required": ["action"],
+          "additionalProperties": true,
+          "properties": {
+            "action": {
+              "description": "HTTP call, event emission, or system trigger being exercised",
+              "oneOf": [
+                { "type": "string" },
+                { "type": "array", "items": { "type": "string" } }
+              ]
+            },
+            "body": {
+              "type": "object",
+              "description": "Request body for HTTP action tests",
+              "additionalProperties": true
+            },
+            "steps": {
+              "type": "array",
+              "items": { "type": "string" },
+              "description": "Ordered steps for multi-step acceptance tests"
+            }
+          }
+        },
+
+        "then": {
+          "type": "object",
+          "description": "Expected outcomes — HTTP status, response fields, and/or emitted events",
+          "additionalProperties": true,
+          "properties": {
+            "status": {
+              "type": "integer", "minimum": 100, "maximum": 599,
+              "description": "Expected HTTP response status code"
+            }
+          }
+        }
+      }
+    }
+  }
+}

@@ -1,0 +1,29 @@
+{
+    "name":  "build_system_design",
+    "label":  "Build System Design",
+    "phase":  "system_design",
+    "intent":  "generate",
+    "ai":  "required",
+    "requires":  [
+                     "ba/requirements.md",
+                     "ba/use-cases/*.md",
+                     "ba/business-functions.json"
+                 ],
+    "produces":  [
+                     "design/application_architecture.json",
+                     "design/modules/module-catalog.json"
+                 ],
+    "calls":  [
+                  "system_design"
+              ],
+    "tools":  [
+                  "file_manager"
+              ],
+    "rules":  [
+                  "Must define architectural patterns",
+                  "Must define component/module boundaries",
+                  "Must map requirements to modules"
+              ]
+}
+
+

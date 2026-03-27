@@ -1,0 +1,140 @@
+{
+  "layers": {
+    "view": {
+      "allowed_dependencies": [
+        "controller"
+      ],
+      "forbidden_dependencies": [
+        "service",
+        "query_service",
+        "domain",
+        "data_access",
+        "adapter"
+      ],
+      "responsibilities": [
+        "UI rendering",
+        "client-side interaction"
+      ]
+    },
+    "controller": {
+      "allowed_dependencies": [
+        "service",
+        "query_service"
+      ],
+      "forbidden_dependencies": [
+        "domain",
+        "data_access"
+      ],
+      "must_use": [
+        "dto"
+      ],
+      "responsibilities": [
+        "request parsing",
+        "input validation",
+        "response shaping",
+        "routing writes to service, reads to query_service"
+      ]
+    },
+    "service": {
+      "allowed_dependencies": [
+        "domain",
+        "data_access",
+        "adapter"
+      ],
+      "forbidden_dependencies": [
+        "view",
+        "query_service"
+      ],
+      "responsibilities": [
+        "write use-case orchestration",
+        "transaction boundary",
+        "authorization",
+        "business event emission"
+      ],
+      "notes": "One public method per use case. Must not perform reads for response shaping — that is query_service responsibility."
+    },
+    "query_service": {
+      "allowed_dependencies": [
+        "data_access"
+      ],
+      "forbidden_dependencies": [
+        "view",
+        "controller",
+        "service",
+        "domain",
+        "adapter"
+      ],
+      "must_be": [
+        "stateless",
+        "read_only"
+      ],
+      "responsibilities": [
+        "read-only data retrieval",
+        "read model shaping",
+        "filter and pagination handling",
+        "screen-specific DTO projection"
+      ],
+      "notes": "Bypasses domain layer. May only consult domain entity if read genuinely requires domain behavior — this should be rare."
+    },
+    "domain": {
+      "allowed_dependencies": [],
+      "forbidden_dependencies": [
+        "controller",
+        "service",
+        "query_service",
+        "data_access",
+        "adapter"
+      ],
+      "must_be": [
+        "pure_business_logic"
+      ],
+      "responsibilities": [
+        "object identity and state",
+        "business invariants",
+        "state transition guards",
+        "domain validation",
+        "business rules and calculations"
+      ]
+    },
+    "data_access": {
+      "allowed_dependencies": [
+        "database"
+      ],
+      "forbidden_dependencies": [
+        "view",
+        "controller",
+        "service",
+        "query_service"
+      ],
+      "must_use": [
+        "repository",
+        "mapper"
+      ],
+      "responsibilities": [
+        "persistence",
+        "column-name mapping via mapper",
+        "query execution",
+        "optimistic locking enforcement"
+      ]
+    },
+    "adapter": {
+      "allowed_dependencies": [
+        "external_system"
+      ],
+      "forbidden_dependencies": [
+        "view",
+        "controller",
+        "domain"
+      ],
+      "must_use": [
+        "adapter"
+      ],
+      "responsibilities": [
+        "vendor isolation",
+        "protocol translation",
+        "external API access",
+        "event publishing (Kafka, message bus)"
+      ]
+    }
+  }
+}

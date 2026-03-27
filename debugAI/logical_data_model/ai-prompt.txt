@@ -1,0 +1,27 @@
+Skill Debug Prompt
+Skill: logical_data_model
+GeneratedAt: 2026-03-26T03:27:09.207Z
+
+Purpose: Generate a logical data model grounded in requirements, glossary, and architecture
+
+Input Files Included:
+- ba/requirements.md
+- design/application_architecture.json
+
+Missing Input Patterns:
+- ../../ba/glossary.md
+
+AI Task Prompt
+You are executing the following skill in this workspace.
+Skill Name: logical_data_model
+Objective: Generate a logical data model grounded in requirements, glossary, and architecture
+
+Rules:
+- Use business vocabulary
+- Separate conceptual entities from physical implementation
+- Record ownership and relationships explicitly
+
+Expected Outputs:
+- ../../ba/data-model/logical-data-model.json
+
+Use the included input files as your evidence base and produce outputs exactly at the expected paths.

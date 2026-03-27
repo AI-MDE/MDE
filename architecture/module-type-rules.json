@@ -1,0 +1,102 @@
+{
+  "module_types": {
+    "workflow": {
+      "recommended_patterns": [
+        "state",
+        "command"
+      ],
+      "required_artifacts": [
+        "state-machine.json"
+      ],
+      "required_layers": [
+        "domain",
+        "service",
+        "query_service",
+        "data_access"
+      ],
+      "default_concurrency_rule": "optimistic_locking",
+      "typical_entities": [
+        "request",
+        "case",
+        "workflow_instance"
+      ],
+      "notes": "Domain entity must include StateMachine for state transition guards. Each workflow operation becomes one service method (use case)."
+    },
+    "master_data": {
+      "recommended_patterns": [
+        "repository"
+      ],
+      "required_artifacts": [
+        "schema.json"
+      ],
+      "required_layers": [
+        "domain",
+        "service",
+        "query_service",
+        "data_access"
+      ],
+      "default_concurrency_rule": "optimistic_locking",
+      "typical_entities": [
+        "employee",
+        "vendor",
+        "policy"
+      ]
+    },
+    "integration": {
+      "recommended_patterns": [
+        "adapter"
+      ],
+      "required_artifacts": [
+        "api-contract.json"
+      ],
+      "required_layers": [
+        "service",
+        "adapter"
+      ],
+      "forbidden_behaviors": [
+        "direct_vendor_sdk_in_domain"
+      ],
+      "typical_entities": [
+        "connector",
+        "webhook",
+        "message"
+      ]
+    },
+    "reporting": {
+      "recommended_patterns": [
+        "query_service"
+      ],
+      "required_artifacts": [
+        "query-spec.json"
+      ],
+      "required_layers": [
+        "query_service",
+        "data_access"
+      ],
+      "read_only": true,
+      "forbidden_behaviors": [
+        "write_transactions",
+        "domain_entity_rehydration"
+      ],
+      "notes": "Reporting modules use query_service layer only. No service or domain layer required unless business rules are needed for the read."
+    },
+    "rule_engine": {
+      "recommended_patterns": [
+        "strategy",
+        "specification"
+      ],
+      "required_artifacts": [
+        "rules.json"
+      ],
+      "required_layers": [
+        "domain",
+        "service"
+      ],
+      "typical_entities": [
+        "rule_set",
+        "decision",
+        "policy_evaluator"
+      ]
+    }
+  }
+}

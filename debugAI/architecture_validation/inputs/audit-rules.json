@@ -1,0 +1,22 @@
+{
+  "audit_required": true,
+  "audit_scope": [
+    "workflow_state_changes",
+    "approval_decisions",
+    "policy_exceptions",
+    "security_relevant_changes"
+  ],
+  "audit_event_shape": {
+    "event_id": "uuid",
+    "entity_type": "string",
+    "entity_id": "uuid",
+    "event_type": "string",
+    "actor_id": "string",
+    "occurred_at": "timestamp",
+    "payload": "json"
+  },
+  "immutability": {
+    "append_only": true,
+    "updates_allowed": false
+  }
+}

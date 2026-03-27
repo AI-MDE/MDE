@@ -1,0 +1,42 @@
+Skill Debug Prompt
+Skill: use_case_generation
+GeneratedAt: 2026-03-26T03:27:22.318Z
+
+Purpose: Generate business use cases from requirements and lifecycle context, then normalize output to repository standards.
+MappedCommands: generate_use_cases
+
+Input Files Included:
+- ba/use-cases/uc-001-submit-claim.md
+- ba/use-cases/uc-002-assign-claim-to-agent.md
+- ba/use-cases/uc-003-review-claim.md
+- ba/use-cases/uc-004-request-additional-information.md
+- ba/use-cases/uc-005-perform-fraud-review.md
+- ba/use-cases/uc-006-approve-or-deny-claim.md
+- ba/use-cases/uc-007-calculate-and-execute-payout.md
+- ba/use-cases/uc-008-send-claim-notifications.md
+- project/project-state.json
+
+Missing Input Patterns:
+- ../../ba/business-functions.json
+
+AI Task Prompt
+You are executing the following skill in this workspace.
+Skill Name: use_case_generation
+Objective: Generate business use cases from requirements and lifecycle context, then normalize output to repository standards.
+
+Methodology:
+- Read requirements baseline and identify core user/system goals, actors, and workflow steps.
+- Draft concise use cases with consistent numbering and naming.
+- Ensure each use case includes: Description, Actors, Preconditions, Main Flow, Postconditions.
+- Prefer incremental creation; keep existing files unless overwrite is explicitly requested.
+- After AI drafting, run tool normalization/write flow to persist consistent markdown.
+
+Constraints:
+- Do not invent domain-critical constraints not present in baseline.
+- Do not overwrite existing use-case files unless force/explicit overwrite is requested.
+- Do not emit partial documents missing required sections.
+
+Expected Outputs:
+- ../../ba/use-cases/uc-*.md
+
+Use the included input files as your evidence base and produce outputs exactly at the expected paths.

@@ -1,0 +1,25 @@
+Skill Debug Prompt
+Skill: sample_data_generation
+GeneratedAt: 2026-03-26T03:27:15.577Z
+
+Purpose: Generate sample entity data files
+
+Input Files Included:
+- ba/data-model/logical-data-model.json
+
+Missing Input Patterns:
+- ../../design/entities/*.json
+
+AI Task Prompt
+You are executing the following skill in this workspace.
+Skill Name: sample_data_generation
+Objective: Generate sample entity data files
+
+Rules:
+- Respect field types and required flags
+- Use deterministic values per entity
+
+Expected Outputs:
+- ../../output/sample-data/*.json
+
+Use the included input files as your evidence base and produce outputs exactly at the expected paths.

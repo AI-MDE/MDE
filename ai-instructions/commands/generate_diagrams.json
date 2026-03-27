@@ -1,0 +1,28 @@
+{
+    "name":  "generate_diagrams",
+    "label":  "Generate Diagrams",
+    "phase":  "governance",
+    "intent":  "generate",
+    "ai":  "optional",
+    "requires":  [
+                     "ba/data-model/logical-data-model.json",
+                     "design/application_architecture.json",
+                     "design/modules/module-catalog.json"
+                 ],
+    "produces":  [
+                     "output/docs/diagrams/*.md",
+                     "output/docs/diagrams/*.svg"
+                 ],
+    "calls":  [
+                  "diagram_generation"
+              ],
+    "tools":  [
+                  "file_manager"
+              ],
+    "rules":  [
+                  "Produce LDM, architecture, interaction, and dataflow diagrams",
+                  "Keep diagrams derived from canonical artifacts"
+              ]
+}
+
+

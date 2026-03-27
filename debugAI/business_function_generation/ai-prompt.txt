@@ -1,0 +1,29 @@
+Skill Debug Prompt
+Skill: business_function_generation
+GeneratedAt: 2026-03-26T03:26:53.840Z
+
+Purpose: Generate business capabilities/functions from requirements as a precursor to use-case generation.
+MappedCommands: generate_business_functions
+
+Input Files Included:
+- project/project-state.json
+
+Missing Input Patterns:
+- ../../ba/business-functions.json
+
+AI Task Prompt
+You are executing the following skill in this workspace.
+Skill Name: business_function_generation
+Objective: Generate business capabilities/functions from requirements as a precursor to use-case generation.
+
+Methodology:
+- Extract top-level capabilities from requirements baseline.
+- Derive core business functions under each capability.
+- Keep names concise and domain-aligned.
+- Write deterministic JSON schema with stable identifiers.
+- AI-first generation with deterministic tool fallback.
+
+Expected Outputs:
+- ../../ba/business-functions.json
+
+Use the included input files as your evidence base and produce outputs exactly at the expected paths.

@@ -1,0 +1,104 @@
+{
+  "layers": {
+    "view": {
+      "allowed_dependencies": [
+        "controller"
+      ],
+      "forbidden_dependencies": [
+        "service",
+        "domain",
+        "data_access",
+        "adapter"
+      ],
+      "responsibilities": [
+        "UI rendering",
+        "client-side interaction"
+      ]
+    },
+    "controller": {
+      "allowed_dependencies": [
+        "service"
+      ],
+      "forbidden_dependencies": [
+        "domain",
+        "data_access"
+      ],
+      "must_use": [
+        "dto"
+      ],
+      "responsibilities": [
+        "request parsing",
+        "input validation",
+        "response shaping"
+      ]
+    },
+    "service": {
+      "allowed_dependencies": [
+        "domain",
+        "data_access",
+        "adapter"
+      ],
+      "forbidden_dependencies": [
+        "view"
+      ],
+      "responsibilities": [
+        "use-case orchestration",
+        "transaction boundary",
+        "event emission"
+      ]
+    },
+    "domain": {
+      "allowed_dependencies": [],
+      "forbidden_dependencies": [
+        "controller",
+        "service",
+        "data_access",
+        "adapter"
+      ],
+      "must_be": [
+        "pure_business_logic"
+      ],
+      "responsibilities": [
+        "business rules",
+        "domain calculations",
+        "state transition guards"
+      ]
+    },
+    "data_access": {
+      "allowed_dependencies": [
+        "database"
+      ],
+      "forbidden_dependencies": [
+        "view",
+        "controller",
+        "service"
+      ],
+      "must_use": [
+        "repository"
+      ],
+      "responsibilities": [
+        "persistence",
+        "schema mapping",
+        "query execution"
+      ]
+    },
+    "adapter": {
+      "allowed_dependencies": [
+        "external_system"
+      ],
+      "forbidden_dependencies": [
+        "view",
+        "controller",
+        "domain"
+      ],
+      "must_use": [
+        "adapter"
+      ],
+      "responsibilities": [
+        "vendor isolation",
+        "protocol translation",
+        "external API access"
+      ]
+    }
+  }
+}

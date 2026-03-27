@@ -1,0 +1,30 @@
+Skill Debug Prompt
+Skill: governance_validation
+GeneratedAt: 2026-03-26T03:27:04.278Z
+
+Purpose: Validate traceability, phase completeness, TOGAF/Zachman coverage, and missing artifacts
+
+Input Files Included:
+- ba/requirements.md
+- design/modules/module-catalog.json
+- mde/methodology/methodology.json
+- project/project-state.json
+
+Missing Input Patterns:
+- ../../design/modules/module-tests.json
+
+AI Task Prompt
+You are executing the following skill in this workspace.
+Skill Name: governance_validation
+Objective: Validate traceability, phase completeness, TOGAF/Zachman coverage, and missing artifacts
+
+Rules:
+- Every requirement should map to functions, modules, and tests where relevant
+- Missing artifacts must be reported, not guessed
+
+Expected Outputs:
+- ../../design/trace-matrix.json
+- ../../output/work/phase-status-report.json
+- ../../design/governance-report.json
+
+Use the included input files as your evidence base and produce outputs exactly at the expected paths.

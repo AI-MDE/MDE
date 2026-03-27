@@ -1,0 +1,22 @@
+{
+  "default_locking_strategy": "optimistic",
+  "optimistic_locking": {
+    "enabled_for_module_types": [
+      "workflow",
+      "master_data"
+    ],
+    "version_column": {
+      "name": "version_no",
+      "type": "integer",
+      "default": 0
+    },
+    "on_conflict": {
+      "action": "reject_update",
+      "error_code": "CONCURRENT_MODIFICATION"
+    }
+  },
+  "notes": [
+    "Apply optimistic locking to mutable aggregate roots.",
+    "Reporting modules are excluded unless explicitly overridden."
+  ]
+}

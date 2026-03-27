@@ -1,0 +1,27 @@
+# Identify External References
+
+| Field | Value |
+|-------|-------|
+| `name` | `identify_external_references` |
+| `phase` | business_analysis |
+| `intent` | research |
+| `ai` | `required` |
+
+---
+
+## Requires
+
+- ../../application/application.json
+- ../../ba/domain-brief.md
+
+## Produces
+
+- ../../ba/external-references.md
+
+## Rules
+
+- Identify all applicable standards, regulations, and protocols for the domain (e.g. HL7, GDPR, ISO 27001, FHIR, PCI-DSS)
+- For each reference: record name, version, governing body, relevance to the project, and sections that directly impact requirements
+- Flag mandatory compliance items separately from advisory best-practice references
+- Note where each standard will surface as constraints or acceptance criteria in requirements
+- Re-run this command if the domain scope expands or new regulatory requirements emerge

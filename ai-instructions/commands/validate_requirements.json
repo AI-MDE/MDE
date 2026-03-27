@@ -1,0 +1,27 @@
+{
+    "name":  "validate_requirements",
+    "label":  "Validate Requirements",
+    "phase":  "business_analysis",
+    "intent":  "validate",
+    "ai":  "optional",
+    "requires":  [
+                     "ba/requirements.md"
+                 ],
+    "produces":  [
+                     "ba/requirements-validation-report.json"
+                 ],
+    "calls":  [
+                  "requirements_validation"
+              ],
+    "tools":  [
+                  "file_manager",
+                  "json_validator",
+                  "traceability_engine"
+              ],
+    "rules":  [
+                  "Do not modify source requirements unless explicitly requested",
+                  "Report ambiguity, missing actors, missing acceptance criteria, and traceability gaps"
+              ]
+}
+
+

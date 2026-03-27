@@ -1,0 +1,27 @@
+Skill Debug Prompt
+Skill: dal_generation_from_db
+GeneratedAt: 2026-03-26T03:26:58.091Z
+
+Purpose: Generate TypeScript DAL modules using raw SQL from live DB schema
+
+Input Files Included:
+- configuration.json
+
+Missing Input Patterns:
+- .env (DATABASE_URL)
+- ../../design/modules/dal/dal-*.json
+- ../../design/modules/dal/*/schema.json
+
+AI Task Prompt
+You are executing the following skill in this workspace.
+Skill Name: dal_generation_from_db
+Objective: Generate TypeScript DAL modules using raw SQL from live DB schema
+
+Rules:
+- Introspect DB schema for columns and keys
+- Use raw SQL for queries
+
+Expected Outputs:
+- ../../src/dal/*.ts
+
+Use the included input files as your evidence base and produce outputs exactly at the expected paths.

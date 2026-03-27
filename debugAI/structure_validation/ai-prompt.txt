@@ -1,0 +1,25 @@
+Skill Debug Prompt
+Skill: structure_validation
+GeneratedAt: 2026-03-26T03:27:18.091Z
+
+Purpose: Validate that the physical folder structure matches the configuration
+
+Input Files Included:
+- configuration.json
+
+Missing Input Patterns:
+- (none)
+
+AI Task Prompt
+You are executing the following skill in this workspace.
+Skill Name: structure_validation
+Objective: Validate that the physical folder structure matches the configuration
+
+Rules:
+- Fail if critical root folders are missing
+- Warn if optional folders are missing
+
+Expected Outputs:
+- ../../output/work/structure-validation-report.json
+
+Use the included input files as your evidence base and produce outputs exactly at the expected paths.

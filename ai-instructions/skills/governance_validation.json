@@ -1,0 +1,32 @@
+{
+    "name":  "governance_validation",
+    "purpose":  "Validate traceability, phase completeness, TOGAF/Zachman coverage, and missing artifacts",
+    "inputs":  [
+                   "ba/requirements.md",
+                   "design/modules/module-catalog.json",
+                   "design/modules/module-tests.json",
+                   "mde/methodology/methodology.json",
+                   "project/project-state.json"
+               ],
+    "outputs":  [
+                    "design/trace-matrix.json",
+                    "output/work/phase-status-report.json",
+                    "design/governance-report.json"
+                ],
+    "artifacts":  [
+                      "design/trace-matrix.json",
+                      "output/work/phase-status-report.json"
+                  ],
+    "rules":  [
+                  "Every requirement should map to functions, modules, and tests where relevant",
+                  "Missing artifacts must be reported, not guessed"
+              ],
+    "uses_tools":  [
+                       "traceability_engine",
+                       "phase_status_checker",
+                       "file_manager"
+                   ],
+    "next_phase":  null
+}
+
+

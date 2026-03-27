@@ -1,0 +1,28 @@
+{
+  "skill": "dal_generation_from_db",
+  "generatedAt": "2026-03-26T03:26:58.092Z",
+  "config": "configuration.json",
+  "commandMappings": [],
+  "inputs": {
+    "declaredPatterns": [
+      "../../configuration.json",
+      ".env (DATABASE_URL)",
+      "../../design/modules/dal/dal-*.json",
+      "../../design/modules/dal/*/schema.json"
+    ],
+    "includedFiles": [
+      "configuration.json"
+    ],
+    "missingPatterns": [
+      ".env (DATABASE_URL)",
+      "../../design/modules/dal/dal-*.json",
+      "../../design/modules/dal/*/schema.json"
+    ]
+  },
+  "outputPaths": {
+    "debugDir": "debug/dal_generation_from_db",
+    "prompt": "debug/dal_generation_from_db/ai-prompt.txt",
+    "zip": "debug/dal_generation_from_db/inputs.zip"
+  },
+  "project": "Claims Management System"
+}

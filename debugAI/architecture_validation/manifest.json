@@ -1,0 +1,25 @@
+{
+  "skill": "architecture_validation",
+  "generatedAt": "2026-03-26T03:26:49.708Z",
+  "config": "configuration.json",
+  "commandMappings": [
+    "validate_architecture"
+  ],
+  "inputs": {
+    "declaredPatterns": [
+      "../../design/application_architecture.json",
+      "../../design/modules/module-catalog.json"
+    ],
+    "includedFiles": [
+      "design/application_architecture.json",
+      "design/modules/module-catalog.json"
+    ],
+    "missingPatterns": []
+  },
+  "outputPaths": {
+    "debugDir": "debug/architecture_validation",
+    "prompt": "debug/architecture_validation/ai-prompt.txt",
+    "zip": "debug/architecture_validation/inputs.zip"
+  },
+  "project": "Claims Management System"
+}

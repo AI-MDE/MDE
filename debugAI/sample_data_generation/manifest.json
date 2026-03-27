@@ -1,0 +1,24 @@
+{
+  "skill": "sample_data_generation",
+  "generatedAt": "2026-03-26T03:27:15.577Z",
+  "config": "configuration.json",
+  "commandMappings": [],
+  "inputs": {
+    "declaredPatterns": [
+      "../../ba/data-model/logical-data-model.json",
+      "../../design/entities/*.json"
+    ],
+    "includedFiles": [
+      "ba/data-model/logical-data-model.json"
+    ],
+    "missingPatterns": [
+      "../../design/entities/*.json"
+    ]
+  },
+  "outputPaths": {
+    "debugDir": "debug/sample_data_generation",
+    "prompt": "debug/sample_data_generation/ai-prompt.txt",
+    "zip": "debug/sample_data_generation/inputs.zip"
+  },
+  "project": "Claims Management System"
+}

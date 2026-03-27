@@ -1,0 +1,29 @@
+Skill Debug Prompt
+Skill: source_code_generation
+GeneratedAt: 2026-03-26T03:27:16.938Z
+
+Purpose: Generate application source code from module specifications
+
+Input Files Included:
+- (none)
+
+Missing Input Patterns:
+- ../../design/modules/<type>/<module>/schema.json
+- ../../design/modules/<type>/<module>/rules.json
+- ../../design/modules/<type>/<module>/state-machine.json
+- ../../design/modules/<type>/<module>/api.yaml
+
+AI Task Prompt
+You are executing the following skill in this workspace.
+Skill Name: source_code_generation
+Objective: Generate application source code from module specifications
+
+Rules:
+- Honor architecture layer rules
+- Emit deterministic codegen outputs
+
+Expected Outputs:
+- ../../src/<layer>/**/*.ts
+- generated-manifest.json
+
+Use the included input files as your evidence base and produce outputs exactly at the expected paths.

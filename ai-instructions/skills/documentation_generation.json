@@ -1,0 +1,23 @@
+{
+    "name":  "documentation_generation",
+    "purpose":  "Render documentation using templates and artifacts",
+    "inputs":  [
+                   "configuration.json"
+               ],
+    "outputs":  [
+                    "output/docs/*.md"
+                ],
+    "artifacts":  [
+                      "output/docs/"
+                  ],
+    "rules":  [
+                  "Use registered templates",
+                  "Do not overwrite canonical sources"
+              ],
+    "uses_tools":  [
+                       "file_manager"
+                   ],
+    "next_phase":  "governance"
+}
+
+

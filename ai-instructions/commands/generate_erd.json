@@ -1,0 +1,23 @@
+{
+  "name": "generate_erd",
+  "label": "Generate ERD",
+  "phase": "governance",
+  "intent": "generate",
+  "ai": "none",
+  "requires": [
+    "ba/data-model/logical-data-model.json"
+  ],
+  "produces": [
+    "output/docs/diagrams/erd.md"
+  ],
+  "calls": [
+    "diagram_generation"
+  ],
+  "tools": [
+    "file_manager"
+  ],
+  "rules": [
+    "Generate ERD directly from logical-data-model.json",
+    "Do not invent entities or relationships"
+  ]
+}

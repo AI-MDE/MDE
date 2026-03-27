@@ -1,0 +1,27 @@
+{
+  "name": "generate_sql",
+  "label": "Generate SQL Schema",
+  "phase": "design",
+  "intent": "generate",
+  "ai": "none",
+  "requires": [
+    "design/entities/ent-*.json"
+  ],
+  "produces": [
+    "design/sql/schema.sql",
+    "design/sql/schema-state.json",
+    "design/sql/alter-YYYY-MM-DD.sql"
+  ],
+  "calls": [],
+  "tools": [
+    "file_manager"
+  ],
+  "rules": [
+    "First run writes schema.sql and schema-state.json — no alter file",
+    "Subsequent runs diff against schema-state.json and write alter-YYYY-MM-DD.sql with only the changes",
+    "Dropped tables and columns are commented out — never auto-applied",
+    "Reads entity fields, indexes, and relationships from design/entities/ent-*.json",
+    "Entity type mapping: uuid → UUID, string → VARCHAR(255), decimal → NUMERIC, datetime → TIMESTAMPTZ, enum → VARCHAR(50) with CHECK constraint"
+  ],
+  "notes": "Configure entities-dir and sql-dir in configuration.json to point to design/entities/ and design/sql/ respectively."
+}

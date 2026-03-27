@@ -1,0 +1,101 @@
+{
+  "project": "Claims Management System",
+  "version": "0.1.0",
+  "generatedAt": "2026-03-26T02:21:40.382Z",
+  "modules": [
+    {
+      "moduleId": "M01",
+      "moduleName": "Claim Intake",
+      "type": "service",
+      "responsibilities": [
+        "Capture claim submission",
+        "Validate mandatory fields and documents"
+      ],
+      "interfaces": [],
+      "dependencies": [],
+      "requirements": [
+        "BR-001"
+      ]
+    },
+    {
+      "moduleId": "M02",
+      "moduleName": "Assignment",
+      "type": "service",
+      "responsibilities": [
+        "Assign claim to processing queue",
+        "Balance workload across agents"
+      ],
+      "interfaces": [],
+      "dependencies": [],
+      "requirements": [
+        "BR-002"
+      ]
+    },
+    {
+      "moduleId": "M03",
+      "moduleName": "Claim Review",
+      "type": "service",
+      "responsibilities": [
+        "Review claim details",
+        "Handle additional information requests"
+      ],
+      "interfaces": [],
+      "dependencies": [],
+      "requirements": [
+        "BR-003"
+      ]
+    },
+    {
+      "moduleId": "M04",
+      "moduleName": "Decisioning",
+      "type": "service",
+      "responsibilities": [
+        "Apply business rules",
+        "Approve or deny claim"
+      ],
+      "interfaces": [],
+      "dependencies": [],
+      "requirements": [
+        "BR-004"
+      ]
+    },
+    {
+      "moduleId": "M05",
+      "moduleName": "Payout",
+      "type": "service",
+      "responsibilities": [
+        "Calculate payout amount",
+        "Initiate approved payout flow"
+      ],
+      "interfaces": [],
+      "dependencies": [],
+      "requirements": [
+        "BR-005"
+      ]
+    },
+    {
+      "moduleId": "M06",
+      "moduleName": "Notifications",
+      "type": "service",
+      "responsibilities": [
+        "Publish workflow events",
+        "Notify participants on status changes"
+      ],
+      "interfaces": [],
+      "dependencies": [],
+      "requirements": []
+    },
+    {
+      "moduleId": "M07",
+      "moduleName": "Reporting",
+      "type": "service",
+      "responsibilities": [
+        "Provide operational KPIs",
+        "Expose status and throughput views"
+      ],
+      "interfaces": [],
+      "dependencies": [],
+      "requirements": []
+    }
+  ]
+}

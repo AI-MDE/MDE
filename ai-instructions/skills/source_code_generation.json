@@ -1,0 +1,67 @@
+{
+  "name": "source_code_generation",
+  "purpose": "Generate application source code from module specifications, following the layer structure and naming conventions in architecture.json",
+  "inputs": [
+    "mde/architecture/architecture.json",
+    "design/modules/<type>/<module>/schema.json",
+    "design/modules/<type>/<module>/rules.json",
+    "design/modules/<type>/<module>/state-machine.json",
+    "design/modules/<type>/<module>/events.json",
+    "design/modules/<type>/<module>/api.yaml"
+  ],
+  "outputs": [
+    "src/{module}/domain/{module}.entity.ts",
+    "src/{module}/domain/{module}.validator.ts",
+    "src/{module}/domain/{module}.state-machine.ts",
+    "src/{module}/dto/{module}.request.dto.ts",
+    "src/{module}/dto/{module}.response.dto.ts",
+    "src/{module}/dto/{module}.read.dto.ts",
+    "src/{module}/dto/{verb}-{module}.command.ts",
+    "src/{module}/dto/{module}.events.ts",
+    "src/{module}/data_access/{module}.repository.interface.ts",
+    "src/{module}/data_access/{module}.repository.ts",
+    "src/{module}/data_access/{module}.mapper.ts",
+    "src/{module}/service/{module}.service.interface.ts",
+    "src/{module}/service/{module}.service.ts",
+    "src/{module}/queries/{module}.query-service.ts",
+    "src/{module}/controller/{module}.controller.ts",
+    "src/shared/events/domain-event.ts",
+    "src/shared/events/domain-event-publisher.ts",
+    "generated-manifest.json"
+  ],
+  "artifacts": [
+    "src/{module}/"
+  ],
+  "generation_order": [
+    "shared types and errors",
+    "domain Entity",
+    "Commands",
+    "Repository port interfaces",
+    "Service classes",
+    "Mapper",
+    "Repository implementations",
+    "QueryService classes",
+    "Controllers",
+    "DI container wiring"
+  ],
+  "rules": [
+    "Read architecture.json for folder structure, naming conventions, and layer rules before generating",
+    "Follow codegen.structure.layers for output paths — src/{module}/domain/, src/{module}/service/, etc.",
+    "Follow codegen.naming for class and file naming conventions",
+    "Entity must expose create() factory for new instances and rehydrate() factory for repository reconstruction",
+    "Service class: one public method per use case — authorize, load, act, save, emit event",
+    "QueryService: stateless, reads only, returns ReadDto — must not touch domain layer",
+    "Mapper: pure field translation only — no business logic",
+    "Repository implementation: raw SQL, parameterized queries only",
+    "Commands: one per write operation, fields only, no behavior",
+    "Event types: typed aliases of DomainEvent<T> — base type in shared/events/domain-event.ts",
+    "DomainEventPublisher interface in shared/events/domain-event-publisher.ts",
+    "Emit deterministic outputs — same inputs must produce same outputs",
+    "Generate unit test stubs for domain and service layers",
+    "Generate integration test stubs for data_access and controller layers"
+  ],
+  "uses_tools": [
+    "file_manager"
+  ],
+  "next_phase": "development"
+}

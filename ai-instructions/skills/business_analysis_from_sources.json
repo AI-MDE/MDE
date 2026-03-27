@@ -1,0 +1,251 @@
+{
+    "name":  "business_analysis_from_sources",
+    "label":  "Business Analysis from Source Documents",
+    "category":  "business_analysis",
+    "purpose":  "Analyze mixed project inputs, derive a clean requirements baseline, maintain a separate analysis status record for sources, history, and open issues, and generate targeted clarification questions with prefilled default answers the user can keep, edit, or delete.",
+    "when_to_use":  [
+                        "Project starts from raw notes, docs, spreadsheets, screenshots, forms, reports, emails, or process descriptions",
+                        "Requirements are incomplete or unclear",
+                        "The user cannot articulate a formal requirements document",
+                        "The system needs to guide discovery before architecture or design"
+                    ],
+    "requires":  [
+                     "source-documents"
+                 ],
+    "optional_inputs":  [
+                            "requirements.json",
+                            "use-cases.md",
+                            "business-functions.json",
+                            "open-issues.json",
+                            "clarification-queue.json",
+                            "questions.json"
+                        ],
+    "input_types":  {
+                        "source-documents":  {
+                                                 "description":  "Primary business source materials such as markdown docs, notes, spreadsheets, screenshots, forms, reports, SOPs, and sample outputs",
+                                                 "required":  true,
+                                                 "multiple":  true
+                                             },
+                        "application-definition":  {
+                                                        "description":  "Structured application definition covering the app, business domain, subjects, scope, and current release intent",
+                                                        "required":  true,
+                                                        "multiple":  false
+                                                    },
+                        "existing-ba-artifacts":  {
+                                                      "description":  "Previously generated BA outputs that should be updated rather than recreated",
+                                                      "required":  false,
+                                                      "multiple":  true
+                                                  },
+                        "requirements-json":  {
+                                                  "description":  "Existing normalized requirements baseline, if available",
+                                                  "required":  false,
+                                                  "multiple":  false
+                                              },
+                        "business-functions":  {
+                                                   "description":  "Known business capability/function list, if available",
+                                                   "required":  false,
+                                                   "multiple":  false
+                                               },
+                        "open-issues-json":  {
+                                                 "description":  "Current unresolved issues or deferred questions",
+                                                 "required":  false,
+                                                 "multiple":  false
+                                             },
+                        "clarification-queue-json":  {
+                                                         "description":  "Pending or previously unanswered clarification items",
+                                                         "required":  false,
+                                                         "multiple":  false
+                                                     },
+                        "clarification-question-batch-json":  {
+                                                                  "description":  "Question batch file containing user responses that must be examined and incorporated into updated BA outputs on subsequent runs",
+                                                                  "required":  false,
+                                                                  "multiple":  false
+                                                              },
+                        "completed-questions-json":  {
+                                                         "description":  "Archive of satisfactorily answered questions that were accepted into the BA baseline in prior runs",
+                                                         "required":  false,
+                                                         "multiple":  false
+                                                     }
+                    },
+    "objectives":  [
+                       "Extract business goals, actors, workflows, rules, artifacts, entities, constraints, pain points, integrations, and ambiguities",
+                       "Normalize terminology across inconsistent source material",
+                       "Separate explicit facts from inference, assumptions, and unresolved issues",
+                                          "Examine user responses captured in project/questions.json and use accepted answers to update BA outputs before generating new questions",
+                                          "Archive only satisfactorily answered question items in project/completed-Questions.json so active questions.json contains only still-open or not-yet-accepted clarification work",
+                       "Generate the next highest-value clarification questions",
+                       "Prefill the response field with the best default answer or answer set when confidence is sufficient",
+                       "Allow unresolved items to remain in queue rather than forcing guesses",
+                       "Produce a design-ready BA baseline incrementally",
+                       "Keep requirements.md focused on baseline requirements while recording source inventory, clarification history, blockers, and readiness in a separate status artifact"
+                   ],
+    "workflow_pattern": "discovery_loop",
+    "methodology":  [
+                        "Follow the discovery_loop workflow pattern defined in methodology.json",
+                        "Use source artifacts as the primary evidence base",
+                        "Do not assume the user can provide a formal requirements document",
+                        "Start with discovery, not architecture",
+                        "Extract what is explicit first",
+                        "Label each significant item as explicit, inferred, assumed, conflicting, or unresolved",
+                        "Ask only the next highest-value questions, not an exhaustive questionnaire",
+                        "For each question, explain why it matters and what gap it resolves",
+                        "When possible, prefill the response field with the best default answer or answer set to reduce user effort",
+                        "Allow the user to keep, edit, partially delete, fully clear, or defer the prefilled response",
+                        "Track unresolved items in a queue instead of inventing certainty",
+                        "Preserve traceability between sources, findings, questions, answers, requirements, and BA sections",
+                        "Keep the requirements document focused on requirements content and store source inventory, history, blockers, and status in a separate BA status document",
+                        "Do not move to architecture recommendations unless BA readiness is sufficient"
+                    ],
+    "question_strategy":  {
+                              "batch_size_default":  5,
+                              "batch_size_min":  3,
+                              "batch_size_max":  7,
+                              "prioritization":  [
+                                                     "Architecture impact",
+                                                     "Business criticality",
+                                                     "Uncertainty level",
+                                                     "Dependency on other answers",
+                                                     "Ability to reduce multiple downstream ambiguities"
+                                                 ],
+                              "question_categories":  [
+                                                          "business_problem",
+                                                          "scope",
+                                                          "stakeholders_roles",
+                                                          "workflow_process",
+                                                          "business_rules",
+                                                          "data_artifacts",
+                                                          "integrations",
+                                                          "reporting_outputs",
+                                                          "non_functional_constraints",
+                                                          "open_issues"
+                                                      ],
+                              "answer_modes":  [
+                                                   "single_select_or_edit",
+                                                   "multi_select_or_edit",
+                                                   "free_text",
+                                                   "defer_to_queue"
+                                               ],
+                              "include_why_relevant":  true,
+                              "include_current_understanding":  true,
+                              "include_likely_answers_when_confident":  true,
+                              "allow_work_queue":  true
+                          },
+    "default_response_policy":  {
+                                    "enabled":  true,
+                                    "only_when_confidence_at_least":  "medium",
+                                    "max_prefilled_items":  6,
+                                    "rules":  [
+                                                  "Do not present prefilled responses as facts",
+                                                  "Use the response field itself for defaults rather than a separate suggested_answers field",
+                                                  "Prefer domain-neutral patterns unless project evidence suggests otherwise",
+                                                  "Allow the user to edit, trim, replace, or clear the prefilled response"
+                                              ]
+                                },
+    "gap_detection":  {
+                          "coverage_areas":  [
+                                                 "business_problem_and_goals",
+                                                 "scope_and_out_of_scope",
+                                                 "stakeholders_and_roles",
+                                                 "business_capabilities_and_functions",
+                                                 "use_cases_and_user_stories",
+                                                 "current_state_process",
+                                                 "pain_points_and_gaps",
+                                                 "target_capabilities",
+                                                 "business_rules_and_decision_logic",
+                                                 "functional_requirements",
+                                                 "non_functional_requirements",
+                                                 "data_and_business_entities",
+                                                 "inputs_outputs_and_artifacts",
+                                                 "external_integrations",
+                                                 "risks_assumptions_dependencies",
+                                                 "open_questions"
+                                             ],
+                          "on_missing_required_context":  "generate_clarification_questions",
+                          "on_conflict":  "record_conflict_and_ask_for_resolution",
+                          "on_partial_information":  "continue_with_labeled_assumptions"
+                      },
+    "outputs":  [
+                    "source_inventory",
+                    "discovery_findings",
+                    "terminology_map",
+                    "clarification_question_batch",
+                    "clarification_queue_updates",
+                    "completed_questions_archive_updates",
+                    "assumptions_register",
+                    "conflict_register",
+                    "requirements_baseline_updates",
+                    "business_rules_catalog_updates",
+                    "entity_artifact_catalog_updates",
+                    "business_analysis_document_updates",
+                    "business_analysis_status_document_updates",
+                    "design_readiness_summary"
+                ],
+    "output_formats":  {
+                           "clarification_question_batch":  "json",
+                           "clarification_queue_updates":  "json",
+                           "completed_questions_archive_updates":  "json",
+                           "requirements_baseline_updates":  "json",
+                           "business_rules_catalog_updates":  "json",
+                           "business_analysis_document_updates":  "markdown",
+                           "business_analysis_status_document_updates":  "markdown",
+                           "design_readiness_summary":  "json"
+                       },
+    "question_output_schema_hint":  {
+                                        "fields":  [
+                                                       "id",
+                                                       "category",
+                                                       "question",
+                                                       "why_relevant",
+                                                       "current_understanding",
+                                                       "answer_mode",
+                                                       "blocking",
+                                                       "related_ba_sections",
+                                                       "source_refs",
+                                                       "response",
+                                                       "accepted",
+                                                       "queue"
+                                                   ],
+                                        "field_notes": {
+                                            "response": "The answer payload — prefilled by AI when confident, edited by user to correct or clarify",
+                                            "accepted": "Boolean. Set to true by the user to confirm the response is correct and ready to incorporate. Default false. The AI must not set this to true — only the user confirms acceptance.",
+                                            "queue": "Set to true to defer the question without answering it"
+                                        }
+                                    },
+    "traceability_rules":  [
+                               "Every major finding should reference one or more source artifacts when available",
+                               "Every clarification question should identify the gap it is resolving",
+                               "Every accepted answer should update one or more BA objects explicitly",
+                               "Every unresolved issue should remain visible in the queue or open issues register",
+                               "Questions accepted as complete should be preserved in project/completed-Questions.json rather than disappearing from traceability",
+                               "When a document is moved to analyzed, preserve enough path metadata to trace findings back to the original source file",
+                               "Do not silently overwrite prior assumptions without recording the change"
+                           ],
+    "completion_criteria":  [
+                                "Business problem is clear enough for structured analysis",
+                                "Main actors and workflow are identified",
+                                "Key artifacts and entities are known",
+                                "Major business rules are captured or explicitly queued",
+                                "Core functional and non-functional requirements are at least draftable",
+                                "Major ambiguities are either resolved or visible in queue",
+                                "BA baseline is stable enough to support architecture"
+                            ],
+    "failure_behavior":  {
+                             "on_insufficient_sources":  "ask_for_more_source_material_or_application_definition",
+                             "on_heavy_conflict":  "produce_conflict_register_and_targeted_resolution_questions",
+                             "on_missing_answers":  "continue_with_queue_and_labeled_assumptions",
+                             "on_low_confidence":  "avoid overcommitting_and_raise_clarification"
+                         },
+    "constraints":  [
+                        "Do not jump directly to architecture or implementation",
+                        "Do not fabricate requirements that are not supported by evidence or clarified by the user",
+                        "Do not overwhelm the user with broad questionnaires",
+                        "Do not hide uncertainty",
+                        "Do not ignore populated responses in questions.json on subsequent runs",
+                        "Do not emit a separate suggested_answers field in questions.json; use response as the default answer payload",
+                        "Do not move questions to completed-Questions.json unless accepted is true",
+                        "Do not set accepted to true — only the user sets accepted",
+                        "Do not keep questions with accepted: true in active questions.json; move them to completed-Questions.json",
+                        "Do not discard unanswered questions; queue them"
+                    ]
+}
+

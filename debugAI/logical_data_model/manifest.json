@@ -1,0 +1,26 @@
+{
+  "skill": "logical_data_model",
+  "generatedAt": "2026-03-26T03:27:09.207Z",
+  "config": "configuration.json",
+  "commandMappings": [],
+  "inputs": {
+    "declaredPatterns": [
+      "../../ba/requirements.md",
+      "../../ba/glossary.md",
+      "../../design/application_architecture.json"
+    ],
+    "includedFiles": [
+      "ba/requirements.md",
+      "design/application_architecture.json"
+    ],
+    "missingPatterns": [
+      "../../ba/glossary.md"
+    ]
+  },
+  "outputPaths": {
+    "debugDir": "debug/logical_data_model",
+    "prompt": "debug/logical_data_model/ai-prompt.txt",
+    "zip": "debug/logical_data_model/inputs.zip"
+  },
+  "project": "Claims Management System"
+}

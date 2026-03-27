@@ -1,0 +1,334 @@
+﻿{
+  "skills": [
+    {
+      "name": "requirements_validation",
+      "purpose": "Validate requirement artifacts for clarity, completeness, ambiguity, and readiness for design",
+      "inputs": [
+        "1-BA/requirements.json",
+        "1-BA/use-cases/*.md",
+        "1-BA/business-functions.json"
+      ],
+      "outputs": [
+        "1-BA/requirements-validation-report.json"
+      ],
+      "artifacts": [
+        "requirements-validation-report.json"
+      ],
+      "rules": [
+        "Do not introduce technical architecture",
+        "Flag ambiguity explicitly",
+        "Ensure each requirement has an ID and acceptance criteria where applicable"
+      ],
+      "uses_tools": [
+        "file_manager",
+        "json_validator",
+        "traceability_engine"
+      ],
+      "next_phase": "system_design"
+    },
+    {
+      "name": "system_design",
+      "purpose": "Generate architecture and design artifacts from validated business analysis outputs",
+      "inputs": [
+        "requirements.json",
+        "use-cases/*.md",
+        "business-functions.json"
+      ],
+      "outputs": [
+        "architecture.json",
+        "module-catalog.json"
+      ],
+      "artifacts": [
+        "../MDT/architecture.json",
+        "2 Design/modules/module-catalog.json"
+      ],
+      "rules": [
+        "Patterns must be explicit",
+        "Runtime components and code modules must be distinguished",
+        "Requirement-to-module mapping must exist"
+      ],
+      "uses_tools": [
+        "file_manager"
+      ],
+      "next_phase": "module_definition"
+    },
+    {
+      "name": "logical_data_model",
+      "purpose": "Generate a logical data model grounded in requirements, glossary, and architecture",
+      "inputs": [
+        "requirements.json",
+        "glossary.md",
+        "architecture.json"
+      ],
+      "outputs": [
+        "logical-data-model.json"
+      ],
+      "artifacts": [
+        "1-BA/data-model/logical-data-model.json"
+      ],
+      "rules": [
+        "Use business vocabulary",
+        "Separate conceptual entities from physical implementation",
+        "Record ownership and relationships explicitly"
+      ],
+      "uses_tools": [
+        "file_manager",
+        "json_validator"
+      ],
+      "next_phase": "module_definition"
+    },
+    {
+      "name": "module_definition",
+      "purpose": "Define buildable modules with boundaries, responsibilities, interfaces, and dependencies",
+      "inputs": [
+        "architecture.json",
+        "module-catalog.json",
+        "requirements.json"
+      ],
+      "outputs": [
+        "modules/<type>/module-charter-<module>.md",
+        "modules/<type>/module-<module>.json"
+      ],
+      "artifacts": [
+        "2 Design/modules/"
+      ],
+      "rules": [
+        "Each module must have clear ownership",
+        "No overlapping responsibilities",
+        "Dependencies must be explicit and directional"
+      ],
+      "uses_tools": [
+        "file_manager"
+      ],
+      "next_phase": "module_specification"
+    },
+    {
+      "name": "module_specification",
+      "purpose": "Generate detailed implementation-ready specs for a module",
+      "inputs": [
+        "modules/<type>/module-<module>.json",
+        "requirements.json",
+        "architecture.json"
+      ],
+      "outputs": [
+        "schema.json",
+        "rules.json",
+        "state-machine.json",
+        "api.yaml"
+      ],
+      "artifacts": [
+        "2 Design/modules/<module>/"
+      ],
+      "rules": [
+        "No new requirements allowed",
+        "All rules must be explicit",
+        "State transitions and error conditions must be defined"
+      ],
+      "uses_tools": [
+        "file_manager",
+        "json_validator"
+      ],
+      "next_phase": "test_pack"
+    },
+    {
+      "name": "architecture_validation",
+      "purpose": "Validate architecture artifacts against declared patterns and dependency rules",
+      "inputs": [
+        "architecture.json",
+        "module-catalog.json"
+      ],
+      "outputs": [
+        "architecture-validation-report.json"
+      ],
+      "artifacts": [
+        "2 Design/architecture-validation-report.json"
+      ],
+      "rules": [
+        "Check architectural pattern stack",
+        "Check layer rules and adapter rules",
+        "Check module alignment with architecture"
+      ],
+      "uses_tools": [
+        "file_manager",
+        "architecture_validator"
+      ],
+      "next_phase": "module_definition"
+    },
+    {
+      "name": "source_code_generation",
+      "purpose": "Generate application source code from module specifications",
+      "inputs": [
+        "modules/<type>/<module>/schema.json",
+        "modules/<type>/<module>/rules.json",
+        "modules/<type>/<module>/state-machine.json",
+        "modules/<type>/<module>/api.yaml"
+      ],
+      "outputs": [
+        "src/<layer>/**/*.ts",
+        "generated-manifest.json"
+      ],
+      "artifacts": [
+        "src/"
+      ],
+      "rules": [
+        "Honor architecture layer rules",
+        "Emit deterministic codegen outputs"
+      ],
+      "uses_tools": [
+        "file_manager"
+      ],
+      "next_phase": "development"
+    },
+    {
+      "name": "documentation_generation",
+      "purpose": "Render documentation using templates and artifacts",
+      "inputs": [
+        "configuration.json",
+        "templates/registry.json"
+      ],
+      "outputs": [
+        "docs/*.md"
+      ],
+      "artifacts": [
+        "docs/"
+      ],
+      "rules": [
+        "Use registered templates",
+        "Do not overwrite canonical sources"
+      ],
+      "uses_tools": [
+        "file_manager"
+      ],
+      "next_phase": "governance"
+    },
+    {
+      "name": "sample_data_generation",
+      "purpose": "Generate sample entity data files",
+      "inputs": [
+        "data-model/logical-data-model.json",
+        "entities/*.json"
+      ],
+      "outputs": [
+        "sampleData/*.json"
+      ],
+      "artifacts": [
+        "sampleData/"
+      ],
+      "rules": [
+        "Respect field types and required flags",
+        "Use deterministic values per entity"
+      ],
+      "uses_tools": [
+        "file_manager"
+      ],
+      "next_phase": "development"
+    },
+    {
+      "name": "diagram_generation",
+      "purpose": "Generate diagrams from core artifacts",
+      "inputs": [
+        "data-model/logical-data-model.json",
+        "architecture.json",
+        "architecture.json",
+        "modules/module-catalog.json"
+      ],
+      "outputs": [
+        "docs/diagrams/*.md",
+        "docs/diagrams/*.svg"
+      ],
+      "artifacts": [
+        "docs/diagrams/"
+      ],
+      "rules": [
+        "Render LDM, architecture, interaction, and dataflow diagrams",
+        "Use canonical sources as inputs"
+      ],
+      "uses_tools": [
+        "file_manager"
+      ],
+      "next_phase": "governance"
+    },
+    {
+      "name": "dal_generation",
+      "purpose": "Generate TypeScript DAL modules using raw SQL from DAL specs",
+      "inputs": [
+        "configuration.json",
+        "2 Design/modules/dal/dal-*.json",
+        "2 Design/modules/dal/*/schema.json"
+      ],
+      "outputs": [
+        "src/dal/*.ts",
+        "src/services/*.ts",
+        "src/dal/*.test.js",
+        "src/services/*.test.js"
+      ],
+      "artifacts": [
+        "src/dal/"
+      ],
+      "rules": [
+        "Use raw SQL for queries",
+        "Emit TypeScript for Node.js",
+        "Avoid modifying non-DAL folders"
+      ],
+      "uses_tools": [
+        "file_manager"
+      ],
+      "next_phase": "development"
+    },
+    {
+      "name": "dal_generation_from_db",
+      "purpose": "Generate TypeScript DAL modules using raw SQL from live DB schema",
+      "inputs": [
+        "configuration.json",
+        ".env (DATABASE_URL)",
+        "2 Design/modules/dal/dal-*.json",
+        "2 Design/modules/dal/*/schema.json"
+      ],
+      "outputs": [
+        "src/dal/*.ts"
+      ],
+      "artifacts": [
+        "src/dal/"
+      ],
+      "rules": [
+        "Introspect DB schema for columns and keys",
+        "Use raw SQL for queries"
+      ],
+      "uses_tools": [
+        "file_manager"
+      ],
+      "next_phase": "development"
+    },
+    {
+      "name": "governance_validation",
+      "purpose": "Validate traceability, phase completeness, TOGAF/Zachman coverage, and missing artifacts",
+      "inputs": [
+        "requirements.json",
+        "module-catalog.json",
+        "module-tests.json",
+        "methodology.json",
+        "project-state.json"
+      ],
+      "outputs": [
+        "trace-matrix.json",
+        "phase-status-report.json",
+        "governance-report.json"
+      ],
+      "artifacts": [
+        "2 Design/trace-matrix.json",
+        "work/phase-status-report.json"
+      ],
+      "rules": [
+        "Every requirement should map to functions, modules, and tests where relevant",
+        "Missing artifacts must be reported, not guessed"
+      ],
+      "uses_tools": [
+        "traceability_engine",
+        "phase_status_checker",
+        "file_manager"
+      ],
+      "next_phase": "development"
+    }
+  ]
+}
+

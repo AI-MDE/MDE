@@ -1,0 +1,27 @@
+{
+    "name":  "logical_data_model",
+    "purpose":  "Generate a logical data model grounded in requirements, glossary, and architecture",
+    "inputs":  [
+                   "ba/requirements.md",
+                   "ba/glossary.md",
+                   "design/application_architecture.json"
+               ],
+    "outputs":  [
+                    "ba/data-model/logical-data-model.json"
+                ],
+    "artifacts":  [
+                      "ba/data-model/logical-data-model.json"
+                  ],
+    "rules":  [
+                  "Use business vocabulary",
+                  "Separate conceptual entities from physical implementation",
+                  "Record ownership and relationships explicitly"
+              ],
+    "uses_tools":  [
+                       "file_manager",
+                       "json_validator"
+                   ],
+    "next_phase":  "module_definition"
+}
+
+

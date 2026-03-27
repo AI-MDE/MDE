@@ -1,0 +1,24 @@
+{
+    "name":  "generate_documentation",
+    "label":  "Generate Documentation",
+    "phase":  "governance",
+    "intent":  "generate",
+    "ai":  "optional",
+    "requires":  [
+                     "configuration.json"
+                 ],
+    "produces":  [
+                     "output/docs/*.md"
+                 ],
+    "calls":  [
+                  "documentation_generation"
+              ],
+    "tools":  [
+                  "file_manager"
+              ],
+    "rules":  [
+                  "Use templates to render project artifacts"
+              ]
+}
+
+

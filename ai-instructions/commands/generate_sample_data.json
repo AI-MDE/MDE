@@ -1,0 +1,26 @@
+{
+    "name":  "generate_sample_data",
+    "label":  "Generate Sample Data",
+    "phase":  "development",
+    "intent":  "generate",
+    "ai":  "none",
+    "requires":  [
+                     "ba/data-model/logical-data-model.json",
+                     "design/entities/*.json"
+                 ],
+    "produces":  [
+                     "output/sample-data/*.json"
+                 ],
+    "calls":  [
+                  "sample_data_generation"
+              ],
+    "tools":  [
+                  "file_manager"
+              ],
+    "rules":  [
+                  "Generate sample rows for entities",
+                  "Respect field types and required flags"
+              ]
+}
+
+

@@ -1,0 +1,26 @@
+{
+  "skill": "business_function_generation",
+  "generatedAt": "2026-03-26T03:26:53.841Z",
+  "config": "configuration.json",
+  "commandMappings": [
+    "generate_business_functions"
+  ],
+  "inputs": {
+    "declaredPatterns": [
+      "../../ba/business-functions.json",
+      "../../project/project-state.json"
+    ],
+    "includedFiles": [
+      "project/project-state.json"
+    ],
+    "missingPatterns": [
+      "../../ba/business-functions.json"
+    ]
+  },
+  "outputPaths": {
+    "debugDir": "debug/business_function_generation",
+    "prompt": "debug/business_function_generation/ai-prompt.txt",
+    "zip": "debug/business_function_generation/inputs.zip"
+  },
+  "project": "Claims Management System"
+}

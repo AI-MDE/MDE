@@ -1,0 +1,30 @@
+Skill Debug Prompt
+Skill: dal_generation
+GeneratedAt: 2026-03-26T03:26:55.972Z
+
+Purpose: Generate TypeScript DAL modules using raw SQL from DAL specs
+
+Input Files Included:
+- configuration.json
+
+Missing Input Patterns:
+- ../../design/modules/dal/dal-*.json
+- ../../design/modules/dal/*/schema.json
+
+AI Task Prompt
+You are executing the following skill in this workspace.
+Skill Name: dal_generation
+Objective: Generate TypeScript DAL modules using raw SQL from DAL specs
+
+Rules:
+- Use raw SQL for queries
+- Emit TypeScript for Node.js
+- Avoid modifying non-DAL folders
+
+Expected Outputs:
+- ../../src/dal/*.ts
+- ../../src/services/*.ts
+- ../../src/dal/*.test.js
+- ../../src/services/*.test.js
+
+Use the included input files as your evidence base and produce outputs exactly at the expected paths.

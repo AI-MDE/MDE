@@ -1,0 +1,336 @@
+{
+  "name": "mdt_orchestrator",
+  "version": "1.1",
+  "description": "Command-driven orchestrator for this workspace's AI-assisted model-driven engineering workflow.",
+  "inputs": {
+    "command_registry": "mde/ai-instructions/commands",
+    "skills_registry": "mde/ai-instructions/skills",
+    "agent_bootstrap": "AGENT.md",
+    "requirements_baseline": "ba/requirements.md",
+    "analysis_status": "ba/analysis-status.md",
+    "discovery_folder": "ba/discovery",
+    "analyzed_folder": "ba/analyzed",
+    "active_question_batch": "project/questions.json",
+    "open_queue": "project/open-queue.json",
+    "completed_questions": "project/completed-Questions.json",
+    "application_definition": "application/application.json",
+    "project_state": "project/project-state.json",
+    "command_log": "project/logs/command-log.json",
+    "configuration": "configuration.json",
+    "methodology": "project/methodology.json"
+  },
+  "state_model": {
+    "project_state_file": "project/project-state.json",
+    "fields": {
+      "current_phase": "string",
+      "completed_commands": [
+        "string"
+      ],
+      "failed_commands": [
+        "string"
+      ],
+      "artifacts": {
+        "type": "object",
+        "additionalProperties": {
+          "type": "string",
+          "enum": [
+            "missing",
+            "in_progress",
+            "complete",
+            "failed"
+          ]
+        }
+      },
+      "last_command": "string",
+      "last_run_at": "datetime",
+      "recommended_next_command": "string",
+      "next_valid_commands": [
+        {
+          "command": "string",
+          "reason": "string"
+        }
+      ]
+    }
+  },
+  "command_resolution": {
+    "mode": "explicit_first",
+    "rules": [
+      "If the user input matches a command label exactly, use that command.",
+      "If the user input matches a canonical command name, use that command.",
+      "If the user input is close to multiple commands, return ranked candidates.",
+      "Never guess destructive or phase-skipping commands.",
+      "Normalize user text to verb + target where possible."
+    ],
+    "examples": [
+      {
+        "user_input": "Perform Business Analysis",
+        "resolved_command": "perform_business_analysis"
+      },
+      {
+        "user_input": "Validate Requirements",
+        "resolved_command": "validate_requirements"
+      },
+      {
+        "user_input": "Build System Design",
+        "resolved_command": "build_system_design"
+      },
+      {
+        "user_input": "Generate Modules",
+        "resolved_command": "generate_modules"
+      }
+    ]
+  },
+  "execution_pipeline": [
+    {
+      "step": 1,
+      "name": "resolve_command",
+      "description": "Map user input to a canonical command in mde/ai-instructions/commands/*.json"
+    },
+    {
+      "step": 2,
+      "name": "load_context",
+      "description": "Load AGENT.md, orchestration registries, BA artifacts, and optional project state/configuration files"
+    },
+    {
+      "step": 3,
+      "name": "check_prerequisites",
+      "description": "Verify that all required artifacts for the command exist"
+    },
+    {
+      "step": 4,
+      "name": "validate_phase_rules",
+      "description": "Ensure the command is valid for the current phase or explicitly allowed cross-phase"
+    },
+    {
+      "step": 5,
+      "name": "select_skills_and_tools",
+      "description": "Read the command definition and determine which skills and tools to invoke"
+    },
+    {
+      "step": 6,
+      "name": "execute_skill_flow",
+      "description": "Invoke skill flows in order and let each skill call its permitted tools"
+    },
+    {
+      "step": 7,
+      "name": "persist_outputs",
+      "description": "Write generated or validated artifacts to the configured BA and project paths"
+    },
+    {
+      "step": 8,
+      "name": "update_project_state",
+      "description": "Record command completion or failure and always refresh recommended_next_command plus next_valid_commands (with reasons) if project/project-state.json is present"
+    },
+    {
+      "step": 9,
+      "name": "return_result",
+      "description": "Return summary, outputs, warnings, blockers, and next valid commands"
+    }
+  ],
+  "phase_rules": {
+    "project_initiation": {
+      "allowed_commands": [
+        "initiate_project",
+        "select_methodology",
+        "select_architecture"
+      ],
+      "entry_conditions": [],
+      "exit_conditions": [
+        "project/project-state.json exists or initialization was intentionally skipped"
+      ]
+    },
+    "business_analysis": {
+      "allowed_commands": [
+        "identify_domain",
+        "identify_external_references",
+        "perform_business_analysis",
+        "generate_business_functions",
+        "generate_use_cases",
+        "validate_requirements"
+      ],
+      "entry_conditions": [],
+      "exit_conditions": [
+        "ba/requirements.md exists",
+        "ba/analysis-status.md exists",
+        "project/questions.json exists",
+        "project/open-queue.json exists"
+      ]
+    },
+    "system_design": {
+      "allowed_commands": [
+        "build_system_design",
+        "generate_ldm",
+        "validate_ldm_coverage",
+        "generate_modules",
+        "validate_architecture"
+      ],
+      "entry_conditions": [
+        "ba/requirements.md exists"
+      ],
+      "exit_conditions": [
+        "design/application_architecture.json exists",
+        "design/modules/module-catalog.json exists",
+        "at least one module definition exists in design/modules/"
+      ]
+    },
+    "development": {
+      "allowed_commands": [
+        "generate_source_code",
+        "generate_sample_data"
+      ],
+      "entry_conditions": [
+        "schema.json exists for target module"
+      ],
+      "exit_conditions": [
+        "development artifacts exist for the target command"
+      ]
+    },
+    "governance": {
+      "allowed_commands": [
+        "assess_methodology",
+        "assess_architecture",
+        "identify_external_references",
+        "validate_traceability",
+        "show_phase_status",
+        "generate_diagrams",
+        "generate_documentation"
+      ],
+      "entry_conditions": [],
+      "exit_conditions": []
+    }
+  },
+  "skill_invocation_policy": {
+    "rules": [
+      "A command may call one or more skills in sequence.",
+      "A skill may only use tools declared in mde/ai-instructions/skills/*.json and allowed by the command.",
+      "Skills must not invent missing upstream artifacts.",
+      "Validation skills may report missing artifacts but must not create them unless explicitly allowed."
+    ]
+  },
+  "tool_invocation_policy": {
+    "rules": [
+      "file_manager is the default tool for artifact I/O.",
+      "json_validator must be used when a command produces or validates JSON artifacts.",
+      "traceability_engine must be used for end-to-end trace checks.",
+      "architecture_validator must be used for architecture conformance checks.",
+      "No tool may write outside configured project paths."
+    ]
+  },
+  "error_handling": {
+    "on_missing_prerequisites": {
+      "action": "block_execution",
+      "response": "Return missing artifacts and recommended preceding commands."
+    },
+    "on_validation_failure": {
+      "action": "complete_with_warnings",
+      "response": "Return validation report and keep command status as failed or warning depending on severity."
+    },
+    "on_tool_failure": {
+      "action": "stop_current_command",
+      "response": "Log tool failure, mark command failed, preserve partial outputs only if explicitly allowed."
+    },
+    "on_phase_mismatch": {
+      "action": "reject_or_offer_override",
+      "response": "Explain phase mismatch and show valid commands for the current state."
+    }
+  },
+  "response_contract": {
+    "fields": [
+      "command",
+      "status",
+      "summary",
+      "outputs",
+      "warnings",
+      "blockers",
+      "next_valid_commands"
+    ],
+    "status_values": [
+      "success",
+      "warning",
+      "blocked",
+      "failed"
+    ]
+  },
+  "logging_policy": {
+    "log_file": "project/logs/command-log.json",
+    "rules": [
+      "After completing or failing any AI command, append one entry to project/logs/command-log.json.",
+      "If the file does not exist, create it with structure: { \"entries\": [] }",
+      "Append to the entries array — never overwrite existing entries.",
+      "Entry schema: { command, label, ai: true, ran_at (ISO 8601), status (success|warning|failed), cost_estimate (object with input_tokens and output_tokens if known, otherwise null), outputs (array of files written) }",
+      "cost_estimate should be filled when token counts are available from the session context; otherwise set to null.",
+      "This rule is mandatory — do not skip logging even if the command produced warnings or partial output."
+    ]
+  },
+  "next_command_policy": {
+    "rules": [
+      "Recommend only commands whose prerequisites are satisfied.",
+      "Prefer commands in the current phase before cross-phase commands.",
+      "Always include at least one validation or inspection command when available."
+    ]
+  },
+  "sample_flows": [
+    {
+      "user_input": "Perform Business Analysis",
+      "resolved_command": "perform_business_analysis",
+      "skills": [
+        "business_analysis_from_sources"
+      ],
+      "tools": [
+        "file_manager",
+        "json_validator"
+      ],
+      "outputs": [
+        "ba/requirements.md",
+        "ba/analysis-status.md",
+        "project/questions.json",
+        "project/open-queue.json"
+      ]
+    },
+    {
+      "user_input": "Validate Requirements",
+      "resolved_command": "validate_requirements",
+      "skills": [
+        "requirements_validation"
+      ],
+      "tools": [
+        "file_manager",
+        "json_validator",
+        "traceability_engine"
+      ],
+      "outputs": [
+        "{business-analysis}/requirements-validation-report.json"
+      ]
+    },
+    {
+      "user_input": "Build System Design",
+      "resolved_command": "build_system_design",
+      "skills": [
+        "system_design"
+      ],
+      "tools": [
+        "file_manager"
+      ],
+      "outputs": [
+        "design/application_architecture.json",
+        "design/modules/module-catalog.json"
+      ]
+    },
+    {
+      "user_input": "Generate Modules",
+      "resolved_command": "generate_modules",
+      "skills": [
+        "module_definition"
+      ],
+      "tools": [
+        "file_manager",
+        "json_validator"
+      ],
+      "outputs": [
+        "design/modules/module-catalog.json",
+        "design/modules/{moduleType}/module-{kebab-module}.json",
+        "design/modules/{moduleType}/module-{kebab-module}.md"
+      ]
+    }
+  ]
+}

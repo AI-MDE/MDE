@@ -1,0 +1,75 @@
+{
+  "module_types": {
+    "workflow": {
+      "recommended_patterns": [
+        "state",
+        "command"
+      ],
+      "required_artifacts": [
+        "state-machine.json"
+      ],
+      "default_concurrency_rule": "optimistic_locking",
+      "typical_entities": [
+        "request",
+        "case",
+        "workflow_instance"
+      ]
+    },
+    "master_data": {
+      "recommended_patterns": [
+        "repository"
+      ],
+      "required_artifacts": [
+        "schema.json"
+      ],
+      "default_concurrency_rule": "optimistic_locking",
+      "typical_entities": [
+        "employee",
+        "vendor",
+        "policy"
+      ]
+    },
+    "integration": {
+      "recommended_patterns": [
+        "adapter"
+      ],
+      "required_artifacts": [
+        "api-contract.json"
+      ],
+      "forbidden_behaviors": [
+        "direct_vendor_sdk_in_domain"
+      ],
+      "typical_entities": [
+        "connector",
+        "webhook",
+        "message"
+      ]
+    },
+    "reporting": {
+      "recommended_patterns": [
+        "query_object"
+      ],
+      "required_artifacts": [
+        "query-spec.json"
+      ],
+      "read_only": true,
+      "forbidden_behaviors": [
+        "write_transactions"
+      ]
+    },
+    "rule_engine": {
+      "recommended_patterns": [
+        "strategy",
+        "specification"
+      ],
+      "required_artifacts": [
+        "rules.json"
+      ],
+      "typical_entities": [
+        "rule_set",
+        "decision",
+        "policy_evaluator"
+      ]
+    }
+  }
+}

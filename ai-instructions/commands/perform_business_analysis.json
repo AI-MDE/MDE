@@ -1,0 +1,19 @@
+{
+    "name":  "perform_business_analysis",
+    "label":  "Perform Business Analysis",
+    "phase":  "business_analysis",
+    "intent":  "analyze_and_clarify",
+    "ai":  "required",
+    "skill":  "business_analysis_from_sources",
+    "input":  {
+                  "source_folder":  "ba/discovery",
+                  "application_definition":  "application/application.json"
+              },
+    "output":  {
+                   "question_batch_file":  "project/questions.json",
+                   "ba_doc_file":  "ba/requirements.md",
+                   "queue_file":  "project/open-queue.json",
+                   "status_doc_file":  "ba/analysis-status.md"
+               }
+}
+

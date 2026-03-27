@@ -1,0 +1,38 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1100 260" role="img" aria-label="AI-MDE flow diagram">
+  <style>
+    .box{fill:#0f172a;stroke:#334155;stroke-width:2}
+    .t{font:600 24px Arial, sans-serif;fill:#e2e8f0}
+    .s{font:500 16px Arial, sans-serif;fill:#94a3b8}
+    .arrow{stroke:#38bdf8;stroke-width:4;fill:none;marker-end:url(#m)}
+  </style>
+  <defs>
+    <marker id="m" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse">
+      <path d="M0 0L10 5L0 10z" fill="#38bdf8"/>
+    </marker>
+  </defs>
+  <rect width="1100" height="260" fill="#020617"/>
+  <rect class="box" x="30" y="60" width="180" height="120" rx="16" ry="16"/>
+  <text class="t" x="120" y="110" text-anchor="middle">Commands</text>
+  <text class="s" x="120" y="140" text-anchor="middle">Validate • Build • Generate</text>
+
+  <rect class="box" x="250" y="60" width="180" height="120" rx="16" ry="16"/>
+  <text class="t" x="340" y="110" text-anchor="middle">Orchestrator</text>
+  <text class="s" x="340" y="140" text-anchor="middle">Resolve • Check • Route</text>
+
+  <rect class="box" x="470" y="60" width="180" height="120" rx="16" ry="16"/>
+  <text class="t" x="560" y="110" text-anchor="middle">Skills</text>
+  <text class="s" x="560" y="140" text-anchor="middle">Analyze • Design • Model</text>
+
+  <rect class="box" x="690" y="60" width="180" height="120" rx="16" ry="16"/>
+  <text class="t" x="780" y="110" text-anchor="middle">Rules</text>
+  <text class="s" x="780" y="140" text-anchor="middle">Architecture • Data • ACL</text>
+
+  <rect class="box" x="910" y="60" width="160" height="120" rx="16" ry="16"/>
+  <text class="t" x="990" y="110" text-anchor="middle">Artifacts</text>
+  <text class="s" x="990" y="140" text-anchor="middle">Reqs • Design • Specs</text>
+
+  <path class="arrow" d="M210 120H250"/>
+  <path class="arrow" d="M430 120H470"/>
+  <path class="arrow" d="M650 120H690"/>
+  <path class="arrow" d="M870 120H910"/>
+</svg>

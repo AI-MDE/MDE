@@ -1,0 +1,33 @@
+{
+  "dto_policy": {
+    "use_dto": true,
+    "apply_to_layers": [
+      "controller",
+      "service",
+      "query_service"
+    ],
+    "forbid_direct_entity_exposure": true,
+    "mapping_layers": [
+      "controller",
+      "service",
+      "query_service"
+    ],
+    "suffixes": {
+      "request_dto": "RequestDto",
+      "response_dto": "ResponseDto",
+      "read_dto": "ReadDto",
+      "command": "Command"
+    },
+    "usage": {
+      "write_input":   "Command — one per use case, used by service layer",
+      "write_output":  "ResponseDto — returned by service to controller",
+      "read_output":   "ReadDto — returned by query_service; shaped for the consuming screen",
+      "api_input":     "RequestDto — parsed at controller boundary"
+    }
+  },
+  "api_rules": {
+    "must_define_error_contracts": true,
+    "must_define_validation_errors": true,
+    "prefer_versioned_external_apis": true
+  }
+}

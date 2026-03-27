@@ -1,0 +1,42 @@
+Skill Debug Prompt
+Skill: ldm_coverage_validation
+GeneratedAt: 2026-03-26T03:27:07.054Z
+
+Purpose: Validate that BA nouns are represented in the logical data model as entities, attributes, relationships, roles/actors, or explicit synonyms.
+MappedCommands: validate_ldm_coverage
+
+Input Files Included:
+- ba/use-cases/uc-001-submit-claim.md
+- ba/use-cases/uc-002-assign-claim-to-agent.md
+- ba/use-cases/uc-003-review-claim.md
+- ba/use-cases/uc-004-request-additional-information.md
+- ba/use-cases/uc-005-perform-fraud-review.md
+- ba/use-cases/uc-006-approve-or-deny-claim.md
+- ba/use-cases/uc-007-calculate-and-execute-payout.md
+- ba/use-cases/uc-008-send-claim-notifications.md
+- project/project-state.json
+
+Missing Input Patterns:
+- ../../ba/business-functions.json
+
+AI Task Prompt
+You are executing the following skill in this workspace.
+Skill Name: ldm_coverage_validation
+Objective: Validate that BA nouns are represented in the logical data model as entities, attributes, relationships, roles/actors, or explicit synonyms.
+
+Methodology:
+- Extract canonical noun terms from BA artifacts (requirements, use cases, business functions).
+- Normalize term variants and detect semantic equivalence.
+- Match terms to LDM coverage classes: entity, attribute, relationship, role_actor, synonym.
+- Produce explicit missing-term list with recommended target class and candidate mapping.
+- Flag ambiguous mappings separately from clear misses.
+
+Constraints:
+- Do not auto-edit LDM during validation.
+- Do not rely only on lexical token matches; include semantic matching.
+- Do not suppress unresolved terms.
+
+Expected Outputs:
+- ../../work/ldm-coverage-report.json
+
+Use the included input files as your evidence base and produce outputs exactly at the expected paths.

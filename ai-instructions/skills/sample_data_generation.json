@@ -1,0 +1,24 @@
+{
+    "name":  "sample_data_generation",
+    "purpose":  "Generate sample entity data files",
+    "inputs":  [
+                   "ba/data-model/logical-data-model.json",
+                   "design/entities/*.json"
+               ],
+    "outputs":  [
+                    "output/sample-data/*.json"
+                ],
+    "artifacts":  [
+                      "output/sample-data/"
+                  ],
+    "rules":  [
+                  "Respect field types and required flags",
+                  "Use deterministic values per entity"
+              ],
+    "uses_tools":  [
+                       "file_manager"
+                   ],
+    "next_phase":  "development"
+}
+
+

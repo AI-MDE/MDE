@@ -1,0 +1,26 @@
+{
+  "skill": "module_specification",
+  "generatedAt": "2026-03-26T03:27:12.338Z",
+  "config": "configuration.json",
+  "commandMappings": [],
+  "inputs": {
+    "declaredPatterns": [
+      "../../design/modules/<type>/module-<module>.json",
+      "../../ba/requirements.md",
+      "../../design/application_architecture.json"
+    ],
+    "includedFiles": [
+      "ba/requirements.md",
+      "design/application_architecture.json"
+    ],
+    "missingPatterns": [
+      "../../design/modules/<type>/module-<module>.json"
+    ]
+  },
+  "outputPaths": {
+    "debugDir": "debug/module_specification",
+    "prompt": "debug/module_specification/ai-prompt.txt",
+    "zip": "debug/module_specification/inputs.zip"
+  },
+  "project": "Claims Management System"
+}

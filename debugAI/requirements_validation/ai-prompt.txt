@@ -1,0 +1,34 @@
+Skill Debug Prompt
+Skill: requirements_validation
+GeneratedAt: 2026-03-26T03:27:13.951Z
+
+Purpose: Validate requirement artifacts for clarity, completeness, ambiguity, and readiness for design
+
+Input Files Included:
+- ba/requirements.md
+- ba/use-cases/uc-001-submit-claim.md
+- ba/use-cases/uc-002-assign-claim-to-agent.md
+- ba/use-cases/uc-003-review-claim.md
+- ba/use-cases/uc-004-request-additional-information.md
+- ba/use-cases/uc-005-perform-fraud-review.md
+- ba/use-cases/uc-006-approve-or-deny-claim.md
+- ba/use-cases/uc-007-calculate-and-execute-payout.md
+- ba/use-cases/uc-008-send-claim-notifications.md
+
+Missing Input Patterns:
+- ../../ba/business-functions.json
+
+AI Task Prompt
+You are executing the following skill in this workspace.
+Skill Name: requirements_validation
+Objective: Validate requirement artifacts for clarity, completeness, ambiguity, and readiness for design
+
+Rules:
+- Do not introduce technical architecture
+- Flag ambiguity explicitly
+- Ensure each requirement has an ID and acceptance criteria where applicable
+
+Expected Outputs:
+- ../../ba/requirements-validation-report.json
+
+Use the included input files as your evidence base and produce outputs exactly at the expected paths.

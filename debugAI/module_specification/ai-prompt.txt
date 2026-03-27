@@ -1,0 +1,30 @@
+Skill Debug Prompt
+Skill: module_specification
+GeneratedAt: 2026-03-26T03:27:12.337Z
+
+Purpose: Generate detailed implementation-ready specs for a module
+
+Input Files Included:
+- ba/requirements.md
+- design/application_architecture.json
+
+Missing Input Patterns:
+- ../../design/modules/<type>/module-<module>.json
+
+AI Task Prompt
+You are executing the following skill in this workspace.
+Skill Name: module_specification
+Objective: Generate detailed implementation-ready specs for a module
+
+Rules:
+- No new requirements allowed
+- All rules must be explicit
+- State transitions and error conditions must be defined
+
+Expected Outputs:
+- ../../design/modules/<type>/<module>/schema.json
+- ../../design/modules/<type>/<module>/rules.json
+- ../../design/modules/<type>/<module>/state-machine.json
+- ../../design/modules/<type>/<module>/api.yaml
+
+Use the included input files as your evidence base and produce outputs exactly at the expected paths.

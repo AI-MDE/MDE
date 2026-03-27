@@ -1,0 +1,33 @@
+{
+  "skill": "business_analysis_from_sources",
+  "generatedAt": "2026-03-26T03:26:52.107Z",
+  "config": "configuration.json",
+  "commandMappings": [
+    "perform_business_analysis"
+  ],
+  "inputs": {
+    "declaredPatterns": [
+      "requirements.json",
+      "use-cases.md",
+      "business-functions.json",
+      "open-issues.json",
+      "clarification-queue.json",
+      "questions.json"
+    ],
+    "includedFiles": [],
+    "missingPatterns": [
+      "requirements.json",
+      "use-cases.md",
+      "business-functions.json",
+      "open-issues.json",
+      "clarification-queue.json",
+      "questions.json"
+    ]
+  },
+  "outputPaths": {
+    "debugDir": "debug/business_analysis_from_sources",
+    "prompt": "debug/business_analysis_from_sources/ai-prompt.txt",
+    "zip": "debug/business_analysis_from_sources/inputs.zip"
+  },
+  "project": "Claims Management System"
+}

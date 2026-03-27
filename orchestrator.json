@@ -1,0 +1,286 @@
+﻿{
+  "name": "mdt_orchestrator",
+  "version": "1.0",
+  "description": "Command-driven orchestrator for a multi-phase AI-assisted model-driven engineering workflow.",
+  "inputs": {
+    "command_registry": "commands.json",
+    "skills_registry": "skills.json",
+    "methodology": "methodology.json",
+    "architecture": "architecture.json",
+    "project_state": "project-state.json",
+    "configuration": "configuration.json"
+  },
+  "state_model": {
+    "project_state_file": "project-state.json",
+    "fields": {
+      "current_phase": "string",
+      "completed_commands": [
+        "string"
+      ],
+      "failed_commands": [
+        "string"
+      ],
+      "artifacts": {
+        "type": "object",
+        "additionalProperties": {
+          "type": "string",
+          "enum": [
+            "missing",
+            "in_progress",
+            "complete",
+            "failed"
+          ]
+        }
+      },
+      "last_command": "string",
+      "last_run_at": "datetime"
+    }
+  },
+  "command_resolution": {
+    "mode": "explicit_first",
+    "rules": [
+      "If the user input matches a command label exactly, use that command.",
+      "If the user input matches a canonical command name, use that command.",
+      "If the user input is close to multiple commands, return ranked candidates.",
+      "Never guess destructive or phase-skipping commands.",
+      "Normalize user text to verb + target where possible."
+    ],
+    "examples": [
+      {
+        "user_input": "Validate Requirements",
+        "resolved_command": "validate_requirements"
+      },
+      {
+        "user_input": "Build System Design",
+        "resolved_command": "build_system_design"
+      },
+      {
+        "user_input": "Generate LDM",
+        "resolved_command": "generate_ldm"
+      }
+    ]
+  },
+  "execution_pipeline": [
+    {
+      "step": 1,
+      "name": "resolve_command",
+      "description": "Map user input to a canonical command in commands.json"
+    },
+    {
+      "step": 2,
+      "name": "load_context",
+      "description": "Load configuration, project state, methodology, architecture, and required registries"
+    },
+    {
+      "step": 3,
+      "name": "check_prerequisites",
+      "description": "Verify that all required artifacts for the command exist"
+    },
+    {
+      "step": 4,
+      "name": "validate_phase_rules",
+      "description": "Ensure the command is valid for the current phase or explicitly allowed cross-phase"
+    },
+    {
+      "step": 5,
+      "name": "select_skills_and_tools",
+      "description": "Read the command definition and determine which skills and tools to invoke"
+    },
+    {
+      "step": 6,
+      "name": "execute_skill_flow",
+      "description": "Invoke skill(s) in order and let each skill call its permitted tools"
+    },
+    {
+      "step": 7,
+      "name": "persist_outputs",
+      "description": "Write generated or validated artifacts to configured file paths"
+    },
+    {
+      "step": 8,
+      "name": "update_project_state",
+      "description": "Record command completion/failure and update artifact status"
+    },
+    {
+      "step": 9,
+      "name": "return_result",
+      "description": "Return summary, outputs, warnings, blockers, and next valid commands"
+    }
+  ],
+  "phase_rules": {
+    "business_analysis": {
+      "allowed_commands": [
+        "validate_requirements"
+      ],
+      "entry_conditions": [],
+      "exit_conditions": [
+        "requirements.json exists",
+        "requirements validation report exists or validation passed"
+      ]
+    },
+    "system_design": {
+      "allowed_commands": [
+        "build_system_design",
+        "generate_ldm",
+        "validate_architecture"
+      ],
+      "entry_conditions": [
+        "requirements.json exists"
+      ],
+      "exit_conditions": [
+        "architecture.json exists",
+        "module-catalog.json exists"
+      ]
+    },
+    "module_definition": {
+      "allowed_commands": [
+        "generate_module_catalog",
+        "generate_module_charter"
+      ],
+      "entry_conditions": [
+        "architecture.json exists"
+      ],
+      "exit_conditions": [
+        "module-catalog.json exists",
+        "at least one module charter exists"
+      ]
+    },
+    "module_specification": {
+      "allowed_commands": [
+        "generate_module_spec"
+      ],
+      "entry_conditions": [
+        "module-catalog.json exists"
+      ],
+      "exit_conditions": [
+        "schema.json exists for target module",
+        "rules.json exists for target module"
+      ]
+    },
+    "development": {
+      "allowed_commands": [
+        "generate_dal"
+      ],
+      "entry_conditions": [
+        "schema.json exists for target module"
+      ],
+      "exit_conditions": [
+        "dal source exists"
+      ]
+    },
+    "governance": {
+      "allowed_commands": [
+        "validate_traceability",
+        "show_phase_status"
+      ],
+      "entry_conditions": [],
+      "exit_conditions": []
+    }
+  },
+  "skill_invocation_policy": {
+    "rules": [
+      "A command may call one or more skills in sequence.",
+      "A skill may only use tools declared in skills.json and allowed by the command.",
+      "Skills must not invent missing upstream artifacts.",
+      "Validation skills may report missing artifacts but must not create them unless explicitly allowed."
+    ]
+  },
+  "tool_invocation_policy": {
+    "rules": [
+      "file_manager is the default tool for artifact I/O.",
+      "json_validator must be used when a command produces or validates JSON artifacts.",
+      "traceability_engine must be used for end-to-end trace checks.",
+      "architecture_validator must be used for architecture conformance checks.",
+      "No tool may write outside configured project paths."
+    ]
+  },
+  "error_handling": {
+    "on_missing_prerequisites": {
+      "action": "block_execution",
+      "response": "Return missing artifacts and recommended preceding commands."
+    },
+    "on_validation_failure": {
+      "action": "complete_with_warnings",
+      "response": "Return validation report and keep command status as failed or warning depending on severity."
+    },
+    "on_tool_failure": {
+      "action": "stop_current_command",
+      "response": "Log tool failure, mark command failed, preserve partial outputs only if explicitly allowed."
+    },
+    "on_phase_mismatch": {
+      "action": "reject_or_offer_override",
+      "response": "Explain phase mismatch and show valid commands for the current state."
+    }
+  },
+  "response_contract": {
+    "fields": [
+      "command",
+      "status",
+      "summary",
+      "outputs",
+      "warnings",
+      "blockers",
+      "next_valid_commands"
+    ],
+    "status_values": [
+      "success",
+      "warning",
+      "blocked",
+      "failed"
+    ]
+  },
+  "next_command_policy": {
+    "rules": [
+      "Recommend only commands whose prerequisites are satisfied.",
+      "Prefer commands in the current phase before cross-phase commands.",
+      "Always include at least one validation or inspection command when available."
+    ]
+  },
+  "sample_flows": [
+    {
+      "user_input": "Validate Requirements",
+      "resolved_command": "validate_requirements",
+      "skills": [
+        "requirements_validation"
+      ],
+      "tools": [
+        "file_manager",
+        "json_validator",
+        "traceability_engine"
+      ],
+      "outputs": [
+        "1-BA/requirements-validation-report.json"
+      ]
+    },
+    {
+      "user_input": "Build System Design",
+      "resolved_command": "build_system_design",
+      "skills": [
+        "system_design"
+      ],
+      "tools": [
+        "file_manager"
+      ],
+      "outputs": [
+        "../MDT/architecture.json",
+        "2 Design/modules/module-catalog.json"
+      ]
+    },
+    {
+      "user_input": "Generate LDM",
+      "resolved_command": "generate_ldm",
+      "skills": [
+        "logical_data_model"
+      ],
+      "tools": [
+        "file_manager",
+        "json_validator"
+      ],
+      "outputs": [
+        "2 Design/ldm.md",
+        "2 Design/ldm.json"
+      ]
+    }
+  ]
+}
+

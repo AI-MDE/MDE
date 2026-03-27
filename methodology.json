@@ -1,0 +1,71 @@
+﻿{
+  "methodology": "Model-Driven",
+  "version": "1.0",
+  "title": "Model-Driven Development Methodology",
+  "pipeline": [
+    "Business Analysis",
+    "System Design",
+    "Module Definition",
+    "Module Specification",
+    "Tests",
+    "Development",
+    "Traceability"
+  ],
+  "principles": [
+    "Dual Artifacts",
+    "Progressive Refinement",
+    "No Phase Skipping",
+    "Traceability",
+    "Separation of Concerns",
+    "Single Source of Truth",
+    "Stable IDs"
+  ],
+  "phases": [
+    {
+      "name": "business_analysis",
+      "required_artifacts": [
+        "1-BA/requirements.json",
+        "1-BA/use-cases/*.md",
+        "1-BA/business-functions.json",
+        "1-BA/glossary.md"
+      ]
+    },
+    {
+      "name": "system_design",
+      "required_artifacts": [
+        "../MDT/architecture.json",
+        "../MDT/architecture.json",
+        "1-BA/data-model/logical-data-model.json",
+        "2 Design/data-model/physical-data-model.json",
+        "2 Design/modules/module-catalog.json"
+      ]
+    },
+    {
+      "name": "module_definition",
+      "required_artifacts": [
+        "2 Design/modules/svc/module-charter-<module>.md",
+        "2 Design/modules/svc/module-<module>.json",
+        "2 Design/modules/dal/module-charter-<module>.md",
+        "2 Design/modules/dal/module-<module>.json"
+      ]
+    },
+    {
+      "name": "module_specification",
+      "required_artifacts": [
+        "2 Design/modules/<type>/<module>/schema.json",
+        "2 Design/modules/<type>/<module>/rules.json",
+        "2 Design/modules/<type>/<module>/state-machine.json",
+        "2 Design/modules/<type>/<module>/api.yaml"
+      ]
+    },
+    {
+      "name": "governance",
+      "required_artifacts": [
+        "2 Design/trace-matrix.json",
+        "2 Design/traceability-validation-report.json",
+        "work/phase-status-report.json"
+      ]
+    }
+  ]
+}
+

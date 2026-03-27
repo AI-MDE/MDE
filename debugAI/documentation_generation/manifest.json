@@ -1,0 +1,21 @@
+{
+  "skill": "documentation_generation",
+  "generatedAt": "2026-03-26T03:27:02.453Z",
+  "config": "configuration.json",
+  "commandMappings": [],
+  "inputs": {
+    "declaredPatterns": [
+      "../../configuration.json"
+    ],
+    "includedFiles": [
+      "configuration.json"
+    ],
+    "missingPatterns": []
+  },
+  "outputPaths": {
+    "debugDir": "debug/documentation_generation",
+    "prompt": "debug/documentation_generation/ai-prompt.txt",
+    "zip": "debug/documentation_generation/inputs.zip"
+  },
+  "project": "Claims Management System"
+}

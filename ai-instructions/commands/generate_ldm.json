@@ -1,0 +1,29 @@
+{
+    "name":  "generate_ldm",
+    "label":  "Generate LDM",
+    "phase":  "system_design",
+    "intent":  "generate",
+    "ai":  "required",
+    "requires":  [
+                     "ba/requirements.md",
+                     "ba/glossary.md",
+                     "design/application_architecture.json"
+                 ],
+    "produces":  [
+                     "ba/data-model/logical-data-model.json"
+                 ],
+    "calls":  [
+                  "logical_data_model"
+              ],
+    "tools":  [
+                  "file_manager",
+                  "json_validator"
+              ],
+    "rules":  [
+                  "Use glossary terms as canonical names",
+                  "Do not invent entities with no business justification",
+                  "Map entities to owning modules where possible"
+              ]
+}
+
+

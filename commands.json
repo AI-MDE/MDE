@@ -1,0 +1,412 @@
+﻿{
+  "commands": [
+    {
+      "name": "Initiate Project",
+      "label": "Initiate Project",
+      "phase": "Project Initiation",
+      "intent": "create templates",
+      "ai": "none",
+      "requires": [
+      ],
+      "produces": [
+        "requirements.json",
+        "../MDT/architecture.json",
+        "package.json",
+        "tsconfig.json",
+        ".env"
+      ],
+      "calls": [
+        "initiate_project"
+      ],
+      "tools": [
+        "file_manager",
+        "json_validator"
+      ],
+      "rules": [
+      ]
+    },
+    {
+      "name": "validate_requirements",
+      "label": "Validate Requirements",
+      "phase": "business_analysis",
+      "intent": "validate",
+      "ai": "optional",
+      "requires": [
+        "1-BA/requirements.json"
+      ],
+      "produces": [
+        "1-BA/requirements-validation-report.json"
+      ],
+      "calls": [
+        "requirements_validation"
+      ],
+      "tools": [
+        "file_manager",
+        "json_validator",
+        "traceability_engine"
+      ],
+      "rules": [
+        "Do not modify source requirements unless explicitly requested",
+        "Report ambiguity, missing actors, missing acceptance criteria, and traceability gaps"
+      ]
+    },
+    {
+      "name": "build_system_design",
+      "label": "Build System Design",
+      "phase": "system_design",
+      "intent": "generate",
+      "ai": "required",
+      "requires": [
+        "1-BA/requirements.json",
+        "1-BA/use-cases/*.md",
+        "1-BA/business-functions.json"
+      ],
+      "produces": [
+        "../MDT/architecture.json",
+        "2 Design/modules/module-catalog.json"
+      ],
+      "calls": [
+        "system_design"
+      ],
+      "tools": [
+        "file_manager"
+      ],
+      "rules": [
+        "Must define architectural patterns",
+        "Must define component/module boundaries",
+        "Must map requirements to modules"
+      ]
+    },
+    {
+      "name": "generate_ldm",
+      "label": "Generate LDM",
+      "phase": "system_design",
+      "intent": "generate",
+      "ai": "required",
+      "requires": [
+        "1-BA/requirements.json",
+        "1-BA/glossary.md",
+        "../MDT/architecture.json"
+      ],
+      "produces": [
+        "1-BA/data-model/logical-data-model.json"
+      ],
+      "calls": [
+        "logical_data_model"
+      ],
+      "tools": [
+        "file_manager",
+        "json_validator"
+      ],
+      "rules": [
+        "Use glossary terms as canonical names",
+        "Do not invent entities with no business justification",
+        "Map entities to owning modules where possible"
+      ]
+    },
+    {
+      "name": "generate_module_catalog",
+      "label": "Generate Module Catalog",
+      "phase": "module_definition",
+      "intent": "generate",
+      "ai": "required",
+      "requires": [
+        "../MDT/architecture.json",
+        "1-BA/requirements.json"
+      ],
+      "produces": [
+        "2 Design/modules/module-catalog.json"
+      ],
+      "calls": [
+        "module_definition"
+      ],
+      "tools": [
+        "file_manager"
+      ],
+      "rules": [
+        "Each module must have a purpose and owner",
+        "No overlapping responsibilities"
+      ]
+    },
+    {
+      "name": "generate_module_charter",
+      "label": "Generate Module Charter",
+      "phase": "module_definition",
+      "intent": "generate",
+      "ai": "required",
+      "requires": [
+        "2 Design/modules/module-catalog.json",
+        "../MDT/architecture.json"
+      ],
+      "produces": [
+        "2 Design/modules/<type>/module-charter-<module>.md",
+        "2 Design/modules/<type>/module-<module>.json"
+      ],
+      "calls": [
+        "module_definition"
+      ],
+      "tools": [
+        "file_manager"
+      ],
+      "rules": [
+        "Must declare responsibilities, exclusions, dependencies, interfaces, requirement mapping"
+      ]
+    },
+    {
+      "name": "generate_module_spec",
+      "label": "Generate Module Spec",
+      "phase": "module_specification",
+      "intent": "generate",
+      "ai": "required",
+      "requires": [
+        "2 Design/modules/<type>/module-<module>.json",
+        "1-BA/requirements.json",
+        "../MDT/architecture.json"
+      ],
+      "produces": [
+        "2 Design/modules/<type>/<module>/schema.json",
+        "2 Design/modules/<type>/<module>/rules.json",
+        "2 Design/modules/<type>/<module>/state-machine.json",
+        "2 Design/modules/<type>/<module>/api.yaml"
+      ],
+      "calls": [
+        "module_specification"
+      ],
+      "tools": [
+        "file_manager",
+        "json_validator"
+      ],
+      "rules": [
+        "No new requirements allowed",
+        "All validations and state transitions must be explicit"
+      ]
+    },
+    {
+      "name": "validate_architecture",
+      "label": "Validate Architecture",
+      "phase": "system_design",
+      "intent": "validate",
+      "ai": "required",
+      "requires": [
+        "../MDT/architecture.json"
+      ],
+      "produces": [
+        "2 Design/architecture-validation-report.json"
+      ],
+      "calls": [
+        "architecture_validation"
+      ],
+      "tools": [
+        "file_manager",
+        "architecture_validator"
+      ],
+      "rules": [
+        "Check pattern declarations, layer rules, dependency rules, and module alignment"
+      ]
+    },
+    {
+      "name": "generate_source_code",
+      "label": "Generate Source Code",
+      "phase": "development",
+      "intent": "generate",
+      "ai": "required",
+      "requires": [
+        "2 Design/modules/<type>/<module>/schema.json",
+        "2 Design/modules/<type>/<module>/rules.json",
+        "2 Design/modules/<type>/<module>/state-machine.json",
+        "2 Design/modules/<type>/<module>/api.yaml"
+      ],
+      "produces": [
+        "src/<layer>/**/*.ts",
+        "generated-manifest.json"
+      ],
+      "calls": [
+        "source_code_generation"
+      ],
+      "tools": [
+        "file_manager"
+      ],
+      "rules": [
+        "Generate code from module specs",
+        "Respect architecture layer rules"
+      ]
+    },
+    {
+      "name": "generate_documentation",
+      "label": "Generate Documentation",
+      "phase": "governance",
+      "intent": "generate",
+      "ai": "optional",
+      "requires": [
+        "configuration.json",
+        "MDT/templates/registry.json"
+      ],
+      "produces": [
+        "docs/*.md"
+      ],
+      "calls": [
+        "documentation_generation"
+      ],
+      "tools": [
+        "file_manager"
+      ],
+      "rules": [
+        "Use templates to render project artifacts"
+      ]
+    },
+    {
+      "name": "generate_sample_data",
+      "label": "Generate Sample Data",
+      "phase": "development",
+      "intent": "generate",
+      "ai": "none",
+      "requires": [
+        "1-BA/data-model/logical-data-model.json",
+        "2 Design/entities/*.json"
+      ],
+      "produces": [
+        "sampleData/*.json"
+      ],
+      "calls": [
+        "sample_data_generation"
+      ],
+      "tools": [
+        "file_manager"
+      ],
+      "rules": [
+        "Generate sample rows for entities",
+        "Respect field types and required flags"
+      ]
+    },
+    {
+      "name": "generate_diagrams",
+      "label": "Generate Diagrams",
+      "phase": "governance",
+      "intent": "generate",
+      "ai": "optional",
+      "requires": [
+        "1-BA/data-model/logical-data-model.json",
+        "../MDT/architecture.json",
+        "2 Design/modules/module-catalog.json"
+      ],
+      "produces": [
+        "docs/diagrams/*.md",
+        "docs/diagrams/*.svg"
+      ],
+      "calls": [
+        "diagram_generation"
+      ],
+      "tools": [
+        "file_manager"
+      ],
+      "rules": [
+        "Produce LDM, architecture, interaction, and dataflow diagrams",
+        "Keep diagrams derived from canonical artifacts"
+      ]
+    },
+    {
+      "name": "generate_dal",
+      "label": "Generate DAL",
+      "phase": "development",
+      "intent": "generate",
+      "ai": "none",
+      "requires": [
+        "configuration.json",
+        "2 Design/modules/dal/dal-*.json",
+        "2 Design/modules/dal/*/schema.json"
+      ],
+      "produces": [
+        "src/dal/*.ts",
+        "src/services/*.ts",
+        "src/dal/*.test.js",
+        "src/services/*.test.js"
+      ],
+      "calls": [
+        "dal_generation"
+      ],
+      "tools": [
+        "file_manager"
+      ],
+      "rules": [
+        "Generate DAL code from module schema definitions",
+        "Use raw SQL and TypeScript Node.js runtime"
+      ]
+    },
+    {
+      "name": "generate_dal_from_db",
+      "label": "Generate DAL from DB",
+      "phase": "development",
+      "intent": "generate",
+      "ai": "none",
+      "requires": [
+        "configuration.json",
+        ".env (DATABASE_URL)",
+        "2 Design/modules/dal/dal-*.json",
+        "2 Design/modules/dal/*/schema.json"
+      ],
+      "produces": [
+        "src/dal/*.ts"
+      ],
+      "calls": [
+        "dal_generation"
+      ],
+      "tools": [
+        "file_manager"
+      ],
+      "rules": [
+        "Introspect live DB schema for columns and keys",
+        "Use raw SQL and TypeScript Node.js runtime"
+      ]
+    },
+    {
+      "name": "validate_traceability",
+      "label": "Validate Traceability",
+      "phase": "governance",
+      "intent": "validate",
+      "ai": "optional",
+      "requires": [
+        "1-BA/requirements.json",
+        "2 Design/modules/module-catalog.json",
+        "2 Design/modules/module-tests.json"
+      ],
+      "produces": [
+        "2 Design/traceability-validation-report.json",
+        "2 Design/trace-matrix.json"
+      ],
+      "calls": [
+        "governance_validation"
+      ],
+      "tools": [
+        "traceability_engine"
+      ],
+      "rules": [
+        "Every requirement must map to at least one module and one test"
+      ]
+    },
+    {
+      "name": "show_phase_status",
+      "label": "Show Phase Status",
+      "phase": "governance",
+      "intent": "inspect",
+      "ai": "none",
+      "requires": [
+        "project-state.json",
+        "methodology.json"
+      ],
+      "produces": [
+        "work/phase-status-report.json"
+      ],
+      "calls": [
+        "governance_validation"
+      ],
+      "tools": [
+        "file_manager",
+        "phase_status_checker"
+      ],
+      "rules": [
+        "Report complete, in-progress, blocked, and missing artifacts per phase"
+      ]
+    }
+  ]
+}
+

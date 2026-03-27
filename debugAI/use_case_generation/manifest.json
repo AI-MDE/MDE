@@ -1,0 +1,35 @@
+{
+  "skill": "use_case_generation",
+  "generatedAt": "2026-03-26T03:27:22.321Z",
+  "config": "configuration.json",
+  "commandMappings": [
+    "generate_use_cases"
+  ],
+  "inputs": {
+    "declaredPatterns": [
+      "../../ba/use-cases/*.md",
+      "../../ba/business-functions.json",
+      "../../project/project-state.json"
+    ],
+    "includedFiles": [
+      "ba/use-cases/uc-001-submit-claim.md",
+      "ba/use-cases/uc-002-assign-claim-to-agent.md",
+      "ba/use-cases/uc-003-review-claim.md",
+      "ba/use-cases/uc-004-request-additional-information.md",
+      "ba/use-cases/uc-005-perform-fraud-review.md",
+      "ba/use-cases/uc-006-approve-or-deny-claim.md",
+      "ba/use-cases/uc-007-calculate-and-execute-payout.md",
+      "ba/use-cases/uc-008-send-claim-notifications.md",
+      "project/project-state.json"
+    ],
+    "missingPatterns": [
+      "../../ba/business-functions.json"
+    ]
+  },
+  "outputPaths": {
+    "debugDir": "debug/use_case_generation",
+    "prompt": "debug/use_case_generation/ai-prompt.txt",
+    "zip": "debug/use_case_generation/inputs.zip"
+  },
+  "project": "Claims Management System"
+}

@@ -1,0 +1,23 @@
+{
+  "primary_key_strategy": "surrogate",
+  "surrogate_key": {
+    "type": "uuid",
+    "generated_by": "system",
+    "immutable": true,
+    "column_name": "id"
+  },
+  "natural_keys": {
+    "allowed": true,
+    "role": "business_identifier_only",
+    "may_be_unique": true
+  },
+  "foreign_key_rule": "All foreign keys reference surrogate primary keys.",
+  "default_columns": [
+    "created_at",
+    "updated_at"
+  ],
+  "naming": {
+    "table_case": "snake_case",
+    "column_case": "snake_case"
+  }
+}

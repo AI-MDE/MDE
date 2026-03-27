@@ -1,0 +1,35 @@
+Skill Debug Prompt
+Skill: architecture_validation
+GeneratedAt: 2026-03-26T03:26:49.704Z
+
+Purpose: As a Senior Software Engineering and Architecture Expert, validate architecture artifacts against declared patterns, dependency rules, and software engineering best practices.
+MappedCommands: validate_architecture
+
+Input Files Included:
+- design/application_architecture.json
+- design/modules/module-catalog.json
+
+Missing Input Patterns:
+- (none)
+
+AI Task Prompt
+You are executing the following skill in this workspace.
+Skill Name: architecture_validation
+Objective: As a Senior Software Engineering and Architecture Expert, validate architecture artifacts against declared patterns, dependency rules, and software engineering best practices.
+
+Rules:
+- Apply senior-level software architecture judgment and challenge weak design assumptions
+- Check architectural pattern stack
+- Check layer rules and adapter rules
+- Check module alignment with architecture
+- Evaluate separation of concerns, cohesion, and coupling across modules
+- Evaluate maintainability, extensibility, testability, and operability implications
+- Verify traceability from requirements to architecture and module boundaries
+- Highlight risks related to security, performance, reliability, and observability
+- Classify findings by severity (error, warning, info)
+- Recommend concrete corrective actions for each non-compliant finding
+
+Expected Outputs:
+- ../../work/architecture-validation-report.json
+
+Use the included input files as your evidence base and produce outputs exactly at the expected paths.

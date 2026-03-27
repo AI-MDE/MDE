@@ -1,0 +1,30 @@
+Skill Debug Prompt
+Skill: initiate_project
+GeneratedAt: 2026-03-26T03:27:05.958Z
+
+Purpose: Initialize a new project with default templates and directory structure
+
+Input Files Included:
+- (none)
+
+Missing Input Patterns:
+- (none)
+
+AI Task Prompt
+You are executing the following skill in this workspace.
+Skill Name: initiate_project
+Objective: Initialize a new project with default templates and directory structure
+
+Rules:
+- Do not overwrite existing files without confirmation
+- Ensure standard folder structure is created
+
+Expected Outputs:
+- ../../ba/requirements.md
+- ../../design/application_architecture.json
+- ../../project/project-state.json
+- package.json
+- tsconfig.json
+- .env
+
+Use the included input files as your evidence base and produce outputs exactly at the expected paths.

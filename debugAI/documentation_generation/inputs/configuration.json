@@ -1,0 +1,12 @@
+{
+  "Methodology": "Model-Driven Engineering",
+  "Project-Type": "application",
+  "Project-Name": "Claims Management System",
+  "Description": "Host application workspace using the embedded MDE package.",
+  "mde-path": "./mde",
+  "Author": "OpenAI Codex",
+  "Version": "0.1.0",
+  "metaModel": {
+    "doctypes": "app/metaModel/doctypes.json"
+  }
+}

@@ -1,0 +1,33 @@
+{
+  "skill": "requirements_validation",
+  "generatedAt": "2026-03-26T03:27:13.953Z",
+  "config": "configuration.json",
+  "commandMappings": [],
+  "inputs": {
+    "declaredPatterns": [
+      "../../ba/requirements.md",
+      "../../ba/use-cases/*.md",
+      "../../ba/business-functions.json"
+    ],
+    "includedFiles": [
+      "ba/requirements.md",
+      "ba/use-cases/uc-001-submit-claim.md",
+      "ba/use-cases/uc-002-assign-claim-to-agent.md",
+      "ba/use-cases/uc-003-review-claim.md",
+      "ba/use-cases/uc-004-request-additional-information.md",
+      "ba/use-cases/uc-005-perform-fraud-review.md",
+      "ba/use-cases/uc-006-approve-or-deny-claim.md",
+      "ba/use-cases/uc-007-calculate-and-execute-payout.md",
+      "ba/use-cases/uc-008-send-claim-notifications.md"
+    ],
+    "missingPatterns": [
+      "../../ba/business-functions.json"
+    ]
+  },
+  "outputPaths": {
+    "debugDir": "debug/requirements_validation",
+    "prompt": "debug/requirements_validation/ai-prompt.txt",
+    "zip": "debug/requirements_validation/inputs.zip"
+  },
+  "project": "Claims Management System"
+}
