@@ -5,13 +5,22 @@
   "intent": "generate",
   "ai": "required",
   "skill": "use_case_generation",
-  "requires": [
-    "ba/requirements.md",
-    "ba/business-functions.json"
-  ],
-  "produces": [
-    "ba/use-cases/uc-*.md"
-  ],
+  "requires": {
+    "requirements": {
+      "from": "config.ba.requirements",
+      "default": "ba/requirements.md"
+    },
+    "businessFunctions": {
+      "from": "config.ba.businessFunctions",
+      "default": "ba/business-functions.json"
+    }
+  },
+  "produces": {
+    "useCases": {
+      "to": "config.ba.useCases",
+      "pattern": "uc-*.md"
+    }
+  },
   "tools": [
     "file_manager"
   ],

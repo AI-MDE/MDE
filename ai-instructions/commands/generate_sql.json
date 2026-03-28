@@ -4,14 +4,26 @@
   "phase": "design",
   "intent": "generate",
   "ai": "none",
-  "requires": [
-    "design/entities/ent-*.json"
-  ],
-  "produces": [
-    "design/sql/schema.sql",
-    "design/sql/schema-state.json",
-    "design/sql/alter-YYYY-MM-DD.sql"
-  ],
+  "requires": {
+    "entities": {
+      "from": "config.design.entityPattern",
+      "default": "design/entities/ent-*.json"
+    }
+  },
+  "produces": {
+    "schema": {
+      "from": "config.design.schema",
+      "default": "design/sql/schema.sql"
+    },
+    "schemaState": {
+      "from": "config.design.schemaState",
+      "default": "design/sql/schema-state.json"
+    },
+    "alterScript": {
+      "to": "config.design.sql",
+      "pattern": "alter-{date}.sql"
+    }
+  },
   "calls": [],
   "tools": [
     "file_manager"

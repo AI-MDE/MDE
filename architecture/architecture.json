@@ -40,13 +40,6 @@
     "Each public method on a Service class corresponds to exactly one use case — do not aggregate unrelated operations into one service.",
     "Reads (QueryService) bypass the domain layer and go directly to data_access. Writes (Service) must pass through the domain layer."
   ],
-  "tech": {
-    "language": "TypeScript",
-    "runtime": "Node.js",
-    "dataAccess": "raw-sql",
-    "database": "MySQL",
-    "packageManager": "npm"
-  },
   "codegen": {
     "naming": {
       "module_folder": "kebab-case",

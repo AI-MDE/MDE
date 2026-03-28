@@ -1,29 +1,36 @@
 {
-    "name":  "validate_architecture",
-    "label":  "Validate Architecture",
-    "phase":  "system_design",
-    "intent":  "validate",
-    "ai":  "required",
-    "skill":  "architecture_validation",
-    "requires":  [
-                     "design/application_architecture.json",
-                     "design/modules/module-catalog.json"
-                 ],
-    "produces":  [
-                     "work/architecture-validation-report.json"
-                 ],
-    "calls":  [
-                  "architecture_validation"
-              ],
-    "tools":  [
-                  "file_manager",
-                  "architecture_validator"
-              ],
-    "rules":  [
-                  "Use AI semantic validation for pattern declarations, layer rules, dependency rules, and module alignment",
-                  "Return explicit findings with severity and recommended fixes",
-                  "Do not mutate architecture artifacts during validation"
-              ]
+  "name": "validate_architecture",
+  "label": "Validate Architecture",
+  "phase": "system_design",
+  "intent": "validate",
+  "ai": "required",
+  "skill": "architecture_validation",
+  "requires": {
+    "appArchitecture": {
+      "from": "config.design.appArchitecture",
+      "default": "design/application_architecture.json"
+    },
+    "catalog": {
+      "from": "config.design.moduleCatalog",
+      "default": "design/modules/module-catalog.json"
+    }
+  },
+  "produces": {
+    "report": {
+      "to": "config.output.work",
+      "pattern": "architecture-validation-report.json"
+    }
+  },
+  "calls": [
+    "architecture_validation"
+  ],
+  "tools": [
+    "file_manager",
+    "architecture_validator"
+  ],
+  "rules": [
+    "Use AI semantic validation for pattern declarations, layer rules, dependency rules, and module alignment",
+    "Return explicit findings with severity and recommended fixes",
+    "Do not mutate architecture artifacts during validation"
+  ]
 }
-
-

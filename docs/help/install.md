@@ -3,6 +3,24 @@
 This is not your typical app, it is an AI orchastrator tool, so install is a bit different. Too easy actually.
 
 
+Now ai-mde sites on its own folder
+
+to install ai-mde
+## Install ai-mde
+1.  go to a folder that want to install ai-mde under
+2.  git clone https://github.com/AI-MDE/ai-mde.git
+3.  an ai-mde folder will be created with the install
+4.  cd ai-mde
+5.  npm install
+
+## Create a project
+1.  create a new folder that you want to house your application
+```
+    cd myApp
+```
+2.  npm run 
+
+
 ## Pre-requisites
 
 1.  vs-code to view and edit files or another ide

@@ -1,0 +1,5 @@
+Fix install 
+
+generate tests  with with source code
+generate sample_data
+generate deploy scripts

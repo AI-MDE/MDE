@@ -1,32 +1,60 @@
 {
-    "name":  "governance_validation",
-    "purpose":  "Validate traceability, phase completeness, TOGAF/Zachman coverage, and missing artifacts",
-    "inputs":  [
-                   "ba/requirements.md",
-                   "design/modules/module-catalog.json",
-                   "design/modules/module-tests.json",
-                   "mde/methodology/methodology.json",
-                   "project/project-state.json"
-               ],
-    "outputs":  [
-                    "design/trace-matrix.json",
-                    "output/work/phase-status-report.json",
-                    "design/governance-report.json"
-                ],
-    "artifacts":  [
-                      "design/trace-matrix.json",
-                      "output/work/phase-status-report.json"
-                  ],
-    "rules":  [
-                  "Every requirement should map to functions, modules, and tests where relevant",
-                  "Missing artifacts must be reported, not guessed"
-              ],
-    "uses_tools":  [
-                       "traceability_engine",
-                       "phase_status_checker",
-                       "file_manager"
-                   ],
-    "next_phase":  null
+  "name": "governance_validation",
+  "purpose": "Validate traceability, phase completeness, TOGAF/Zachman coverage, and missing artifacts",
+  "inputs": {
+    "requirements": {
+      "from": "config.ba.requirements",
+      "default": "ba/requirements.md"
+    },
+    "catalog": {
+      "from": "config.design.moduleCatalog",
+      "default": "design/modules/module-catalog.json"
+    },
+    "moduleTests": {
+      "from": "config.design.moduleTests",
+      "default": "design/modules/module-tests.json"
+    },
+    "methodology": {
+      "from": "config.mde.methodology",
+      "default": "mde/methodology/methodology.json"
+    },
+    "projectState": {
+      "from": "config.project_state.state",
+      "default": "project/project-state.json"
+    }
+  },
+  "outputs": {
+    "traceMatrix": {
+      "from": "config.design.traceMatrix",
+      "default": "design/trace-matrix.json"
+    },
+    "phaseStatusReport": {
+      "to": "config.output.work",
+      "pattern": "phase-status-report.json"
+    },
+    "governanceReport": {
+      "from": "config.design.governanceReport",
+      "default": "design/governance-report.json"
+    }
+  },
+  "artifacts": [
+    {
+      "from": "config.design.modules",
+      "default": "design/modules"
+    },
+    {
+      "from": "config.output.work",
+      "default": "output/work"
+    }
+  ],
+  "rules": [
+    "Every requirement should map to functions, modules, and tests where relevant",
+    "Missing artifacts must be reported, not guessed"
+  ],
+  "uses_tools": [
+    "traceability_engine",
+    "phase_status_checker",
+    "file_manager"
+  ],
+  "next_phase": null
 }
-
-

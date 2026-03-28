@@ -4,15 +4,30 @@
   "phase": "design",
   "intent": "generate",
   "ai": "required",
-  "requires": [
-    "ba/data-model/logical-data-model.json",
-    "ba/requirements.md",
-    "design/application_architecture.json",
-    "mde/architecture/"
-  ],
-  "produces": [
-    "design/entities/ent-{entity}.json"
-  ],
+  "requires": {
+    "ldm": {
+      "from": "config.ba.ldmFile",
+      "default": "ba/data-model/logical-data-model.json"
+    },
+    "requirements": {
+      "from": "config.ba.requirements",
+      "default": "ba/requirements.md"
+    },
+    "appArchitecture": {
+      "from": "config.design.appArchitecture",
+      "default": "design/application_architecture.json"
+    },
+    "architecture": {
+      "from": "config.mde.architecture",
+      "default": "mde/architecture/architecture.json"
+    }
+  },
+  "produces": {
+    "entities": {
+      "to": "config.design.entities",
+      "pattern": "ent-{entity}.json"
+    }
+  },
   "calls": [
     "physical_entity_identification"
   ],

@@ -1,26 +1,38 @@
 {
-    "name":  "diagram_generation",
-    "purpose":  "Generate diagrams from core artifacts",
-    "inputs":  [
-                   "ba/data-model/logical-data-model.json",
-                   "design/application_architecture.json",
-                   "design/modules/module-catalog.json"
-               ],
-    "outputs":  [
-                    "output/docs/diagrams/*.md",
-                    "output/docs/diagrams/*.svg"
-                ],
-    "artifacts":  [
-                      "output/docs/diagrams/"
-                  ],
-    "rules":  [
-                  "Render LDM, architecture, interaction, and dataflow diagrams",
-                  "Use canonical sources as inputs"
-              ],
-    "uses_tools":  [
-                       "file_manager"
-                   ],
-    "next_phase":  "governance"
+  "name": "diagram_generation",
+  "purpose": "Generate diagrams from core artifacts",
+  "inputs": {
+    "ldm": {
+      "from": "config.ba.ldmFile",
+      "default": "ba/data-model/logical-data-model.json"
+    },
+    "appArchitecture": {
+      "from": "config.design.appArchitecture",
+      "default": "design/application_architecture.json"
+    },
+    "catalog": {
+      "from": "config.design.moduleCatalog",
+      "default": "design/modules/module-catalog.json"
+    }
+  },
+  "outputs": {
+    "diagrams": {
+      "to": "config.output.docs",
+      "pattern": "diagrams/*.md"
+    }
+  },
+  "artifacts": [
+    {
+      "from": "config.output.docs",
+      "default": "output/docs"
+    }
+  ],
+  "rules": [
+    "Render LDM, architecture, interaction, and dataflow diagrams",
+    "Use canonical sources as inputs"
+  ],
+  "uses_tools": [
+    "file_manager"
+  ],
+  "next_phase": "governance"
 }
-
-

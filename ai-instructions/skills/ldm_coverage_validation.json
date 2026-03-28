@@ -8,15 +8,28 @@
     "When BA terms seem unmatched in data model artifacts",
     "Before moving from BA/system design to module definition"
   ],
-  "requires": [
-    "ba/requirements.md",
-    "ba/data-model/logical-data-model.json"
-  ],
-  "optional_inputs": [
-    "ba/business-functions.json",
-    "ba/use-cases/*.md",
-    "project/project-state.json"
-  ],
+  "inputs": {
+    "requirements": {
+      "from": "config.ba.requirements",
+      "default": "ba/requirements.md"
+    },
+    "ldm": {
+      "from": "config.ba.ldmFile",
+      "default": "ba/data-model/logical-data-model.json"
+    },
+    "businessFunctions": {
+      "from": "config.ba.businessFunctions",
+      "default": "ba/business-functions.json"
+    },
+    "useCases": {
+      "from": "config.ba.useCasePattern",
+      "default": "ba/use-cases/uc-*.md"
+    },
+    "projectState": {
+      "from": "config.project_state.state",
+      "default": "project/project-state.json"
+    }
+  },
   "methodology": [
     "Extract canonical noun terms from BA artifacts (requirements, use cases, business functions).",
     "Normalize term variants and detect semantic equivalence.",
@@ -24,8 +37,17 @@
     "Produce explicit missing-term list with recommended target class and candidate mapping.",
     "Flag ambiguous mappings separately from clear misses."
   ],
-  "outputs": [
-    "work/ldm-coverage-report.json"
+  "outputs": {
+    "report": {
+      "to": "config.output.work",
+      "pattern": "ldm-coverage-report.json"
+    }
+  },
+  "artifacts": [
+    {
+      "from": "config.output.work",
+      "default": "output/work"
+    }
   ],
   "output_schema_hint": {
     "fields": [

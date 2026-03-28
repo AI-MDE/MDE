@@ -1,21 +1,30 @@
 {
-    "name": "identify_external_references",
-    "label": "Identify External References",
-    "phase": "business_analysis",
-    "intent": "research",
-    "ai": "required",
-    "requires": [
-        "application/application.json",
-        "ba/domain-brief.md"
-    ],
-    "produces": [
-        "ba/external-references.md"
-    ],
-    "rules": [
-        "Identify all applicable standards, regulations, and protocols for the domain (e.g. HL7, GDPR, ISO 27001, FHIR, PCI-DSS)",
-        "For each reference: record name, version, governing body, relevance to the project, and sections that directly impact requirements",
-        "Flag mandatory compliance items separately from advisory best-practice references",
-        "Note where each standard will surface as constraints or acceptance criteria in requirements",
-        "Re-run this command if the domain scope expands or new regulatory requirements emerge"
-    ]
+  "name": "identify_external_references",
+  "label": "Identify External References",
+  "phase": "business_analysis",
+  "intent": "research",
+  "ai": "required",
+  "requires": {
+    "application": {
+      "from": "config.application.definition",
+      "default": "application/application.json"
+    },
+    "domainBrief": {
+      "from": "config.ba.domainBrief",
+      "default": "ba/domain-brief.md"
+    }
+  },
+  "produces": {
+    "externalReferences": {
+      "from": "config.ba.externalReferences",
+      "default": "ba/external-references.md"
+    }
+  },
+  "rules": [
+    "Identify all applicable standards, regulations, and protocols for the domain (e.g. HL7, GDPR, ISO 27001, FHIR, PCI-DSS)",
+    "For each reference: record name, version, governing body, relevance to the project, and sections that directly impact requirements",
+    "Flag mandatory compliance items separately from advisory best-practice references",
+    "Note where each standard will surface as constraints or acceptance criteria in requirements",
+    "Re-run this command if the domain scope expands or new regulatory requirements emerge"
+  ]
 }

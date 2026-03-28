@@ -1,36 +1,104 @@
 {
   "name": "source_code_generation",
   "purpose": "Generate application source code from module specifications, following the layer structure and naming conventions in architecture.json",
-  "inputs": [
-    "mde/architecture/architecture.json",
-    "design/modules/<type>/<module>/schema.json",
-    "design/modules/<type>/<module>/rules.json",
-    "design/modules/<type>/<module>/state-machine.json",
-    "design/modules/<type>/<module>/events.json",
-    "design/modules/<type>/<module>/api.yaml"
-  ],
-  "outputs": [
-    "src/{module}/domain/{module}.entity.ts",
-    "src/{module}/domain/{module}.validator.ts",
-    "src/{module}/domain/{module}.state-machine.ts",
-    "src/{module}/dto/{module}.request.dto.ts",
-    "src/{module}/dto/{module}.response.dto.ts",
-    "src/{module}/dto/{module}.read.dto.ts",
-    "src/{module}/dto/{verb}-{module}.command.ts",
-    "src/{module}/dto/{module}.events.ts",
-    "src/{module}/data_access/{module}.repository.interface.ts",
-    "src/{module}/data_access/{module}.repository.ts",
-    "src/{module}/data_access/{module}.mapper.ts",
-    "src/{module}/service/{module}.service.interface.ts",
-    "src/{module}/service/{module}.service.ts",
-    "src/{module}/queries/{module}.query-service.ts",
-    "src/{module}/controller/{module}.controller.ts",
-    "src/shared/events/domain-event.ts",
-    "src/shared/events/domain-event-publisher.ts",
-    "generated-manifest.json"
-  ],
+  "inputs": {
+    "architecture": {
+      "from": "config.mde.architecture",
+      "default": "mde/architecture/architecture.json"
+    },
+    "moduleSchema": {
+      "from": "config.design.modules",
+      "default": "design/modules/{moduleType}/{module}/schema.json"
+    },
+    "moduleRules": {
+      "from": "config.design.modules",
+      "default": "design/modules/{moduleType}/{module}/rules.json"
+    },
+    "stateMachine": {
+      "from": "config.design.modules",
+      "default": "design/modules/{moduleType}/{module}/state-machine.json"
+    },
+    "events": {
+      "from": "config.design.modules",
+      "default": "design/modules/{moduleType}/{module}/events.json"
+    },
+    "api": {
+      "from": "config.design.modules",
+      "default": "design/modules/{moduleType}/{module}/api.yaml"
+    }
+  },
+  "outputs": {
+    "src": {
+      "to": "config.output.src",
+      "pattern": "{module}/**/*.ts"
+    }
+  },
+  "scaffold": {
+    "package_json": {
+      "when": "file does not already exist",
+      "derive_from": [
+        "config.project.name",
+        "config.project.version",
+        "mde/architecture/architecture.json tech block"
+      ],
+      "must_include": {
+        "scripts": {
+          "build": "tsc",
+          "start": "node dist/index.js",
+          "test": "jest",
+          "test:unit": "jest --testPathPattern=test/unit",
+          "test:integration": "jest --testPathPattern=test/integration"
+        },
+        "dependencies": "derive from architecture.json tech (e.g. mysql2 for MySQL, uuid)",
+        "devDependencies": "typescript, ts-jest, @types/jest, jest, @types/node"
+      }
+    },
+    "tsconfig_json": {
+      "when": "file does not already exist",
+      "derive_from": [
+        "mde/architecture/architecture.json tech block"
+      ],
+      "must_include": {
+        "compilerOptions": {
+          "target": "ES2020",
+          "module": "commonjs",
+          "strict": true,
+          "esModuleInterop": true,
+          "skipLibCheck": true,
+          "outDir": "dist",
+          "rootDir": "src"
+        },
+        "include": [
+          "src/**/*.ts"
+        ],
+        "exclude": [
+          "node_modules",
+          "dist",
+          "test"
+        ]
+      }
+    }
+  },
+  "test": {
+    "framework": "jest",
+    "root": {
+      "from": "config.test.root",
+      "default": "test"
+    },
+    "unit": {
+      "from": "config.test.unit",
+      "default": "test/unit"
+    },
+    "integration": {
+      "from": "config.test.integration",
+      "default": "test/integration"
+    }
+  },
   "artifacts": [
-    "src/{module}/"
+    {
+      "from": "config.output.src",
+      "default": "src"
+    }
   ],
   "generation_order": [
     "shared types and errors",
@@ -42,7 +110,9 @@
     "Repository implementations",
     "QueryService classes",
     "Controllers",
-    "DI container wiring"
+    "DI container wiring",
+    "Unit tests (domain + service) → test/unit/{module}/",
+    "Integration tests (data_access + controller) → test/integration/{module}/"
   ],
   "rules": [
     "Read architecture.json for folder structure, naming conventions, and layer rules before generating",
@@ -57,8 +127,17 @@
     "Event types: typed aliases of DomainEvent<T> — base type in shared/events/domain-event.ts",
     "DomainEventPublisher interface in shared/events/domain-event-publisher.ts",
     "Emit deterministic outputs — same inputs must produce same outputs",
-    "Generate unit test stubs for domain and service layers",
-    "Generate integration test stubs for data_access and controller layers"
+    "Read config.test.* for test output paths — default to test/unit and test/integration",
+    "Unit tests go to test/unit/{module}/ — cover domain (entity, validator, state-machine) and service layers; mock all dependencies",
+    "Integration tests go to test/integration/{module}/ — cover data_access (repository against real DB) and controller (HTTP); no mocks",
+    "Test framework is Jest — use describe/it/expect; import from jest for mocks",
+    "Each service test: one describe block per service class, one it() per error condition and one for the happy path",
+    "Each entity test: cover create(), rehydrate(), and every state transition method",
+    "Each validator test: cover every rule — one it() per pass case and one per throw case",
+    "Do not generate test files for dto, mapper, or repository interface layers",
+    "Generate package.json if it does not exist — derive name and version from config.project, tech stack from architecture.json; always include jest scripts for unit and integration",
+    "Generate tsconfig.json if it does not exist — derive target and module from architecture.json tech; outDir=dist, rootDir=src, exclude test/",
+    "Never overwrite package.json or tsconfig.json if they already exist"
   ],
   "uses_tools": [
     "file_manager"

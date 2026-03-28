@@ -8,14 +8,24 @@
     "Requirements exist but BA/use-cases are incomplete",
     "Need to refresh use-case docs after baseline changes"
   ],
-  "requires": [
-    "ba/requirements.md"
-  ],
-  "optional_inputs": [
-    "ba/use-cases/*.md",
-    "ba/business-functions.json",
-    "project/project-state.json"
-  ],
+  "inputs": {
+    "requirements": {
+      "from": "config.ba.requirements",
+      "default": "ba/requirements.md"
+    },
+    "useCases": {
+      "from": "config.ba.useCasePattern",
+      "default": "ba/use-cases/uc-*.md"
+    },
+    "businessFunctions": {
+      "from": "config.ba.businessFunctions",
+      "default": "ba/business-functions.json"
+    },
+    "projectState": {
+      "from": "config.project_state.state",
+      "default": "project/project-state.json"
+    }
+  },
   "methodology": [
     "Read requirements baseline and identify core user/system goals, actors, and workflow steps.",
     "Draft concise use cases with consistent numbering and naming.",
@@ -23,8 +33,17 @@
     "Prefer incremental creation; keep existing files unless overwrite is explicitly requested.",
     "After AI drafting, run tool normalization/write flow to persist consistent markdown."
   ],
-  "outputs": [
-    "ba/use-cases/uc-*.md"
+  "outputs": {
+    "useCases": {
+      "to": "config.ba.useCases",
+      "pattern": "uc-*.md"
+    }
+  },
+  "artifacts": [
+    {
+      "from": "config.ba.useCases",
+      "default": "ba/use-cases"
+    }
   ],
   "tooling": {
     "primary_tool": "mde/tools/generate-use-cases.js",

@@ -4,17 +4,38 @@
   "phase": "design",
   "intent": "generate",
   "ai": "required",
-  "requires": [
-    "design/entities/ent-*.json",
-    "design/application_architecture.json",
-    "ba/requirements.md",
-    "mde/architecture/architecture.json"
-  ],
-  "produces": [
-    "design/modules/module-catalog.json",
-    "design/modules/{moduleType}/module-{kebab-module}.json",
-    "design/modules/{moduleType}/module-{kebab-module}.md"
-  ],
+  "requires": {
+    "entities": {
+      "from": "config.design.entityPattern",
+      "default": "design/entities/ent-*.json"
+    },
+    "appArchitecture": {
+      "from": "config.design.appArchitecture",
+      "default": "design/application_architecture.json"
+    },
+    "requirements": {
+      "from": "config.ba.requirements",
+      "default": "ba/requirements.md"
+    },
+    "architecture": {
+      "from": "config.mde.architecture",
+      "default": "mde/architecture/architecture.json"
+    }
+  },
+  "produces": {
+    "moduleCatalog": {
+      "from": "config.design.moduleCatalog",
+      "default": "design/modules/module-catalog.json"
+    },
+    "moduleJson": {
+      "to": "config.design.modules",
+      "pattern": "{moduleType}/module-{kebab-module}.json"
+    },
+    "moduleMd": {
+      "to": "config.design.modules",
+      "pattern": "{moduleType}/module-{kebab-module}.md"
+    }
+  },
   "calls": [
     "module_definition"
   ],

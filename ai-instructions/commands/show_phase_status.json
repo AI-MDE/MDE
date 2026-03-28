@@ -1,26 +1,33 @@
 {
-    "name":  "show_phase_status",
-    "label":  "Show Phase Status",
-    "phase":  "governance",
-    "intent":  "inspect",
-    "ai":  "none",
-    "requires":  [
-                     "project/project-state.json",
-                     "mde/methodology/methodology.json"
-                 ],
-    "produces":  [
-                     "output/work/phase-status-report.json"
-                 ],
-    "calls":  [
-                  "governance_validation"
-              ],
-    "tools":  [
-                  "file_manager",
-                  "phase_status_checker"
-              ],
-    "rules":  [
-                  "Report complete, in-progress, blocked, and missing artifacts per phase"
-              ]
+  "name": "show_phase_status",
+  "label": "Show Phase Status",
+  "phase": "governance",
+  "intent": "inspect",
+  "ai": "none",
+  "requires": {
+    "projectState": {
+      "from": "config.project_state.state",
+      "default": "project/project-state.json"
+    },
+    "methodology": {
+      "from": "config.mde.methodology",
+      "default": "mde/methodology/methodology.json"
+    }
+  },
+  "produces": {
+    "report": {
+      "to": "config.output.work",
+      "pattern": "phase-status-report.json"
+    }
+  },
+  "calls": [
+    "governance_validation"
+  ],
+  "tools": [
+    "file_manager",
+    "phase_status_checker"
+  ],
+  "rules": [
+    "Report complete, in-progress, blocked, and missing artifacts per phase"
+  ]
 }
-
-

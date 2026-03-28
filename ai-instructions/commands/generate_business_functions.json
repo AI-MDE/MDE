@@ -5,12 +5,18 @@
   "intent": "generate",
   "ai": "required",
   "skill": "business_function_generation",
-  "requires": [
-    "ba/requirements.md"
-  ],
-  "produces": [
-    "ba/business-functions.json"
-  ],
+  "requires": {
+    "requirements": {
+      "from": "config.ba.requirements",
+      "default": "ba/requirements.md"
+    }
+  },
+  "produces": {
+    "businessFunctions": {
+      "from": "config.ba.businessFunctions",
+      "default": "ba/business-functions.json"
+    }
+  },
   "tools": [
     "file_manager"
   ],

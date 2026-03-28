@@ -8,13 +8,20 @@
     "Use-case generation should be grounded in business functions",
     "Need standardized function catalog for downstream traceability"
   ],
-  "requires": [
-    "ba/requirements.md"
-  ],
-  "optional_inputs": [
-    "ba/business-functions.json",
-    "project/project-state.json"
-  ],
+  "inputs": {
+    "requirements": {
+      "from": "config.ba.requirements",
+      "default": "ba/requirements.md"
+    },
+    "businessFunctions": {
+      "from": "config.ba.businessFunctions",
+      "default": "ba/business-functions.json"
+    },
+    "projectState": {
+      "from": "config.project_state.state",
+      "default": "project/project-state.json"
+    }
+  },
   "methodology": [
     "Extract top-level capabilities from requirements baseline.",
     "Derive core business functions under each capability.",
@@ -22,9 +29,12 @@
     "Write deterministic JSON schema with stable identifiers.",
     "AI-first generation with deterministic tool fallback."
   ],
-  "outputs": [
-    "ba/business-functions.json"
-  ],
+  "outputs": {
+    "businessFunctions": {
+      "from": "config.ba.businessFunctions",
+      "default": "ba/business-functions.json"
+    }
+  },
   "tooling": {
     "primary_tool": "mde/tools/generate-business-functions.js",
     "mode": "ai_first"

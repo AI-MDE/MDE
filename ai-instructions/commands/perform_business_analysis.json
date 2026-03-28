@@ -1,19 +1,18 @@
 {
-    "name":  "perform_business_analysis",
-    "label":  "Perform Business Analysis",
-    "phase":  "business_analysis",
-    "intent":  "analyze_and_clarify",
-    "ai":  "required",
-    "skill":  "business_analysis_from_sources",
-    "input":  {
-                  "source_folder":  "ba/discovery",
-                  "application_definition":  "application/application.json"
-              },
-    "output":  {
-                   "question_batch_file":  "project/questions.json",
-                   "ba_doc_file":  "ba/requirements.md",
-                   "queue_file":  "project/open-queue.json",
-                   "status_doc_file":  "ba/analysis-status.md"
-               }
+  "name":  "perform_business_analysis",
+  "label": "Perform Business Analysis",
+  "phase": "business_analysis",
+  "intent": "analyze_and_clarify",
+  "ai":    "required",
+  "skill": "business_analysis_from_sources",
+  "requires": {
+    "sourceFolder":          { "from": "config.ba.discovery",           "default": "ba/discovery" },
+    "applicationDefinition": { "from": "config.application.definition", "default": "application/application.json" }
+  },
+  "produces": {
+    "questionBatchFile": { "from": "config.project_state.questions", "default": "project/questions.json" },
+    "baDocFile":         { "from": "config.ba.requirements",         "default": "ba/requirements.md" },
+    "queueFile":         { "from": "config.project_state.openQueue", "default": "project/open-queue.json" },
+    "statusDocFile":     { "from": "config.ba.analysisStatus",       "default": "ba/analysis-status.md" }
+  }
 }
-

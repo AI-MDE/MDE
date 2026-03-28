@@ -2,16 +2,31 @@
   "name": "architecture_validation",
   "purpose": "As a Senior Software Engineering and Architecture Expert, validate architecture artifacts against declared patterns, layer rules, and software engineering best practices.",
   "review_posture": "Senior Software Expert",
-  "inputs": [
-    "mde/architecture/architecture.json",
-    "design/application_architecture.json",
-    "design/modules/module-catalog.json"
-  ],
-  "outputs": [
-    "work/architecture-validation-report.json"
-  ],
+  "inputs": {
+    "architecture": {
+      "from": "config.mde.architecture",
+      "default": "mde/architecture/architecture.json"
+    },
+    "appArchitecture": {
+      "from": "config.design.appArchitecture",
+      "default": "design/application_architecture.json"
+    },
+    "catalog": {
+      "from": "config.design.moduleCatalog",
+      "default": "design/modules/module-catalog.json"
+    }
+  },
+  "outputs": {
+    "report": {
+      "to": "config.output.work",
+      "pattern": "architecture-validation-report.json"
+    }
+  },
   "artifacts": [
-    "work/architecture-validation-report.json"
+    {
+      "from": "config.output.work",
+      "default": "output/work"
+    }
   ],
   "rules": [
     "Apply senior-level software architecture judgment and challenge weak design assumptions",

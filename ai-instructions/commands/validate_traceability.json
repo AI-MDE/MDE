@@ -1,28 +1,41 @@
 {
-    "name":  "validate_traceability",
-    "label":  "Validate Traceability",
-    "phase":  "governance",
-    "intent":  "validate",
-    "ai":  "optional",
-    "requires":  [
-                     "ba/requirements.md",
-                     "design/modules/module-catalog.json",
-                     "design/modules/module-tests.json"
-                 ],
-    "produces":  [
-                     "design/traceability-validation-report.json",
-                     "design/trace-matrix.json"
-                 ],
-    "calls":  [
-                  "governance_validation"
-              ],
-    "tools":  [
-                  "traceability_engine",
-                  "file_manager"
-              ],
-    "rules":  [
-                  "Every requirement must map to at least one module and one test"
-              ]
+  "name": "validate_traceability",
+  "label": "Validate Traceability",
+  "phase": "governance",
+  "intent": "validate",
+  "ai": "optional",
+  "requires": {
+    "requirements": {
+      "from": "config.ba.requirements",
+      "default": "ba/requirements.md"
+    },
+    "catalog": {
+      "from": "config.design.moduleCatalog",
+      "default": "design/modules/module-catalog.json"
+    },
+    "moduleTests": {
+      "from": "config.design.moduleTests",
+      "default": "design/modules/module-tests.json"
+    }
+  },
+  "produces": {
+    "traceabilityReport": {
+      "from": "config.design.traceabilityReport",
+      "default": "design/traceability-validation-report.json"
+    },
+    "traceMatrix": {
+      "from": "config.design.traceMatrix",
+      "default": "design/trace-matrix.json"
+    }
+  },
+  "calls": [
+    "governance_validation"
+  ],
+  "tools": [
+    "traceability_engine",
+    "file_manager"
+  ],
+  "rules": [
+    "Every requirement must map to at least one module and one test"
+  ]
 }
-
-

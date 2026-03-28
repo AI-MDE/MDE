@@ -2,19 +2,43 @@
   "name": "module_definition",
   "purpose": "Produce a complete module definition per module in the catalog — combining charter (ownership, boundaries, interfaces, dependencies) and spec (schema, rules, state machine, events, API) into a single implementation-ready artifact.",
   "inputs": {
-    "catalog":       { "from": "config.design.moduleCatalog",  "default": "design/modules/module-catalog.json" },
-    "entities":      { "from": "config.design.entityPattern",  "default": "design/entities/ent-*.json" },
-    "requirements":  { "from": "config.ba.requirements",       "default": "ba/requirements.md" },
-    "architecture":  { "from": "config.mde.architecture",      "default": "mde/architecture/architecture.json" }
+    "catalog": {
+      "from": "config.design.moduleCatalog",
+      "default": "design/modules/module-catalog.json"
+    },
+    "entities": {
+      "from": "config.design.entityPattern",
+      "default": "design/entities/ent-*.json"
+    },
+    "requirements": {
+      "from": "config.ba.requirements",
+      "default": "ba/requirements.md"
+    },
+    "architecture": {
+      "from": "config.mde.architecture",
+      "default": "mde/architecture/architecture.json"
+    }
   },
   "outputs": {
-    "moduleJson": { "to": "config.design.modules", "pattern": "{moduleType}/module-{kebab-module}.json" },
-    "moduleMd":   { "to": "config.design.modules", "pattern": "{moduleType}/module-{kebab-module}.md" }
+    "moduleJson": {
+      "to": "config.design.modules",
+      "pattern": "{moduleType}/module-{kebab-module}.json"
+    },
+    "moduleMd": {
+      "to": "config.design.modules",
+      "pattern": "{moduleType}/module-{kebab-module}.md"
+    }
   },
   "artifacts": [
-    "design/modules/"
+    {
+      "from": "config.design.modules",
+      "default": "design/modules"
+    }
   ],
-  "output_folder": "design/modules/{moduleType}/",
+  "output_folder": {
+    "to": "config.design.modules",
+    "pattern": "{moduleType}/"
+  },
   "output_shape": {
     "json": {
       "moduleId": "from catalog",
@@ -27,20 +51,41 @@
         "responsibilities": "array of strings — what this module owns and enforces",
         "exclusions": "array of strings — what this module explicitly does NOT do, and which module owns it instead",
         "dependencies": [
-          { "moduleId": "Mxx", "moduleName": "string", "reason": "one sentence" }
+          {
+            "moduleId": "Mxx",
+            "moduleName": "string",
+            "reason": "one sentence"
+          }
         ],
         "requirementMapping": [
-          { "ruleId": "BR-xxx", "mappedTo": "domain | data_access | service | query_service", "artifact": "ClassName", "description": "one sentence" }
+          {
+            "ruleId": "BR-xxx",
+            "mappedTo": "domain | data_access | service | query_service",
+            "artifact": "ClassName",
+            "description": "one sentence"
+          }
         ]
       },
       "spec": {
         "schema": {
           "table": "snake_case table name",
           "columns": [
-            { "name": "column_name", "type": "uuid | string | integer | decimal | boolean | date | datetime | enum", "required": true, "default": null, "enum": [], "description": "optional" }
+            {
+              "name": "column_name",
+              "type": "uuid | string | integer | decimal | boolean | date | datetime | enum",
+              "required": true,
+              "default": null,
+              "enum": [],
+              "description": "optional"
+            }
           ],
           "indexes": [
-            { "fields": [], "unique": false, "where": null, "description": "optional" }
+            {
+              "fields": [],
+              "unique": false,
+              "where": null,
+              "description": "optional"
+            }
           ]
         },
         "interfaces": {
@@ -51,9 +96,17 @@
               "command": "XCommand",
               "response": "XResponseDto",
               "signature": "execute(cmd: XCommand, actor: ActorContext): Promise<XResponseDto>",
-              "steps": ["authorize", "load", "domain behavior", "save", "emit event"],
+              "steps": [
+                "authorize",
+                "load",
+                "domain behavior",
+                "save",
+                "emit event"
+              ],
               "description": "one sentence",
-              "errorConditions": ["ErrorClassName — when condition"]
+              "errorConditions": [
+                "ErrorClassName — when condition"
+              ]
             }
           ],
           "query_service": [
@@ -69,22 +122,46 @@
           ]
         },
         "rules": [
-          { "id": "RULE-MOD-nn", "name": "string", "layer": "domain | service | controller", "artifact": "ClassName", "condition": "string", "action": "string", "elseAction": "string" }
+          {
+            "id": "RULE-MOD-nn",
+            "name": "string",
+            "layer": "domain | service | controller",
+            "artifact": "ClassName",
+            "condition": "string",
+            "action": "string",
+            "elseAction": "string"
+          }
         ],
         "stateMachine": {
           "note": "workflow module type only",
           "states": [],
           "initial": "string",
           "transitions": [
-            { "from": "string", "to": "string", "event": "string", "guard": "rule ID or none", "actions": [] }
+            {
+              "from": "string",
+              "to": "string",
+              "event": "string",
+              "guard": "rule ID or none",
+              "actions": []
+            }
           ]
         },
         "api": [
-          { "method": "POST | GET | PUT | PATCH | DELETE", "path": "/api/{resource}", "requestDto": "XRequestDto", "responseDto": "XResponseDto | XReadDto", "description": "one sentence" }
+          {
+            "method": "POST | GET | PUT | PATCH | DELETE",
+            "path": "/api/{resource}",
+            "requestDto": "XRequestDto",
+            "responseDto": "XResponseDto | XReadDto",
+            "description": "one sentence"
+          }
         ],
         "events": {
           "published": [
-            { "eventType": "string", "trigger": "service method name", "payloadFields": [] }
+            {
+              "eventType": "string",
+              "trigger": "service method name",
+              "payloadFields": []
+            }
           ]
         }
       },
@@ -95,36 +172,107 @@
   },
   "module_type_rules": {
     "workflow": {
-      "generates": ["dto", "data_access", "domain", "service", "query_service"],
-      "domain_artifacts": ["Entity", "Validator", "StateMachine"],
-      "spec_required": ["schema", "interfaces", "rules", "stateMachine", "api", "events"],
-      "must_have": ["stateMachine block derived from entity file", "auditRequired: true"]
+      "generates": [
+        "dto",
+        "data_access",
+        "domain",
+        "service",
+        "query_service"
+      ],
+      "domain_artifacts": [
+        "Entity",
+        "Validator",
+        "StateMachine"
+      ],
+      "spec_required": [
+        "schema",
+        "interfaces",
+        "rules",
+        "stateMachine",
+        "api",
+        "events"
+      ],
+      "must_have": [
+        "stateMachine block derived from entity file",
+        "auditRequired: true"
+      ]
     },
     "master_data": {
-      "generates": ["dto", "data_access", "domain", "service", "query_service"],
-      "domain_artifacts": ["Entity", "Validator"],
-      "spec_required": ["schema", "interfaces", "rules", "api"],
-      "must_have": ["optimisticLocking: true"]
+      "generates": [
+        "dto",
+        "data_access",
+        "domain",
+        "service",
+        "query_service"
+      ],
+      "domain_artifacts": [
+        "Entity",
+        "Validator"
+      ],
+      "spec_required": [
+        "schema",
+        "interfaces",
+        "rules",
+        "api"
+      ],
+      "must_have": [
+        "optimisticLocking: true"
+      ]
     },
     "rule_engine": {
-      "generates": ["dto", "data_access", "domain", "service"],
-      "domain_artifacts": ["Entity", "Rules"],
-      "spec_required": ["schema", "interfaces", "rules", "api", "events"],
-      "must_have": ["auditRequired: true"],
+      "generates": [
+        "dto",
+        "data_access",
+        "domain",
+        "service"
+      ],
+      "domain_artifacts": [
+        "Entity",
+        "Rules"
+      ],
+      "spec_required": [
+        "schema",
+        "interfaces",
+        "rules",
+        "api",
+        "events"
+      ],
+      "must_have": [
+        "auditRequired: true"
+      ],
       "note": "Typically append-only — set optimisticLocking: false when entity is immutable"
     },
     "integration": {
-      "generates": ["dto", "data_access", "service"],
+      "generates": [
+        "dto",
+        "data_access",
+        "service"
+      ],
       "domain_artifacts": [],
-      "spec_required": ["schema", "interfaces", "api", "events"],
-      "must_have": ["optimisticLocking: false"],
+      "spec_required": [
+        "schema",
+        "interfaces",
+        "api",
+        "events"
+      ],
+      "must_have": [
+        "optimisticLocking: false"
+      ],
       "note": "No domain layer. Failures must not propagate to caller."
     },
     "reporting": {
-      "generates": ["query_service"],
+      "generates": [
+        "query_service"
+      ],
       "domain_artifacts": [],
-      "spec_required": ["interfaces.query_service", "api"],
-      "must_have": ["table: null", "entityRef: null"],
+      "spec_required": [
+        "interfaces.query_service",
+        "api"
+      ],
+      "must_have": [
+        "table: null",
+        "entityRef: null"
+      ],
       "note": "query_service only — no schema, no data_access, no domain, no service layer."
     }
   },

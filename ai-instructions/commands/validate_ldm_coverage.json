@@ -5,13 +5,22 @@
   "intent": "validate",
   "ai": "required",
   "skill": "ldm_coverage_validation",
-  "requires": [
-    "ba/requirements.md",
-    "ba/data-model/logical-data-model.json"
-  ],
-  "produces": [
-    "work/ldm-coverage-report.json"
-  ],
+  "requires": {
+    "requirements": {
+      "from": "config.ba.requirements",
+      "default": "ba/requirements.md"
+    },
+    "ldm": {
+      "from": "config.ba.ldmFile",
+      "default": "ba/data-model/logical-data-model.json"
+    }
+  },
+  "produces": {
+    "report": {
+      "to": "config.output.work",
+      "pattern": "ldm-coverage-report.json"
+    }
+  },
   "tools": [
     "file_manager"
   ],

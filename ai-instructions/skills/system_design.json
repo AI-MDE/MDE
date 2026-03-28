@@ -1,21 +1,51 @@
 {
   "name": "system_design",
   "purpose": "Generate architecture and design artifacts from validated business analysis outputs, following the iterative design process defined in system-design-process.md",
-  "inputs": [
-    "ba/requirements.md",
-    "ba/use-cases/*.md",
-    "ba/business-functions.json",
-    "mde/architecture/architecture.json",
-    "mde/docs/design/system-design-process.md",
-    "mde/docs/design/use-case-mapping.md"
-  ],
-  "outputs": [
-    "design/application_architecture.json",
-    "design/modules/module-catalog.json"
-  ],
+  "inputs": {
+    "requirements": {
+      "from": "config.ba.requirements",
+      "default": "ba/requirements.md"
+    },
+    "useCases": {
+      "from": "config.ba.useCasePattern",
+      "default": "ba/use-cases/uc-*.md"
+    },
+    "businessFunctions": {
+      "from": "config.ba.businessFunctions",
+      "default": "ba/business-functions.json"
+    },
+    "architecture": {
+      "from": "config.mde.architecture",
+      "default": "mde/architecture/architecture.json"
+    },
+    "designProcess": {
+      "from": "config.mde.docs.designProcess",
+      "default": "mde/docs/design/system-design-process.md"
+    },
+    "useCaseMapping": {
+      "from": "config.mde.docs.useCaseMapping",
+      "default": "mde/docs/design/use-case-mapping.md"
+    }
+  },
+  "outputs": {
+    "appArchitecture": {
+      "from": "config.design.appArchitecture",
+      "default": "design/application_architecture.json"
+    },
+    "moduleCatalog": {
+      "from": "config.design.moduleCatalog",
+      "default": "design/modules/module-catalog.json"
+    }
+  },
   "artifacts": [
-    "design/application_architecture.json",
-    "design/modules/module-catalog.json"
+    {
+      "from": "config.design.appArchitecture",
+      "default": "design/application_architecture.json"
+    },
+    {
+      "from": "config.design.moduleCatalog",
+      "default": "design/modules/module-catalog.json"
+    }
   ],
   "process": {
     "step_1a": "Extract aggregate roots from schema — each becomes: Entity, Repository port, Repository impl, Mapper",

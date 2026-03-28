@@ -4,12 +4,18 @@
   "phase": "governance",
   "intent": "generate",
   "ai": "none",
-  "requires": [
-    "ba/data-model/logical-data-model.json"
-  ],
-  "produces": [
-    "output/docs/diagrams/erd.md"
-  ],
+  "requires": {
+    "ldm": {
+      "from": "config.ba.ldmFile",
+      "default": "ba/data-model/logical-data-model.json"
+    }
+  },
+  "produces": {
+    "erd": {
+      "to": "config.output.docs",
+      "pattern": "diagrams/erd.md"
+    }
+  },
   "calls": [
     "diagram_generation"
   ],
