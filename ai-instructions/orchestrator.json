@@ -78,6 +78,10 @@
       {
         "user_input": "Generate UI Outline",
         "resolved_command": "generate_ui_outline"
+      },
+      {
+        "user_input": "Generate UI Source Code",
+        "resolved_command": "generate_ui_source_code"
       }
     ]
   },
@@ -177,6 +181,7 @@
     "development": {
       "allowed_commands": [
         "generate_source_code",
+        "generate_ui_source_code",
         "generate_sample_data"
       ],
       "exit_conditions_all": [
@@ -209,7 +214,8 @@
       "json_validator must be used when a command produces or validates JSON artifacts.",
       "traceability_engine must be used for end-to-end trace checks.",
       "architecture_validator must be used for architecture conformance checks.",
-      "No tool may write outside configured project paths."
+      "No tool may write outside configured project paths.",
+      "The MDE framework folder (config.mde.path) is READ-ONLY. Skills and commands MUST NOT write any files into it. All output goes to project paths defined in configuration.json under ba, design, project_state, application, output, or test."
     ]
   },
   "error_handling": {

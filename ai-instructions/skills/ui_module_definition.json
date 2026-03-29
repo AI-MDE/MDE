@@ -29,17 +29,33 @@
   },
   "outputs": {
     "uiModuleCatalog": {
-      "to": "config.design.modules",
-      "pattern": "ui/ui-catalog.json"
+      "to": "config.design.uiModules",
+      "pattern": "ui-catalog.json"
     },
     "uiModuleSpec": {
-      "to": "config.design.modules",
-      "pattern": "ui/ui-{kebab-module-name}.json"
+      "to": "config.design.uiModules",
+      "pattern": "ui-{kebab-module-name}.json"
     }
   },
+  "artifacts": [
+    { "from": "config.application.definition" },
+    { "from": "config.ba.requirements" },
+    { "from": "config.ba.useCases" },
+    { "from": "config.design.moduleCatalog" },
+    { "from": "config.design.entities" }
+  ],
   "output_shape": {
     "uiModuleCatalog": {
       "application": "from application.json — name",
+      "menu": [
+        {
+          "moduleId": "UI-Mnn",
+          "label": "string — nav menu label",
+          "icon": "string — icon name hint e.g. calendar, users, clipboard",
+          "route": "full route id of the module entry point — e.g. /my-leave/dashboard",
+          "order": 1
+        }
+      ],
       "modules": [
         {
           "id": "UI-Mnn",
@@ -63,9 +79,9 @@
       "backendModules": ["Mnn"],
       "pages": [
         {
-          "id": "PAGE-nn",
+          "id": "/routePrefix/sub-path — full route, e.g. /my-leave/dashboard or /my-leave/:id/edit",
           "name": "string",
-          "routePath": "/kebab-path/sub-path — relative to routePrefix",
+          "routePath": "/sub-path — relative to routePrefix, e.g. /dashboard, /:id, /new",
           "pattern": "dashboard | list | detail | form | wizard | modal | split-view",
           "purpose": "what the user achieves on this page",
           "requirementRefs": ["FR-nn or BR-nn — requirements this page fulfills"],
@@ -77,7 +93,7 @@
               "label": "button/link label",
               "type": "navigate | submit | delete | confirm | filter | export | modal | bulk",
               "requiredRoles": ["actor names — omit if same as page"],
-              "navigatesTo": "PAGE-nn or null"
+              "navigatesTo": "full route id e.g. /my-leave/:id or null"
             }
           ],
           "filters": [
@@ -96,15 +112,23 @@
             }
           ],
           "emptyState": "message shown when the page has no data",
-          "drillsInto": ["PAGE-nn — pages reachable from this page"]
+          "drillsInto": ["full route id — pages reachable from this page, e.g. /my-leave/:id"]
+        }
+      ],
+      "subNav": [
+        {
+          "label": "string — tab or secondary menu label",
+          "route": "full route id",
+          "note": "include only when the module has 3+ peer sections worth a persistent tab bar; omit otherwise"
         }
       ],
       "navigation": {
-        "entryPoint": "PAGE-nn",
+        "entryPoint": "full route id — e.g. /my-leave/dashboard",
+        "menuVisible": true,
         "flows": [
           {
-            "from": "PAGE-nn",
-            "to": "PAGE-nn",
+            "from": "full route id",
+            "to": "full route id",
             "via": "action label"
           }
         ]
@@ -150,10 +174,9 @@
   },
   "naming_rules": {
     "module_id": "UI-M01, UI-M02 — sequential, prefixed UI-M",
-    "page_id": "PAGE-01, PAGE-02 — sequential within module",
+    "page_id": "Full route path — routePrefix + routePath concatenated, e.g. /my-leave/dashboard, /my-leave/:id/edit. Use the exact route as the page id. This makes every reference self-documenting and collision-free across modules.",
     "routePrefix": "/kebab-case-plural-noun — e.g. /leave-requests",
     "routePath": "relative to routePrefix — e.g. '', '/:id', '/new', '/:id/edit'",
-    "output_folder": "design/modules/ui/",
     "catalog_file": "ui-catalog.json",
     "spec_file": "ui-{kebab-case-moduleName}.json"
   },
@@ -167,17 +190,22 @@
     "Each drill-down must appear in both drillsInto on the source page and navigation.flows",
     "Actions of type delete must be type confirm — never a direct destructive action",
     "Filters only where data volume or search need is identified in requirements",
-    "Validation rules required on all form pages for every required field",
+    "Validation rules required on all form pages — must align with DomainValidator constraints where applicable",
+    "RequiredRoles must map directly to the Actors defined in the requirements baseline",
     "emptyState required on all list and dashboard pages",
     "backendModules must reference module IDs from module-catalog.json",
     "relatedEntities must reference entity names from entity files",
     "Priority: core = required for MVP, secondary = important but deferrable, optional = nice-to-have",
     "One UI module per cohesive user workflow — do not split a single workflow across modules",
-    "No new requirements — all pages must be traceable to requirements or use cases"
+    "No new requirements — all pages must be traceable to requirements or use cases",
+    "ui-catalog.json must include a top-level menu array — one entry per UI module, ordered by actor priority (core modules first), with the module's entryPoint route",
+    "navigation.menuVisible must be true for pages reachable directly from the menu, false for pages only reachable via in-page flows",
+    "subNav is optional — include only when a module has 3 or more peer sections that warrant a persistent tab bar (e.g. HR Admin with Leave Types / Balances / Requests tabs); omit for simple linear workflows",
+    "navigation.flows covers in-page transitions only — menu-level navigation is covered by the catalog menu array"
   ],
   "uses_tools": [
     "file_manager",
     "json_validator"
   ],
-  "next_phase": "ui_source_code_generation"
+  "next_phase": "development"
 }

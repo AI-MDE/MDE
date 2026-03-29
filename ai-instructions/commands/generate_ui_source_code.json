@@ -1,0 +1,47 @@
+{
+  "name": "generate_ui_source_code",
+  "label": "Generate UI Source Code",
+  "phase": "development",
+  "intent": "generate",
+  "ai": "required",
+  "requires": {
+    "uiCatalog": {
+      "from": "config.design.uiModules",
+      "default": "design/modules/ui/ui-catalog.json"
+    },
+    "uiModuleSpecs": {
+      "from": "config.design.uiModules",
+      "default": "design/modules/ui/ui-*.json"
+    },
+    "moduleCatalog": {
+      "from": "config.design.moduleCatalog",
+      "default": "design/modules/module-catalog.json"
+    },
+    "entities": {
+      "from": "config.design.entityPattern",
+      "default": "design/entities/ent-*.json"
+    },
+    "application": {
+      "from": "config.application.definition",
+      "default": "application/application.json"
+    }
+  },
+  "produces": {
+    "uiSrc": {
+      "to": "config.output.uiSrc",
+      "pattern": "{module}/**/*.{tsx,ts,css}"
+    }
+  },
+  "calls": [
+    "ui_source_code_generation"
+  ],
+  "tools": [
+    "file_manager",
+    "json_validator"
+  ],
+  "rules": [
+    "Generate one UI module folder per entry in ui-catalog.json",
+    "Each page in a UI module spec becomes one component file",
+    "Follow framework and styling choices from config.ui"
+  ]
+}

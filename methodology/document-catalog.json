@@ -438,6 +438,40 @@
     },
 
     {
+      "id": "ui-catalog",
+      "displayName": "UI Module Catalog",
+      "purpose": "Index of all UI modules with route prefixes, primary users, backend module bindings, and priority classification.",
+      "format": "json",
+      "phase": ["system_design"],
+      "status": "optional",
+      "namingConvention": "ui/ui-catalog.json",
+      "templateRef": "ui-catalog.md",
+      "generation": {
+        "canGenerate": true,
+        "requiredInputs": ["module-catalog", "business-functions", "use-case"]
+      },
+      "relatedCommands": ["generate_ui_outline"],
+      "relatedSkills": ["ui_module_definition"]
+    },
+
+    {
+      "id": "ui-module-spec",
+      "displayName": "UI Module Spec",
+      "purpose": "Full page specification for one UI module: pages, routes, actions, filters, validation rules, and navigation flows.",
+      "format": "json",
+      "phase": ["system_design"],
+      "status": "optional",
+      "namingConvention": "ui/ui-{kebab-module-name}.json",
+      "templateRef": "ui-module-spec.md",
+      "generation": {
+        "canGenerate": true,
+        "requiredInputs": ["ui-catalog", "module-spec", "entity"]
+      },
+      "relatedCommands": ["generate_ui_outline"],
+      "relatedSkills": ["ui_module_definition"]
+    },
+
+    {
       "id": "schema-state",
       "displayName": "Schema State",
       "purpose": "Tracks the current state of the database schema: applied migrations, table checksums, and last-modified timestamps.",
@@ -497,6 +531,28 @@
       },
       "relatedCommands": ["generate_source_code", "setup_dev_environment"],
       "relatedSkills": ["source_code_generation"]
+    },
+
+    {
+      "id": "ui-source-code",
+      "displayName": "UI Source Code",
+      "purpose": "React/Vue/Angular component files and supporting code generated from UI module specs.",
+      "format": "tsx",
+      "phase": ["development"],
+      "status": "optional",
+      "namingConvention": "{module}/pages/{PageName}.tsx",
+      "namingPattern": ".*\\.(tsx|ts|css)$",
+      "schemaRef": null,
+      "templateRef": null,
+      "sourceMode": "generated_by_ai",
+      "generation": {
+        "canGenerate": true,
+        "canRegenerate": true,
+        "requiredInputs": ["ui-catalog", "ui-module-spec", "entity"],
+        "skill": "ui_source_code_generation"
+      },
+      "relatedCommands": ["generate_ui_source_code"],
+      "relatedSkills": ["ui_source_code_generation"]
     },
 
     {

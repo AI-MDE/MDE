@@ -933,6 +933,8 @@ const FORMAT_FNS = {
   // source code — show as-is, no processing
   'code': _plain,
   'ts':   _plain,
+  'tsx':  _plain,
+  'css':  _plain,
   'js':   _plain,
   'py':   _plain,
   'jsonl':(body, _doc, content) => {
@@ -1005,6 +1007,36 @@ function normalizeForTemplate(docType, data, doc) {
           parentId: fn.parent_id || '',
           outcomes: (fn.outcomes || []).map(o => ({ '.': o })),
         })),
+      })),
+    };
+  }
+
+  if (docType === 'ui-catalog') {
+    return {
+      application: data.application || '',
+      menu: (data.menu || []),
+      modules: (data.modules || []).map(m => ({
+        ...m,
+        users:    (m.primaryUsers    || []).join(', '),
+        backends: (m.backendModules  || []).join(', '),
+      })),
+    };
+  }
+
+  if (docType === 'ui-module-spec') {
+    return {
+      ...data,
+      users:    (data.primaryUsers   || []).join(', '),
+      backends: (data.backendModules || []).join(', '),
+      subNav:   (data.subNav || []).length > 0 ? data.subNav : null,
+      pages: (data.pages || []).map(p => ({
+        ...p,
+        roles:            (p.requiredRoles   || []).join(', '),
+        requirements:     (p.requirementRefs || []).join(', '),
+        menuVisibleLabel: p.menuVisible === false ? 'flow only' : 'menu',
+        hasActions:    (p.actions     || []).length > 0,
+        hasFilters:    (p.filters     || []).length > 0,
+        hasValidation: (p.validation  || []).length > 0,
       })),
     };
   }

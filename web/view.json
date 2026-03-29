@@ -111,6 +111,26 @@
       ]
     },
     {
+      "id": "ui-design",
+      "label": "UI Design",
+      "phase": "system_design",
+      "icon": "device-phone-mobile",
+      "items": [
+        { "id": "ui-catalog", "label": "UI Catalog", "docType": "ui-catalog", "file": "$config.design.uiModules/ui-catalog.json", "includeIfExists": true },
+        {
+          "id": "ui-module-specs",
+          "label": "UI Modules",
+          "docType": "ui-module-spec",
+          "scan": {
+            "dir": "$config.design.uiModules",
+            "pattern": "^ui-(?!catalog).*\\.json$",
+            "labelFrom": "moduleName",
+            "sortBy": "moduleId"
+          }
+        }
+      ]
+    },
+    {
       "id": "governance",
       "label": "Governance",
       "phase": "governance",
@@ -143,6 +163,18 @@
             "dir": "$config.output.src/../output/sample-data",
             "pattern": ".*\\.json$",
             "labelFrom": "filename",
+            "sortBy": "filename"
+          }
+        },
+        {
+          "id": "ui-source-code",
+          "label": "UI Source Code",
+          "docType": "ui-source-code",
+          "scan": {
+            "dir": "$config.output.uiSrc",
+            "pattern": ".*\\.(tsx|ts|css)$",
+            "recursive": true,
+            "groupBy": "parent-folder",
             "sortBy": "filename"
           }
         },
