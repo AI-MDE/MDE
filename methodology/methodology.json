@@ -1,7 +1,8 @@
 {
   "methodology": "Model-Driven",
-  "version": "1.2",
+  "version": "1.3",
   "title": "Model-Driven Development Methodology",
+
   "principles": [
     "Dual Artifacts",
     "Progressive Refinement",
@@ -11,40 +12,28 @@
     "Single Source of Truth",
     "Stable IDs"
   ],
+
   "naming_conventions": {
     "note": "Patterns are regex. Templates use {placeholder} syntax for human reference only.",
     "files": {
-      "use_case":        { "pattern": "^uc-\\d+.*\\.md$",              "template": "uc-{number}-{name}.md",                   "location": "ba/use-cases/" },
-      "entity":          { "pattern": "^ent-.*\\.json$",               "template": "ent-{name}.json",                         "location": "design/entities/" },
-      "module_charter":  { "pattern": "^module-charter-.*\\.md$",      "template": "module-charter-{name}.md",                "location": "design/modules/{type}/" },
-      "module_def":      { "pattern": "^module-.*\\.json$",            "template": "module-{name}.json",                      "location": "design/modules/{type}/" },
-      "module_spec_dir": { "pattern": "^[a-z0-9-]+$",                  "template": "{module-name}/",                          "location": "design/modules/{type}/" }
+      "use_case":        { "pattern": "^uc-\\d+.*\\.md$",              "template": "uc-{number}-{name}.md",    "location": "ba/use-cases/" },
+      "entity":          { "pattern": "^ent-.*\\.json$",               "template": "ent-{name}.json",          "location": "design/entities/" },
+      "module_charter":  { "pattern": "^module-charter-.*\\.md$",      "template": "module-charter-{name}.md", "location": "design/modules/{type}/" },
+      "module_def":      { "pattern": "^module-.*\\.json$",            "template": "module-{name}.json",       "location": "design/modules/{type}/" },
+      "module_spec_dir": { "pattern": "^[a-z0-9-]+$",                  "template": "{module-name}/",           "location": "design/modules/{type}/" }
     },
     "ids": {
-      "requirement":        { "pattern": "^BR-\\d+$",                  "template": "BR-{number}",        "example": "BR-001" },
-      "business_rule":      { "pattern": "^BRule-\\d+$",               "template": "BRule-{number}",     "example": "BRule-001" },
-      "constraint":         { "pattern": "^CON-\\d+$",                 "template": "CON-{number}",       "example": "CON-001" },
-      "acceptance_criteria":{ "pattern": "^AC-\\d+$",                  "template": "AC-{number}",        "example": "AC-001" },
-      "risk":               { "pattern": "^RISK-\\d+$",                "template": "RISK-{number}",      "example": "RISK-001" },
-      "module":             { "pattern": "^MOD-\\d+$",                 "template": "MOD-{number}",       "example": "MOD-001" },
-      "test_suite":         { "pattern": "^TS-[A-Z]+-\\d+$",           "template": "TS-{MODULE}-{number}","example": "TS-CLAIM-001" },
-      "test_case":          { "pattern": "^TC-[A-Z]+-\\d{2}-\\d{2}$", "template": "TC-{MODULE}-{suite}-{case}", "example": "TC-CLAIM-01-02" }
+      "requirement":         { "pattern": "^BR-\\d+$",                  "template": "BR-{number}",               "example": "BR-001" },
+      "business_rule":       { "pattern": "^BRule-\\d+$",               "template": "BRule-{number}",            "example": "BRule-001" },
+      "constraint":          { "pattern": "^CON-\\d+$",                 "template": "CON-{number}",              "example": "CON-001" },
+      "acceptance_criteria": { "pattern": "^AC-\\d+$",                  "template": "AC-{number}",               "example": "AC-001" },
+      "risk":                { "pattern": "^RISK-\\d+$",                "template": "RISK-{number}",             "example": "RISK-001" },
+      "module":              { "pattern": "^MOD-\\d+$",                 "template": "MOD-{number}",              "example": "MOD-001" },
+      "test_suite":          { "pattern": "^TS-[A-Z]+-\\d+$",           "template": "TS-{MODULE}-{number}",     "example": "TS-CLAIM-001" },
+      "test_case":           { "pattern": "^TC-[A-Z]+-\\d{2}-\\d{2}$", "template": "TC-{MODULE}-{suite}-{case}","example": "TC-CLAIM-01-02" }
     }
   },
-  "module_types": [
-    {
-      "id": "svc",
-      "label": "Service",
-      "description": "Business logic and orchestration layer",
-      "path": "design/modules/svc"
-    },
-    {
-      "id": "dal",
-      "label": "Data Access Layer",
-      "description": "Database interaction and persistence layer",
-      "path": "design/modules/dal"
-    }
-  ],
+
   "workflow_patterns": {
     "discovery_loop": {
       "label": "Discovery Loop",
@@ -59,48 +48,22 @@
       ],
       "inbox_folder_convention": "Each phase that uses discovery maintains an inbox folder (e.g. ba/discovery/) and a processed folder (e.g. ba/analyzed/). The convention is inbox → processed after the file has been incorporated.",
       "question_lifecycle": {
-        "active": "project/questions.json — current batch, open for user response",
-        "deferred": "project/open-queue.json — items that cannot be resolved yet",
+        "active":    "project/questions.json — current batch, open for user response",
+        "deferred":  "project/open-queue.json — items that cannot be resolved yet",
         "completed": "project/completed-Questions.json — items accepted into the artifact baseline"
       },
       "applies_to": [
         "business_analysis",
-        "system_design",
-        "module_specification"
+        "system_design"
       ]
     }
   },
-  "notes": {
-    "commands_are_fluid": "Commands can be run multiple times and against different targets. The 'commands' list per phase is a display grouping hint, not an enforcement gate.",
-    "exit_validation_command": "The command that validates phase completion. Not yet enforced — planned as a future phase gate.",
-    "docs.required": "Required docs are used by show_phase_status to determine if a phase is complete or blocked.",
-    "docs.docType": "Used by the viewer to select the correct renderer for a document.",
-    "docs.scan": "Scan-based docs match multiple files dynamically — the phase is considered to have at least one when any match exists."
-  },
-  "cross_phase": {
-    "label": "Governance",
-    "description": "Inspection, validation, and assessment commands available at any phase — no prerequisites on phase",
-    "commands": [
-      "assess_methodology",
-      "assess_architecture",
-      "identify_external_references",
-      "validate_traceability",
-      "show_phase_status",
-      "generate_diagrams",
-      "generate_documentation"
-    ]
-  },
+
   "phases": [
     {
       "name": "project_initiation",
       "label": "Project Initiation",
       "description": "Bootstrap the workspace with default structure, configuration, and state files. Select the methodology and architecture before analysis begins.",
-      "commands": [
-        "initiate_project",
-        "select_methodology",
-        "select_architecture"
-      ],
-      "exit_validation_command": null,
       "docs": [
         {
           "id": "configuration",
@@ -124,24 +87,10 @@
           "required": true
         },
         {
-          "id": "methodology-decision",
-          "label": "Methodology Decision",
-          "docType": "decision",
-          "file": "mde/methodology/methodology-decision.md",
-          "required": false
-        },
-        {
-          "id": "architecture-decision",
-          "label": "Architecture Decision",
-          "docType": "decision",
-          "file": "design/architecture-decision.md",
-          "required": false
-        },
-        {
           "id": "command-log",
           "label": "Command Log",
           "docType": "command-log",
-          "file": "project/logs/command-log.json",
+          "file": "project/logs/command-log.jsonl",
           "required": false
         }
       ]
@@ -149,16 +98,7 @@
     {
       "name": "business_analysis",
       "label": "Business Analysis",
-      "description": "Analyze source material, derive a requirements baseline, and generate targeted clarification questions",
-      "commands": [
-        "identify_domain",
-        "identify_external_references",
-        "perform_business_analysis",
-        "generate_business_functions",
-        "generate_use_cases",
-        "validate_requirements"
-      ],
-      "exit_validation_command": "validate_requirements",
+      "description": "Analyze source material, derive a requirements baseline, and generate targeted clarification questions.",
       "docs": [
         {
           "id": "domain-brief",
@@ -238,15 +178,7 @@
     {
       "name": "system_design",
       "label": "System Design",
-      "description": "Derive architecture, logical data model, and module catalog from the requirements baseline",
-      "commands": [
-        "build_system_design",
-        "generate_ldm",
-        "generate_erd",
-        "validate_architecture",
-        "validate_ldm_coverage"
-      ],
-      "exit_validation_command": "validate_architecture",
+      "description": "Derive architecture, logical data model, module catalog, and module definitions from the requirements baseline.",
       "docs": [
         {
           "id": "architecture",
@@ -270,31 +202,12 @@
           "required": true
         },
         {
-          "id": "erd",
-          "label": "Entity Relationship Diagram",
-          "docType": "logical-erd",
-          "file": "output/docs/diagrams/erd.md",
-          "required": false
-        },
-        {
           "id": "pdm",
           "label": "Physical Data Model",
           "docType": "physical-data-model",
           "file": "design/data-model/physical-data-model.json",
           "required": false
-        }
-      ]
-    },
-    {
-      "name": "module_definition",
-      "label": "Module Definition",
-      "description": "Define module charters and detailed module contracts for each module type",
-      "commands": [
-        "generate_module_catalog",
-        "generate_module_charter"
-      ],
-      "exit_validation_command": null,
-      "docs": [
+        },
         {
           "id": "module-charters-svc",
           "label": "Service Module Charters",
@@ -314,18 +227,7 @@
             "dir": "design/modules/dal",
             "pattern": "^module-charter-.*\\.md$"
           }
-        }
-      ]
-    },
-    {
-      "name": "module_specification",
-      "label": "Module Specification",
-      "description": "Produce schema, rules, state machine, and API spec for each module",
-      "commands": [
-        "generate_module_spec"
-      ],
-      "exit_validation_command": null,
-      "docs": [
+        },
         {
           "id": "module-specs",
           "label": "Module Specifications",
@@ -340,32 +242,9 @@
       ]
     },
     {
-      "name": "tests",
-      "label": "Tests",
-      "description": "Define test plans and acceptance criteria for each module",
-      "commands": [],
-      "exit_validation_command": null,
-      "docs": [
-        {
-          "id": "module-tests",
-          "label": "Module Tests",
-          "docType": "module-tests",
-          "file": "design/modules/module-tests.json",
-          "required": true
-        }
-      ]
-    },
-    {
       "name": "development",
       "label": "Development",
-      "description": "Generate DAL, source code, and sample data from module specifications",
-      "commands": [
-        "generate_dal",
-        "generate_dal_from_db",
-        "generate_source_code",
-        "generate_sample_data"
-      ],
-      "exit_validation_command": null,
+      "description": "Generate DAL, source code, and sample data from module specifications.",
       "docs": [
         {
           "id": "source-code",
@@ -384,6 +263,34 @@
           "docType": "manifest",
           "file": "generated-manifest.json",
           "required": true
+        },
+        {
+          "id": "module-tests",
+          "label": "Module Tests",
+          "docType": "module-tests",
+          "file": "design/modules/module-tests.json",
+          "required": true
+        }
+      ]
+    },
+    {
+      "name": "governance",
+      "label": "Governance",
+      "description": "Inspection, validation, assessment, and documentation commands available at any phase.",
+      "docs": [
+        {
+          "id": "erd",
+          "label": "Entity Relationship Diagram",
+          "docType": "logical-erd",
+          "file": "output/docs/diagrams/erd.md",
+          "required": false
+        },
+        {
+          "id": "trace-matrix",
+          "label": "Traceability Matrix",
+          "docType": "trace-matrix",
+          "file": "output/docs/trace-matrix.md",
+          "required": false
         }
       ]
     }

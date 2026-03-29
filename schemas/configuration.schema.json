@@ -1,0 +1,135 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "configuration.schema.json",
+  "title": "MDE Project Configuration",
+  "description": "Schema for configuration.json — the per-project path registry used by the MDE framework.",
+  "type": "object",
+  "required": ["project", "mde", "ba", "design", "project_state", "application", "output"],
+  "additionalProperties": false,
+
+  "properties": {
+
+    "project": {
+      "type": "object",
+      "description": "Project identity metadata",
+      "required": ["name", "type", "version"],
+      "additionalProperties": false,
+      "properties": {
+        "name":        { "type": "string", "description": "Human-readable project name" },
+        "type":        { "type": "string", "description": "Project type e.g. application, service, library" },
+        "version":     { "type": "string", "pattern": "^\\d+\\.\\d+(\\.\\d+)?$" },
+        "methodology": { "type": "string" },
+        "description": { "type": "string" },
+        "author":      { "type": "string" }
+      }
+    },
+
+    "mde": {
+      "type": "object",
+      "description": "Paths to the MDE framework installation",
+      "required": ["path", "orchestrator", "commands", "skills", "architecture", "methodology"],
+      "additionalProperties": false,
+      "properties": {
+        "path":         { "type": "string", "description": "Absolute path to the ai-mde installation" },
+        "ai-mde-path":  { "type": "string", "description": "Alias for path — used in token resolution" },
+        "_note_1":      { "type": "string" },
+        "orchestrator": { "type": "string" },
+        "commands":     { "type": "string" },
+        "skills":       { "type": "string" },
+        "architecture": { "type": "string" },
+        "methodology":  { "type": "string" }
+      }
+    },
+
+    "ba": {
+      "type": "object",
+      "description": "Business analysis artifact paths",
+      "required": ["requirements", "analysisStatus", "discovery", "analyzed", "useCases", "useCasePattern", "businessFunctions"],
+      "additionalProperties": false,
+      "properties": {
+        "requirements":      { "type": "string" },
+        "analysisStatus":    { "type": "string" },
+        "glossary":          { "type": "string" },
+        "discovery":         { "type": "string" },
+        "analyzed":          { "type": "string" },
+        "useCases":          { "type": "string" },
+        "useCasePattern":    { "type": "string" },
+        "businessFunctions": { "type": "string" }
+      }
+    },
+
+    "design": {
+      "type": "object",
+      "description": "System design artifact paths",
+      "required": ["entities", "entityPattern", "appArchitecture", "moduleCatalog", "modules", "ldm", "sql", "schema"],
+      "additionalProperties": false,
+      "properties": {
+        "entities":        { "type": "string" },
+        "entityPattern":   { "type": "string" },
+        "appArchitecture": { "type": "string" },
+        "moduleCatalog":   { "type": "string" },
+        "modules":         { "type": "string" },
+        "ldm":             { "type": "string" },
+        "sql":             { "type": "string" },
+        "schema":          { "type": "string" }
+      }
+    },
+
+    "project_state": {
+      "type": "object",
+      "description": "Project state and log file paths",
+      "required": ["state", "questions", "openQueue", "completedQuestions", "commandLog", "methodology"],
+      "additionalProperties": false,
+      "properties": {
+        "state":              { "type": "string" },
+        "questions":          { "type": "string" },
+        "openQueue":          { "type": "string" },
+        "completedQuestions": { "type": "string" },
+        "commandLog":         { "type": "string" },
+        "methodology":        { "type": "string" }
+      }
+    },
+
+    "application": {
+      "type": "object",
+      "description": "Application definition path",
+      "required": ["definition"],
+      "additionalProperties": false,
+      "properties": {
+        "definition": { "type": "string" }
+      }
+    },
+
+    "scripts": {
+      "type": "object",
+      "description": "Optional project-specific script paths",
+      "additionalProperties": { "type": "string" }
+    },
+
+    "output": {
+      "type": "object",
+      "description": "Output directory paths",
+      "required": ["src"],
+      "additionalProperties": false,
+      "properties": {
+        "src":      { "type": "string" },
+        "commands": { "type": "string" },
+        "docs":     { "type": "string" }
+      }
+    },
+
+    "test": {
+      "type": "object",
+      "description": "Test configuration paths",
+      "additionalProperties": false,
+      "properties": {
+        "root":               { "type": "string" },
+        "unit":               { "type": "string" },
+        "integration":        { "type": "string" },
+        "unitPattern":        { "type": "string" },
+        "integrationPattern": { "type": "string" },
+        "framework":          { "type": "string" }
+      }
+    }
+  }
+}

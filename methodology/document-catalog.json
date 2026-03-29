@@ -1,0 +1,655 @@
+{
+  "catalog": "MDE Document Type Catalog",
+  "version": "1.0",
+  "description": "Defines every document type managed by MDE. Each entry is the authoritative definition of a document type — its format, phase membership, schema, template, source mode, generation rules, and related commands and skills.",
+  "note": "Physical file paths are NOT defined here. methodology.json defines logical names per phase. configuration.json maps logical names to physical paths.",
+
+  "document_types": [
+
+    {
+      "id": "root-configuration",
+      "displayName": "Configuration",
+      "purpose": "Project-level settings: paths, tool references, and MDE configuration. The single source of physical path resolution for all other documents.",
+      "format": "json",
+      "phase": ["project_initiation"],
+      "status": "required",
+      "namingConvention": "configuration.json",
+      "schemaRef": "schemas/configuration.schema.json",
+      "templateRef": "root-configuration.md",
+      "sourceMode": "provided_by_user",
+      "generation": {
+        "canGenerate": false,
+        "note": "Scaffolded once at project creation by create-project script. User-maintained thereafter."
+      },
+      "relatedCommands": [],
+      "relatedSkills": []
+    },
+
+    {
+      "id": "application",
+      "displayName": "Application Definition",
+      "purpose": "Defines the application name, type, business domain, actors, scope, and non-functional requirements. Establishes the identity and boundaries of the project.",
+      "format": "json",
+      "phase": ["project_initiation"],
+      "status": "required",
+      "namingConvention": "application.json",
+      "schemaRef": null,
+      "templateRef": "application.md",
+      "sourceMode": "provided_by_user",
+      "generation": {
+        "canGenerate": false,
+        "note": "Authored by the user or derived from discovery sources."
+      },
+      "relatedCommands": [],
+      "relatedSkills": []
+    },
+
+    {
+      "id": "project-state",
+      "displayName": "Project State",
+      "purpose": "Runtime state of the project: current phase, last command, completed commands, next valid commands, and artifact registry.",
+      "format": "json",
+      "phase": ["project_initiation", "business_analysis", "system_design", "development", "governance"],
+      "status": "required",
+      "namingConvention": "project-state.json",
+      "schemaRef": null,
+      "templateRef": "project-state.md",
+      "sourceMode": "generated_by_ai",
+      "generation": {
+        "canGenerate": true,
+        "updatedBy": "every command",
+        "skill": null,
+        "note": "Written by the AI after every command execution as part of post-command obligations."
+      },
+      "relatedCommands": ["show_phase_status"],
+      "relatedSkills": []
+    },
+
+    {
+      "id": "command-log",
+      "displayName": "Command Log",
+      "purpose": "Append-only JSONL log of every command execution: timestamp, command name, AI flag, status, duration, cost estimate, and outputs.",
+      "format": "jsonl",
+      "phase": ["project_initiation", "business_analysis", "system_design", "development", "governance"],
+      "status": "optional",
+      "namingConvention": "command-log.jsonl",
+      "schemaRef": null,
+      "templateRef": "command-log.md",
+      "sourceMode": "generated_by_ai",
+      "generation": {
+        "canGenerate": true,
+        "updatedBy": "every command",
+        "skill": null,
+        "note": "One JSONL entry appended after every command execution."
+      },
+      "relatedCommands": [],
+      "relatedSkills": []
+    },
+
+    {
+      "id": "requirements",
+      "displayName": "Requirements",
+      "purpose": "The requirements baseline: functional requirements, business rules, constraints, non-functional requirements, and actors. The primary output of business analysis.",
+      "format": "md",
+      "phase": ["business_analysis"],
+      "status": "required",
+      "namingConvention": "requirements.md",
+      "schemaRef": "schemas/requirements.schema.json",
+      "templateRef": "requirements.md",
+      "sourceMode": "generated_by_ai",
+      "generation": {
+        "canGenerate": true,
+        "canRegenerate": true,
+        "requiredInputs": ["ba/discovery/"],
+        "skill": "business_analysis_from_sources",
+        "relatedCommands": ["perform_business_analysis"]
+      },
+      "relatedCommands": ["perform_business_analysis", "validate_requirements"],
+      "relatedSkills": ["business_analysis_from_sources", "requirements_validation"]
+    },
+
+    {
+      "id": "analysis-status",
+      "displayName": "Analysis Status",
+      "purpose": "A running record of what has been analyzed, what is known, what is open, and the confidence level of the BA output. Updated alongside requirements.",
+      "format": "md",
+      "phase": ["business_analysis"],
+      "status": "required",
+      "namingConvention": "analysis-status.md",
+      "schemaRef": null,
+      "templateRef": null,
+      "sourceMode": "generated_by_ai",
+      "generation": {
+        "canGenerate": true,
+        "canRegenerate": true,
+        "skill": "business_analysis_from_sources"
+      },
+      "relatedCommands": ["perform_business_analysis"],
+      "relatedSkills": ["business_analysis_from_sources"]
+    },
+
+    {
+      "id": "business-functions",
+      "displayName": "Business Functions",
+      "purpose": "Structured decomposition of the application into capabilities and business functions, each with outcomes and source requirement references.",
+      "format": "json",
+      "phase": ["business_analysis"],
+      "status": "required",
+      "namingConvention": "business-functions.json",
+      "schemaRef": null,
+      "templateRef": "hierarchy.md",
+      "sourceMode": "generated_by_ai",
+      "generation": {
+        "canGenerate": true,
+        "canRegenerate": true,
+        "requiredInputs": ["requirements"],
+        "skill": "business_function_generation"
+      },
+      "relatedCommands": ["generate_business_functions"],
+      "relatedSkills": ["business_function_generation"]
+    },
+
+    {
+      "id": "use-case",
+      "displayName": "Use Case",
+      "purpose": "A structured scenario describing how an actor achieves a goal. One file per use case.",
+      "format": "md",
+      "phase": ["business_analysis"],
+      "status": "required",
+      "namingConvention": "uc-{number}-{name}.md",
+      "namingPattern": "^uc-\\d+.*\\.md$",
+      "schemaRef": null,
+      "templateRef": null,
+      "sourceMode": "generated_by_ai",
+      "generation": {
+        "canGenerate": true,
+        "canRegenerate": true,
+        "requiredInputs": ["requirements", "business-functions"],
+        "skill": "use_case_generation"
+      },
+      "relatedCommands": ["generate_use_cases"],
+      "relatedSkills": ["use_case_generation"]
+    },
+
+    {
+      "id": "glossary",
+      "displayName": "Glossary",
+      "purpose": "Definitions of domain terms, entities, and acronyms encountered during business analysis.",
+      "format": "md",
+      "phase": ["business_analysis"],
+      "status": "optional",
+      "namingConvention": "glossary.md",
+      "schemaRef": null,
+      "templateRef": null,
+      "sourceMode": "generated_by_ai",
+      "generation": {
+        "canGenerate": true,
+        "canRegenerate": true,
+        "requiredInputs": ["requirements"],
+        "skill": "glossary_generation"
+      },
+      "relatedCommands": ["generate_glossary"],
+      "relatedSkills": ["glossary_generation"]
+    },
+
+    {
+      "id": "domain-brief",
+      "displayName": "Domain Brief",
+      "purpose": "A short narrative summary of the business domain, key actors, and system context. Produced early in BA as an orienting document.",
+      "format": "md",
+      "phase": ["business_analysis"],
+      "status": "optional",
+      "namingConvention": "domain-brief.md",
+      "schemaRef": null,
+      "templateRef": null,
+      "sourceMode": "generated_by_ai",
+      "generation": {
+        "canGenerate": true,
+        "requiredInputs": ["ba/discovery/"],
+        "skill": "business_analysis_from_sources"
+      },
+      "relatedCommands": ["identify_domain"],
+      "relatedSkills": ["business_analysis_from_sources"]
+    },
+
+    {
+      "id": "external-references",
+      "displayName": "External References",
+      "purpose": "Catalogue of external systems, standards, regulations, or documents referenced by or influencing the project.",
+      "format": "md",
+      "phase": ["business_analysis"],
+      "status": "optional",
+      "namingConvention": "external-references.md",
+      "schemaRef": null,
+      "templateRef": null,
+      "sourceMode": "generated_by_ai",
+      "generation": {
+        "canGenerate": true,
+        "requiredInputs": ["ba/discovery/"],
+        "skill": "business_analysis_from_sources"
+      },
+      "relatedCommands": ["identify_external_references"],
+      "relatedSkills": ["business_analysis_from_sources"]
+    },
+
+    {
+      "id": "questions-batch",
+      "displayName": "Questions Batch",
+      "purpose": "The active set of clarification questions generated by the AI in the current discovery loop iteration, awaiting user response.",
+      "format": "json",
+      "phase": ["business_analysis", "system_design"],
+      "status": "optional",
+      "namingConvention": "questions.json",
+      "schemaRef": null,
+      "templateRef": "questions-batch.md",
+      "sourceMode": "generated_by_ai",
+      "generation": {
+        "canGenerate": true,
+        "note": "Generated as a by-product of analysis commands when gaps are found."
+      },
+      "relatedCommands": ["perform_business_analysis", "build_system_design"],
+      "relatedSkills": ["business_analysis_from_sources", "system_design"]
+    },
+
+    {
+      "id": "open-queue",
+      "displayName": "Open Queue",
+      "purpose": "Deferred or unresolvable questions and issues that cannot be answered now but must not be lost.",
+      "format": "json",
+      "phase": ["business_analysis", "system_design"],
+      "status": "optional",
+      "namingConvention": "open-queue.json",
+      "schemaRef": null,
+      "templateRef": "open-queue.md",
+      "sourceMode": "generated_by_ai",
+      "generation": {
+        "canGenerate": true,
+        "note": "Items moved here from questions-batch when the user marks them as deferred."
+      },
+      "relatedCommands": [],
+      "relatedSkills": []
+    },
+
+    {
+      "id": "completed-questions",
+      "displayName": "Completed Questions",
+      "purpose": "Archive of questions that have been answered and incorporated into baseline documents. Immutable record.",
+      "format": "json",
+      "phase": ["business_analysis", "system_design"],
+      "status": "optional",
+      "namingConvention": "completed-questions.json",
+      "schemaRef": null,
+      "templateRef": "completed-questions.md",
+      "sourceMode": "generated_by_ai",
+      "generation": {
+        "canGenerate": true,
+        "note": "Items moved here from questions-batch once accepted and incorporated."
+      },
+      "relatedCommands": [],
+      "relatedSkills": []
+    },
+
+    {
+      "id": "architecture",
+      "displayName": "Application Architecture",
+      "purpose": "Defines the architectural decisions: module groupings, layers, interaction patterns, and technology choices. The structural blueprint for system design.",
+      "format": "json",
+      "phase": ["system_design"],
+      "status": "required",
+      "namingConvention": "application_architecture.json",
+      "schemaRef": null,
+      "templateRef": "application-architecture.md",
+      "sourceMode": "generated_by_ai",
+      "generation": {
+        "canGenerate": true,
+        "canRegenerate": true,
+        "requiredInputs": ["requirements", "business-functions"],
+        "skill": "system_design"
+      },
+      "relatedCommands": ["select_architecture", "build_system_design", "validate_architecture", "assess_architecture"],
+      "relatedSkills": ["system_design", "architecture_validation"]
+    },
+
+    {
+      "id": "logical-data-model",
+      "displayName": "Logical Data Model",
+      "purpose": "Business-level entities and their relationships. Technology-agnostic. Derived from requirements and business functions.",
+      "format": "json",
+      "phase": ["system_design"],
+      "status": "required",
+      "namingConvention": "logical-data-model.json",
+      "schemaRef": null,
+      "templateRef": "ldm.md",
+      "sourceMode": "generated_by_ai",
+      "generation": {
+        "canGenerate": true,
+        "canRegenerate": true,
+        "requiredInputs": ["requirements", "business-functions", "use-case"],
+        "skill": "logical_data_model"
+      },
+      "relatedCommands": ["generate_ldm", "validate_ldm_coverage"],
+      "relatedSkills": ["logical_data_model", "ldm_coverage_validation"]
+    },
+
+    {
+      "id": "physical-data-model",
+      "displayName": "Physical Data Model",
+      "purpose": "Database-level representation: tables, columns, types, constraints, and indexes. Derived from the logical data model and entity definitions.",
+      "format": "json",
+      "phase": ["system_design"],
+      "status": "optional",
+      "namingConvention": "physical-data-model.json",
+      "schemaRef": null,
+      "templateRef": "pdm.md",
+      "sourceMode": "generated_by_ai",
+      "generation": {
+        "canGenerate": true,
+        "requiredInputs": ["logical-data-model", "entity"],
+        "skill": "physical_entity_identification"
+      },
+      "relatedCommands": ["identify_physical_entities"],
+      "relatedSkills": ["physical_entity_identification"]
+    },
+
+    {
+      "id": "entity",
+      "displayName": "Entity Definition",
+      "purpose": "Detailed specification of a single domain entity: fields, constraints, relationships, state machine, and business rules. One file per entity.",
+      "format": "json",
+      "phase": ["system_design"],
+      "status": "required",
+      "namingConvention": "ent-{name}.json",
+      "namingPattern": "^ent-.*\\.json$",
+      "schemaRef": null,
+      "templateRef": null,
+      "sourceMode": "generated_by_ai",
+      "generation": {
+        "canGenerate": true,
+        "canRegenerate": true,
+        "requiredInputs": ["logical-data-model"],
+        "skill": "system_design"
+      },
+      "relatedCommands": ["build_system_design"],
+      "relatedSkills": ["system_design"]
+    },
+
+    {
+      "id": "module-catalog",
+      "displayName": "Module Catalog",
+      "purpose": "Registry of all application modules: IDs, names, layers, tiers, owners, and dependencies. Single reference for module identity.",
+      "format": "json",
+      "phase": ["system_design"],
+      "status": "required",
+      "namingConvention": "module-catalog.json",
+      "schemaRef": null,
+      "templateRef": "module-catalog.md",
+      "sourceMode": "generated_by_ai",
+      "generation": {
+        "canGenerate": true,
+        "canRegenerate": true,
+        "requiredInputs": ["architecture", "logical-data-model"],
+        "skill": "module_definition"
+      },
+      "relatedCommands": ["generate_modules"],
+      "relatedSkills": ["module_definition"]
+    },
+
+    {
+      "id": "module-charter",
+      "displayName": "Module Charter",
+      "purpose": "High-level charter for a single module: purpose, responsibilities, owned entities, dependencies, and layer assignment. One file per module.",
+      "format": "md",
+      "phase": ["system_design"],
+      "status": "required",
+      "namingConvention": "module-charter-{name}.md",
+      "namingPattern": "^module-charter-.*\\.md$",
+      "schemaRef": null,
+      "templateRef": null,
+      "sourceMode": "generated_by_ai",
+      "generation": {
+        "canGenerate": true,
+        "requiredInputs": ["module-catalog"],
+        "skill": "module_definition"
+      },
+      "relatedCommands": ["generate_modules"],
+      "relatedSkills": ["module_definition"]
+    },
+
+    {
+      "id": "module-spec",
+      "displayName": "Module Specification",
+      "purpose": "Detailed design specification for a single module: API endpoints, service operations, business rules, state machines, domain events, and DAL contracts.",
+      "format": "json",
+      "phase": ["system_design"],
+      "status": "required",
+      "namingConvention": "module-{name}.json",
+      "namingPattern": "^module-.*\\.json$",
+      "schemaRef": null,
+      "templateRef": "module-spec.md",
+      "sourceMode": "generated_by_ai",
+      "generation": {
+        "canGenerate": true,
+        "canRegenerate": true,
+        "requiredInputs": ["module-catalog", "entity", "logical-data-model"],
+        "skill": "module_definition"
+      },
+      "relatedCommands": ["build_system_design"],
+      "relatedSkills": ["module_definition"]
+    },
+
+    {
+      "id": "schema-state",
+      "displayName": "Schema State",
+      "purpose": "Tracks the current state of the database schema: applied migrations, table checksums, and last-modified timestamps.",
+      "format": "json",
+      "phase": ["system_design", "development"],
+      "status": "optional",
+      "namingConvention": "schema-state.json",
+      "schemaRef": null,
+      "templateRef": null,
+      "sourceMode": "generated_by_ai",
+      "generation": {
+        "canGenerate": true,
+        "requiredInputs": ["sql"],
+        "skill": null
+      },
+      "relatedCommands": ["generate_sql"],
+      "relatedSkills": []
+    },
+
+    {
+      "id": "sql",
+      "displayName": "Database Schema DDL",
+      "purpose": "SQL DDL statements to create the database schema: tables, indexes, constraints, and sequences.",
+      "format": "sql",
+      "phase": ["system_design"],
+      "status": "optional",
+      "namingConvention": "schema.sql",
+      "schemaRef": null,
+      "templateRef": null,
+      "sourceMode": "generated_by_ai",
+      "generation": {
+        "canGenerate": true,
+        "requiredInputs": ["entity", "physical-data-model"],
+        "skill": null
+      },
+      "relatedCommands": ["generate_sql"],
+      "relatedSkills": []
+    },
+
+    {
+      "id": "source-code",
+      "displayName": "Source Code",
+      "purpose": "TypeScript application source files generated from module specifications.",
+      "format": "code",
+      "phase": ["development"],
+      "status": "required",
+      "namingConvention": "{module}/{layer}/{name}.ts",
+      "namingPattern": ".*\\.ts$",
+      "schemaRef": null,
+      "templateRef": null,
+      "sourceMode": "generated_by_ai",
+      "generation": {
+        "canGenerate": true,
+        "canRegenerate": true,
+        "requiredInputs": ["module-spec", "entity"],
+        "skill": "source_code_generation"
+      },
+      "relatedCommands": ["generate_source_code", "setup_dev_environment"],
+      "relatedSkills": ["source_code_generation"]
+    },
+
+    {
+      "id": "module-tests",
+      "displayName": "Module Tests",
+      "purpose": "Test specifications and test cases for module validation.",
+      "format": "json",
+      "phase": ["development"],
+      "status": "required",
+      "namingConvention": "module-tests.json",
+      "schemaRef": "schemas/module-tests.schema.json",
+      "templateRef": null,
+      "sourceMode": "generated_by_ai",
+      "generation": {
+        "canGenerate": true,
+        "requiredInputs": ["module-spec"],
+        "skill": null
+      },
+      "relatedCommands": [],
+      "relatedSkills": []
+    },
+
+    {
+      "id": "manifest",
+      "displayName": "Generated Manifest",
+      "purpose": "Machine-readable manifest of all generated source files: paths, modules, layer assignments, and generation timestamps.",
+      "format": "json",
+      "phase": ["development"],
+      "status": "required",
+      "namingConvention": "generated-manifest.json",
+      "schemaRef": null,
+      "templateRef": null,
+      "sourceMode": "generated_by_ai",
+      "generation": {
+        "canGenerate": true,
+        "skill": "source_code_generation"
+      },
+      "relatedCommands": ["generate_source_code"],
+      "relatedSkills": ["source_code_generation"]
+    },
+
+    {
+      "id": "sample-data",
+      "displayName": "Sample Data",
+      "purpose": "JSON seed data for development and testing, one file per entity.",
+      "format": "json",
+      "phase": ["development"],
+      "status": "optional",
+      "namingConvention": "{entity}-sample.json",
+      "schemaRef": null,
+      "templateRef": "table.md",
+      "sourceMode": "generated_by_ai",
+      "generation": {
+        "canGenerate": true,
+        "requiredInputs": ["entity", "module-spec"],
+        "skill": "sample_data_generation"
+      },
+      "relatedCommands": ["generate_sample_data"],
+      "relatedSkills": ["sample_data_generation"]
+    },
+
+    {
+      "id": "trace-matrix",
+      "displayName": "Traceability Matrix",
+      "purpose": "Cross-reference linking requirements to business functions, modules, test cases, and acceptance criteria. Validates coverage and completeness.",
+      "format": "json",
+      "phase": ["governance"],
+      "status": "optional",
+      "namingConvention": "trace-matrix.json",
+      "schemaRef": "schemas/trace-matrix.schema.json",
+      "templateRef": "trace-matrix.md",
+      "sourceMode": "generated_by_ai",
+      "generation": {
+        "canGenerate": true,
+        "requiredInputs": ["requirements", "business-functions", "use-case", "module-catalog"],
+        "skill": "governance_validation"
+      },
+      "relatedCommands": ["validate_traceability"],
+      "relatedSkills": ["governance_validation"]
+    },
+
+    {
+      "id": "markdown",
+      "displayName": "Markdown Document",
+      "purpose": "Generic markdown document. Used for diagrams, narrative outputs, and any document type without a dedicated renderer.",
+      "format": "md",
+      "phase": ["governance"],
+      "status": "optional",
+      "namingConvention": "{name}.md",
+      "schemaRef": null,
+      "templateRef": null,
+      "sourceMode": "generated_by_ai",
+      "generation": {
+        "canGenerate": true,
+        "skill": "diagram_generation"
+      },
+      "relatedCommands": ["generate_diagrams", "generate_documentation"],
+      "relatedSkills": ["diagram_generation", "documentation_generation"]
+    },
+
+    {
+      "id": "logical-erd",
+      "displayName": "Logical ERD Diagram",
+      "purpose": "Visual entity relationship diagram rendered from the logical data model.",
+      "format": "md",
+      "phase": ["governance"],
+      "status": "optional",
+      "namingConvention": "erd.md",
+      "schemaRef": null,
+      "templateRef": null,
+      "sourceMode": "generated_by_ai",
+      "generation": {
+        "canGenerate": true,
+        "requiredInputs": ["logical-data-model", "entity"],
+        "skill": "diagram_generation"
+      },
+      "relatedCommands": ["generate_erd", "generate_diagrams"],
+      "relatedSkills": ["diagram_generation"]
+    },
+
+    {
+      "id": "erd",
+      "displayName": "ERD (Live)",
+      "purpose": "Live entity-relationship diagram computed from all entity definition files in the project.",
+      "format": "virtual",
+      "phase": ["governance"],
+      "status": "optional",
+      "namingConvention": null,
+      "schemaRef": null,
+      "templateRef": null,
+      "renderMode": "virtual",
+      "sourceMode": "computed",
+      "generation": { "canGenerate": false },
+      "relatedCommands": ["generate_erd"],
+      "relatedSkills": ["diagram_generation"]
+    },
+
+    {
+      "id": "entity-catalogue",
+      "displayName": "Entity Catalogue (Live)",
+      "purpose": "Live catalogue of all entity definitions, computed from entity files in the project.",
+      "format": "virtual",
+      "phase": ["governance"],
+      "status": "optional",
+      "namingConvention": null,
+      "schemaRef": null,
+      "templateRef": null,
+      "renderMode": "virtual",
+      "sourceMode": "computed",
+      "generation": { "canGenerate": false },
+      "relatedCommands": [],
+      "relatedSkills": []
+    }
+
+  ]
+}

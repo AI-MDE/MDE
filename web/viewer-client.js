@@ -2,6 +2,7 @@
 
 // ── State ──────────────────────────────────────────────────────────────────────
 let tree = [];
+let catalog = {};   // docType id → document-catalog entry, loaded from /api/catalog
 let activeId = null;
 let activeDoc = null;   // current doc descriptor
 let activeContent = ''; // raw content of current doc
@@ -137,12 +138,18 @@ let popoverHideTimer = null;
  * @param {string} id - The document ID.
  * @returns {{id:string, label:string, file:string, docType:string}|null} The doc descriptor, or null.
  */
+function groupDocs(g) {
+  const docs = [...(g.docs || [])];
+  for (const sub of (g.groups || [])) docs.push(...groupDocs(sub));
+  return docs;
+}
+
 function findDocById(id) {
   for (const phase of tree) {
     for (const doc of (phase.docs || []))
       if (doc.id === id) return doc;
     for (const g of (phase.groups || []))
-      for (const doc of (g.docs || []))
+      for (const doc of groupDocs(g))
         if (doc.id === id) return doc;
   }
   return null;
@@ -163,7 +170,8 @@ function navigateTo(entityId) {
  * @returns {string} Human-readable entity name.
  */
 function entityNameFromId(entId) {
-  return entId.replace(/^ent-/, '')
+  if (!entId) return '';
+  return String(entId).replace(/^ent-/, '')
               .replace(/-([a-z])/g, (_, c) => c.toUpperCase())
               .replace(/^[a-z]/, c => c.toUpperCase());
 }
@@ -422,7 +430,7 @@ let _ucById  = {};  // "UC-03"  -> doc entry from tree
 function buildDocLookups(phases) {
   _modById = {}; _ucById = {};
   phases.forEach(phase => {
-    [...(phase.docs || []), ...(phase.groups || []).flatMap(g => g.docs || [])].forEach(doc => {
+    [...(phase.docs || []), ...(phase.groups || []).flatMap(g => groupDocs(g))].forEach(doc => {
       const modM = doc.id.match(/^mod-(\d+)/);
       if (modM) _modById['MOD-' + modM[1]] = doc;
       const ucM = doc.id.match(/^uc-(\d+)/);
@@ -449,7 +457,15 @@ function docFromHash() {
  */
 async function init() {
   try {
-    tree = await fetchJson('/api/tree');
+    const [treeData, catalogData] = await Promise.all([
+      fetchJson('/api/tree'),
+      fetchJson('/api/catalog').catch(() => ({ document_types: [] })),
+    ]);
+    tree = treeData;
+    catalog = {};
+    for (const dt of (catalogData.document_types || [])) {
+      catalog[dt.id] = dt;
+    }
     buildDocLookups(tree);
     buildNav(tree);
     await initCommands();
@@ -514,13 +530,21 @@ function buildNav(phases) {
 
     (phase.docs || []).forEach(doc => docsDiv.appendChild(navItem(doc)));
 
-    (phase.groups || []).forEach(group => {
+    const BASE_PAD = 22; // matches .nav-group-label and .nav-item default padding-left
+    function appendGroup(container, group, depth) {
       const lbl = document.createElement('div');
       lbl.className = 'nav-group-label';
+      lbl.style.paddingLeft = (BASE_PAD + depth * 12) + 'px';
       lbl.textContent = group.label;
-      docsDiv.appendChild(lbl);
-      (group.docs || []).forEach(doc => docsDiv.appendChild(navItem(doc)));
-    });
+      container.appendChild(lbl);
+      (group.docs || []).forEach(doc => {
+        const item = navItem(doc);
+        item.style.paddingLeft = (BASE_PAD + (depth + 1) * 12) + 'px';
+        container.appendChild(item);
+      });
+      (group.groups || []).forEach(sub => appendGroup(container, sub, depth + 1));
+    }
+    (phase.groups || []).forEach(group => appendGroup(docsDiv, group, 0));
 
     section.appendChild(docsDiv);
     nav.appendChild(section);
@@ -785,7 +809,7 @@ async function loadDoc(doc, { pushHistory = true } = {}) {
     editing = false;
     showMeta(doc, '');
     showDocBody();
-    renderDoc(doc, null, null);
+    await renderDoc(doc, null, null);
     return;
   }
 
@@ -799,7 +823,7 @@ async function loadDoc(doc, { pushHistory = true } = {}) {
     editing = false;
     showMeta(doc, ext);
     showDocBody();
-    renderDoc(doc, content, ext, renderedFrom);
+    await renderDoc(doc, content, ext, renderedFrom);
   } catch (err) {
     clientLog('error', 'Document load failed', { docId: doc.id, file: doc.file, error: err && err.message ? err.message : String(err) });
     document.getElementById('loading').style.display = 'none';
@@ -816,7 +840,7 @@ function findPhase(docId) {
   for (const phase of tree) {
     if ((phase.docs || []).some(d => d.id === docId)) return phase;
     for (const g of (phase.groups || []))
-      if (g.docs.some(d => d.id === docId)) return phase;
+      if (groupDocs(g).some(d => d.id === docId)) return phase;
   }
   return null;
 }
@@ -862,7 +886,7 @@ async function toggleTemplateView() {
     activeRenderedFrom = renderedFrom || null;
     showMeta(activeDoc, ext);
     showDocBody();
-    renderDoc(activeDoc, content, ext, renderedFrom);
+    await renderDoc(activeDoc, content, ext, renderedFrom);
   } catch (err) {
     clientLog('error', 'Template/raw toggle failed', { docId: activeDoc.id, file: activeDoc.file, error: err && err.message ? err.message : String(err) });
     document.getElementById('doc-body').innerHTML = `<p style="color:red">Error loading document: ${err.message}</p>`;
@@ -874,46 +898,185 @@ async function toggleTemplateView() {
 
 // ── Renderers ──────────────────────────────────────────────────────────────────
 
+// ── Renderer Registry ──────────────────────────────────────────────────────────
+//
+// Three-tier dispatch driven by document-catalog.json:
+//
+//   Tier 1 — VIRTUAL_FNS:   catalog renderMode="virtual"  → custom async function
+//   Tier 2 — templateRef:   catalog templateRef set       → fetch template + Mustache → markdown
+//   Tier 3 — FORMAT_FNS:    catalog format / file ext     → format fallback
+//
+// To add a new document type: add a catalog entry. Only add here if truly virtual.
+
+// Tier 1: virtual docs — compute their own data, no file on disk
+const VIRTUAL_FNS = {
+  'erd':              (body) => renderERD(body),
+  'entity-catalogue': (body) => renderEntityCatalogue(body),
+};
+
+// Pattern fallbacks for docs where docType may not be set (scanned files)
+const PATTERN_DOCTYPE = [
+  { test: (doc) => doc.file && doc.file.match(/\/ent-[^/]+\.json$/),       docType: 'entity'       },
+  { test: (doc) => doc.file && doc.file.match(/\/module-[^/]+\.json$/),    docType: 'module-spec'  },
+  { test: (doc) => doc.file && doc.file.match(/\/sample-data\/[^/]+\.json$/), docType: 'sample-data' },
+  { test: (doc) => doc.id === 'erd',                                        docType: 'erd'          },
+  { test: (doc) => doc.id === 'entity-catalogue',                           docType: 'entity-catalogue' },
+];
+
+// Tier 3: format fallbacks
+const _plain = (body, _doc, content) => renderPlainText(body, content);
+const FORMAT_FNS = {
+  'md':   (body, doc,  content) => renderMarkdown(body, content, doc.file),
+  'sql':  _plain,
+  'sh':   _plain,
+  'txt':  _plain,
+  // source code — show as-is, no processing
+  'code': _plain,
+  'ts':   _plain,
+  'js':   _plain,
+  'py':   _plain,
+  'jsonl':(body, _doc, content) => {
+    const entries = content.split('\n').map(l => l.trim()).filter(Boolean).map(l => parseJsonSafe(l, 'entry'));
+    renderCommandLog(body, { entries });
+  },
+};
+
+// Custom renderers for complex types that can't be expressed as a simple template.
+// These are called from renderFromCatalog when templateRef is null and format is json.
+const CUSTOM_FNS = {
+  'root-configuration': (body, _doc, content) => renderConfiguration(body, parseJsonSafe(content, 'configuration')),
+  'application':        (body, _doc, content) => renderApplication(body, parseJsonSafe(content, 'application definition')),
+  'project-state':      (body, _doc, content) => renderProjectState(body, parseJsonSafe(content, 'project state')),
+  'command-log':        (body, _doc, content) => {
+    const entries = content.split('\n').map(l => l.trim()).filter(Boolean).map(l => parseJsonSafe(l, 'command log entry'));
+    renderCommandLog(body, { entries });
+  },
+  'logical-data-model': (body, _doc, content) => renderLogicalDataModel(body, parseJsonSafe(content, 'logical data model')),
+  'module-catalog':     (body, _doc, content) => renderModuleCatalog(body, parseJsonSafe(content, 'module catalog')),
+  'module-spec':        (body, doc,  content) => renderModuleSpec(body, parseJsonSafe(content, `module spec (${doc.id})`)),
+  'entity':             (body, doc,  content) => renderEntity(body, parseJsonSafe(content, `entity spec (${doc.id})`)),
+  'trace-matrix':       (body, _doc, content) => renderTraceMatrix(body, parseJsonSafe(content, 'trace matrix')),
+};
+
+// ── Template engine (Tier 2) ───────────────────────────────────────────────────
+
+const _templateCache = {};
+
+async function fetchTemplate(name) {
+  if (_templateCache[name]) return _templateCache[name];
+  const res = await fetch(`/api/template/${encodeURIComponent(name)}`);
+  if (!res.ok) throw new Error(`Template not found: ${name}`);
+  const text = await res.text();
+  _templateCache[name] = text;
+  return text;
+}
+
 /**
- * Dispatches rendering to the correct specialised renderer based on the doc
- * type, document ID, or file extension.
- * @param {{id:string, docType:string, file:string}} doc - The document descriptor.
- * @param {string|null} content - Raw file content.
- * @param {string|null} ext - File extension.
- * @param {string|null} [renderedFrom] - Original file path when content is template-rendered.
+ * Normalizes raw document data into a shape the template can use.
+ * Each docType that has a templateRef gets a normalizer here.
  */
-function renderDoc(doc, content, ext, renderedFrom) {
+function normalizeForTemplate(docType, data, doc) {
+  if (docType === 'sample-data') {
+    const rows  = Array.isArray(data) ? data : (data.rows || data.data || []);
+    const title = Array.isArray(data) ? (doc.label || 'Sample Data') : (data.entity || doc.label || 'Sample Data');
+    if (!rows.length) return { title, count: 0, header: '', separator: '', rows: [] };
+    const cols = [...new Set(rows.flatMap(r => Object.keys(r)))];
+    const esc  = s => String(s ?? '').replace(/\|/g, '\\|');
+    return {
+      title,
+      count: rows.length,
+      header:    '| ' + cols.map(esc).join(' | ') + ' |',
+      separator: '| ' + cols.map(() => '---').join(' | ') + ' |',
+      rows: rows.map(r => ({ cells: '| ' + cols.map(c => esc(r[c])).join(' | ') + ' |' })),
+    };
+  }
+
+  if (docType === 'business-functions') {
+    const caps = data.capabilities || [];
+    return {
+      title: data.application || 'Business Functions',
+      items: caps.map(cap => ({
+        id:          cap.id,
+        name:        cap.name,
+        description: cap.description || '',
+        children: (cap.functions || []).map(fn => ({
+          id:       fn.id,
+          name:     fn.name,
+          parentId: fn.parent_id || '',
+          outcomes: (fn.outcomes || []).map(o => ({ '.': o })),
+        })),
+      })),
+    };
+  }
+
+  return data;
+}
+
+async function renderFromTemplate(body, doc, content, templateRef) {
+  try {
+    const template = await fetchTemplate(templateRef);
+    const docType  = doc.docType;
+    const raw      = parseJsonSafe(content, docType);
+    const data     = normalizeForTemplate(docType, raw, doc);
+    const markdown = Mustache.render(template, data);
+    renderMarkdown(body, markdown, doc.file);
+  } catch (e) {
+    body.innerHTML = `<div class="doc-section"><p style="color:var(--error)">Template error: ${escHtml(String(e))}</p></div>`;
+  }
+}
+
+/**
+ * Dispatches rendering for a document.
+ *
+ * Resolution order (all driven by document-catalog.json):
+ *   1. renderedFrom → renderMarkdown
+ *   2. Tier 1: catalog renderMode="virtual" → VIRTUAL_FNS
+ *   3. Tier 2: catalog templateRef set      → fetchTemplate + Mustache → markdown
+ *   4. Tier 3: CUSTOM_FNS (complex json types with no template)
+ *   5. Tier 3: catalog format / ext         → FORMAT_FNS
+ *   6. Fallback → renderJson
+ */
+async function renderDoc(doc, content, ext, renderedFrom) {
   console.debug('[renderDoc]', { id: doc.id, docType: doc.docType, ext, renderedFrom: !!renderedFrom });
   const body = document.getElementById('doc-body');
 
-  if (renderedFrom) {
-    renderMarkdown(body, content, doc.file);
+  if (renderedFrom) { renderMarkdown(body, content, doc.file); return; }
+
+  // Resolve effective docType (may be inferred from file pattern)
+  let docType = doc.docType;
+  if (!docType) {
+    for (const p of PATTERN_DOCTYPE) {
+      if (p.test(doc)) { docType = p.docType; break; }
+    }
+  }
+
+  const catalogEntry = docType ? catalog[docType] : null;
+
+  // Tier 1: virtual
+  if (catalogEntry?.renderMode === 'virtual' || VIRTUAL_FNS[docType]) {
+    VIRTUAL_FNS[docType]?.(body);
     return;
   }
 
-  if (doc.id === 'erd') {
-    renderERD(body);
-  } else if (doc.id === 'entity-catalogue') {
-    renderEntityCatalogue(body);
-  } else if (doc.id === 'trace-matrix') {
-    renderTraceMatrix(body, parseJsonSafe(content, 'trace matrix'));
-  } else if (doc.docType === 'project-state' || doc.id === 'project-state') {
-    renderProjectState(body, parseJsonSafe(content, 'project state'));
-  } else if (doc.docType === 'command-log' || doc.id === 'command-log') {
-    renderCommandLog(body, parseJsonSafe(content, 'command log'));
-  } else if (doc.docType === 'module-catalog' || doc.id === 'module-catalog') {
-    renderModuleCatalog(body, parseJsonSafe(content, 'module catalog'));
-  } else if (doc.id === 'module-catalogue-layer') {
-    renderModuleCatalogByLayer(body, parseJsonSafe(content, 'module catalog by layer'));
-  } else if (doc.id && doc.id.match(/^mod-\d+/)) {
-    renderModuleSpec(body, parseJsonSafe(content, `module spec (${doc.id})`));
-  } else if (doc.id && doc.id.match(/^ent-/)) {
-    renderEntity(body, parseJsonSafe(content, `entity spec (${doc.id})`));
-  } else if (ext === 'md') {
-    renderMarkdown(body, content, doc.file);
-  } else {
-    renderJson(body, content);
+  // Tier 2: template — only for JSON-format docs (templateRef on md docs is an AI guide, not a view template)
+  if (catalogEntry?.templateRef && catalogEntry?.format === 'json') {
+    await renderFromTemplate(body, { ...doc, docType }, content, catalogEntry.templateRef);
+    return;
   }
+
+  // Tier 3a: custom complex renderer
+  if (docType && CUSTOM_FNS[docType]) {
+    CUSTOM_FNS[docType](body, doc, content);
+    return;
+  }
+
+  // Tier 3b: format fallback
+  const format = catalogEntry?.format;
+  if (format && FORMAT_FNS[format]) { FORMAT_FNS[format](body, doc, content); return; }
+  if (ext    && FORMAT_FNS[ext])    { FORMAT_FNS[ext](body, doc, content);    return; }
+
+  // Fallback
+  renderJson(body, content);
 }
 
 /**
@@ -971,6 +1134,15 @@ function renderMarkdown(body, content, baseFile) {
       });
     });
   }
+}
+
+/**
+ * Renders plain text content (SQL, shell scripts, etc.) into the body element.
+ * @param {HTMLElement} body - The container to render into.
+ * @param {string} content - Raw text content.
+ */
+function renderPlainText(body, content) {
+  body.innerHTML = `<div class="json-body"><pre><code>${escHtml(content)}</code></pre></div>`;
 }
 
 /**
@@ -1056,6 +1228,33 @@ function renderTraceMatrix(body, data) {
  * @param {HTMLElement} body - The container to render into.
  * @param {Object|null} data - Parsed project-state JSON data.
  */
+
+// ── Configuration Renderer ────────────────────────────────────────────────────
+
+function renderConfiguration(body, data) {
+  function section(title, obj) {
+    if (!obj || typeof obj !== 'object') return '';
+    const rows = Object.entries(obj)
+      .filter(([k]) => !k.startsWith('_'))
+      .map(([k, v]) => `<tr><td><code>${escHtml(k)}</code></td><td>${escHtml(String(v ?? ''))}</td></tr>`)
+      .join('');
+    return rows ? `<h3>${escHtml(title)}</h3><table class="cat-table"><tbody>${rows}</tbody></table>` : '';
+  }
+
+  let html = `<div class="md-body"><h1>Configuration</h1>`;
+  html += section('Project', data.project);
+  html += section('MDE Framework', data.mde);
+  html += section('Business Analysis', data.ba);
+  html += section('Design', data.design);
+  html += section('Project State', data.project_state);
+  html += section('Application', data.application);
+  html += section('Output', data.output);
+  if (data.test) html += section('Test', data.test);
+  if (data.scripts) html += section('Scripts', data.scripts);
+  html += `</div>`;
+  body.innerHTML = html;
+}
+
 function renderProjectState(body, data) {
   if (!data) { body.innerHTML = '<p style="color:red">Could not parse project state.</p>'; return; }
   const row = (label, val) => val != null && val !== ''
@@ -1150,12 +1349,16 @@ function renderCommandLog(body, data) {
  * @param {{project:string, version:string, modules:Array}} data - Parsed module catalog data.
  */
 function renderModuleCatalog(body, data) {
+  const catalog = data.catalog || data;
+  const modules = catalog.modules || data.modules || [];
+  const project = catalog.application || data.project || '';
+  const version = catalog.version || data.version || '';
   let html = `<div class="md-body"><h1>Module Catalog</h1>
-    <p>${data.modules.length} modules - <strong>${data.project}</strong> v${data.version}</p></div>
+    <p>${modules.length} modules${project ? ` - <strong>${escHtml(project)}</strong>` : ''}${version ? ` v${escHtml(version)}` : ''}</p></div>
     <table class="cat-table">
       <thead><tr><th>ID</th><th>Name</th><th>Layer</th><th>Tier</th><th>Owner</th><th>Depends On</th></tr></thead>
       <tbody>`;
-  data.modules.forEach(m => {
+  modules.forEach(m => {
     const id   = m.moduleId || m.id || '';
     const name = m.moduleName || m.displayName || m.name || '';
     const layer = m.layer || m.type || '';
@@ -1663,12 +1866,93 @@ function updateResizeOverlayPosition() {
 // ── Entity Renderer ────────────────────────────────────────────────────────────
 
 /**
+ * Renders a logical-data-model JSON as a mermaid erDiagram.
+ * @param {HTMLElement} body - The container to render into.
+ * @param {Object} data - Parsed LDM JSON.
+ */
+function renderApplication(body, data) {
+  const app = data.application || data;
+  let html = `<div class="doc-section">
+    <h1>${escHtml(app.name || 'Application Definition')}</h1>
+    <p>${escHtml(app.description || '')}</p>
+    <table class="spec-table" style="margin-bottom:16px">
+      <tbody>
+        <tr><th>Type</th><td>${escHtml(app.type || '')}</td></tr>
+        <tr><th>Domain</th><td>${escHtml(app.business_domain || '')}</td></tr>
+        ${app.release_intent ? `<tr><th>Release Intent</th><td>${escHtml(app.release_intent)}</td></tr>` : ''}
+      </tbody>
+    </table>`;
+
+  const actors = app.actors || [];
+  if (actors.length) {
+    html += `<h2>Actors</h2><div class="entity-card"><table class="spec-table"><thead>
+      <tr><th>ID</th><th>Name</th><th>Description</th></tr></thead><tbody>`;
+    actors.forEach(a => {
+      html += `<tr><td><code>${escHtml(a.id)}</code></td><td><strong>${escHtml(a.name)}</strong></td><td>${escHtml(a.description || '')}</td></tr>`;
+    });
+    html += `</tbody></table></div>`;
+  }
+
+  const scope = app.scope || {};
+  const inScope = scope.in_scope || [];
+  const outScope = scope.out_of_scope_assumed || scope.out_of_scope || [];
+  if (inScope.length || outScope.length) {
+    html += `<h2>Scope</h2><div class="two-col" style="display:grid;grid-template-columns:1fr 1fr;gap:16px">`;
+    if (inScope.length) {
+      html += `<div><h3 style="color:var(--accent)">In Scope</h3><ul>${inScope.map(s => `<li>${escHtml(s)}</li>`).join('')}</ul></div>`;
+    }
+    if (outScope.length) {
+      html += `<div><h3 style="color:var(--muted)">Out of Scope</h3><ul>${outScope.map(s => `<li>${escHtml(s)}</li>`).join('')}</ul></div>`;
+    }
+    html += `</div>`;
+  }
+
+  const nfr = app.non_functional || {};
+  const nfrEntries = Object.entries(nfr);
+  if (nfrEntries.length) {
+    html += `<h2>Non-Functional Requirements</h2><div class="entity-card"><table class="spec-table"><tbody>`;
+    nfrEntries.forEach(([k, v]) => {
+      html += `<tr><th style="text-transform:capitalize">${escHtml(k)}</th><td>${escHtml(String(v))}</td></tr>`;
+    });
+    html += `</tbody></table></div>`;
+  }
+
+  html += `</div>`;
+  body.innerHTML = html;
+}
+
+function renderLogicalDataModel(body, data) {
+  const CARD = {
+    'one-to-many':  '||--o{',
+    'many-to-one':  '}o--||',
+    'one-to-one':   '||--||',
+    'many-to-many': '}o--o{',
+    'self-reference': '||--o{',
+  };
+
+  const entities = (data.entities || []).map(e => e.name);
+  const rels = data.relationships_summary || [];
+
+  const lines = ['erDiagram'];
+  entities.forEach(name => lines.push(`    ${name} {}`));
+  rels.forEach(r => {
+    const arrow = CARD[r.cardinality] || CARD[r.type] || '||--o{';
+    const label = (r.via || r.type || '').replace(/\s+/g, '_');
+    lines.push(`    ${r.from} ${arrow} ${r.to} : "${label}"`);
+  });
+
+  const md = '```mermaid\n' + lines.join('\n') + '\n```';
+  renderMarkdown(body, `# ${data.model || 'Logical Data Model'}\n\n${md}`, null);
+}
+
+/**
  * Renders an entity specification document (fields, relationships, rules,
  * state machine, events) into the body element.
  * @param {HTMLElement} body - The container to render into.
  * @param {Object} d - Parsed entity JSON data.
  */
-function renderEntity(body, d) {
+function renderEntity(body, raw) {
+  const d = raw.entity ? { ...raw, ...raw.entity, entityName: raw.entity.name, entityId: raw.entity.id } : raw;
   let html = '';
 
   // Header
@@ -1699,34 +1983,40 @@ function renderEntity(body, d) {
       <div class="entity-card">
         <table class="rel-table"><tbody>`;
     rels.forEach(r => {
+      const relTarget = r.entity || r.target || '';
+      const relFk     = r.foreignKey || r.via || r.cardinality || '';
       html += `<tr>
-        <td>${entRefHtml(r.entity)}</td>
+        <td>${entRefHtml(relTarget)}</td>
         <td><span class="rel-type">${escHtml(r.type)}</span></td>
-        <td><span class="rel-fk">${escHtml(r.foreignKey)}</span></td>
+        <td><span class="rel-fk">${escHtml(relFk)}</span></td>
         <td style="font-size:12px;color:var(--muted)">${escHtml(r.description || '')}</td>
       </tr>`;
     });
     html += `</tbody></table></div></div>`;
   }
 
-  // Fields
-  const fields = d.fields || [];
+  // Fields / Attributes
+  const fields = d.fields || d.attributes || [];
   if (fields.length) {
     html += `<div class="spec-section"><h2>Fields</h2>
       <div class="entity-card">
         <table class="spec-table">
-          <thead><tr><th>Field</th><th>Type</th><th>Req</th><th>Default / Notes</th></tr></thead>
+          <thead><tr><th>Field</th><th>Type</th><th>Req</th><th>Constraints / Notes</th></tr></thead>
           <tbody>`;
     fields.forEach(f => {
+      const constraints = (f.constraints || []).join(', ');
       const notes = [
-        f.enum ? `enum: ${f.enum.join(', ')}` : '',
+        f.values ? `values: ${f.values.join(', ')}` : '',
+        f.enum   ? `enum: ${f.enum.join(', ')}` : '',
+        constraints,
         f.default !== undefined ? `default: ${f.default}` : '',
-        f.description || '',
+        f.note || f.description || '',
       ].filter(Boolean).join(' · ');
+      const required = f.required !== undefined ? f.required : !(f.constraints || []).includes('NULLABLE');
       html += `<tr>
         <td><code>${escHtml(f.name)}</code></td>
         <td><code>${escHtml(f.type)}</code></td>
-        <td><span class="req-dot ${f.required ? 'yes' : ''}" title="${f.required ? 'required' : 'optional'}"></span></td>
+        <td><span class="req-dot ${required ? 'yes' : ''}" title="${required ? 'required' : 'optional'}"></span></td>
         <td style="font-size:12px;color:#6b7280">${escHtml(notes)}</td>
       </tr>`;
     });
@@ -2014,7 +2304,7 @@ async function saveDoc() {
     activeContent = content;
     setSaveStatus('ok', 'Saved');
     // re-render the view with updated content
-    renderDoc(activeDoc, content, 'md');
+    await renderDoc(activeDoc, content, 'md');
     setTimeout(() => {
       editing = false;
       showDocBody();

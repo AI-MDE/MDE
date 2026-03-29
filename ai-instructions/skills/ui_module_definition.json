@@ -1,0 +1,100 @@
+{
+  "name": "ui_module_definition",
+  "purpose": "Design UI modules and pages for the application — derived from user tasks, business functions, and domain entities. Produces a structured UI module catalog and per-module page specifications.",
+  "inputs": {
+    "requirements": {
+      "from": "config.ba.requirements",
+      "default": "ba/requirements.md"
+    },
+    "businessFunctions": {
+      "from": "config.ba.businessFunctions",
+      "default": "ba/business-functions.json"
+    },
+    "moduleCatalog": {
+      "from": "config.design.moduleCatalog",
+      "default": "design/modules/module-catalog.json"
+    },
+    "entities": {
+      "from": "config.design.entityPattern",
+      "default": "design/entities/ent-*.json"
+    }
+  },
+  "outputs": {
+    "uiModuleCatalog": {
+      "to": "config.design.modules",
+      "pattern": "ui/ui-module-catalog.json"
+    },
+    "uiModuleSpec": {
+      "to": "config.design.modules",
+      "pattern": "ui/module-{kebab-module-name}.json"
+    }
+  },
+  "output_shape": {
+    "uiModuleCatalog": {
+      "modules": [
+        {
+          "id": "UI-Mnn",
+          "name": "string",
+          "purpose": "one sentence — user task this module supports",
+          "primaryUsers": ["actor names from application.json"],
+          "backendModules": ["M-xx — backend module IDs this UI module depends on"],
+          "priority": "core | secondary | optional"
+        }
+      ]
+    },
+    "uiModuleSpec": {
+      "moduleId": "UI-Mnn",
+      "moduleName": "string",
+      "purpose": "one sentence",
+      "primaryUsers": [],
+      "pages": [
+        {
+          "id": "PAGE-nn",
+          "name": "string",
+          "pattern": "dashboard | list | detail | form | wizard",
+          "purpose": "what the user achieves on this page",
+          "shows": ["data items displayed"],
+          "actions": [
+            {
+              "label": "button/action label",
+              "type": "navigate | submit | filter | export",
+              "navigatesTo": "PAGE-nn or null"
+            }
+          ],
+          "filters": ["filterable fields, or empty"],
+          "relatedEntities": ["entity names"],
+          "drillsInto": ["PAGE-nn — pages reachable from this page"]
+        }
+      ],
+      "navigation": {
+        "entryPoint": "PAGE-nn",
+        "flows": [
+          {
+            "from": "PAGE-nn",
+            "to": "PAGE-nn",
+            "via": "action label"
+          }
+        ]
+      }
+    }
+  },
+  "rules": [
+    "Design from user tasks, not database tables",
+    "Every page must have an explicit purpose linked to a business function",
+    "Prefer dashboard, list, detail, and form page patterns",
+    "Keep navigation shallow — maximum two levels deep",
+    "Each drill-down relationship between pages must be explicit in drillsInto and navigation.flows",
+    "primaryUsers must reference actors defined in application.json",
+    "backendModules must reference module IDs from module-catalog.json",
+    "relatedEntities must reference entity names from entity files",
+    "Priority: core = required for MVP, secondary = important but deferrable, optional = nice-to-have",
+    "Filters only where data volume or search need is identified in requirements",
+    "Actions must include navigatesTo when they change the current page",
+    "No new requirements — all pages must be traceable to business functions or requirements"
+  ],
+  "uses_tools": [
+    "file_manager",
+    "json_validator"
+  ],
+  "next_phase": "source_code_generation"
+}

@@ -1,16 +1,16 @@
 /**
  * MDE Documentation Viewer — Node.js HTTP server
- * Driven by docs.json manifest with $config.x.y path resolution and runtime directory scanning.
+ * Driven by view.json manifest with $config.x.y path resolution and runtime directory scanning.
  *
  * Usage:
- *   ts-node mde/web/viewer.ts --root=<project-root> [--manifest=output/docs/docs.json] [--port=4000]
+ *   ts-node mde/web/viewer.ts --root=<project-root> [--manifest=output/docs/view.json] [--port=4000]
  */
 
 import * as http from 'http';
 import * as fs   from 'fs';
 import * as path from 'path';
 
-// ── Manifest types (docs.json schema) ─────────────────────────────────────────
+// ── Manifest types (view.json schema) ─────────────────────────────────────────
 
 interface ScanConfig {
   dir: string;
@@ -148,14 +148,21 @@ class DocServer {
   // ── Directory scanning ─────────────────────────────────────────────────────
 
   /**
-   * Converts a raw pattern (possibly a full glob path like "ba/use-cases/uc-*.md")
-   * into a RegExp that matches bare filenames.
+   * Converts a raw pattern into a RegExp that matches bare filenames.
+   * Accepts either a glob (e.g. "uc-*.md" or "ba/use-cases/uc-*.md") or
+   * a regex string (e.g. "^module-.*\\.md$").  Regex strings are detected
+   * by a leading "^" or trailing "$" and used as-is.
    */
   private toFilenamePattern(rawPattern: string, resolvedDir: string): RegExp {
+    // If the pattern is already a regex string, use it directly (before any transformation)
+    if (rawPattern.startsWith('^') || rawPattern.endsWith('$')) {
+      try { return new RegExp(rawPattern); } catch { return /.*/; }
+    }
+
+    // Otherwise treat as a glob: normalise separators, strip dir prefix, then convert to regex
     let pat = rawPattern.replace(/\\/g, '/');
     const dir = resolvedDir.replace(/\\/g, '/').replace(/\/$/, '');
     if (pat.startsWith(dir + '/')) pat = pat.slice(dir.length + 1);
-    // Convert glob * to regex .*  (escape dots first)
     const reSource = pat.replace(/\./g, '\\.').replace(/\*/g, '.*');
     try {
       return new RegExp(`^${reSource}$`);
@@ -402,6 +409,25 @@ class DocServer {
         return this.sendJson(res, this.buildTree());
       }
 
+      if (url.pathname.startsWith('/api/template/')) {
+        const name = path.basename(decodeURIComponent(url.pathname.slice('/api/template/'.length)));
+        const tplPath = path.join(__dirname, '..', 'templates', name);
+        if (!fs.existsSync(tplPath)) { res.writeHead(404); res.end('Template not found'); return; }
+        const content = fs.readFileSync(tplPath, 'utf8');
+        res.writeHead(200, { 'Content-Type': 'text/plain; charset=utf-8' });
+        res.end(content);
+        return;
+      }
+
+      if (url.pathname === '/api/catalog') {
+        const catalogPath = path.join(__dirname, '..', 'methodology', 'document-catalog.json');
+        if (!fs.existsSync(catalogPath)) {
+          return this.sendJson(res, { document_types: [] });
+        }
+        const catalog = JSON.parse(fs.readFileSync(catalogPath, 'utf8'));
+        return this.sendJson(res, catalog);
+      }
+
       if (url.pathname.startsWith('/api/doc/')) {
         const relPath = decodeURIComponent(url.pathname.slice('/api/doc/'.length));
         const absPath = path.resolve(this.docsRoot, relPath);
@@ -479,7 +505,7 @@ function parseArg(prefix: string): string | undefined {
 const PORT      = parseInt(parseArg('--port=') ?? process.env.VIEWER_PORT ?? '4000', 10);
 const DOCS_ROOT = path.resolve(parseArg('--root=') ?? process.cwd());
 // Manifest lives beside viewer.ts in the MDE web folder — no project-side copy needed
-const MANIFEST  = parseArg('--manifest=') ?? path.join(__dirname, 'docs.json');
+const MANIFEST  = parseArg('--manifest=') ?? path.join(__dirname, 'view.json');
 
 if (!fs.existsSync(DOCS_ROOT)) {
   console.error(`[viewer] Project root does not exist: ${DOCS_ROOT}`);
@@ -490,7 +516,7 @@ if (!fs.existsSync(DOCS_ROOT)) {
 const manifestAbs = path.isAbsolute(MANIFEST) ? MANIFEST : path.join(DOCS_ROOT, MANIFEST);
 if (!fs.existsSync(manifestAbs)) {
   console.error(`[viewer] Manifest not found: ${manifestAbs}`);
-  console.error(`[viewer] Expected: ${path.join(__dirname, 'docs.json')}`);
+  console.error(`[viewer] Expected: ${path.join(__dirname, 'view.json')}`);
   process.exit(1);
 }
 

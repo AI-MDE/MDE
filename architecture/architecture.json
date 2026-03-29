@@ -1,5 +1,5 @@
 {
-  "name": "claims-management-system",
+  "name": "generic_enterprise_app_architecture",
   "version": "1.2",
   "date": "2026-03-27",
   "purpose": "Root architectural policy manifest. Defines the layer stack, module types, tech stack, codegen conventions, and references to rule files. All generation phases read this file first.",
@@ -47,18 +47,18 @@
       "class": "PascalCase",
       "interface": "PascalCase with I prefix",
       "examples": {
-        "module_folder": "fraud-review/",
-        "service_class": "FraudReviewService",
-        "service_interface": "IFraudReviewService",
-        "query_service_class": "FraudReviewQueryService",
-        "repository_class": "FraudReviewRepository",
-        "repository_interface": "IFraudReviewRepository",
-        "mapper_class": "FraudReviewMapper",
-        "command_class": "ApproveFraudReviewCommand",
-        "request_dto": "FraudReviewRequestDto",
-        "response_dto": "FraudReviewResponseDto",
-        "read_dto": "FraudReviewReadDto",
-        "event_type": "FraudReviewDecidedEvent",
+        "module_folder": "[module]/",
+        "service_class": "[module]Service",
+        "service_interface": "I[module]Service",
+        "query_service_class": "[module]QueryService",
+        "repository_class": "[module]Repository",
+        "repository_interface": "I[module]Repository",
+        "mapper_class": "[module]Mapper",
+        "command_class": "Approve[module]Command",
+        "request_dto": "[module]RequestDto",
+        "response_dto": "[module]ResponseDto",
+        "read_dto": "[module]ReadDto",
+        "event_type": "[module]DecidedEvent",
         "event_publisher_interface": "DomainEventPublisher",
         "event_publisher_impl": "OutboxEventPublisher"
       }
@@ -96,7 +96,7 @@
           "RequestDto and ResponseDto suffix for write operations",
           "ReadDto suffix for query results",
           "Command suffix for write operation inputs — one Command per Service method",
-          "Event types are typed aliases of DomainEvent<T> — no extra classes; suffix with Event (e.g. ClaimDeniedEvent)",
+          "Event types are typed aliases of DomainEvent<T> — no extra classes; suffix with Event (e.g. [event]Event)",
           "Base DomainEvent<T> lives in shared/events/domain-event.ts — not per module"
         ]
       },
@@ -134,7 +134,7 @@
         ]
       },
       "service": {
-        "description": "Write-side orchestration. Each class method corresponds to exactly one use case (e.g. DenyClaimService.execute()). For reads, use QueryService instead.",
+        "description": "Write-side orchestration. Each class method corresponds to exactly one use case (e.g. [module]Service.execute()). For reads, use QueryService instead.",
         "artifacts": [
           { "type": "interface", "name": "I{Module}Service", "file": "{module}.service.interface.ts", "description": "Public write contract exposed to controllers and other modules" },
           { "type": "class",     "name": "{Module}Service",  "file": "{module}.service.ts",           "description": "Write use-case orchestration: authorize → load → domain behavior → save → emit event" }

@@ -70,6 +70,82 @@ This is more accurate than calling it a catalog, because it is not only a list. 
 
 ---
 
+
+## 3a. Meta-Model
+
+The meta-model is composed of the following first-class objects:
+
+### Document / Artifact Instance
+The actual file that exists on disk for a given project.
+
+- **document-type** — the type known to the system (e.g. `requirements`, `logical-data-model`) → registered in the Document-Type Catalog
+- **format** — `json`, `md`, `sql`, `code`, etc.
+- **name** — follows the project naming convention defined in `methodology.json`
+- **location** — physical path resolved from the logical name via `configuration.json`
+- **source mode** — how the document entered the system: `provided_by_user`, `generated_by_ai`, `derived_from_other_documents`, `hybrid`, `imported`
+- **version** — tracks document evolution within the project lifecycle
+- **schema validation state** — whether the instance conforms to its document-type schema
+
+### Document-Type
+A platform-level definition registered in the **Document-Type Catalog**.
+
+- **id** — unique identifier (e.g. `logical-data-model`)
+- **display name** — human-readable label
+- **phase membership** — which lifecycle phase(s) this type belongs to
+- **status in phase** — `required`, `recommended`, or `optional`
+- **format** — expected file format
+- **naming convention** — file naming pattern
+- **schema reference** — link to the document's structural schema
+- **template reference** — link to the viewer presentation template
+- **source mode** — expected provenance for this type
+- **generation rules** — whether AI can generate or regenerate it, and from what inputs
+- **validation rules** — what checks apply after creation
+- **related commands** — commands that produce or operate on this type
+- **related skills** — skills responsible for generation or analysis
+
+### Schema
+The machine-readable structural definition for a document type.
+Enables field validation, completeness checking, and inter-document consistency.
+Lives in the **Schema Repository** (`mde/schemas/`).
+
+### Template
+The human-readable presentation definition for a document type.
+Defines how the document is rendered in the viewer — layout, sections, formatting.
+Separate from the schema: schema = machine form, template = human form.
+Lives in the **Template Catalog** (to be defined).
+
+### Phase
+A stage in the project lifecycle.
+Defined in `mde/methodology/methodology.json`.
+
+- identifies required and optional document types for the phase
+- defines exit criteria (readiness gate)
+- lists available commands
+- does **not** define physical file locations (that is `configuration.json`'s role)
+
+---
+
+### Meta-Documents (Governing Files)
+
+These files together constitute the operational meta-model for a project:
+
+| File | Role |
+|---|---|
+| `mde/methodology/methodology.json` | Defines lifecycle phases, document types per phase, exit criteria. Logical — no file paths. |
+| `configuration.json` | Maps every logical document name to its physical path in the project. |
+| `mde/methodology/document-catalog.json` | Registers all document types with schema, template, source mode, and generation rules. Siblings with `methodology.json` — referenced by it, not embedded in it. |
+| `mde/schemas/*.json` | One schema file per document type. |
+| `web/docs.json` | Viewer manifest — defines how documents are presented and navigated. Driven by, but separate from, the document-type catalog. |
+
+The key separation:
+- `methodology.json` answers: *what documents belong to each phase and when is the phase complete?*
+- `configuration.json` answers: *where does each document live on disk?*
+- `document-catalog.json` answers: *what is each document type, what format, which schema, which template, how is it generated, and which commands and skills own it?*
+- `web/docs.json` answers: *how should the viewer navigate and present the documents for this project?*
+
+
+
+
 ## 4. Static Meta-Model vs Runtime Project State
 
 A critical architectural distinction is the separation of:
@@ -98,6 +174,38 @@ Defines one active project instance:
 - actual change history
 
 The meta-model governs the runtime state, but the two should remain separate.
+
+---
+
+## 4.1 Methodology and Architecture Influence on the Meta-Model
+
+The MDE Meta-Model Repository is not purely static. Its effective behavior is influenced by project-specific context.
+
+Two major influences are:
+
+### Delivery Methodology
+The selected or derived delivery methodology influences:
+- active lifecycle and phase behavior
+- required versus optional artifacts
+- validation rigor
+- approval expectations
+- readiness gates
+- change management style
+- iteration and refinement rules
+
+### Architecture Direction
+The selected or derived architectural direction influences:
+- which design artifacts are expected
+- which document types become relevant in later phases
+- the depth and structure of data modeling
+- integration and interface expectations
+- module and component modeling
+- cross-document validation rules
+- traceability requirements from requirements to design
+
+The effective project meta-model should therefore be understood as:
+
+**Static Meta-Model + Methodology Context + Architecture Context = Active Project Meta-Model**
 
 ---
 
@@ -638,7 +746,120 @@ These concepts will become essential as the platform grows.
 
 ---
 
-## 15. Recommended Naming
+## 15. Repository Operations, Collaboration, and Security
+
+Because MDE is document-centric and manages active lifecycle artifacts, it must support enterprise-grade repository operations.
+
+Core capabilities should include:
+- full Git-based source control
+- version history and change traceability
+- branching and merge practices as appropriate
+- collaborative editing and review
+- multi-user access
+- role-based security
+- auditability across artifacts and phases
+
+A guiding principle should be:
+
+> All governed project artifacts in MDE are versioned assets and must participate in source control, audit trail, and collaborative review.
+
+MDE should be source-control-aware, collaboration-aware, and security-aware at the platform level.
+
+---
+
+## 16. Annotation, Review, and Approval
+
+Managed artifacts should support structured review workflows.
+
+MDE should allow:
+- annotations and comments
+- review threads
+- section-level or object-level review
+- approval and rejection states
+- requested changes
+- sign-off history
+
+Review and approval should be supported for:
+- business analysis outputs
+- data models
+- architecture baselines
+- system design artifacts
+- change requests
+- validation results where formal review is required
+
+This enables governed collaboration instead of uncontrolled document exchange.
+
+---
+
+## 17. Product Change Control
+
+MDE must distinguish between:
+- changes to managed artifacts/documents
+- formal changes to the target product or system itself
+
+The second type requires explicit **product change control**.
+
+A formal Change Request capability should support:
+- id
+- title
+- description
+- rationale
+- requester
+- impacted areas
+- impacted artifacts
+- priority
+- status
+- approval state
+- impact analysis
+- resulting updates and traceability
+
+Product change control should support methodology-specific behavior:
+- stronger formality in predictive settings
+- lighter but still traceable control in agile/hybrid settings
+- propagation of approved changes into affected artifacts, validations, and readiness gates
+
+This should be treated as a major governed feature of the platform.
+
+---
+
+## 18. External Tool Integration
+
+MDE should not be designed as an isolated system.
+
+It should be designed with integration points for:
+- source control platforms
+- issue and project management tools
+- collaborative documentation systems
+- diagramming/modeling tools
+- identity and access systems
+- enterprise collaboration platforms
+
+The exact integration targets may evolve, but the internal architecture should anticipate:
+- import/export of artifacts
+- synchronization of status and identifiers
+- linking to external issues or work items
+- preserving traceability across system boundaries
+
+Integration is a subject of further investigation, but should be represented as an architectural concern from the start.
+
+---
+
+## 19. Suggested Additional Core Objects
+
+In addition to the previously identified core objects, the meta-model should anticipate:
+
+- `ReviewThread`
+- `Annotation`
+- `ApprovalRecord`
+- `ChangeRequest`
+- `AccessPolicy`
+- `IntegrationEndpoint`
+
+These objects support collaboration, governance, and integration around the document-centric lifecycle.
+
+---
+
+## 20. Recommended Naming
 
 The internal center of MDE should be described as:
 
@@ -661,7 +882,7 @@ This is the most accurate name for the central architectural concept.
 
 ---
 
-## 16. Final View
+## 21. Final View
 
 MDE should be understood as a **document-centric lifecycle engine** governed by a meta-model.
 

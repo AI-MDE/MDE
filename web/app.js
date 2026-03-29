@@ -8,7 +8,8 @@ const net = require('net');
 const { spawn } = require('child_process');
 
 const viewerPath = path.join(__dirname, 'viewer.js');
-const projectRoot = process.cwd();
+const rootArg = process.argv.find(a => a.startsWith('--root='));
+const projectRoot = rootArg ? path.resolve(rootArg.replace('--root=', '')) : process.cwd();
 const viewerUrl = 'http://localhost:4000/';
 const viewerPort = 4000;
 
