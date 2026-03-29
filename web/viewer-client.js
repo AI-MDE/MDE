@@ -1009,6 +1009,21 @@ function normalizeForTemplate(docType, data, doc) {
     };
   }
 
+  if (docType === 'root-configuration') {
+    const SECTION_KEYS = ['project', 'mde', 'ba', 'design', 'project_state', 'application', 'output', 'test', 'scripts'];
+    const toTitle = k => k.replace(/_/g, ' ').replace(/\b\w/g, c => c.toUpperCase());
+    const sections = SECTION_KEYS
+      .filter(k => data[k] && typeof data[k] === 'object')
+      .map(k => ({
+        title: toTitle(k),
+        rows: Object.entries(data[k])
+          .filter(([key]) => !key.startsWith('_'))
+          .map(([key, val]) => ({ key, value: String(val ?? '') })),
+      }))
+      .filter(s => s.rows.length);
+    return { sections };
+  }
+
   return data;
 }
 

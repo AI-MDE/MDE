@@ -2,23 +2,6 @@
   "name": "mdt_orchestrator",
   "version": "1.1",
   "description": "Command-driven orchestrator for this workspace's AI-assisted model-driven engineering workflow.",
-  "inputs": {
-    "command_registry":    { "from": "config.mde.commands",                  "default": "mde/ai-instructions/commands" },
-    "skills_registry":     { "from": "config.mde.skills",                    "default": "mde/ai-instructions/skills" },
-    "agent_bootstrap":     { "default": "CLAUDE.md" },
-    "requirements":        { "from": "config.ba.requirements",               "default": "ba/requirements.md" },
-    "analysis_status":     { "from": "config.ba.analysisStatus",             "default": "ba/analysis-status.md" },
-    "discovery":           { "from": "config.ba.discovery",                  "default": "ba/discovery" },
-    "analyzed":            { "from": "config.ba.analyzed",                   "default": "ba/analyzed" },
-    "questions":           { "from": "config.project_state.questions",       "default": "project/questions.json" },
-    "open_queue":          { "from": "config.project_state.openQueue",       "default": "project/open-queue.json" },
-    "completed_questions": { "from": "config.project_state.completedQuestions", "default": "project/completed-Questions.json" },
-    "application":         { "from": "config.application.definition",        "default": "application/application.json" },
-    "project_state":       { "from": "config.project_state.state",           "default": "project/project-state.json" },
-    "command_log":         { "from": "config.project_state.commandLog",      "default": "project/logs/command-log.jsonl" },
-    "configuration":       { "default": "configuration.json" },
-    "methodology":         { "from": "config.project_state.methodology",     "default": "project/methodology.json" }
-  },
   "state_model": {
     "project_state_file": { "from": "config.project_state.state", "default": "project/project-state.json" },
     "fields": {
@@ -91,6 +74,10 @@
       {
         "user_input": "Generate Modules",
         "resolved_command": "generate_modules"
+      },
+      {
+        "user_input": "Generate UI Outline",
+        "resolved_command": "generate_ui_outline"
       }
     ]
   },
@@ -149,12 +136,10 @@
   "phase_rules": {
     "project_initiation": {
       "allowed_commands": [
-        "initiate_project",
         "select_methodology",
         "select_architecture"
       ],
-      "entry_conditions": [],
-      "exit_conditions": [
+      "exit_conditions_all": [
         "{ config.project_state.state } exists or initialization was intentionally skipped"
       ]
     },
@@ -167,8 +152,7 @@
         "generate_use_cases",
         "validate_requirements"
       ],
-      "entry_conditions": [],
-      "exit_conditions": [
+      "exit_conditions_all": [
         "{ config.ba.requirements } exists",
         "{ config.ba.analysisStatus } exists",
         "{ config.project_state.questions } exists",
@@ -181,12 +165,10 @@
         "generate_ldm",
         "validate_ldm_coverage",
         "generate_modules",
+        "generate_ui_outline",
         "validate_architecture"
       ],
-      "entry_conditions": [
-        "{ config.ba.requirements } exists"
-      ],
-      "exit_conditions": [
+      "exit_conditions_all": [
         "{ config.design.appArchitecture } exists",
         "{ config.design.moduleCatalog } exists",
         "at least one module definition exists in { config.design.modules }"
@@ -197,10 +179,7 @@
         "generate_source_code",
         "generate_sample_data"
       ],
-      "entry_conditions": [
-        "schema.json exists for target module"
-      ],
-      "exit_conditions": [
+      "exit_conditions_all": [
         "development artifacts exist for the target command"
       ]
     },
@@ -208,14 +187,12 @@
       "allowed_commands": [
         "assess_methodology",
         "assess_architecture",
-        "identify_external_references",
         "validate_traceability",
         "show_phase_status",
         "generate_diagrams",
         "generate_documentation"
       ],
-      "entry_conditions": [],
-      "exit_conditions": []
+      "exit_conditions_all": []
     }
   },
   "skill_invocation_policy": {
@@ -304,69 +281,5 @@
       "Prefer commands in the current phase before cross-phase commands.",
       "Always include at least one validation or inspection command when available."
     ]
-  },
-  "sample_flows": [
-    {
-      "user_input": "Perform Business Analysis",
-      "resolved_command": "perform_business_analysis",
-      "skills": [
-        "business_analysis_from_sources"
-      ],
-      "tools": [
-        "file_manager",
-        "json_validator"
-      ],
-      "outputs": [
-        "{ config.ba.requirements }",
-        "{ config.ba.analysisStatus }",
-        "{ config.project_state.questions }",
-        "{ config.project_state.openQueue }"
-      ]
-    },
-    {
-      "user_input": "Validate Requirements",
-      "resolved_command": "validate_requirements",
-      "skills": [
-        "requirements_validation"
-      ],
-      "tools": [
-        "file_manager",
-        "json_validator",
-        "traceability_engine"
-      ],
-      "outputs": [
-        "{ config.ba.requirementsValidationReport }"
-      ]
-    },
-    {
-      "user_input": "Build System Design",
-      "resolved_command": "build_system_design",
-      "skills": [
-        "system_design"
-      ],
-      "tools": [
-        "file_manager"
-      ],
-      "outputs": [
-        "{ config.design.appArchitecture }",
-        "{ config.design.moduleCatalog }"
-      ]
-    },
-    {
-      "user_input": "Generate Modules",
-      "resolved_command": "generate_modules",
-      "skills": [
-        "module_definition"
-      ],
-      "tools": [
-        "file_manager",
-        "json_validator"
-      ],
-      "outputs": [
-        "{ config.design.moduleCatalog }",
-        "{ config.design.modules }/{moduleType}/module-{kebab-module}.json",
-        "{ config.design.modules }/{moduleType}/module-{kebab-module}.md"
-      ]
-    }
-  ]
+  }
 }

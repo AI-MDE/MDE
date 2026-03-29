@@ -1,13 +1,12 @@
-﻿# Root Configuration
+# Configuration
 
-- Methodology: `{{Methodology}}`
-- Project Type: `{{Project-Type}}`
-- Project Name: `{{Project-Name}}`
-- Description: {{Description}}
-- MDE Path: `{{MDT-path}}`
-- Author: `{{Author}}`
-- Version: `{{Version}}`
+{{#sections}}
+## {{title}}
 
-## Meta Model
+| Setting | Value |
+| --- | --- |
+{{#rows}}
+| `{{key}}` | {{value}} |
+{{/rows}}
 
-- Doctypes: `{{metaModel.doctypes}}`
+{{/sections}}

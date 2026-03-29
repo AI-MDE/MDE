@@ -1,0 +1,59 @@
+{
+  "name": "generate_ui_outline",
+  "label": "Generate UI Outline",
+  "phase": "system_design",
+  "intent": "generate",
+  "ai": "required",
+  "requires": {
+    "application": {
+      "from": "config.application.definition",
+      "default": "application/application.json"
+    },
+    "requirements": {
+      "from": "config.ba.requirements",
+      "default": "ba/requirements.md"
+    },
+    "businessFunctions": {
+      "from": "config.ba.businessFunctions",
+      "default": "ba/business-functions.json"
+    },
+    "useCases": {
+      "from": "config.ba.useCases",
+      "default": "ba/use-cases/uc-*.md"
+    },
+    "moduleCatalog": {
+      "from": "config.design.moduleCatalog",
+      "default": "design/modules/module-catalog.json"
+    },
+    "entities": {
+      "from": "config.design.entityPattern",
+      "default": "design/entities/ent-*.json"
+    }
+  },
+  "produces": {
+    "uiCatalog": {
+      "to": "config.design.modules",
+      "pattern": "ui/ui-catalog.json"
+    },
+    "uiModuleSpec": {
+      "to": "config.design.modules",
+      "pattern": "ui/ui-{kebab-module-name}.json"
+    }
+  },
+  "calls": [
+    "ui_module_definition"
+  ],
+  "tools": [
+    "file_manager",
+    "json_validator"
+  ],
+  "rules": [
+    "Step 1 — Identify UI modules: one per cohesive user workflow derived from use cases and business functions",
+    "Step 2 — Write ui-catalog.json listing all UI modules with id, name, routePrefix, primaryUsers, backendModules, priority",
+    "Step 3 — For each UI module, write ui-{kebab-name}.json with full page specifications",
+    "Every page must declare requirementRefs and businessFunctionRef",
+    "Every use case must map to at least one page",
+    "All actors from application.json must appear in at least one module's primaryUsers",
+    "No new requirements — all pages traceable to requirements or use cases"
+  ]
+}
