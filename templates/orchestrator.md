@@ -1,38 +1,34 @@
-﻿# Orchestrator
+# {{name}} v{{version}}
 
-- Name: `{{name}}`
-- Version: `{{version}}`
-- Description: {{description}}
-
-## Inputs
-
-- Command Registry: `{{inputs.command_registry}}`
-- Skills Registry: `{{inputs.skills_registry}}`
-- Agent Bootstrap: `{{inputs.agent_bootstrap}}`
-- Project State: `{{inputs.project_state}}`
+{{description}}
 
 ## Execution Pipeline
 
 {{#execution_pipeline}}
-- {{step}}. `{{name}}` - {{description}}
+{{step}}. **{{name}}** — {{description}}
 {{/execution_pipeline}}
-
-## Phase Cycle
-
-`project_initiation -> business_analysis -> system_design -> module_definition -> module_specification -> development -> governance`
 
 ## Phase Rules
 
 {{#phase_rules_list}}
 ### {{phase}}
 
-Allowed Commands: {{allowed_commands}}
+**Allowed commands:** {{allowed_commands}}
 
-{{#entry_conditions}}
-- Entry: {{.}}
-{{/entry_conditions}}
 {{#exit_conditions}}
-- Exit: {{.}}
+- {{.}}
 {{/exit_conditions}}
 
 {{/phase_rules_list}}
+
+## Interaction Policy
+
+{{#interaction_policy.rules}}
+- {{.}}
+{{/interaction_policy.rules}}
+
+## Tool Policy
+
+{{#tool_invocation_policy.rules}}
+- {{.}}
+{{/tool_invocation_policy.rules}}

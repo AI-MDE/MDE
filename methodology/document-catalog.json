@@ -705,6 +705,70 @@
       "generation": { "canGenerate": false },
       "relatedCommands": [],
       "relatedSkills": []
+    },
+
+    {
+      "id": "mde-command",
+      "displayName": "MDE Command",
+      "purpose": "An MDE command definition — phase, intent, prerequisites, outputs, and rules.",
+      "format": "json",
+      "phase": ["project_initiation"],
+      "status": "optional",
+      "namingConvention": "{command_name}.json",
+      "schemaRef": null,
+      "templateRef": "mde-command.md",
+      "sourceMode": "provided_by_framework",
+      "generation": { "canGenerate": false },
+      "relatedCommands": [],
+      "relatedSkills": []
+    },
+
+    {
+      "id": "mde-skill",
+      "displayName": "MDE Skill",
+      "purpose": "An MDE skill definition — inputs, outputs, and generation rules.",
+      "format": "json",
+      "phase": ["project_initiation"],
+      "status": "optional",
+      "namingConvention": "{skill_name}.json",
+      "schemaRef": null,
+      "templateRef": "mde-skill.md",
+      "sourceMode": "provided_by_framework",
+      "generation": { "canGenerate": false },
+      "relatedCommands": [],
+      "relatedSkills": []
+    },
+
+    {
+      "id": "methodology",
+      "displayName": "Methodology",
+      "purpose": "MDE methodology definition — phases, commands, and workflow rules.",
+      "format": "json",
+      "phase": ["project_initiation"],
+      "status": "optional",
+      "namingConvention": "methodology.json",
+      "schemaRef": null,
+      "templateRef": "methodology.md",
+      "sourceMode": "provided_by_framework",
+      "generation": { "canGenerate": false },
+      "relatedCommands": [],
+      "relatedSkills": []
+    },
+
+    {
+      "id": "orchestrator",
+      "displayName": "Orchestrator",
+      "purpose": "MDE orchestrator definition — command resolution, phase rules, and execution pipeline.",
+      "format": "json",
+      "phase": ["project_initiation"],
+      "status": "optional",
+      "namingConvention": "orchestrator.json",
+      "schemaRef": null,
+      "templateRef": "orchestrator.md",
+      "sourceMode": "provided_by_framework",
+      "generation": { "canGenerate": false },
+      "relatedCommands": [],
+      "relatedSkills": []
     }
 
   ]

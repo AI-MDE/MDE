@@ -530,19 +530,28 @@ function buildNav(phases) {
 
     (phase.docs || []).forEach(doc => docsDiv.appendChild(navItem(doc)));
 
-    const BASE_PAD = 22; // matches .nav-group-label and .nav-item default padding-left
+    const BASE_PAD = 22;
     function appendGroup(container, group, depth) {
+      const wrapper = document.createElement('div');
+      wrapper.className = 'nav-group open';
+
       const lbl = document.createElement('div');
       lbl.className = 'nav-group-label';
       lbl.style.paddingLeft = (BASE_PAD + depth * 12) + 'px';
-      lbl.textContent = group.label;
-      container.appendChild(lbl);
+      lbl.innerHTML = `<span class="arrow">▶</span>${group.label}`;
+      lbl.onclick = () => wrapper.classList.toggle('open');
+      wrapper.appendChild(lbl);
+
+      const items = document.createElement('div');
+      items.className = 'nav-group-items';
       (group.docs || []).forEach(doc => {
         const item = navItem(doc);
         item.style.paddingLeft = (BASE_PAD + (depth + 1) * 12) + 'px';
-        container.appendChild(item);
+        items.appendChild(item);
       });
-      (group.groups || []).forEach(sub => appendGroup(container, sub, depth + 1));
+      (group.groups || []).forEach(sub => appendGroup(items, sub, depth + 1));
+      wrapper.appendChild(items);
+      container.appendChild(wrapper);
     }
     (phase.groups || []).forEach(group => appendGroup(docsDiv, group, 0));
 
@@ -1007,6 +1016,63 @@ function normalizeForTemplate(docType, data, doc) {
           parentId: fn.parent_id || '',
           outcomes: (fn.outcomes || []).map(o => ({ '.': o })),
         })),
+      })),
+    };
+  }
+
+  if (docType === 'mde-command') {
+    const flatten = obj => obj && typeof obj === 'object'
+      ? Object.entries(obj).map(([key, val]) => ({
+          key,
+          value: typeof val === 'object' ? (val.from || val.default || JSON.stringify(val)) : String(val),
+        }))
+      : [];
+    return {
+      ...data,
+      calls: (data.calls || []).join(', '),
+      requires_list: flatten(data.requires),
+      produces_list: flatten(data.produces),
+    };
+  }
+
+  if (docType === 'mde-skill') {
+    const flatten = obj => obj && typeof obj === 'object'
+      ? Object.entries(obj).map(([key, val]) => ({
+          key,
+          value: typeof val === 'object' ? (val.from || val.default || JSON.stringify(val)) : String(val),
+        }))
+      : [];
+    return {
+      ...data,
+      inputs_list:  flatten(data.inputs),
+      outputs_list: flatten(data.outputs),
+    };
+  }
+
+  if (docType === 'orchestrator') {
+    const phaseRules = data.phase_rules || {};
+    return {
+      ...data,
+      phase_rules_list: Object.entries(phaseRules).map(([phase, rules]) => ({
+        phase,
+        allowed_commands: (rules.allowed_commands || []).join(', '),
+        exit_conditions:  (rules.exit_conditions_all || []).map(c => ({ '.': c })),
+      })),
+    };
+  }
+
+  if (docType === 'methodology') {
+    const phases = data.phases || [];
+    // Build mermaid flowchart: phase1 --> phase2 --> ...
+    const nodes = phases.map(p => `  ${p.name}["${p.label}"]`).join('\n');
+    const edges = phases.slice(0, -1).map((p, i) => `  ${p.name} --> ${phases[i+1].name}`).join('\n');
+    const mermaid = '```mermaid\nflowchart LR\n' + nodes + '\n' + edges + '\n```';
+    return {
+      ...data,
+      mermaid,
+      phases: phases.map(p => ({
+        ...p,
+        docs: (p.docs || []).map(d => ({ '.': d })),
       })),
     };
   }

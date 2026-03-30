@@ -9,22 +9,27 @@
   },
 
   "mde": {
-    "path":         "mde",
-    "orchestrator": "mde/ai-instructions/orchestrator.json",
-    "commands":     "mde/ai-instructions/commands",
-    "skills":       "mde/ai-instructions/skills",
-    "architecture": "mde/architecture/architecture.json",
-    "methodology":  "mde/methodology/methodology.json"
+    "path":         "{ai-mde-path}",
+
+    "_note_1": "These file are using in the AI calls.",
+
+    "orchestrator": "{ai-mde-path}/ai-instructions/orchestrator.json",
+    "commands":     "{ai-mde-path}/ai-instructions/commands/",
+    "skills":       "{ai-mde-path}/ai-instructions/skills/",
+    "architecture": "{ai-mde-path}/architecture/",
+    "methodology":  "{ai-mde-path}/methodology/"
   },
 
   "ba": {
     "requirements":      "ba/requirements.md",
     "analysisStatus":    "ba/analysis-status.md",
+    "glossary":          "ba/glossary.md",
     "discovery":         "ba/discovery",
     "analyzed":          "ba/analyzed",
     "useCases":          "ba/use-cases",
     "useCasePattern":    "ba/use-cases/uc-*.md",
-    "businessFunctions": "ba/business-functions.json"
+    "businessFunctions": "ba/business-functions.json",
+    "ldm":               "ba/data-model"
   },
 
   "design": {
@@ -33,7 +38,7 @@
     "appArchitecture": "design/application_architecture.json",
     "moduleCatalog":   "design/modules/module-catalog.json",
     "modules":         "design/modules",
-    "ldm":             "design/ldm",
+    "uiModules":       "design/modules/ui",
     "sql":             "design/sql",
     "schema":          "design/sql/schema.json"
   },
@@ -43,7 +48,7 @@
     "questions":          "project/questions.json",
     "openQueue":          "project/open-queue.json",
     "completedQuestions": "project/completed-Questions.json",
-    "commandLog":         "project/logs/command-log.json",
+    "commandLog":         "project/logs/command-log.jsonl",
     "methodology":        "project/methodology.json"
   },
 
@@ -51,9 +56,34 @@
     "definition": "application/application.json"
   },
 
+  "scripts": {
+    "setupDb":  "scripts/sql/setup-db.sh",
+    "seedData": "scripts/loadSeedData.js"
+  },
+
+  "ui": {
+    "framework":   "react",
+    "language":    "typescript",
+    "router":      "react-router-dom",
+    "styling":     "tailwind",
+    "stateClient": "tanstack-query",
+    "authScheme":  "jwt-bearer",
+    "apiProxy":    "http://localhost:3000"
+  },
+
   "output": {
     "src":      "src",
+    "uiSrc":    "ui/src",
     "commands": "output/commands",
-    "docs":     "output/docs"
+    "docs":     "docs"
+  },
+
+  "test": {
+    "root":               "test",
+    "unit":               "test/unit",
+    "integration":        "test/integration",
+    "unitPattern":        "test/unit/**/*.test.ts",
+    "integrationPattern": "test/integration/**/*.test.ts",
+    "framework":          "jest"
   }
 }

@@ -242,7 +242,24 @@
     color: var(--sidebar-muted);
     font-weight: 600;
     letter-spacing: .4px;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    gap: 4px;
+    user-select: none;
   }
+  .nav-group-label:hover { color: var(--sidebar-text); }
+  .nav-group-label .arrow {
+    display: inline-block;
+    width: 10px;
+    font-size: 9px;
+    transition: transform 0.15s;
+    transform: rotate(0deg);
+    flex-shrink: 0;
+  }
+  .nav-group.open > .nav-group-label .arrow { transform: rotate(90deg); }
+  .nav-group-items { display: none; }
+  .nav-group.open > .nav-group-items { display: block; }
 
   .nav-item {
     display: flex;

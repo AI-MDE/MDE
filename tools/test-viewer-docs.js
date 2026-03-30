@@ -62,12 +62,13 @@ async function waitForViewer(retries = 20) {
 // ── Tree walking ──────────────────────────────────────────────────────────────
 function collectDocs(node, docs = []) {
   if (node.file || node.path) docs.push(node);
-  for (const child of (node.items || node.docs || node.groups || [])) collectDocs(child, docs);
+  const children = [...(node.items || []), ...(node.docs || []), ...(node.groups || [])];
+  for (const child of children) collectDocs(child, docs);
   return docs;
 }
 
 // ── Render-tier classification (mirrors viewer-client.js logic) ───────────────
-const CODE_FORMATS = new Set(['code','ts','js','py','rb','go','java','cs','cpp','c','sh','txt','sql']);
+const CODE_FORMATS = new Set(['code','ts','tsx','js','jsx','css','py','rb','go','java','cs','cpp','c','sh','txt','sql']);
 
 function renderTier(doc, catalogEntry, ext) {
   const docType = doc.docType;

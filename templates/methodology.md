@@ -1,23 +1,24 @@
-# Methodology
+# {{title}}
 
-**Name:** {{methodology}}
-**Version:** {{version}}
-**Title:** {{title}}
+_v{{version}} — {{methodology}}_
 
-## Pipeline
-{{#pipeline}}
-- {{.}}
-{{/pipeline}}
+{{{mermaid}}}
 
 ## Principles
+
 {{#principles}}
 - {{.}}
 {{/principles}}
 
 ## Phases
+
 {{#phases}}
-### {{name}}
-{{#required_artifacts}}
+### {{label}}
+
+{{description}}
+
+{{#docs}}
 - {{.}}
-{{/required_artifacts}}
+{{/docs}}
+
 {{/phases}}

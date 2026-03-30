@@ -53,6 +53,7 @@ class DocServer {
         if (!fs.existsSync(manifestAbs)) {
             throw new Error(`Manifest not found: ${manifestAbs}`);
         }
+        this.manifestAbs = manifestAbs;
         this.manifest = JSON.parse(fs.readFileSync(manifestAbs, 'utf8'));
         const configAbs = path.join(this.docsRoot, this.manifest.config ?? 'configuration.json');
         if (!fs.existsSync(configAbs)) {
@@ -61,6 +62,14 @@ class DocServer {
                 `  → Run with:  ts-node mde/web/viewer.ts --root=<project-root>`);
         }
         this.config = JSON.parse(fs.readFileSync(configAbs, 'utf8'));
+        // Derive allowed read roots: project root + mde.path (framework folder)
+        this.allowedRoots = [path.resolve(this.docsRoot)];
+        const mdePath = this.config?.mde?.path;
+        if (mdePath) {
+            // Use path.resolve(docsRoot, mdePath) so that Unix-style absolute paths
+            // like "/dev/ai-mde" resolve correctly on Windows as drive-relative paths.
+            this.allowedRoots.push(path.resolve(this.docsRoot, mdePath));
+        }
         this.htmlFile = path.join(__dirname, 'viewer.html');
         this.cssFile = path.join(__dirname, 'style.css');
         this.clientFile = path.join(__dirname, 'viewer-client.js');
@@ -151,11 +160,14 @@ class DocServer {
         return results.sort();
     }
     // ── Label extraction ───────────────────────────────────────────────────────
+    resolveAbsFile(relFile) {
+        return path.isAbsolute(relFile) ? relFile : path.join(this.docsRoot, relFile);
+    }
     extractLabel(relFile, labelFrom) {
         const fallback = path.basename(relFile).replace(/\.[^.]+$/, '');
         if (!labelFrom || labelFrom === 'filename')
             return fallback;
-        const absFile = path.join(this.docsRoot, relFile);
+        const absFile = this.resolveAbsFile(relFile);
         if (!fs.existsSync(absFile))
             return fallback;
         try {
@@ -221,11 +233,16 @@ class DocServer {
         const labelFrom = scan.labelFrom ?? 'filename';
         const docType = item.docType ?? null;
         const groupBy = scan.groupBy;
-        const absDir = path.join(this.docsRoot, dir);
+        const absDir = path.isAbsolute(dir) ? dir : path.join(this.docsRoot, dir);
         const pattern = this.toFilenamePattern(rawPat, dir);
         const relFiles = scan.recursive
             ? this.listRecursive(absDir, pattern)
-            : this.listFlat(absDir, pattern).map(f => `${dir}/${f}`.replace(/\/\//g, '/'));
+            : this.listFlat(absDir, pattern).map(f => {
+                const full = path.join(absDir, f);
+                return path.isAbsolute(dir)
+                    ? full
+                    : `${dir}/${f}`.replace(/\/\//g, '/');
+            });
         if (!relFiles.length)
             return null;
         if (groupBy === 'parent-folder' || groupBy === 'module-folder') {
@@ -253,6 +270,36 @@ class DocServer {
             }
             return { id: item.id, label: item.label ?? item.id, groups: subGroups };
         }
+        if (typeof groupBy === 'string' && groupBy !== '' && groupBy !== 'parent-folder' && groupBy !== 'module-folder') {
+            const order = Array.isArray(scan.groupByOrder) ? scan.groupByOrder : [];
+            const byField = new Map();
+            for (const relFile of relFiles) {
+                const absFile = this.resolveAbsFile(relFile);
+                let fieldVal = '_other';
+                try {
+                    const raw = fs.readFileSync(absFile, 'utf8').replace(/^\uFEFF/, '');
+                    const obj = JSON.parse(raw);
+                    const v = groupBy.split('.').reduce((n, k) => (n && typeof n === 'object' ? n[k] : undefined), obj);
+                    if (typeof v === 'string') fieldVal = v;
+                } catch { /* fallback to _other */ }
+                if (!byField.has(fieldVal)) byField.set(fieldVal, []);
+                byField.get(fieldVal).push({
+                    id: this.docId(relFile),
+                    label: this.extractLabel(relFile, labelFrom),
+                    file: relFile,
+                    docType,
+                });
+            }
+            const sortedKeys = order.length
+                ? [...order.filter(k => byField.has(k)), ...[...byField.keys()].filter(k => !order.includes(k))]
+                : [...byField.keys()].sort();
+            const subGroups = sortedKeys.map(key => ({
+                id: `${item.id}-${key.replace(/[^a-z0-9]/gi, '-')}`,
+                label: key.replace(/_/g, ' ').replace(/\b\w/g, c => c.toUpperCase()),
+                docs: byField.get(key),
+            }));
+            return { id: item.id, label: item.label ?? item.id, groups: subGroups };
+        }
         const docs = relFiles.map(relFile => ({
             id: this.docId(relFile),
             label: this.extractLabel(relFile, labelFrom),
@@ -262,6 +309,7 @@ class DocServer {
         return { id: item.id, label: item.label ?? item.id, docs };
     }
     buildTree() {
+        try { this.manifest = JSON.parse(fs.readFileSync(this.manifestAbs, 'utf8')); } catch { /* keep cached */ }
         return this.manifest.sections.map(section => {
             const docs = [];
             const groups = [];
@@ -310,8 +358,7 @@ class DocServer {
         });
     }
     isWithinRoot(absPath) {
-        const root = path.resolve(this.docsRoot);
-        return absPath === root || absPath.startsWith(root + path.sep);
+        return this.allowedRoots.some(root => absPath === root || absPath.startsWith(root + path.sep));
     }
     readBody(req) {
         return new Promise(resolve => {
@@ -341,6 +388,14 @@ class DocServer {
             }
             if (url.pathname === '/api/config') {
                 return this.sendJson(res, this.config);
+            }
+            if (url.pathname === '/api/tree-hash') {
+                const tree = this.buildTree();
+                const hash = require('crypto')
+                    .createHash('md5')
+                    .update(JSON.stringify(tree))
+                    .digest('hex');
+                return this.sendJson(res, { hash });
             }
             if (url.pathname === '/api/tree') {
                 return this.sendJson(res, this.buildTree());
