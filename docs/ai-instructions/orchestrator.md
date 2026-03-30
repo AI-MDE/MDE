@@ -1,8 +1,8 @@
 # Orchestrator Reference
 | Field | Value |
 |-------|-------|
-| `file` | `mde/ai-instructions/orchestrator.json` |
-| `name` | `mdt_orchestrator` |
+| `file` | `orchestrator.json` |
+| `name` | `mde_orchestrator` |
 | `version` | 1.1 |
 | `description` | Command-driven orchestrator for this workspace's AI-assisted model-driven engineering workflow. |
 
@@ -22,29 +22,9 @@ A capable model will generally respect the phase rules, execution pipeline, and 
 
 ---
 
-## Inputs
-
-| Key                      | Path                                     |
-|--------------------------|------------------------------------------|
-| `command_registry`       | `mde/ai-instructions/commands`           |
-| `skills_registry`        | `mde/ai-instructions/skills`             |
-| `agent_bootstrap`        | `AGENT.md`                               |
-| `requirements_baseline`  | `../../ba/requirements.md`               |
-| `analysis_status`        | `../../ba/analysis-status.md`            |
-| `discovery_folder`       | `../../ba/discovery`                     |
-| `analyzed_folder`        | `../../ba/analyzed`                      |
-| `active_question_batch`  | `../../project/questions.json`           |
-| `open_queue`             | `../../project/open-queue.json`          |
-| `completed_questions`    | `../../project/completed-Questions.json` |
-| `application_definition` | `../../application/application.json`     |
-| `project_state`          | `../../project/project-state.json`       |
-| `command_log`            | `../../project/logs/command-log.json`    |
-| `configuration`          | `../../configuration.json`               |
-| `methodology`            | `../../project/methodology.json`         |
-
 ## State Model
 
-State is persisted to `../../project/project-state.json`.
+State is persisted to `project-state.json`.
 
 | Field                      | Type              |
 |----------------------------|-------------------|
@@ -55,7 +35,19 @@ State is persisted to `../../project/project-state.json`.
 | `last_command`             | string            |
 | `last_run_at`              | datetime          |
 | `recommended_next_command` | string            |
-| `next_valid_commands`      | [object Object][] |
+| `next_valid_commands`      | `{ command: string, reason: string }[]` |
+
+## Execution Mode
+
+`execution_mode: one_command_per_turn`
+
+## Interaction Policy
+
+- Execute exactly one command per user turn — never chain commands automatically.
+- After a command completes, stop. Report results and `next_valid_commands`, then wait for the user.
+- Ambiguous input like "continue" must be resolved by showing `next_valid_commands` and asking the user to pick — never infer and auto-execute.
+- Do not infer intent to run multiple commands from vague instructions. Ask instead.
+- The user must explicitly invoke each next command.
 
 ## Command Resolution
 
@@ -80,62 +72,55 @@ State is persisted to `../../project/project-state.json`.
 
 ## Execution Pipeline
 
-| Step                         | Description                                                                                                                                                       |
-|------------------------------|-------------------------------------------------------------------------------------------------------------------------------------------------------------------|
-| 1. `resolve_command`         | Map user input to a canonical command in mde/ai-instructions/commands/*.json                                                                                      |
-| 2. `load_context`            | Load AGENT.md, orchestration registries, BA artifacts, and optional project state/configuration files                                                             |
-| 3. `check_prerequisites`     | Verify that all required artifacts for the command exist                                                                                                          |
-| 4. `validate_phase_rules`    | Ensure the command is valid for the current phase or explicitly allowed cross-phase                                                                               |
-| 5. `select_skills_and_tools` | Read the command definition and determine which skills and tools to invoke                                                                                        |
-| 6. `execute_skill_flow`      | Invoke skill flows in order and let each skill call its permitted tools                                                                                           |
-| 7. `persist_outputs`         | Write generated or validated artifacts to the configured BA and project paths                                                                                     |
-| 8. `update_project_state`    | Record command completion or failure and always refresh recommended_next_command plus next_valid_commands (with reasons) if project/project-state.json is present |
-| 9. `return_result`           | Return summary, outputs, warnings, blockers, and next valid commands                                                                                              |
+| Step                          | Description                                                                                                                                                                  |
+|-------------------------------|------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|
+| 1. `resolve_command`          | Map user input to a canonical command in `mde/ai-instructions/commands/*.json`                                                                                               |
+| 2. `load_context`             | Load `AGENT.md`, orchestration registries, BA artifacts, and optional project state/configuration files                                                                      |
+| 3. `check_prerequisites`      | Verify that all required artifacts for the command exist                                                                                                                     |
+| 4. `validate_phase_rules`     | Ensure the command is valid for the current phase or explicitly allowed cross-phase                                                                                          |
+| 5. `select_skills_and_tools`  | Read the command definition and determine which skills and tools to invoke                                                                                                   |
+| 6. `execute_skill_flow`       | Invoke skill flows in order and let each skill call its permitted tools                                                                                                      |
+| 7. `persist_outputs`          | Write generated or validated artifacts to the configured BA and project paths. **Must complete before steps 8 and 9.**                                                      |
+| 8. `update_project_state`     | **MANDATORY.** Update `project/project-state.json` — set `current_phase`, `last_command`, `last_run_at`, `recommended_next_command`, `next_valid_commands`, and `artifacts`. Create the file if it does not exist. Never skip. |
+| 9. `append_command_log`       | **MANDATORY.** Append one entry to `project/logs/command-log.jsonl` per logging policy. Create the file if it does not exist. Never skip, even on failure or partial output. |
+| 10. `return_result`           | Return the `response_contract` payload. Do not return until steps 8 and 9 are complete.                                                                                     |
 
 ## Phase Rules
+
+`exit_conditions_all` — every condition in the array must be satisfied before the phase is considered complete.
 
 
 ### project_initiation
 **Allowed:** `initiate_project`, `select_methodology`, `select_architecture`
 
-**Entry conditions:** _(none)_
-
 **Exit conditions:**
-- ../../project/project-state.json exists or initialization was intentionally skipped
+- `config.project_state.state` exists or initialization was intentionally skipped
 
 ### business_analysis
 **Allowed:** `identify_domain`, `identify_external_references`, `perform_business_analysis`, `generate_business_functions`, `generate_use_cases`, `validate_requirements`
 
-**Entry conditions:** _(none)_
-
 **Exit conditions:**
-- ../../ba/requirements.md exists
-- ../../ba/analysis-status.md exists
-- ../../project/questions.json exists
-- ../../project/open-queue.json exists
+- `config.ba.requirements` exists
+- `config.ba.analysisStatus` exists
+- `config.project_state.questions` exists
+- `config.project_state.openQueue` exists
 
 ### system_design
 **Allowed:** `build_system_design`, `generate_ldm`, `validate_ldm_coverage`, `generate_modules`, `validate_architecture`
 
-**Entry conditions:**
-- ../../ba/requirements.md exists
 **Exit conditions:**
-- ../../design/application_architecture.json exists
-- ../../design/modules/module-catalog.json exists
-- at least one module definition exists in design/modules/
+- `config.design.appArchitecture` exists
+- `config.design.moduleCatalog` exists
+- at least one module definition exists in `config.design.modules`
 
 ### development
 **Allowed:** `generate_source_code`, `generate_sample_data`
 
-**Entry conditions:**
-- schema.json exists for target module
 **Exit conditions:**
 - development artifacts exist for the target command
 
 ### governance
 **Allowed:** `assess_methodology`, `assess_architecture`, `identify_external_references`, `validate_traceability`, `show_phase_status`, `generate_diagrams`, `generate_documentation`
-
-**Entry conditions:** _(none)_
 
 **Exit conditions:** _(none)_
 
@@ -184,45 +169,35 @@ State is persisted to `../../project/project-state.json`.
 - blocked
 - failed
 
+## Post-Command Obligations
+
+These actions are **required** at the end of every command execution, success or failure. A command is not considered complete until both are fulfilled.
+
+| Action                 | File                                    | Required Fields                                                                                          |
+|------------------------|-----------------------------------------|----------------------------------------------------------------------------------------------------------|
+| `update_project_state` | `project/project-state.json`            | `current_phase`, `last_command`, `last_run_at`, `recommended_next_command`, `next_valid_commands`, `artifacts` |
+| `append_command_log`   | `project/logs/command-log.jsonl`        | `command`, `label`, `ai`, `ran_at`, `status`, `outputs`                                                  |
+
+## Logging Policy
+
+Log file: `project/logs/command-log.jsonl` (resolved from `config.project_state.commandLog`)
+
+- After completing or failing any AI command, append one entry to the log file.
+- If the file does not exist, create it as an empty file.
+- Append one newline-delimited JSON line per command — never overwrite existing lines.
+- Entry schema: `{ command, label, ai: true, ran_at (ISO 8601), status (success|warning|failed), cost_estimate ({ input_tokens, output_tokens } or null), outputs (array of files written) }`
+- `cost_estimate` should be filled when token counts are available; otherwise set to `null`.
+- Mandatory — do not skip even if the command produced warnings or partial output.
+
 ## Next Command Policy
 
+The AI derives `next_valid_commands` by combining two sources:
+
+1. **`phase_rules`** — each phase declares `allowed_commands` and `exit_conditions`. The AI checks which conditions are met to determine if the current phase is complete and which commands are valid.
+2. **`next_command_policy`** — filters and ranks candidates from the current phase against `project-state.json` (current phase, completed commands, artifact statuses).
+
+### Rules
 - Recommend only commands whose prerequisites are satisfied.
 - Prefer commands in the current phase before cross-phase commands.
 - Always include at least one validation or inspection command when available.
 
-## Sample Flows
-
-
-### Perform Business Analysis
-- **Command:** `perform_business_analysis`
-- **Skills:** `business_analysis_from_sources`
-- **Tools:** `file_manager`, `json_validator`
-- **Outputs:**
-- ../../ba/requirements.md
-- ../../ba/analysis-status.md
-- ../../project/questions.json
-- ../../project/open-queue.json
-
-### Validate Requirements
-- **Command:** `validate_requirements`
-- **Skills:** `requirements_validation`
-- **Tools:** `file_manager`, `json_validator`, `traceability_engine`
-- **Outputs:**
-- {business-analysis}/requirements-validation-report.json
-
-### Build System Design
-- **Command:** `build_system_design`
-- **Skills:** `system_design`
-- **Tools:** `file_manager`
-- **Outputs:**
-- design/application_architecture.json
-- design/modules/module-catalog.json
-
-### Generate Modules
-- **Command:** `generate_modules`
-- **Skills:** `module_definition`
-- **Tools:** `file_manager`, `json_validator`
-- **Outputs:**
-- design/modules/module-catalog.json
-- design/modules/{moduleType}/module-{kebab-module}.json
-- design/modules/{moduleType}/module-{kebab-module}.md

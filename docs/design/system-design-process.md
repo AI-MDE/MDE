@@ -1,5 +1,10 @@
 # System Design Process
 
+## NOTE
+
+All file paths in commands and skills are logical names must be translated according to  `configuration.json`.
+
+
 ## Purpose
 
 This document defines the iterative process for moving from business requirements and a database schema to a running application, using the layering architecture defined in `business-app-layering-notes.md`.

@@ -1,0 +1,339 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>AI-MDE Dashboard Mockup</title>
+  <style>
+    :root {
+      --bg: #f5f7fb;
+      --panel: #ffffff;
+      --line: #d9e0ea;
+      --text: #1b2430;
+      --muted: #637083;
+      --accent: #2c6bed;
+      --ok: #1f9d55;
+      --warn: #d9822b;
+      --danger: #c23030;
+      --shadow: 0 8px 24px rgba(16, 24, 40, 0.08);
+      --radius: 16px;
+    }
+    * { box-sizing: border-box; }
+    body {
+      margin: 0;
+      font-family: Arial, Helvetica, sans-serif;
+      background: var(--bg);
+      color: var(--text);
+    }
+    .wrap {
+      max-width: 1440px;
+      margin: 0 auto;
+      padding: 20px;
+    }
+    .topbar {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 18px;
+    }
+    .topbar h1 {
+      margin: 0;
+      font-size: 30px;
+    }
+    .sub {
+      color: var(--muted);
+      font-size: 14px;
+      margin-top: 4px;
+    }
+    .pill {
+      background: #eaf2ff;
+      color: var(--accent);
+      padding: 10px 14px;
+      border-radius: 999px;
+      font-weight: 700;
+      font-size: 13px;
+    }
+    .cards {
+      display: grid;
+      grid-template-columns: repeat(6, 1fr);
+      gap: 14px;
+      margin-bottom: 18px;
+    }
+    .card, .panel {
+      background: var(--panel);
+      border: 1px solid var(--line);
+      border-radius: var(--radius);
+      box-shadow: var(--shadow);
+    }
+    .card {
+      padding: 16px;
+      min-height: 98px;
+    }
+    .label {
+      color: var(--muted);
+      font-size: 12px;
+      text-transform: uppercase;
+      letter-spacing: .05em;
+      margin-bottom: 10px;
+    }
+    .value {
+      font-size: 28px;
+      font-weight: 700;
+    }
+    .small {
+      font-size: 13px;
+      color: var(--muted);
+      margin-top: 8px;
+    }
+    .phases {
+      display: grid;
+      grid-template-columns: repeat(8, 1fr);
+      gap: 10px;
+      margin-bottom: 18px;
+    }
+    .phase {
+      padding: 14px;
+      border: 1px solid var(--line);
+      border-radius: 14px;
+      background: var(--panel);
+      min-height: 110px;
+    }
+    .phase h3 {
+      margin: 0 0 8px 0;
+      font-size: 15px;
+    }
+    .status {
+      display: inline-block;
+      font-size: 12px;
+      font-weight: 700;
+      padding: 6px 10px;
+      border-radius: 999px;
+      margin-bottom: 10px;
+    }
+    .done { background: #e7f6ed; color: var(--ok); }
+    .progress { background: #eaf2ff; color: var(--accent); }
+    .waiting { background: #fff5e8; color: var(--warn); }
+    .blocked { background: #fdecec; color: var(--danger); }
+    .layout {
+      display: grid;
+      grid-template-columns: 2.1fr 1fr;
+      gap: 18px;
+    }
+    .left, .right {
+      display: grid;
+      gap: 18px;
+    }
+    .panel {
+      padding: 18px;
+    }
+    .panel h2 {
+      margin: 0 0 14px 0;
+      font-size: 20px;
+    }
+    .three {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 14px;
+    }
+    .bucket {
+      border: 1px solid var(--line);
+      border-radius: 14px;
+      padding: 14px;
+      min-height: 220px;
+    }
+    ul { padding-left: 18px; margin: 10px 0 0 0; }
+    li { margin-bottom: 10px; line-height: 1.35; }
+    .hero {
+      display: grid;
+      grid-template-columns: 1.4fr 1fr;
+      gap: 14px;
+    }
+    .cta {
+      display: inline-block;
+      background: var(--accent);
+      color: white;
+      padding: 12px 16px;
+      border-radius: 12px;
+      text-decoration: none;
+      font-weight: 700;
+      margin-top: 14px;
+    }
+    table {
+      width: 100%;
+      border-collapse: collapse;
+      font-size: 14px;
+    }
+    th, td {
+      padding: 10px 8px;
+      border-bottom: 1px solid var(--line);
+      text-align: left;
+      vertical-align: top;
+    }
+    th { color: var(--muted); font-size: 12px; text-transform: uppercase; }
+    .event {
+      padding: 12px 0;
+      border-bottom: 1px solid var(--line);
+    }
+    .event strong { display: block; margin-bottom: 4px; }
+    .drawer {
+      border: 2px dashed var(--line);
+      border-radius: 14px;
+      padding: 14px;
+      color: var(--muted);
+      background: #fafcff;
+    }
+    @media (max-width: 1200px) {
+      .cards, .phases, .three, .hero, .layout { grid-template-columns: 1fr; }
+    }
+  </style>
+</head>
+<body>
+  <div class="wrap">
+    <div class="topbar">
+      <div>
+        <h1>AI-MDE Dashboard</h1>
+        <div class="sub">Project: Customer Onboarding Workflow Modernization · Branch: feature/model-sync · Last activity: 12 min ago</div>
+      </div>
+      <div class="pill">Current Phase: Review</div>
+    </div>
+
+    <div class="cards">
+      <div class="card"><div class="label">Overall Completion</div><div class="value">68%</div><div class="small">14 of 21 key items finished</div></div>
+      <div class="card"><div class="label">Status</div><div class="value">At Risk</div><div class="small">2 blockers affecting validation</div></div>
+      <div class="card"><div class="label">Open Blockers</div><div class="value">2</div><div class="small">1 critical, 1 normal</div></div>
+      <div class="card"><div class="label">Pending Reviews</div><div class="value">4</div><div class="small">Architecture and test sign-off pending</div></div>
+      <div class="card"><div class="label">Artifacts</div><div class="value">27</div><div class="small">Models, code, docs, validations</div></div>
+      <div class="card"><div class="label">Validation Score</div><div class="value">81</div><div class="small">Up 6 points from last run</div></div>
+    </div>
+
+    <div class="phases">
+      <div class="phase"><div class="status done">Done</div><h3>Intake</h3><div class="small">Inputs captured<br>5 tasks · 4 artifacts</div></div>
+      <div class="phase"><div class="status done">Done</div><h3>Analyze</h3><div class="small">Dependencies mapped<br>6 tasks · 3 artifacts</div></div>
+      <div class="phase"><div class="status done">Done</div><h3>Model</h3><div class="small">Target model approved<br>4 tasks · 6 artifacts</div></div>
+      <div class="phase"><div class="status done">Done</div><h3>Generate</h3><div class="small">Scaffolds produced<br>7 tasks · 8 artifacts</div></div>
+      <div class="phase"><div class="status progress">In Progress</div><h3>Review</h3><div class="small">Architecture review active<br>3 tasks · 2 artifacts</div></div>
+      <div class="phase"><div class="status waiting">Waiting</div><h3>Validate</h3><div class="small">Queued after review<br>5 checks ready</div></div>
+      <div class="phase"><div class="status waiting">Waiting</div><h3>Release</h3><div class="small">Release checklist pending</div></div>
+      <div class="phase"><div class="status blocked">Blocked</div><h3>Monitor</h3><div class="small">Runtime rules not finalized</div></div>
+    </div>
+
+    <div class="layout">
+      <div class="left">
+        <div class="panel">
+          <h2>Done · Next · Attention</h2>
+          <div class="three">
+            <div class="bucket">
+              <div class="label">Done</div>
+              <ul>
+                <li>Domain model synchronized to latest commands</li>
+                <li>Application service scaffolding generated</li>
+                <li>Initial policy rules imported and normalized</li>
+                <li>Traceability map linked to generated artifacts</li>
+              </ul>
+            </div>
+            <div class="bucket">
+              <div class="label">Next</div>
+              <ul>
+                <li>Approve architecture review comments</li>
+                <li>Regenerate 2 services with updated naming rule</li>
+                <li>Run validation profile against revised model</li>
+                <li>Promote accepted artifacts to release set</li>
+              </ul>
+            </div>
+            <div class="bucket">
+              <div class="label">Attention</div>
+              <ul>
+                <li>One generated service violates naming convention</li>
+                <li>Test template missing exception flow coverage</li>
+                <li>Approval gate waiting on security reviewer</li>
+                <li>Monitoring phase blocked by incomplete event schema</li>
+              </ul>
+            </div>
+          </div>
+        </div>
+
+        <div class="panel">
+          <h2>Recommended Next Action</h2>
+          <div class="hero">
+            <div>
+              <div class="label">Best next action</div>
+              <div class="value" style="font-size:26px;">Resolve review findings and rerun validation</div>
+              <p class="small" style="font-size:14px; line-height:1.5; color:var(--text);">
+                Review is the active bottleneck. Closing the two outstanding findings unlocks Validate and keeps Release on schedule. The system already knows which artifacts are affected.
+              </p>
+              <p class="small"><strong>Needed:</strong> architecture approval, service rename, updated event schema</p>
+              <a class="cta" href="#">Open review details</a>
+            </div>
+            <div class="bucket" style="min-height:auto;">
+              <div class="label">Expected Outcome</div>
+              <ul>
+                <li>Validate phase starts automatically</li>
+                <li>Blocked artifact list drops from 3 to 0</li>
+                <li>Release confidence improves from medium to high</li>
+              </ul>
+            </div>
+          </div>
+        </div>
+
+        <div class="panel">
+          <h2>Artifacts and Work Items</h2>
+          <table>
+            <thead>
+              <tr>
+                <th>Artifact</th>
+                <th>Type</th>
+                <th>Phase</th>
+                <th>Status</th>
+                <th>Generated By</th>
+                <th>Updated</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr><td>customer-onboarding.model.json</td><td>Model</td><td>Model</td><td>Completed</td><td>/model sync</td><td>Today 9:18 AM</td></tr>
+              <tr><td>application-services.ts</td><td>Code</td><td>Generate</td><td>Needs Review</td><td>/generate services</td><td>Today 10:42 AM</td></tr>
+              <tr><td>review-summary.md</td><td>Document</td><td>Review</td><td>Open</td><td>/review analyze</td><td>Today 11:07 AM</td></tr>
+              <tr><td>validation-profile.yaml</td><td>Config</td><td>Validate</td><td>Ready</td><td>/validate init</td><td>Yesterday</td></tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+
+      <div class="right">
+        <div class="panel">
+          <h2>Recent Activity</h2>
+          <div class="event"><strong>11:07 AM · Review report generated</strong><div class="small">4 findings produced, 2 mandatory before validation.</div></div>
+          <div class="event"><strong>10:42 AM · Services regenerated</strong><div class="small">Updated service contracts created from revised model.</div></div>
+          <div class="event"><strong>9:18 AM · Model sync completed</strong><div class="small">Command set reconciled with canonical workflow model.</div></div>
+          <div class="event"><strong>Yesterday · Validation profile prepared</strong><div class="small">Checks ready to start when review gate closes.</div></div>
+        </div>
+
+        <div class="panel">
+          <h2>Blockers</h2>
+          <ul>
+            <li><strong>Critical:</strong> event schema missing two required fields for monitoring</li>
+            <li><strong>Normal:</strong> generated service naming does not match team convention</li>
+          </ul>
+        </div>
+
+        <div class="panel">
+          <h2>Drill-down Drawer Example</h2>
+          <div class="drawer">
+            <strong>Phase: Review</strong><br><br>
+            Summary<br>
+            - 3 review tasks<br>
+            - 2 open findings<br>
+            - 2 related artifacts<br><br>
+            Tabs<br>
+            - Overview<br>
+            - Tasks<br>
+            - Artifacts<br>
+            - Decisions<br>
+            - Issues<br>
+            - History
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</body>
+</html>

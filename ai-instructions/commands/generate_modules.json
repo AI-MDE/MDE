@@ -1,7 +1,7 @@
 {
   "name": "generate_modules",
   "label": "Generate Modules",
-  "phase": "design",
+  "phase": "system_design",
   "intent": "generate",
   "ai": "required",
   "requires": {

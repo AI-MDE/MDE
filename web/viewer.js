@@ -22,23 +22,13 @@ var __setModuleDefault = (this && this.__setModuleDefault) || (Object.create ? (
 }) : function(o, v) {
     o["default"] = v;
 });
-var __importStar = (this && this.__importStar) || (function () {
-    var ownKeys = function(o) {
-        ownKeys = Object.getOwnPropertyNames || function (o) {
-            var ar = [];
-            for (var k in o) if (Object.prototype.hasOwnProperty.call(o, k)) ar[ar.length] = k;
-            return ar;
-        };
-        return ownKeys(o);
-    };
-    return function (mod) {
-        if (mod && mod.__esModule) return mod;
-        var result = {};
-        if (mod != null) for (var k = ownKeys(mod), i = 0; i < k.length; i++) if (k[i] !== "default") __createBinding(result, mod, k[i]);
-        __setModuleDefault(result, mod);
-        return result;
-    };
-})();
+var __importStar = (this && this.__importStar) || function (mod) {
+    if (mod && mod.__esModule) return mod;
+    var result = {};
+    if (mod != null) for (var k in mod) if (k !== "default" && Object.prototype.hasOwnProperty.call(mod, k)) __createBinding(result, mod, k);
+    __setModuleDefault(result, mod);
+    return result;
+};
 Object.defineProperty(exports, "__esModule", { value: true });
 const http = __importStar(require("http"));
 const fs = __importStar(require("fs"));
@@ -53,7 +43,6 @@ class DocServer {
         if (!fs.existsSync(manifestAbs)) {
             throw new Error(`Manifest not found: ${manifestAbs}`);
         }
-        this.manifestAbs = manifestAbs;
         this.manifest = JSON.parse(fs.readFileSync(manifestAbs, 'utf8'));
         const configAbs = path.join(this.docsRoot, this.manifest.config ?? 'configuration.json');
         if (!fs.existsSync(configAbs)) {
@@ -62,14 +51,6 @@ class DocServer {
                 `  → Run with:  ts-node mde/web/viewer.ts --root=<project-root>`);
         }
         this.config = JSON.parse(fs.readFileSync(configAbs, 'utf8'));
-        // Derive allowed read roots: project root + mde.path (framework folder)
-        this.allowedRoots = [path.resolve(this.docsRoot)];
-        const mdePath = this.config?.mde?.path;
-        if (mdePath) {
-            // Use path.resolve(docsRoot, mdePath) so that Unix-style absolute paths
-            // like "/dev/ai-mde" resolve correctly on Windows as drive-relative paths.
-            this.allowedRoots.push(path.resolve(this.docsRoot, mdePath));
-        }
         this.htmlFile = path.join(__dirname, 'viewer.html');
         this.cssFile = path.join(__dirname, 'style.css');
         this.clientFile = path.join(__dirname, 'viewer-client.js');
@@ -160,14 +141,11 @@ class DocServer {
         return results.sort();
     }
     // ── Label extraction ───────────────────────────────────────────────────────
-    resolveAbsFile(relFile) {
-        return path.isAbsolute(relFile) ? relFile : path.join(this.docsRoot, relFile);
-    }
     extractLabel(relFile, labelFrom) {
         const fallback = path.basename(relFile).replace(/\.[^.]+$/, '');
         if (!labelFrom || labelFrom === 'filename')
             return fallback;
-        const absFile = this.resolveAbsFile(relFile);
+        const absFile = path.join(this.docsRoot, relFile);
         if (!fs.existsSync(absFile))
             return fallback;
         try {
@@ -233,16 +211,11 @@ class DocServer {
         const labelFrom = scan.labelFrom ?? 'filename';
         const docType = item.docType ?? null;
         const groupBy = scan.groupBy;
-        const absDir = path.isAbsolute(dir) ? dir : path.join(this.docsRoot, dir);
+        const absDir = path.join(this.docsRoot, dir);
         const pattern = this.toFilenamePattern(rawPat, dir);
         const relFiles = scan.recursive
             ? this.listRecursive(absDir, pattern)
-            : this.listFlat(absDir, pattern).map(f => {
-                const full = path.join(absDir, f);
-                return path.isAbsolute(dir)
-                    ? full
-                    : `${dir}/${f}`.replace(/\/\//g, '/');
-            });
+            : this.listFlat(absDir, pattern).map(f => `${dir}/${f}`.replace(/\/\//g, '/'));
         if (!relFiles.length)
             return null;
         if (groupBy === 'parent-folder' || groupBy === 'module-folder') {
@@ -270,36 +243,6 @@ class DocServer {
             }
             return { id: item.id, label: item.label ?? item.id, groups: subGroups };
         }
-        if (typeof groupBy === 'string' && groupBy !== '' && groupBy !== 'parent-folder' && groupBy !== 'module-folder') {
-            const order = Array.isArray(scan.groupByOrder) ? scan.groupByOrder : [];
-            const byField = new Map();
-            for (const relFile of relFiles) {
-                const absFile = this.resolveAbsFile(relFile);
-                let fieldVal = '_other';
-                try {
-                    const raw = fs.readFileSync(absFile, 'utf8').replace(/^\uFEFF/, '');
-                    const obj = JSON.parse(raw);
-                    const v = groupBy.split('.').reduce((n, k) => (n && typeof n === 'object' ? n[k] : undefined), obj);
-                    if (typeof v === 'string') fieldVal = v;
-                } catch { /* fallback to _other */ }
-                if (!byField.has(fieldVal)) byField.set(fieldVal, []);
-                byField.get(fieldVal).push({
-                    id: this.docId(relFile),
-                    label: this.extractLabel(relFile, labelFrom),
-                    file: relFile,
-                    docType,
-                });
-            }
-            const sortedKeys = order.length
-                ? [...order.filter(k => byField.has(k)), ...[...byField.keys()].filter(k => !order.includes(k))]
-                : [...byField.keys()].sort();
-            const subGroups = sortedKeys.map(key => ({
-                id: `${item.id}-${key.replace(/[^a-z0-9]/gi, '-')}`,
-                label: key.replace(/_/g, ' ').replace(/\b\w/g, c => c.toUpperCase()),
-                docs: byField.get(key),
-            }));
-            return { id: item.id, label: item.label ?? item.id, groups: subGroups };
-        }
         const docs = relFiles.map(relFile => ({
             id: this.docId(relFile),
             label: this.extractLabel(relFile, labelFrom),
@@ -309,7 +252,6 @@ class DocServer {
         return { id: item.id, label: item.label ?? item.id, docs };
     }
     buildTree() {
-        try { this.manifest = JSON.parse(fs.readFileSync(this.manifestAbs, 'utf8')); } catch { /* keep cached */ }
         return this.manifest.sections.map(section => {
             const docs = [];
             const groups = [];
@@ -358,7 +300,8 @@ class DocServer {
         });
     }
     isWithinRoot(absPath) {
-        return this.allowedRoots.some(root => absPath === root || absPath.startsWith(root + path.sep));
+        const root = path.resolve(this.docsRoot);
+        return absPath === root || absPath.startsWith(root + path.sep);
     }
     readBody(req) {
         return new Promise(resolve => {
@@ -388,14 +331,6 @@ class DocServer {
             }
             if (url.pathname === '/api/config') {
                 return this.sendJson(res, this.config);
-            }
-            if (url.pathname === '/api/tree-hash') {
-                const tree = this.buildTree();
-                const hash = require('crypto')
-                    .createHash('md5')
-                    .update(JSON.stringify(tree))
-                    .digest('hex');
-                return this.sendJson(res, { hash });
             }
             if (url.pathname === '/api/tree') {
                 return this.sendJson(res, this.buildTree());
@@ -504,10 +439,14 @@ function parseArg(prefix) {
     const arg = process.argv.find(a => a.startsWith(prefix));
     return arg ? arg.slice(prefix.length) : undefined;
 }
+console.log(process.argv.join(' '));
+const rootParam = parseArg('--root=');
+console.log(`[viewer] Starting up...from ${rootParam}`);
 const PORT = parseInt(parseArg('--port=') ?? process.env.VIEWER_PORT ?? '4000', 10);
-const DOCS_ROOT = path.resolve(parseArg('--root=') ?? process.cwd());
+const DOCS_ROOT = path.resolve(rootParam ?? process.cwd());
 // Manifest lives beside viewer.ts in the MDE web folder — no project-side copy needed
 const MANIFEST = parseArg('--manifest=') ?? path.join(__dirname, 'view.json');
+console.log(`[viewer] Starting with root: ${DOCS_ROOT}`);
 if (!fs.existsSync(DOCS_ROOT)) {
     console.error(`[viewer] Project root does not exist: ${DOCS_ROOT}`);
     console.error(`[viewer] Usage: ts-node mde/web/viewer.ts --root=<project-root>`);
@@ -519,4 +458,10 @@ if (!fs.existsSync(manifestAbs)) {
     console.error(`[viewer] Expected: ${path.join(__dirname, 'view.json')}`);
     process.exit(1);
 }
-new DocServer(DOCS_ROOT, MANIFEST).listen(PORT);
+try {
+    new DocServer(DOCS_ROOT, MANIFEST).listen(PORT);
+}
+catch (err) {
+    console.error(`[viewer] Error: ${err.message}`);
+    process.exit(1);
+}

@@ -10,6 +10,7 @@ import * as http from 'http';
 import * as fs   from 'fs';
 import * as path from 'path';
 import { fileURLToPath } from 'url';
+import { buildDashboardData, resolveDashboardFiles } from './ai-mde-dashboard.ts';
 
 const __filename = fileURLToPath(import.meta.url);
 const __dirname  = path.dirname(__filename);
@@ -411,6 +412,11 @@ class DocServer {
 
       if (url.pathname === '/api/tree') {
         return this.sendJson(res, this.buildTree());
+      }
+
+      if (url.pathname === '/api/dashboard') {
+        const files = resolveDashboardFiles(this.docsRoot, this.config);
+        return this.sendJson(res, buildDashboardData(files));
       }
 
       if (url.pathname.startsWith('/api/template/')) {

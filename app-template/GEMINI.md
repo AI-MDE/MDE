@@ -1,6 +1,15 @@
-# Agent Bootstrap
+# Gemini Bootstrap
 
 Use this file as the entry point for this workspace.
+
+## Path Resolution
+*** IMPORTANT ***
+YOU MUST NOT WRITE ANY FILES OUTSIDE OF THE PROJECT ROOT, AND ONLY AS SPECIFIED BY `configuration.json`.
+-------------------------
+When prompting users for file writes, show the full path.
+
+All file paths in commands and skills are relative to the project root (the folder containing this file and `configuration.json`).
+When a skill input says `{ "from": "config.X.Y" }`, read `configuration.json` at key path `X.Y` to get the resolved path. If the key is absent, use the `default` value.
 
 ## Source Of Truth
 Read these files first:

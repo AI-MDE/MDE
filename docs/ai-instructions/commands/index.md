@@ -23,7 +23,6 @@
 | [Show Phase Status](show_phase_status.md) | governance |
 | [Validate Project Structure](validate_project_structure.md) | governance |
 | [Validate Traceability](validate_traceability.md) | governance |
-| [Initiate Project](initiate_project.md) | Project Initiation |
 | [Select Architecture](select_architecture.md) | project_initiation |
 | [Select Methodology](select_methodology.md) | project_initiation |
 | [Build System Design](build_system_design.md) | system_design |

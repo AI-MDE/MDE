@@ -106,14 +106,15 @@ The viewer is a local web app that gives you a visual dashboard of your project 
 From the project root:
 
 ```bash
-npm run viewer
+npm run viewer -- -- --root=c:\dev\my-project 
 ```
-
-Or directly:
-
+or 
 ```bash
-node mde/web/app.js
+
+ts-node web/app.ts --root=c:\dev\my-project
+
 ```
+
 
 The viewer starts at **http://localhost:4000** and opens automatically in your default browser.
 

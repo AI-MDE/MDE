@@ -1,11 +1,5 @@
 # Install
 
-This is not your typical app, it is an AI orchastrator tool, so install is a bit different. Too easy actually.
-
-
-Now ai-mde sites on its own folder
-
-to install ai-mde
 ## Install ai-mde
 1.  go to a folder that want to install ai-mde under
 2.  git clone https://github.com/AI-MDE/ai-mde.git
@@ -18,7 +12,15 @@ to install ai-mde
 ```
     cd myApp
 ```
-2.  npm run 
+2.  npm run ..?
+```
+```
+the abouve routine will create some files that are seed files point
+>   CLAUDE.md   from app-template
+>   AGENT.md
+>   configuration.json
+But will modify these files to point to ai-mde installation above
+
 
 
 ## Pre-requisites

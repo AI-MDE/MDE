@@ -90,25 +90,26 @@
     }
   },
   "folder_structure": {
+    "note": "All paths are RELATIVE TO config.output.uiSrc (e.g. /dev/myapp/ui/src). Do NOT write to design/ or any other folder.",
     "root": "{config.output.uiSrc}",
-    "layout": "src/layout/ — AppShell, Sidebar, TopBar, AuthGuard",
-    "router": "src/router/ — index.tsx with all routes from ui-catalog menu + module page routes",
-    "types":  "src/types/ — one .ts file per entity from design/entities/",
-    "api":    "src/api/ — one .ts file per backend module from module-catalog",
-    "modules": "src/modules/{kebab-module-name}/ — one folder per UI module",
-    "pages":  "src/modules/{kebab-module-name}/pages/ — one .tsx per page",
-    "components": "src/modules/{kebab-module-name}/components/ — reusable within the module"
+    "layout": "{config.output.uiSrc}/layout/ — AppShell, Sidebar, TopBar, AuthGuard",
+    "router": "{config.output.uiSrc}/router/ — index.tsx with all routes",
+    "types":  "{config.output.uiSrc}/types/ — one .ts file per entity",
+    "api":    "{config.output.uiSrc}/api/ — one .ts file per backend module",
+    "modules": "{config.output.uiSrc}/modules/{kebab-module-name}/",
+    "pages":  "{config.output.uiSrc}/modules/{kebab-module-name}/pages/ — one .tsx per page",
+    "components": "{config.output.uiSrc}/modules/{kebab-module-name}/components/"
   },
   "generation_order": [
-    "scaffold: package.json, tsconfig.json, vite.config.ts if absent",
-    "src/types/{entity}.ts — one per entity file",
-    "src/api/{kebab-module}.ts — one per backend module, typed fetch helpers for each exposes endpoint",
-    "src/layout/AppShell.tsx — wraps all pages, renders Sidebar and TopBar",
-    "src/layout/Sidebar.tsx — nav menu from ui-catalog.menu, active route highlighting",
-    "src/layout/AuthGuard.tsx — checks auth and requiredRoles before rendering",
-    "src/router/index.tsx — all routes; lazy-load each page component",
-    "src/modules/{module}/pages/{PageName}.tsx — one per page in ui-module-spec",
-    "src/modules/{module}/index.ts — barrel export of all pages"
+    "scaffold files in parent of config.output.uiSrc: package.json, tsconfig.json, vite.config.ts if absent",
+    "{config.output.uiSrc}/types/{Entity}.ts — one per entity file",
+    "{config.output.uiSrc}/api/{kebab-module}.ts — one per backend module",
+    "{config.output.uiSrc}/layout/AppShell.tsx",
+    "{config.output.uiSrc}/layout/Sidebar.tsx — nav menu from ui-catalog.menu",
+    "{config.output.uiSrc}/layout/AuthGuard.tsx",
+    "{config.output.uiSrc}/router/index.tsx — all routes, lazy-loaded",
+    "{config.output.uiSrc}/modules/{module}/pages/{PageName}.tsx — one per page spec",
+    "{config.output.uiSrc}/modules/{module}/index.ts — barrel export"
   ],
   "page_generation_rules": {
     "dashboard": "Render summary cards derived from shows[]. Each card navigates to the target listed in actions[type=navigate].",
@@ -138,6 +139,8 @@
     "type_file":      "PascalCase.ts — matches entity name from ent-*.json"
   },
   "rules": [
+    "CRITICAL: config.design.uiModules is the INPUT folder (read-only spec files). config.output.uiSrc is the OUTPUT folder (write all generated code here). Never write into config.design.uiModules.",
+    "CRITICAL: Generate .tsx / .ts files only — never .ejs, .hbs, .html, .vue, or any other template format unless config.ui.framework explicitly says so.",
     "Read config.ui for framework and styling choices before generating any file",
     "Read ui-catalog.json menu array to build the router and Sidebar — menu order = route order",
     "Read each ui-{module}.json for page specs — one component per page",

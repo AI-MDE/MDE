@@ -19,22 +19,26 @@
 
 const fs            = require('fs');
 const path          = require('path');
-const readline      = require('readline');
 const { execSync }  = require('child_process');
 const os            = require('os');
 
 // ─── Paths & config ───────────────────────────────────────────────────────────
 
-const ROOT         = path.join(__dirname, '../..');
+const ROOT         = process.cwd();
 const CONFIG_FILE  = path.join(ROOT, 'configuration.json');
 const CONFIG       = (() => {
   try { return JSON.parse(fs.readFileSync(CONFIG_FILE, 'utf8')); }
   catch { return {}; }
 })();
 
-const COMMANDS_DIR = path.join(ROOT, CONFIG.mde?.commands || 'mde/ai-instructions/commands');
-const SKILLS_DIR   = path.join(ROOT, CONFIG.mde?.skills   || 'mde/ai-instructions/skills');
+const COMMANDS_DIR = path.resolve(ROOT, CONFIG.mde?.commands || 'mde/ai-instructions/commands');
+const SKILLS_DIR   = path.resolve(ROOT, CONFIG.mde?.skills   || 'mde/ai-instructions/skills');
 const OUT_DIR      = path.join(ROOT, CONFIG.output?.commands || 'output/commands');
+
+// MDE tool root — derived from commands dir or explicit config.mde.path
+const MDE_DIR = CONFIG.mde?.path
+  ? path.resolve(CONFIG.mde.path)
+  : path.resolve(path.join(COMMANDS_DIR, '../..'));
 
 // ─── Helpers ──────────────────────────────────────────────────────────────────
 
@@ -62,13 +66,19 @@ function resolveConfigRef(ref) {
 }
 
 /**
- * Given an input entry — either a plain string or { from, default } —
- * return the resolved path string.
+ * Given an input entry — either a plain string or { from, pattern?, default } —
+ * return the resolved path string (may include a glob pattern).
  */
 function resolveInputEntry(entry) {
   if (typeof entry === 'string') return entry;
   if (entry && typeof entry === 'object') {
-    return resolveConfigRef(entry.from) || entry.default || null;
+    const base = resolveConfigRef(entry.from);
+    if (entry.pattern) {
+      // Combine resolved base directory with the glob pattern
+      const dir = base || (entry.default ? path.dirname(entry.default) : null);
+      return dir ? dir.replace(/\\/g, '/').replace(/\/$/, '') + '/' + entry.pattern : null;
+    }
+    return base || entry.default || null;
   }
   return null;
 }
@@ -80,7 +90,7 @@ function resolvePattern(pattern) {
   const base = path.resolve(ROOT, pattern);
 
   if (!base.includes('*')) {
-    return fileExists(base) ? [base] : [];
+    try { return fs.statSync(base).isFile() ? [base] : []; } catch { return []; }
   }
 
   const parts   = base.replace(/\\/g, '/').split('/');
@@ -96,19 +106,61 @@ function resolvePattern(pattern) {
   for (const entry of fs.readdirSync(dir)) {
     if (!re.test(entry)) continue;
     const candidate = rest ? path.join(dir, entry, rest) : path.join(dir, entry);
-    if (fileExists(candidate)) matched.push(candidate);
+    try { if (fs.statSync(candidate).isFile()) matched.push(candidate); } catch { /* skip */ }
   }
   return matched.sort();
 }
 
+/**
+ * Collect files from the MDE tool itself (architecture, methodology, root docs).
+ * Returns { abs, rel } pairs where rel is the path to use inside the zip.
+ */
+function collectMdeContextFiles() {
+  const results = [];
+
+  function addDir(absDir, zipPrefix) {
+    if (!fileExists(absDir)) return;
+    for (const name of fs.readdirSync(absDir)) {
+      const abs = path.join(absDir, name);
+      if (fs.statSync(abs).isFile()) {
+        results.push({ abs, rel: zipPrefix + name });
+      }
+    }
+  }
+
+  // architecture/ — rules and constraints the AI must follow
+  const archDir = CONFIG.mde?.architecture
+    ? path.resolve(ROOT, CONFIG.mde.architecture)
+    : path.join(MDE_DIR, 'architecture');
+  addDir(archDir, 'mde/architecture/');
+
+  // methodology/ — document-catalog.json, methodology.json, etc.
+  const methDir = CONFIG.mde?.methodology
+    ? path.resolve(ROOT, CONFIG.mde.methodology)
+    : path.join(MDE_DIR, 'methodology');
+  addDir(methDir, 'mde/methodology/');
+
+  // MDE root context docs
+  for (const name of ['AGENT.md', 'GEMINI.md', 'README.md', 'changes.md']) {
+    const abs = path.join(MDE_DIR, name);
+    if (fileExists(abs)) results.push({ abs, rel: 'mde/' + name });
+  }
+
+  return results;
+}
+
 /** Collect and deduplicate all input files for a command + its skills. */
 function collectInputs(command, skills) {
-  const seen  = new Set();
-  const files = [];
+  const seen     = new Set();
+  const files    = [];   // { abs, rel } — project-rooted files
+  const mdeFiles = collectMdeContextFiles();
 
   function add(absPath) {
     const norm = absPath.replace(/\\/g, '/');
-    if (!seen.has(norm)) { seen.add(norm); files.push(absPath); }
+    if (!seen.has(norm)) {
+      seen.add(norm);
+      files.push({ abs: absPath, rel: path.relative(ROOT, absPath).replace(/\\/g, '/') });
+    }
   }
 
   // Always include the command and skill definition files themselves
@@ -117,12 +169,16 @@ function collectInputs(command, skills) {
     add(path.join(SKILLS_DIR, `${skill.name}.json`));
   }
 
-  // Command requires[] — always an array of plain strings
-  for (const pattern of (command.requires || [])) {
-    for (const f of resolvePattern(pattern)) add(f);
+  // Command requires — array of strings OR { key: { from, default } } object
+  const reqEntries = Array.isArray(command.requires)
+    ? command.requires
+    : Object.values(command.requires || {});
+  for (const entry of reqEntries) {
+    const pattern = resolveInputEntry(entry);
+    if (pattern) for (const f of resolvePattern(pattern)) add(f);
   }
 
-  // Skill inputs — array of strings OR { key: { from, default } } object
+  // Skill inputs — array of strings OR { key: { from, pattern?, default } } object
   for (const skill of skills) {
     const inputs  = skill.inputs || [];
     const entries = Array.isArray(inputs) ? inputs : Object.values(inputs);
@@ -132,6 +188,12 @@ function collectInputs(command, skills) {
         for (const f of resolvePattern(pattern)) add(f);
       }
     }
+  }
+
+  // Merge MDE context files (deduplicate by rel path)
+  const seenRel = new Set(files.map(f => f.rel));
+  for (const f of mdeFiles) {
+    if (!seenRel.has(f.rel)) { seenRel.add(f.rel); files.push(f); }
   }
 
   return files;
@@ -151,7 +213,7 @@ function resolveOutputs(skill) {
 }
 
 /** Build the command.txt prompt string. */
-function buildPrompt(command, skills, inputFiles) {
+function buildPrompt(command, skills, inputFiles /* { abs, rel }[] */) {
   const lines = [];
 
   lines.push('# AI Command Prompt');
@@ -168,9 +230,11 @@ function buildPrompt(command, skills, inputFiles) {
     lines.push('');
   }
 
+  const toArray = (v) => !v ? [] : Array.isArray(v) ? v : Object.values(v);
+
   const allRules = [
-    ...(command.rules || []),
-    ...skills.flatMap(s => s.rules || []),
+    ...toArray(command.rules),
+    ...skills.flatMap(s => toArray(s.rules)),
   ];
   if (allRules.length) {
     lines.push('## Rules');
@@ -180,7 +244,7 @@ function buildPrompt(command, skills, inputFiles) {
   }
 
   const produces = [
-    ...(command.produces || []),
+    ...toArray(command.produces),
     ...skills.flatMap(resolveOutputs),
   ];
   const uniqueProduces = [...new Set(produces)];
@@ -194,7 +258,7 @@ function buildPrompt(command, skills, inputFiles) {
   lines.push('## Input Files Included');
   lines.push('');
   for (const f of inputFiles) {
-    lines.push(`- ${path.relative(ROOT, f).replace(/\\/g, '/')}`);
+    lines.push(`- ${f.rel}`);
   }
   lines.push('');
 
@@ -210,22 +274,9 @@ function buildPrompt(command, skills, inputFiles) {
   return lines.join('\n');
 }
 
-/** Find a command JSON by name or label (case-insensitive). */
-function findCommand(query) {
-  const files = fs.readdirSync(COMMANDS_DIR).filter(f => f.endsWith('.json'));
-  const q     = query.toLowerCase().replace(/[-_ ]/g, '');
-
-  for (const file of files) {
-    const cmd = readJson(path.join(COMMANDS_DIR, file));
-    const nameNorm  = (cmd.name  || '').toLowerCase().replace(/[-_ ]/g, '');
-    const labelNorm = (cmd.label || '').toLowerCase().replace(/[-_ ]/g, '');
-    if (nameNorm === q || labelNorm === q) return cmd;
-  }
-  return null;
-}
 
 /** Stage files + command.txt into a temp folder, then zip it. */
-function createZip(command, prompt, inputFiles) {
+function createZip(command, prompt, inputFiles /* { abs, rel }[] */) {
   const zipName    = command.name.replace(/_/g, '-');
   const staging    = fs.mkdtempSync(path.join(os.tmpdir(), `mde-${zipName}-`));
   const zipOutPath = path.join(OUT_DIR, `${zipName}.zip`);
@@ -233,11 +284,10 @@ function createZip(command, prompt, inputFiles) {
   try {
     fs.writeFileSync(path.join(staging, 'command.txt'), prompt, 'utf8');
 
-    for (const absFile of inputFiles) {
-      const rel  = path.relative(ROOT, absFile);
+    for (const { abs, rel } of inputFiles) {
       const dest = path.join(staging, rel);
       fs.mkdirSync(path.dirname(dest), { recursive: true });
-      fs.copyFileSync(absFile, dest);
+      fs.copyFileSync(abs, dest);
     }
 
     fs.mkdirSync(OUT_DIR, { recursive: true });
@@ -260,43 +310,27 @@ function createZip(command, prompt, inputFiles) {
 
 // ─── Main ─────────────────────────────────────────────────────────────────────
 
-async function main() {
-  let query = process.argv[2];
+function main() {
+  const commands = fs.readdirSync(COMMANDS_DIR)
+    .filter(f => f.endsWith('.json'))
+    .map(f => { try { return readJson(path.join(COMMANDS_DIR, f)); } catch { return null; } })
+    .filter(c => c && c.name && !c.deprecated);
 
-  if (!query) {
-    const available = fs.readdirSync(COMMANDS_DIR)
-      .filter(f => f.endsWith('.json'))
-      .map(f => { try { return readJson(path.join(COMMANDS_DIR, f)); } catch { return null; } })
-      .filter(c => c && c.name && !c.deprecated)
-      .map(c => `  ${c.name.padEnd(35)} ${c.label || ''}`)
-      .join('\n');
-
-    console.log('\nAvailable commands:\n');
-    console.log(available);
-    console.log('');
-
-    const rl = readline.createInterface({ input: process.stdin, output: process.stdout });
-    query = await new Promise(resolve => rl.question('Command name or label: ', ans => {
-      rl.close();
-      resolve(ans.trim());
-    }));
+  console.log(`\nBuilding zips for ${commands.length} command(s)...\n`);
+  for (const cmd of commands) {
+    buildCommandZip(cmd);
   }
+  console.log('\nDone.\n');
+}
 
-  if (!query) { console.error('No command specified.'); process.exit(1); }
-
-  const command = findCommand(query);
-  if (!command) { console.error(`Command not found: "${query}"`); process.exit(1); }
-  if (command.deprecated) {
-    console.error(`Command "${command.name}" is deprecated. Use: ${command.replacedBy}`);
-    process.exit(1);
-  }
-
+function buildCommandZip(command) {
   console.log(`\nCommand : ${command.label || command.name}`);
 
   const skills = [];
-  for (const skillName of (command.calls || [])) {
+  const callsList = Array.isArray(command.calls) ? command.calls : Object.values(command.calls || {});
+  for (const skillName of callsList) {
     const skillPath = path.join(SKILLS_DIR, `${skillName}.json`);
-    if (!fileExists(skillPath)) { console.warn(`  WARN skill not found: ${skillName}`); continue; }
+    if (!fileExists(skillPath)) { console.warn(`  WARN skill not found: ${skillName}`); return; }
     skills.push(readJson(skillPath));
     console.log(`  Skill : ${skillName}`);
   }
@@ -304,16 +338,14 @@ async function main() {
   const inputFiles = collectInputs(command, skills);
   console.log(`  Files : ${inputFiles.length} input file(s)`);
   for (const f of inputFiles) {
-    console.log(`    + ${path.relative(ROOT, f).replace(/\\/g, '/')}`);
+    console.log(`    + ${f.rel}`);
   }
 
   const prompt  = buildPrompt(command, skills, inputFiles);
   const zipPath = createZip(command, prompt, inputFiles);
   const relZip  = path.relative(ROOT, zipPath).replace(/\\/g, '/');
 
-  console.log(`\nOutput  : ${relZip}`);
-  console.log('\nAttach the zip to ChatGPT and say:');
-  console.log('  "Follow command.txt"\n');
+  console.log(`  Output: ${relZip}`);
 }
 
-main().catch(err => { console.error(err.message); process.exit(1); });
+try { main(); } catch (err) { console.error(err.message); process.exit(1); }

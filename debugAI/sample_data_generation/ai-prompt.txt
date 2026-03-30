@@ -18,6 +18,15 @@ Objective: Generate sample entity data files
 Rules:
 - Respect field types and required flags
 - Use deterministic values per entity
+- **CRITICAL: Generate RFC 4122 v4 UUIDs (e.g., 550e8400-e29b-41d4-a716-446655440001) for ALL ID fields**
+  - NOT placeholder format like "emp-00000001-0000-0000-0000-000000000001"
+  - NOT sequential IDs like "1", "2", "3"
+  - Each entity type should have a unique deterministic UUID seed
+- Maintain referential integrity: if Record A references Record B by ID, use the SAME UUID for that reference
+- Example valid UUIDs per entity type:
+  - employees: 550e8400-e29b-41d4-a716-446655440001, 550e8400-e29b-41d4-a716-446655440002, etc.
+  - leave_types: 660e8400-e29b-41d4-a716-446655440001, 660e8400-e29b-41d4-a716-446655440002, etc.
+  - leave_requests: 880e8400-e29b-41d4-a716-446655440001, 880e8400-e29b-41d4-a716-446655440002, etc.
 
 Expected Outputs:
 - ../../output/sample-data/*.json

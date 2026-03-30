@@ -2,35 +2,25 @@
   "name": "ai-mde",
   "version": "1.1.0",
   "private": true,
-  "scripts": {
+"scripts": {
 
     "_note_1": "----- MDE Viewer scripts -----",
-
     "create-project": "node scripts/create-project.js",
     "validate:ai": "node tools/validate-mde-consistency.js",
     "command-zip": "node mde/scripts/generate-command-zip.js",
     "validate": "node mde/tools/validate-config.js configuration.json",
+    "viewer": "ts-node web/app.ts",
+
+    "_note_2": "---------Internal commands ------------",
     "build:viewer": "tsc web/viewer.ts --outDir web --module commonjs --target es2020 --esModuleInterop true --skipLibCheck",
-    "viewer": "node web/app.js",
+    "build": "tsc -p tsconfig.json",
     "test:api": "node tests/test-web-viewer.js",
     "test:browser": "node tests/test-viewer-browser.js",
-    "test:viewer": "npm run test:api && npm run test:browser",
-    "demo": "ts-node src/demo/app.js",
     "test": "jest",
-
-    "_note_2": "---------Target App Scripts------------",
-
-    "typecheck_s": "tsc --noEmit",
-    "seed_s": "ts-node src.sample/seed/seed.ts",
-    "start_s": "ts-node src.sample/server.ts",
-
-    "_note_3": "---------Target App Scripts------------",
-
-    "typecheck": "tsc --noEmit",
-    "seed": "ts-node src.target/seed/seed.ts",
-    "start": "ts-node src.target/server.ts"
+    "test:viewer": "npm run test:api && npm run test:browser"
 
   },
+
   "dependencies": {
     "dotenv": "^16.6.1",
     "ejs": "^5.0.1",
@@ -39,6 +29,10 @@
     "pg": "^8.12.0"
   },
   "devDependencies": {
+    "@types/node": "^22.10.1",
+    "rimraf": "^6.0.1",
+    "tsx": "^4.19.2",
+    "typescript": "^5.7.2",
     "@playwright/test": "^1.58.2",
     "@types/express": "^5.0.6",
     "@types/jest": "^29.5.12",
