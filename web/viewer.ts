@@ -481,7 +481,7 @@ class DocServer {
   private serveStatic(res: http.ServerResponse, filePath: string, contentType: string): void {
     fs.readFile(filePath, (err, data) => {
       if (err) { res.writeHead(500); res.end(String(err)); return; }
-      res.writeHead(200, { 'Content-Type': contentType });
+      res.writeHead(200, { 'Content-Type': contentType, 'Cache-Control': 'no-cache' });
       res.end(data);
     });
   }
@@ -545,13 +545,13 @@ class DocServer {
       }
 
       if (url.pathname === '/api/screenshots') {
-        const moduleId = url.searchParams.get('module') || '';
-        const screensDir = path.resolve(this.docsRoot, 'docs', 'screens');
+        const screensRelDir = (this.config as any)?.screenshots?.outputDir ?? 'docs/screens';
+        const screensDir = path.resolve(this.docsRoot, screensRelDir);
         if (!fs.existsSync(screensDir)) { return this.sendJson(res, []); }
         const files = fs.readdirSync(screensDir)
-          .filter(f => f.endsWith('.png') && (!moduleId || f.startsWith(moduleId + '-')))
+          .filter(f => f.endsWith('.png'))
           .sort()
-          .map(f => `docs/screens/${f}`);
+          .map(f => `${screensRelDir}/${f}`);
         return this.sendJson(res, files);
       }
 
@@ -560,7 +560,8 @@ class DocServer {
         const filename  = url.searchParams.get('filename') || 'page';
         if (!targetUrl) { res.writeHead(400); res.end('Missing url param'); return; }
         try {
-          const screensDir = path.resolve(this.docsRoot, 'docs', 'screens');
+          const screensRelDir = (this.config as any)?.screenshots?.outputDir ?? 'docs/screens';
+          const screensDir = path.resolve(this.docsRoot, screensRelDir);
           fs.mkdirSync(screensDir, { recursive: true });
           const png      = await this.takeScreenshot(targetUrl);
           const filePath = path.join(screensDir, `${filename}.png`);

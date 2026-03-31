@@ -27,24 +27,13 @@ window.addEventListener('load', () => {
 /**
  * Toggles the top-bar navigation menu open/closed.
  */
-function toggleMenu() {
-  const btn = document.getElementById('menu-btn');
-  const dd  = document.getElementById('menu-dropdown');
-  const open = dd.classList.toggle('open');
-  btn.setAttribute('aria-expanded', String(open));
-}
+function toggleMenu() {}
 
-document.addEventListener('click', (e) => {
-  const wrap = document.getElementById('menu-wrap');
-  if (wrap && !wrap.contains(e.target)) closeMenu();
-});
-
-/**
- * Closes the navigation menu and resets its ARIA state.
- */
 function closeMenu() {
-  document.getElementById('menu-dropdown').classList.remove('open');
-  document.getElementById('menu-btn').setAttribute('aria-expanded', 'false');
+  const dd  = document.getElementById('menu-dropdown');
+  const btn = document.getElementById('menu-btn');
+  dd?.classList.remove('open');
+  btn?.setAttribute('aria-expanded', 'false');
 }
 
 /**
@@ -718,8 +707,6 @@ async function init() {
     buildDocLookups(tree);
     buildNav(tree);
     await initCommands();
-    // auto-open first phase
-    document.querySelector('.phase-section')?.classList.add('open');
     document.getElementById('loading').style.display = 'none';
 
     // restore doc from URL hash, or open dashboard by default
@@ -766,6 +753,14 @@ window.addEventListener('popstate', e => {
 function buildNav(phases) {
   const nav = document.getElementById('nav');
   nav.innerHTML = '';
+
+  // Dashboard — always first entry
+  const dashItem = document.createElement('div');
+  dashItem.className = 'nav-dashboard-entry';
+  dashItem.innerHTML = '<span class="nav-dash-icon"></span>Dashboard';
+  dashItem.onclick = openDashboard;
+  nav.appendChild(dashItem);
+
   phases.forEach(phase => {
     const section = document.createElement('div');
     section.className = 'phase-section';
@@ -1116,38 +1111,75 @@ document.addEventListener('keydown', e => {
   if (e.key === 'ArrowRight') { if (lbIndex < lbImages.length - 1) { lbIndex++; showLightboxImage(); } }
 });
 
-async function displayScreenshots(moduleId) {
+function pageIdToFilename(pageId) {
+  return pageId
+    .replace(/^\//, '')
+    .replace(/[/:]/g, '-')
+    .replace(/-+/g, '-')
+    .replace(/-$/, '')
+    + '.png';
+}
+
+async function displayScreenshots(moduleId, spec) {
   const body = document.getElementById('doc-body');
   if (!body) return;
   document.getElementById('screenshots-panel')?.remove();
+  body.querySelectorAll('.page-screenshot-inline').forEach(el => el.remove());
 
   let paths = [];
   try {
-    paths = await fetchJson(`/api/screenshots?module=${encodeURIComponent(moduleId)}`);
+    paths = await fetchJson('/api/screenshots');
   } catch { return; }
   if (!paths.length) return;
 
-  const images = paths.map(p => ({
-    src:     `/api/image/${encodeURIComponent(p)}`,
-    caption: p.replace(/^.*\//, '').replace(/\.png$/, '').replace(/-/g, ' / '),
-    path:    p,
-  }));
+  // Build filename → path lookup
+  const byFilename = {};
+  for (const p of paths) byFilename[p.replace(/^.*\//, '')] = p;
 
-  const panel = document.createElement('div');
-  panel.id = 'screenshots-panel';
-  panel.innerHTML = `<h2 class="ss-heading">Screenshots <span class="ss-count">${images.length}</span></h2>
-    <div class="ss-grid">${images.map((img, i) =>
-      `<div class="ss-thumb" data-index="${i}">
-        <img src="${img.src}" alt="${escHtml(img.caption)}" loading="lazy">
-        <div class="ss-label">${escHtml(img.caption)}</div>
-      </div>`
-    ).join('')}</div>`;
+  if (spec && (spec.pages || []).length) {
+    // ── Per-page injection: screenshot appears inline below each page heading ──
+    const h3s = Array.from(body.querySelectorAll('h3'));
+    const lbImages = [];
 
-  panel.querySelectorAll('.ss-thumb').forEach(thumb => {
-    thumb.addEventListener('dblclick', () => openLightbox(images, +thumb.dataset.index));
-  });
+    spec.pages.forEach((page, i) => {
+      const filename = pageIdToFilename(page.id);
+      const imgRelPath = byFilename[filename];
+      if (!imgRelPath || !h3s[i]) return;
 
-  body.appendChild(panel);
+      const src = `/api/image/${encodeURIComponent(imgRelPath)}`;
+      const lbIndex = lbImages.length;
+      lbImages.push({ src, caption: page.name });
+
+      const fig = document.createElement('figure');
+      fig.className = 'page-screenshot-inline';
+      fig.innerHTML =
+        `<img src="${src}" alt="${escHtml(page.name)}" loading="lazy">` +
+        `<figcaption class="ss-caption">${escHtml(page.name)}</figcaption>`;
+      fig.querySelector('img').addEventListener('click', () => openLightbox(lbImages, lbIndex));
+      h3s[i].insertAdjacentElement('afterend', fig);
+    });
+  } else {
+    // ── Fallback: module-level thumbnail panel at the bottom ──
+    const images = paths.map(p => ({
+      src:     `/api/image/${encodeURIComponent(p)}`,
+      caption: p.replace(/^.*\//, '').replace(/\.png$/, '').replace(/-/g, ' / '),
+      path:    p,
+    }));
+
+    const panel = document.createElement('div');
+    panel.id = 'screenshots-panel';
+    panel.innerHTML = `<h2 class="ss-heading">Screenshots <span class="ss-count">${images.length}</span></h2>
+      <div class="ss-grid">${images.map((img, i) =>
+        `<div class="ss-thumb" data-index="${i}">
+          <img src="${img.src}" alt="${escHtml(img.caption)}" loading="lazy">
+          <div class="ss-label">${escHtml(img.caption)}</div>
+        </div>`
+      ).join('')}</div>`;
+    panel.querySelectorAll('.ss-thumb').forEach(thumb => {
+      thumb.addEventListener('dblclick', () => openLightbox(images, +thumb.dataset.index));
+    });
+    body.appendChild(panel);
+  }
 }
 
 
@@ -1324,7 +1356,7 @@ async function loadDoc(doc, { pushHistory = true } = {}) {
     if (doc.docType === 'ui-module-spec' && activeContent) {
       try {
         const spec = JSON.parse(activeContent);
-        if (spec.moduleId) displayScreenshots(spec.moduleId);
+        if (spec.moduleId) displayScreenshots(spec.moduleId, spec);
       } catch { /* not JSON */ }
     }
   } catch (err) {
@@ -1510,7 +1542,7 @@ function normalizeForTemplate(docType, data, doc) {
           id:       fn.id,
           name:     fn.name,
           parentId: fn.parent_id || '',
-          outcomes: (fn.outcomes || []).map(o => ({ '.': o })),
+          outcomes: fn.outcomes || [],
         })),
       })),
     };
@@ -1552,7 +1584,7 @@ function normalizeForTemplate(docType, data, doc) {
       phase_rules_list: Object.entries(phaseRules).map(([phase, rules]) => ({
         phase,
         allowed_commands: (rules.allowed_commands || []).join(', '),
-        exit_conditions:  (rules.exit_conditions_all || []).map(c => ({ '.': c })),
+        exit_conditions:  rules.exit_conditions_all || [],
       })),
     };
   }
@@ -1568,7 +1600,7 @@ function normalizeForTemplate(docType, data, doc) {
       mermaid,
       phases: phases.map(p => ({
         ...p,
-        docs: (p.docs || []).map(d => ({ '.': d })),
+        docs: p.docs || [],
       })),
     };
   }
