@@ -21,7 +21,6 @@ merge: Generate business functions and Use Cases into `Finish Capabilities and U
 --- On generate specs or source code , don't overwrite existing logic, only add 
 
 
-
 BUINESS ANALYSIS METHODOLOGY:
 
 ADD BUSINESS EVENTS TO SPECS

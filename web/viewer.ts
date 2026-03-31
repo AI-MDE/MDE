@@ -503,7 +503,7 @@ class DocServer {
   async handle(req: http.IncomingMessage, res: http.ServerResponse): Promise<void> {
     const url = new URL(req.url ?? '/', `http://localhost`);
     this.log('debug', `${req.method} ${url.pathname}`);
-
+    console.log(`request : ${req.method} ${url.pathname}`);
     try {
       // ── Static assets ──
       if (url.pathname === '/' || url.pathname === '/viewer.html' || url.pathname === '/erd-demo.html') {
@@ -512,6 +512,10 @@ class DocServer {
       if (url.pathname === '/style.css') {
         return this.serveStatic(res, this.cssFile, 'text/css');
       }
+     if (url.pathname === '/favicon.png' || url.pathname === '/favicon.ico') {
+          return this.serveStatic(res, path.join(__dirname, 'favicon.png'), 'image/png');
+      }
+
       if (url.pathname === '/viewer-client.js') {
         return this.serveStatic(res, this.clientFile, 'text/javascript');
       }

@@ -1,5 +1,9 @@
 # AI-MDE — AI-Orchestrated Model-Driven Engineering
 
+<p align="center">
+  <img src="docs/images/logo.png" width="150"/>
+</p>
+
 ![Status](https://img.shields.io/badge/status-active-2ea44f)
 ![Lifecycle](https://img.shields.io/badge/lifecycle-end--to--end-blue)
 ![Approach](https://img.shields.io/badge/approach-lightweight-0a66c2)

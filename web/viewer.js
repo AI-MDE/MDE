@@ -447,10 +447,14 @@ class DocServer {
     async handle(req, res) {
         const url = new URL(req.url ?? '/', `http://localhost`);
         this.log('debug', `${req.method} ${url.pathname}`);
+        console.log(`request : ${req.method} ${url.pathname}`);
         try {
             // ── Static assets ──
             if (url.pathname === '/' || url.pathname === '/viewer.html') {
                 return this.serveStatic(res, this.htmlFile, 'text/html');
+            }
+            if (url.pathname === '/favicon.png' || url.pathname === '/favicon.ico') {
+                return this.serveStatic(res, path.join(__dirname, 'favicon.png'), 'image/png');
             }
             if (url.pathname === '/style.css') {
                 return this.serveStatic(res, this.cssFile, 'text/css');
