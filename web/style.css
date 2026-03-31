@@ -1040,4 +1040,105 @@
     transition: all .15s;
   }
   .btn-edit:hover { background: var(--accent); color: #fff; }
+  .btn-screenshot {
+    margin-left: 6px;
+    padding: 4px 11px;
+    border-radius: 6px;
+    font-size: 12px;
+    font-weight: 600;
+    cursor: pointer;
+    border: 1px solid #9ca3af;
+    background: #fff;
+    color: #374151;
+    transition: all .15s;
+  }
+  .btn-screenshot:hover { background: #f3f4f6; }
+  .btn-screenshot:disabled { opacity: .6; cursor: default; }
+
+  /* ── Screenshots Panel ────────────────────────────────────────────────────── */
+  #screenshots-panel { margin-top: 40px; border-top: 2px solid var(--border); padding-top: 24px; }
+  .ss-heading { font-size: 18px; font-weight: 700; color: var(--text); margin-bottom: 16px; }
+  .ss-count { display: inline-block; background: var(--tag-bg); color: var(--tag-text); font-size: 12px; font-weight: 600; padding: 1px 8px; border-radius: 10px; margin-left: 8px; vertical-align: middle; }
+  .ss-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(220px, 1fr)); gap: 16px; }
+  .ss-thumb { border: 1px solid var(--border); border-radius: 8px; overflow: hidden; cursor: zoom-in; transition: box-shadow .15s, transform .15s; background: #fff; }
+  .ss-thumb:hover { box-shadow: 0 4px 16px rgba(0,0,0,.12); transform: translateY(-2px); }
+  .ss-thumb img { width: 100%; height: 160px; object-fit: cover; object-position: top; display: block; }
+  .ss-label { font-size: 11px; color: var(--muted); padding: 6px 10px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+
+  /* ── Lightbox ──────────────────────────────────────────────────────────────── */
+  #lightbox { position: fixed; inset: 0; background: rgba(0,0,0,.92); z-index: 10000; display: none; align-items: center; justify-content: center; flex-direction: column; gap: 12px; }
+  #lightbox.open { display: flex; }
+  #lb-img { max-width: 92vw; max-height: 84vh; object-fit: contain; border-radius: 6px; box-shadow: 0 8px 40px rgba(0,0,0,.6); }
+  #lb-caption { color: rgba(255,255,255,.7); font-size: 13px; text-transform: capitalize; }
+  #lb-close { position: fixed; top: 16px; right: 20px; background: none; border: none; color: #fff; font-size: 26px; cursor: pointer; opacity: .7; transition: opacity .15s; }
+  #lb-close:hover { opacity: 1; }
+  #lb-prev, #lb-next { position: fixed; top: 50%; transform: translateY(-50%); background: rgba(255,255,255,.1); border: none; color: #fff; font-size: 36px; padding: 12px 18px; border-radius: 6px; cursor: pointer; transition: background .15s; }
+  #lb-prev { left: 16px; }
+  #lb-next { right: 16px; }
+  #lb-prev:hover, #lb-next:hover { background: rgba(255,255,255,.2); }
+
+  /* ── Reference Links ──────────────────────────────────────────────────────── */
+  .doc-ref {
+    display: inline;
+    color: var(--accent);
+    border-bottom: 1px dashed var(--accent);
+    cursor: pointer;
+    border-radius: 2px;
+    padding: 0 1px;
+    transition: background .1s, color .1s;
+  }
+  .doc-ref:hover, .doc-ref:focus {
+    background: var(--tag-bg);
+    color: var(--tag-text);
+    border-bottom-style: solid;
+    outline: none;
+  }
+
+  #ref-popup {
+    position: fixed;
+    z-index: 9999;
+    width: 280px;
+    background: #fff;
+    border: 1px solid var(--border);
+    border-radius: 8px;
+    box-shadow: 0 4px 20px rgba(0,0,0,.13);
+    padding: 12px 14px;
+    pointer-events: none;
+    opacity: 0;
+    transform: translateY(4px);
+    transition: opacity .15s, transform .15s;
+  }
+  #ref-popup.visible {
+    opacity: 1;
+    transform: translateY(0);
+  }
+  .ref-popup-id {
+    font-size: 10px;
+    font-weight: 700;
+    letter-spacing: .6px;
+    text-transform: uppercase;
+    color: var(--accent);
+    margin-bottom: 3px;
+  }
+  .ref-popup-label {
+    font-size: 13px;
+    font-weight: 600;
+    color: var(--text);
+    margin-bottom: 5px;
+  }
+  .ref-popup-desc {
+    font-size: 12px;
+    color: var(--muted);
+    line-height: 1.5;
+    margin-bottom: 6px;
+    display: -webkit-box;
+    -webkit-line-clamp: 3;
+    -webkit-box-orient: vertical;
+    overflow: hidden;
+  }
+  .ref-popup-hint {
+    font-size: 11px;
+    color: var(--accent);
+    font-weight: 500;
+  }
 

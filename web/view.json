@@ -73,20 +73,11 @@
         { "id": "diagram-dataflow",      "label": "Data Flow",            "docType": "markdown", "file": "output/docs/diagrams/dataflow.md",           "includeIfExists": true },
         { "id": "diagram-pdm",           "label": "Physical Data Model",  "docType": "markdown", "file": "output/docs/diagrams/pdm.md",                "includeIfExists": true },
         {
-          "id": "entities",
-          "label": "Entities",
-          "docType": "entity",
-          "scan": {
-            "dir": "$config.design.entities",
-            "pattern": "$config.design.entityPattern",
-            "labelFrom": "entity.name",
-            "sortBy": "entity.id"
-          }
+          "id": "entities",          "label": "Entities",          "docType": "entity",          
+                                    "scan": { "dir": "$config.design.entities", "pattern": "$config.design.entityPattern", "labelFrom": "entity.name", "sortBy": "entity.id" }
         },
         {
-          "id": "sql",
-          "label": "Database Schema",
-          "items": [
+          "id": "sql",            "label": "Database Schema",  "items": [
             { "id": "schema-sql",   "label": "Schema DDL",   "docType": "sql",          "file": "$config.design.sql/schema.sql" },
             { "id": "schema-state", "label": "Schema State", "docType": "schema-state", "file": "$config.design.sql/schema-state.json" }
           ]

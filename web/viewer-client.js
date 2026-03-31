@@ -14,6 +14,8 @@ let allCommands = [];
 let aiAvailable = false;
 let commandBindings = {};
 let refreshCommandList = () => {};
+let refIndex = {};      // ref-id → { label, description, file }
+let refPattern = null;  // compiled RegExp built from refIndex keys
 
 window.addEventListener('load', () => {
   if (typeof mermaid !== 'undefined') mermaid.initialize({ startOnLoad: false, theme: 'neutral' });
@@ -73,6 +75,252 @@ function openAIInstructions() {
   const doc = { id: 'ai-instructions-index', label: 'AI Instructions', file: 'mde/docs/ai-instructions/index.md', docType: 'file' };
   _adHocDocs[doc.id] = doc;
   loadDoc(doc);
+}
+
+/**
+ * Fetches /api/dashboard and renders a mockup-style dashboard in the main content area.
+ */
+async function openDashboard() {
+  closeMenu();
+
+  document.getElementById('welcome').style.display = 'none';
+  document.getElementById('loading').style.display = 'block';
+  document.getElementById('doc-body').innerHTML = '';
+  document.getElementById('doc-meta').style.display = 'none';
+  document.getElementById('breadcrumb').innerHTML = '<span class="current">Dashboard</span>';
+
+  let data;
+  try {
+    data = await fetchJson('/api/dashboard');
+  } catch (err) {
+    document.getElementById('loading').style.display = 'none';
+    document.getElementById('doc-body').innerHTML = `<p style="color:red">Dashboard failed to load: ${escHtml(err.message)}</p>`;
+    return;
+  }
+
+  document.getElementById('loading').style.display = 'none';
+
+  try {
+  const s      = data.summary   || {};
+  const phases = data.phases    || [];
+  const work   = data.work      || {};
+  const next   = data.nextAction|| {};
+  const arts   = data.artifacts || [];
+  const blks   = data.blockers  || [];
+  const tr     = data.traceability || {};
+  const activity = tr.recentActivity || [];
+
+  // ── helpers ──────────────────────────────────────────────────────────────────
+
+  const phaseCls = st => {
+    const s = (st || '').toLowerCase();
+    if (s === 'done' || s === 'completed')  return 'db-done';
+    if (s === 'in_progress')                return 'db-progress';
+    if (s === 'blocked' || s === 'at_risk') return 'db-blocked';
+    return 'db-waiting';
+  };
+  const phaseLabel = st => {
+    const map = { done:'Done', completed:'Done', in_progress:'In Progress',
+                  blocked:'Blocked', at_risk:'At Risk', not_started:'Not Started',
+                  waiting:'Waiting', ready:'Ready' };
+    return map[(st||'').toLowerCase()] || st || 'Not Started';
+  };
+
+  const bucket = (label, items) => {
+    const lis = (items || []).map(t =>
+      `<li>${escHtml(t.title)}${t.phase ? `<br><span style="font-size:11px;color:var(--db-muted)">${escHtml(t.phase)}</span>` : ''}</li>`
+    ).join('') || '<li style="color:var(--db-muted);list-style:none">—</li>';
+    return `<div class="db-bucket"><div class="db-label">${label}</div><ul>${lis}</ul></div>`;
+  };
+
+  const timeAgo = iso => {
+    if (!iso) return '';
+    const diff = Date.now() - new Date(iso).getTime();
+    const m = Math.round(diff / 60000);
+    if (m < 2)   return 'just now';
+    if (m < 60)  return `${m} min ago`;
+    const h = Math.round(m / 60);
+    if (h < 24)  return `${h} hr ago`;
+    return `${Math.round(h / 24)} day(s) ago`;
+  };
+
+  // ── cards ────────────────────────────────────────────────────────────────────
+
+  const statusColor = { Blocked:'var(--db-danger)', 'At Risk':'var(--db-warn)', 'On Track':'var(--db-ok)' }[s.status] || 'var(--db-muted)';
+
+  const cards = [
+    { label:'Overall Completion', value:`${s.overallCompletion ?? 0}%`,
+      small: s.daysRemaining != null ? `${s.daysRemaining} day(s) remaining` : '' },
+    { label:'Status', value: s.status || '—',
+      valueStyle:`color:${statusColor}`,
+      small: s.lastActivity ? timeAgo(s.lastActivity.at) : '' },
+    { label:'Open Blockers', value: s.blockers ?? 0, small: '' },
+    { label:'Pending Approvals', value: s.pendingApprovals ?? 0, small: '' },
+    { label:'Artifacts', value: arts.length, small: '' },
+    { label:'Owner', value: s.owner || '—', small: '' },
+  ].map(c => `
+    <div class="db-card">
+      <div class="db-label">${c.label}</div>
+      <div class="db-value" ${c.valueStyle ? `style="${c.valueStyle}"` : ''}>${escHtml(String(c.value))}</div>
+      ${c.small ? `<div class="db-small">${escHtml(c.small)}</div>` : ''}
+    </div>`).join('');
+
+  // ── phase strip ──────────────────────────────────────────────────────────────
+
+  const phaseStrip = phases.map(p => `
+    <div class="db-phase">
+      <span class="db-status ${phaseCls(p.status)}">${phaseLabel(p.status)}</span>
+      <h3>${escHtml(p.name)}</h3>
+      <div class="db-small">${p.taskCount || 0} tasks · ${p.artifactCount || 0} artifacts${p.blockerCount ? ` · <span style="color:var(--db-danger)">${p.blockerCount} blocker(s)</span>` : ''}</div>
+    </div>`).join('');
+
+  // ── artifacts table ──────────────────────────────────────────────────────────
+
+  const artRows = arts.slice(0, 8).map(a => `
+    <tr>
+      <td>${escHtml(a.name)}</td>
+      <td>${escHtml(a.type || '—')}</td>
+      <td>${escHtml(a.phase || '—')}</td>
+      <td>${escHtml(a.status || '—')}</td>
+      <td>${escHtml(timeAgo(a.updatedAt))}</td>
+    </tr>`).join('') || `<tr><td colspan="5" style="color:var(--db-muted)">No artifacts</td></tr>`;
+
+  // ── activity ─────────────────────────────────────────────────────────────────
+
+  const actEvents = activity.slice(0, 6).map(a => `
+    <div class="db-event">
+      <strong>${escHtml(timeAgo(a.at))} · ${escHtml(a.title)}</strong>
+      ${a.detail ? `<div class="db-small">${escHtml(a.detail)}</div>` : ''}
+    </div>`).join('') || '<div class="db-small">No recent activity</div>';
+
+  // ── blockers ─────────────────────────────────────────────────────────────────
+
+  const blkItems = blks.filter(b => !['resolved','closed'].includes(b.status)).slice(0, 6)
+    .map(b => `<li><strong>${escHtml(b.severity)}:</strong> ${escHtml(b.title)}</li>`).join('')
+    || '<li style="color:var(--db-muted);list-style:none">No open blockers</li>';
+
+  // ── render ───────────────────────────────────────────────────────────────────
+
+  document.getElementById('doc-body').innerHTML = `
+<style>
+  .db-wrap { font-family: Arial, Helvetica, sans-serif; max-width: 1440px; padding: 20px;
+    --db-bg:#f5f7fb; --db-panel:#fff; --db-line:#d9e0ea; --db-text:#1b2430;
+    --db-muted:#637083; --db-accent:#2c6bed; --db-ok:#1f9d55;
+    --db-warn:#d9822b; --db-danger:#c23030;
+    --db-shadow:0 8px 24px rgba(16,24,40,.08); --db-radius:16px;
+    color: var(--db-text); }
+  .db-topbar { display:flex; justify-content:space-between; align-items:center; margin-bottom:18px; flex-wrap:wrap; gap:8px; }
+  .db-topbar h1 { margin:0; font-size:28px; }
+  .db-sub { color:var(--db-muted); font-size:14px; margin-top:4px; }
+  .db-pill { background:#eaf2ff; color:var(--db-accent); padding:10px 14px; border-radius:999px; font-weight:700; font-size:13px; white-space:nowrap; }
+  .db-cards { display:grid; grid-template-columns:repeat(6,1fr); gap:14px; margin-bottom:18px; }
+  .db-card { background:var(--db-panel); border:1px solid var(--db-line); border-radius:var(--db-radius); box-shadow:var(--db-shadow); padding:16px; min-height:98px; }
+  .db-label { color:var(--db-muted); font-size:12px; text-transform:uppercase; letter-spacing:.05em; margin-bottom:10px; }
+  .db-value { font-size:26px; font-weight:700; }
+  .db-small { font-size:13px; color:var(--db-muted); margin-top:6px; }
+  .db-phases { display:grid; grid-template-columns:repeat(8,1fr); gap:10px; margin-bottom:18px; }
+  .db-phase { padding:14px; border:1px solid var(--db-line); border-radius:14px; background:var(--db-panel); min-height:110px; box-shadow:var(--db-shadow); }
+  .db-phase h3 { margin:0 0 8px 0; font-size:15px; }
+  .db-status { display:inline-block; font-size:12px; font-weight:700; padding:5px 10px; border-radius:999px; margin-bottom:10px; }
+  .db-done     { background:#e7f6ed; color:var(--db-ok); }
+  .db-progress { background:#eaf2ff; color:var(--db-accent); }
+  .db-waiting  { background:#fff5e8; color:var(--db-warn); }
+  .db-blocked  { background:#fdecec; color:var(--db-danger); }
+  .db-layout { display:grid; grid-template-columns:2.1fr 1fr; gap:18px; }
+  .db-left, .db-right { display:grid; gap:18px; align-content:start; }
+  .db-panel { background:var(--db-panel); border:1px solid var(--db-line); border-radius:var(--db-radius); box-shadow:var(--db-shadow); padding:18px; }
+  .db-panel h2 { margin:0 0 14px 0; font-size:20px; }
+  .db-three { display:grid; grid-template-columns:repeat(3,1fr); gap:14px; }
+  .db-bucket { border:1px solid var(--db-line); border-radius:14px; padding:14px; min-height:180px; }
+  .db-bucket ul { padding-left:18px; margin:10px 0 0 0; }
+  .db-bucket li { margin-bottom:10px; line-height:1.35; font-size:13px; }
+  .db-hero { display:grid; grid-template-columns:1.4fr 1fr; gap:14px; }
+  .db-cta { display:inline-block; background:var(--db-accent); color:white; padding:10px 16px; border-radius:12px; font-weight:700; margin-top:12px; font-size:14px; }
+  .db-event { padding:12px 0; border-bottom:1px solid var(--db-line); }
+  .db-event strong { display:block; margin-bottom:4px; font-size:13px; }
+  table.db-table { width:100%; border-collapse:collapse; font-size:13px; }
+  table.db-table th, table.db-table td { padding:10px 8px; border-bottom:1px solid var(--db-line); text-align:left; vertical-align:top; }
+  table.db-table th { color:var(--db-muted); font-size:12px; text-transform:uppercase; }
+  .db-gen { font-size:11px; color:var(--db-muted); margin-top:4px; }
+  @media(max-width:1200px) { .db-cards,.db-phases,.db-three,.db-hero,.db-layout { grid-template-columns:1fr !important; } }
+</style>
+<div class="db-wrap">
+
+  <div class="db-topbar">
+    <div>
+      <h1>AI-MDE Dashboard</h1>
+      <div class="db-sub">Project: ${escHtml(s.projectName || '—')}${s.owner ? ' · Owner: ' + escHtml(s.owner) : ''}${s.lastActivity ? ' · Last activity: ' + escHtml(timeAgo(s.lastActivity.at)) : ''}</div>
+    </div>
+    <div class="db-pill">Current Phase: ${escHtml(s.currentPhase || '—')}</div>
+  </div>
+
+  <div class="db-cards">${cards}</div>
+
+  <div class="db-phases">${phaseStrip || '<div class="db-small">No phases</div>'}</div>
+
+  <div class="db-layout">
+    <div class="db-left">
+
+      <div class="db-panel">
+        <h2>Done · Next · Attention</h2>
+        <div class="db-three">
+          ${bucket('Done',      work.done)}
+          ${bucket('Next',      work.next)}
+          ${bucket('Attention', work.attention)}
+        </div>
+      </div>
+
+      <div class="db-panel">
+        <h2>Recommended Next Action</h2>
+        <div class="db-hero">
+          <div>
+            <div class="db-label">Best next action</div>
+            <div class="db-value" style="font-size:22px">${escHtml(next.title || '—')}</div>
+            ${next.why    ? `<p class="db-small" style="font-size:13px;line-height:1.5;color:var(--db-text)">${escHtml(next.why)}</p>` : ''}
+            ${next.unlocks? `<p class="db-small"><strong>Unlocks:</strong> ${escHtml(next.unlocks)}</p>` : ''}
+          </div>
+          <div class="db-bucket" style="min-height:auto">
+            <div class="db-label">Expected Outcome</div>
+            <ul>
+              ${next.unlocks ? `<li>${escHtml(next.unlocks)} becomes unblocked</li>` : ''}
+              ${blks.filter(b=>!['resolved','closed'].includes(b.status)).length
+                ? `<li>Resolve ${blks.filter(b=>!['resolved','closed'].includes(b.status)).length} open blocker(s)</li>` : ''}
+            </ul>
+          </div>
+        </div>
+      </div>
+
+      <div class="db-panel">
+        <h2>Artifacts</h2>
+        <table class="db-table">
+          <thead><tr><th>Artifact</th><th>Type</th><th>Phase</th><th>Status</th><th>Updated</th></tr></thead>
+          <tbody>${artRows}</tbody>
+        </table>
+      </div>
+
+    </div>
+    <div class="db-right">
+
+      <div class="db-panel">
+        <h2>Recent Activity</h2>
+        ${actEvents}
+      </div>
+
+      <div class="db-panel">
+        <h2>Blockers</h2>
+        <ul>${blkItems}</ul>
+      </div>
+
+    </div>
+  </div>
+
+  <div class="db-gen">Generated: ${escHtml(data.generatedAt || '')}</div>
+</div>`;
+  } catch (err) {
+    console.error('[dashboard] render error:', err);
+    document.getElementById('doc-body').innerHTML =
+      `<p style="color:red;padding:20px">Dashboard render error: ${escHtml(err && err.message ? err.message : String(err))}</p>`;
+  }
 }
 
 
@@ -460,6 +708,7 @@ async function init() {
     const [treeData, catalogData] = await Promise.all([
       fetchJson('/api/tree'),
       fetchJson('/api/catalog').catch(() => ({ document_types: [] })),
+      loadRefIndex(),
     ]);
     tree = treeData;
     catalog = {};
@@ -473,11 +722,14 @@ async function init() {
     document.querySelector('.phase-section')?.classList.add('open');
     document.getElementById('loading').style.display = 'none';
 
-    // restore doc from URL hash (direct link / page refresh)
+    // restore doc from URL hash, or open dashboard by default
     const hashId = docFromHash();
     if (hashId) {
       const doc = findDocById(hashId) || docFromId(hashId);
       if (doc) loadDoc(doc, { pushHistory: false });
+      else openDashboard();
+    } else {
+      openDashboard();
     }
   } catch (err) {
     console.error('Viewer init failed:', err);
@@ -772,6 +1024,240 @@ document.getElementById('search').addEventListener('input', e => {
 });
 
 
+// ── Dev Screenshot ─────────────────────────────────────────────────────────────
+
+async function screenshotUiModule() {
+  if (!activeDoc?.file) return;
+  // Read config for devUrl
+  let devUrl = 'http://localhost:5173';
+  try {
+    const cfg = await fetchJson('/api/config');
+    devUrl = cfg?.ui?.devUrl || devUrl;
+  } catch { /* use default */ }
+
+  // Fetch the raw JSON to get pages + routePrefix
+  let spec;
+  try {
+    const { content } = await fetchJson(`/api/doc/${encodeURIComponent(activeDoc.file)}`);
+    spec = JSON.parse(content);
+  } catch { alert('Could not read UI module spec'); return; }
+
+  const routePrefix = spec.routePrefix || '';
+  const pages = spec.pages || [];
+  if (!pages.length) { alert('No pages defined in this module spec'); return; }
+
+  const btn = document.querySelector('.btn-screenshot');
+  if (btn) { btn.textContent = '⏳ Capturing…'; btn.disabled = true; }
+
+  let done = 0;
+  const saved = [];
+  for (const page of pages) {
+    const pagePath  = page.routePath || '';
+    const targetUrl = `${devUrl}${routePrefix}${pagePath}`;
+    const filename  = `${spec.moduleId || 'page'}-${(page.id || pagePath).replace(/[^a-z0-9]/gi, '-').replace(/-+/g, '-').replace(/^-|-$/g, '')}`;
+    try {
+      const res  = await fetch(`/api/screenshot?url=${encodeURIComponent(targetUrl)}&filename=${encodeURIComponent(filename)}`);
+      if (!res.ok) throw new Error(await res.text());
+      const { saved: filePath } = await res.json();
+      saved.push(filePath);
+      done++;
+    } catch (e) {
+      console.error(`Screenshot failed for ${targetUrl}:`, e);
+    }
+    if (btn) btn.textContent = `⏳ ${done}/${pages.length}`;
+  }
+
+  const dir = saved.length ? saved[0].replace(/\/[^/]+$/, '') : 'docs/screens';
+  if (btn) { btn.textContent = `✅ ${done}/${pages.length} saved`; btn.disabled = false; }
+  console.info(`[screenshot] Saved ${done} screenshots to ${dir}/`);
+  if (spec.moduleId) displayScreenshots(spec.moduleId);
+  setTimeout(() => { if (btn) btn.textContent = '📷 Screenshot'; }, 4000);
+}
+
+
+// ── Screenshots Panel ──────────────────────────────────────────────────────────
+
+// Lightbox overlay
+const lightbox = document.createElement('div');
+lightbox.id = 'lightbox';
+lightbox.innerHTML = `<button id="lb-close" title="Close (Esc)">✕</button>
+  <button id="lb-prev" title="Previous">‹</button>
+  <img id="lb-img" alt="">
+  <button id="lb-next" title="Next">›</button>
+  <div id="lb-caption"></div>`;
+document.body.appendChild(lightbox);
+
+let lbImages = [];
+let lbIndex  = 0;
+
+function openLightbox(images, index) {
+  lbImages = images;
+  lbIndex  = index;
+  showLightboxImage();
+  lightbox.classList.add('open');
+}
+function showLightboxImage() {
+  const { src, caption } = lbImages[lbIndex];
+  document.getElementById('lb-img').src = src;
+  document.getElementById('lb-caption').textContent = caption;
+  document.getElementById('lb-prev').style.visibility = lbIndex > 0 ? 'visible' : 'hidden';
+  document.getElementById('lb-next').style.visibility = lbIndex < lbImages.length - 1 ? 'visible' : 'hidden';
+}
+function closeLightbox() { lightbox.classList.remove('open'); }
+
+document.getElementById('lb-close').onclick = closeLightbox;
+document.getElementById('lb-prev').onclick  = () => { if (lbIndex > 0) { lbIndex--; showLightboxImage(); } };
+document.getElementById('lb-next').onclick  = () => { if (lbIndex < lbImages.length - 1) { lbIndex++; showLightboxImage(); } };
+lightbox.addEventListener('click', e => { if (e.target === lightbox) closeLightbox(); });
+document.addEventListener('keydown', e => {
+  if (!lightbox.classList.contains('open')) return;
+  if (e.key === 'Escape')      closeLightbox();
+  if (e.key === 'ArrowLeft')  { if (lbIndex > 0) { lbIndex--; showLightboxImage(); } }
+  if (e.key === 'ArrowRight') { if (lbIndex < lbImages.length - 1) { lbIndex++; showLightboxImage(); } }
+});
+
+async function displayScreenshots(moduleId) {
+  const body = document.getElementById('doc-body');
+  if (!body) return;
+  document.getElementById('screenshots-panel')?.remove();
+
+  let paths = [];
+  try {
+    paths = await fetchJson(`/api/screenshots?module=${encodeURIComponent(moduleId)}`);
+  } catch { return; }
+  if (!paths.length) return;
+
+  const images = paths.map(p => ({
+    src:     `/api/image/${encodeURIComponent(p)}`,
+    caption: p.replace(/^.*\//, '').replace(/\.png$/, '').replace(/-/g, ' / '),
+    path:    p,
+  }));
+
+  const panel = document.createElement('div');
+  panel.id = 'screenshots-panel';
+  panel.innerHTML = `<h2 class="ss-heading">Screenshots <span class="ss-count">${images.length}</span></h2>
+    <div class="ss-grid">${images.map((img, i) =>
+      `<div class="ss-thumb" data-index="${i}">
+        <img src="${img.src}" alt="${escHtml(img.caption)}" loading="lazy">
+        <div class="ss-label">${escHtml(img.caption)}</div>
+      </div>`
+    ).join('')}</div>`;
+
+  panel.querySelectorAll('.ss-thumb').forEach(thumb => {
+    thumb.addEventListener('dblclick', () => openLightbox(images, +thumb.dataset.index));
+  });
+
+  body.appendChild(panel);
+}
+
+
+// ── Reference Linking ──────────────────────────────────────────────────────────
+
+const refPopup = document.createElement('div');
+refPopup.id = 'ref-popup';
+refPopup.setAttribute('aria-live', 'polite');
+document.body.appendChild(refPopup);
+
+async function loadRefIndex() {
+  try {
+    refIndex = await fetchJson('/api/ref-index');
+    const keys = Object.keys(refIndex)
+      .filter(k => k.trim().length > 1)
+      .sort((a, b) => b.length - a.length)   // longest first so MOD-001 beats MOD
+      .map(k => k.replace(/[.*+?^${}()|[\]\\]/g, '\\$&'));
+    refPattern = keys.length ? new RegExp(`(?<![\\w-])(${keys.join('|')})(?![\\w-])`, 'g') : null;
+  } catch { refIndex = {}; refPattern = null; }
+}
+
+function findDocByFile(file) {
+  for (const phase of tree) {
+    for (const doc of (phase.docs || []))
+      if (doc.file === file) return doc;
+    for (const g of (phase.groups || []))
+      for (const doc of groupDocs(g))
+        if (doc.file === file) return doc;
+  }
+  return null;
+}
+
+function showRefPopup(span) {
+  const entry = refIndex[span.dataset.ref];
+  if (!entry) return;
+  refPopup.innerHTML =
+    `<div class="ref-popup-id">${escHtml(span.dataset.ref)}</div>` +
+    `<div class="ref-popup-label">${escHtml(entry.label)}</div>` +
+    (entry.description ? `<div class="ref-popup-desc">${escHtml(entry.description)}</div>` : '') +
+    `<div class="ref-popup-hint">Click to open →</div>`;
+  refPopup.classList.add('visible');
+  const r = span.getBoundingClientRect();
+  const pw = refPopup.offsetWidth || 280;
+  let top  = r.top - refPopup.offsetHeight - 10;
+  let left = r.left;
+  if (top < 8) top = r.bottom + 8;
+  if (left + pw + 8 > window.innerWidth) left = window.innerWidth - pw - 8;
+  refPopup.style.top  = `${Math.max(8, top)}px`;
+  refPopup.style.left = `${Math.max(8, left)}px`;
+}
+
+function hideRefPopup() { refPopup.classList.remove('visible'); }
+
+function scanAndLinkRefs(container) {
+  if (!container || !refPattern) return;
+  const walker = document.createTreeWalker(container, NodeFilter.SHOW_TEXT);
+  const textNodes = [];
+  let n;
+  while ((n = walker.nextNode())) textNodes.push(n);
+  for (const textNode of textNodes) {
+    const parent = textNode.parentElement;
+    if (!parent || parent.closest('code, pre, .doc-ref, a')) continue;
+    const text = textNode.textContent;
+    refPattern.lastIndex = 0;
+    let match, last = 0, hasMatch = false;
+    const frag = document.createDocumentFragment();
+    while ((match = refPattern.exec(text)) !== null) {
+      if (!refIndex[match[1]]) continue;
+      hasMatch = true;
+      if (match.index > last) frag.appendChild(document.createTextNode(text.slice(last, match.index)));
+      const span = document.createElement('span');
+      span.className = 'doc-ref';
+      span.tabIndex = 0;
+      span.dataset.ref = match[1];
+      span.textContent = match[1];
+      frag.appendChild(span);
+      last = match.index + match[0].length;
+    }
+    if (!hasMatch) continue;
+    if (last < text.length) frag.appendChild(document.createTextNode(text.slice(last)));
+    parent.replaceChild(frag, textNode);
+  }
+}
+
+// Popup show/hide via event delegation
+document.getElementById('doc-body').addEventListener('mouseover', e => {
+  const span = e.target.closest('.doc-ref');
+  if (span) showRefPopup(span);
+});
+document.getElementById('doc-body').addEventListener('mouseout', e => {
+  if (!e.target.closest('.doc-ref')) hideRefPopup();
+});
+document.getElementById('doc-body').addEventListener('focusin', e => {
+  const span = e.target.closest('.doc-ref');
+  if (span) showRefPopup(span);
+});
+document.getElementById('doc-body').addEventListener('focusout', e => {
+  if (!e.target.closest('.doc-ref')) hideRefPopup();
+});
+document.getElementById('doc-body').addEventListener('click', e => {
+  const span = e.target.closest('.doc-ref');
+  if (!span) return;
+  hideRefPopup();
+  const entry = refIndex[span.dataset.ref];
+  if (!entry) return;
+  const doc = findDocByFile(entry.file);
+  if (doc) loadDoc(doc);
+});
+
+
 // ── Doc Loader ─────────────────────────────────────────────────────────────────
 
 /**
@@ -819,6 +1305,7 @@ async function loadDoc(doc, { pushHistory = true } = {}) {
     showMeta(doc, '');
     showDocBody();
     await renderDoc(doc, null, null);
+    scanAndLinkRefs(document.getElementById('doc-body'));
     return;
   }
 
@@ -833,6 +1320,13 @@ async function loadDoc(doc, { pushHistory = true } = {}) {
     showMeta(doc, ext);
     showDocBody();
     await renderDoc(doc, content, ext, renderedFrom);
+    scanAndLinkRefs(document.getElementById('doc-body'));
+    if (doc.docType === 'ui-module-spec' && activeContent) {
+      try {
+        const spec = JSON.parse(activeContent);
+        if (spec.moduleId) displayScreenshots(spec.moduleId);
+      } catch { /* not JSON */ }
+    }
   } catch (err) {
     clientLog('error', 'Document load failed', { docId: doc.id, file: doc.file, error: err && err.message ? err.message : String(err) });
     document.getElementById('loading').style.display = 'none';
@@ -874,9 +1368,11 @@ function showMeta(doc, ext) {
   const toggleBtn = activeRenderedFrom
     ? `<button class="btn-edit" onclick="toggleTemplateView()">${toggleLabel}</button>`
     : '';
+  const isUiSpec = doc.docType === 'ui-module-spec';
   meta.innerHTML = `${extBadge}${fileBadge}
     ${toggleBtn}
-    ${canEdit ? `<button class="btn-edit" onclick="startEdit()">Edit</button>` : ''}`;
+    ${canEdit ? `<button class="btn-edit" onclick="startEdit()">Edit</button>` : ''}
+    ${isUiSpec ? `<button class="btn-screenshot" onclick="screenshotUiModule()" title="Screenshot app pages (dev)">📷 Screenshot</button>` : ''}`;
 }
 
 /**
@@ -1090,11 +1586,13 @@ function normalizeForTemplate(docType, data, doc) {
   }
 
   if (docType === 'ui-module-spec') {
+    const subNavItems = (data.subNav || []);
     return {
       ...data,
-      users:    (data.primaryUsers   || []).join(', '),
-      backends: (data.backendModules || []).join(', '),
-      subNav:   (data.subNav || []).length > 0 ? data.subNav : null,
+      users:      (data.primaryUsers   || []).join(', '),
+      backends:   (data.backendModules || []).join(', '),
+      hasSubNav:  subNavItems.length > 0,
+      subNav:     subNavItems.length > 0 ? subNavItems : null,
       pages: (data.pages || []).map(p => ({
         ...p,
         roles:            (p.requiredRoles   || []).join(', '),
@@ -1103,6 +1601,17 @@ function normalizeForTemplate(docType, data, doc) {
         hasActions:    (p.actions     || []).length > 0,
         hasFilters:    (p.filters     || []).length > 0,
         hasValidation: (p.validation  || []).length > 0,
+      })),
+    };
+  }
+
+  if (docType === 'ui-catalog') {
+    return {
+      ...data,
+      modules: (data.modules || []).map(m => ({
+        ...m,
+        users:    (m.primaryUsers   || []).join(', '),
+        backends: (m.backendModules || []).join(', '),
       })),
     };
   }
@@ -1236,7 +1745,7 @@ function renderMarkdown(body, content, baseFile) {
   if (baseFile) {
     body.querySelectorAll('a[href]').forEach(a => {
       const href = a.getAttribute('href');
-      if (!href || href.startsWith('http') || href.startsWith('#') || href.startsWith('mailto:')) return;
+      if (!href || href.startsWith('http') || href.startsWith('#') || href.startsWith('mailto:') || href.startsWith('/')) return;
       a.addEventListener('click', e => {
         e.preventDefault();
         const resolved = resolveRelPath(baseFile, href);
@@ -1644,7 +2153,6 @@ const CARD_LABEL = { 'has-one': '1:1', 'has-many': '1:N', 'references': 'ref' };
 
 let _erdCy = null;
 const ERD_STORAGE_KEY = 'eop-erd-layout-v2';
-
 const NODE_SIZES = [
   { w: 'label', h: 'label', pad: '12px' },   // 0 - auto (label-sized)
   { w: 160,     h: 52,      pad: null  },     // 1 - medium
@@ -1693,6 +2201,7 @@ function erdResetLayout() {
     n.data('sizeIdx', 0); n.removeData('customW'); n.removeData('customH');
     applyNodeSize(n, 0);
   });
+  // Also delete the file via API if desired, or just overwrite on next save
   erdLayout('cose');
 }
 
@@ -1700,11 +2209,24 @@ function erdResetLayout() {
  * Restores ERD node positions and sizes from localStorage.
  * @returns {boolean} True if a saved layout was found and applied.
  */
-function erdRestoreLayout() {
-  const raw = localStorage.getItem(ERD_STORAGE_KEY);
-  if (!raw || !_erdCy) return false;
+async function erdRestoreLayout() {
+  if (!_erdCy) return false;
+  let state;
+
   try {
-    const state = parseJsonSafe(raw, 'ERD layout state');
+    // 1. Try to load from Project Folder via API
+    const res = await fetch(`/api/doc/${encodeURIComponent('design/erd-layout.json')}`);
+    if (res.ok) {
+      const data = await res.json();
+      state = parseJsonSafe(data.content, 'ERD layout state');
+    } else {
+      // 2. Fallback to localStorage for unsaved drafts
+      const raw = localStorage.getItem(ERD_STORAGE_KEY);
+      if (raw) state = parseJsonSafe(raw, 'ERD local state');
+    }
+
+    if (!state) return false;
+
     _erdCy.nodes().forEach(n => {
       const s = state[n.id()];
       if (!s) return;

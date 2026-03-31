@@ -169,6 +169,7 @@
         "generate_ldm",
         "validate_ldm_coverage",
         "generate_modules",
+        "elaborate_system_design",
         "generate_ui_outline",
         "validate_architecture"
       ],

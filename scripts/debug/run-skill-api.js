@@ -1,4 +1,16 @@
 #!/usr/bin/env node
+/**
+ * 
+ * This script is a debug utility to run an MDE skill via the OpenAI API. It constructs a prompt based on the skill contract and project files, sends it to the API, and saves the request and response for analysis.
+ * 
+ * Usage: 
+ * 1. Focus on a folder:
+ * 2. Invokes AI using API Call
+ * 3. attache the inputs.zip file if exists in the focused folder as evidence
+ * 4. prompt is the = `ai-prompt.txt` file content in the focused folder
+ * 5. to this folder as a seperate folder run
+ */
+
 const fs = require('fs');
 const path = require('path');
 const { ConfigurationManager } = require('../lib/config-manager');

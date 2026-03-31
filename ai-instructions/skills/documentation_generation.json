@@ -1,15 +1,39 @@
 {
   "name": "documentation_generation",
-  "purpose": "Render documentation using templates and artifacts",
+  "purpose": "Generate project documentation from configuration, architecture, and generated artifacts. Produces SETUP.md covering environment setup, all API endpoints, all UI routes, all run commands, and troubleshooting.",
   "inputs": {
-    "config": {
+    "configuration": {
+      "from": "config._self",
       "default": "configuration.json"
+    },
+    "moduleCatalog": {
+      "from": "config.design.moduleCatalog",
+      "default": "design/modules/module-catalog.json"
+    },
+    "uiCatalog": {
+      "from": "config.design.uiModules",
+      "pattern": "ui-catalog.json",
+      "default": "design/modules/ui/ui-catalog.json"
+    },
+    "uiModuleSpecs": {
+      "from": "config.design.uiModules",
+      "pattern": "ui-*.json",
+      "default": "design/modules/ui/ui-*.json"
+    },
+    "architecture": {
+      "from": "config.mde.architecture",
+      "default": "mde/architecture/architecture.json"
     }
   },
   "outputs": {
     "docs": {
       "to": "config.output.docs",
+      "default": "output/docs",
       "pattern": "*.md"
+    },
+    "setup": {
+      "to": ".",
+      "filename": "SETUP.md"
     }
   },
   "artifacts": [
@@ -18,9 +42,34 @@
       "default": "output/docs"
     }
   ],
+  "setup_md_sections": [
+    "Quick Navigation — backend port, frontend port, DB port",
+    "Prerequisites — Node version, PostgreSQL version",
+    "Environment Configuration — .env fields for backend and ui/.env for frontend",
+    "Database Setup — db:init quick start + individual step-by-step commands",
+    "Running the Application — numbered steps: install deps, start backend (dev vs prod), start frontend, log in",
+    "UI Modules — one subsection per module; table of Page | Route | Description for every page",
+    "API Endpoints — one subsection per backend module; table of Method | Path | Description for every endpoint including all mutations (POST, PUT, PATCH, DELETE)",
+    "Database Schema — one line per table with column highlights",
+    "Seed Data — list of seed files and record counts",
+    "Technology Stack — backend and frontend separately",
+    "Build & Production — backend build + start, frontend build + preview",
+    "All Commands — two blocks: backend commands from project root, frontend commands from ui/",
+    "Troubleshooting — known issues with exact fix commands",
+    "Project Structure — annotated directory tree"
+  ],
   "rules": [
-    "Use registered templates",
-    "Do not overwrite canonical sources"
+    "CRITICAL: SETUP.md must be written to the project ROOT (next to package.json), not to output/docs.",
+    "CRITICAL: The API Endpoints section must list ALL endpoints — GET and mutations (POST, PUT, PATCH, DELETE). Never omit write endpoints.",
+    "CRITICAL: The UI Modules section must list every routed page, including nested detail and form pages (e.g. requests/:id/modify), not just top-level menu items.",
+    "CRITICAL: The Running section must clearly state that backend and frontend run in SEPARATE terminals simultaneously.",
+    "CRITICAL: The Troubleshooting section must include: blank page / wrong role (localStorage.clear()), backend changes not taking effect (rebuild or use npm run dev), port already in use, PostgreSQL not running.",
+    "CRITICAL: The mock auth section must note that login defaults to the highest-privilege role (HR_ADMIN) so all modules are visible during development.",
+    "Derive the API endpoint table from module-catalog.json exposes[] arrays — one row per exposed operation.",
+    "Derive the UI routes table from ui-catalog.json and ui-{module}.json page specs — one row per page.",
+    "Use tables (markdown pipe syntax) for endpoints and UI routes — not bullet lists.",
+    "Do not overwrite canonical source files (schema.sql, configuration.json, etc.).",
+    "Do not include placeholder or example content — all values must be derived from actual configuration."
   ],
   "uses_tools": [
     "file_manager"

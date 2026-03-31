@@ -1,4 +1,4 @@
-﻿<!DOCTYPE html>
+﻿﻿<!DOCTYPE html>
 <html lang="en">
 <head>
 <meta charset="UTF-8">
@@ -14,8 +14,6 @@
 <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/highlight.min.js"></script>
 <!-- Mustache.js for template rendering -->
 <script src="https://cdn.jsdelivr.net/npm/mustache@4/mustache.min.js"></script>
-<!-- cytoscape for interactive ERD -->
-<script src="https://cdn.jsdelivr.net/npm/cytoscape@3/dist/cytoscape.min.js"></script>
 
 <link rel="stylesheet" href="/style.css">
 </head>
@@ -28,6 +26,7 @@
     <button class="menu-btn" id="menu-btn" onclick="toggleMenu()" aria-haspopup="true" aria-expanded="false" title="Menu">&#9776;</button>
     <div class="menu-dropdown" id="menu-dropdown" role="menu">
       <button class="menu-item" role="menuitem" onclick="openProject()">Project</button>
+      <button class="menu-item" role="menuitem" onclick="openDashboard()">Dashboard</button>
       <div class="menu-section">Developer</div>
       <button class="menu-item" role="menuitem" onclick="openMethodology()">Methodology</button>
       <button class="menu-item" role="menuitem" onclick="openAIInstructions()">AI Instructions</button>
@@ -133,4 +132,3 @@
 </div>
 </body>
 </html>
-

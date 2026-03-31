@@ -22,18 +22,21 @@ This is a:
 
 ## Architecture Layers
 
-### 1. User Commands
-User issues explicit actions:
-
-- Validate Requirements
-- Build System Design
-- Generate LDM
-- Validate Architecture
-- Generate Module Spec
-- Design a Module
-- Validate Traceability
-- Perform Work Item
-- Reveiw Work Request
+### Streamlined Commands:
+┌────────────────────────────────────────────────────────────┐
+│                EXECUTION PIPELINE (AI-MDE)                 │
+│                                                            │
+│   1. refine-business-requirements                          │
+│        ↓                                                   │
+│   2. elaborate-system-design                               │
+│        ↓                                                   │
+│   3. generate-source-code                                  │
+│        ↓                                                   │
+│   4. package-application                                   │
+│        ↓                                                   │
+│   5. deploy-and-test                                       │
+│                                                            │
+└────────────────────────────────────────────────────────────┘
 
 These are NOT prompts â€” they are structured commands.
 
@@ -219,6 +222,36 @@ They validate, persist, and execute.
 
 ### 4. Orchestrator controls flow
 It ensures correctness and sequence.
+
+### 5. Optimize for performance of AI
+
+An important consideration of AI is to minimize tokens sent and received through the following:
+
+1.  Send only what is required
+2.  Utilize cached input whenever possible by keeping the input in same order of priority 
+    - `AGNET.md`
+    - `orchestrator.md`
+    - compiled `commands-list`
+    - common needed files for all phases
+    -- `configuration.json`
+
+    For BA relatd
+    -- `ba-methodlogy`
+
+    For Design related
+    -- `design-methodology`
+    -- `architecture`
+
+3.  Code generation is conducted in two passes:
+    A) Identify and outline modules (done in Design phase)
+    
+    B) for each module:
+    -- send the above list +
+        `architecture`
+        `coding-standards` 
+        `test-coverage`
+    --  module specification 
+        
 
 ---
 

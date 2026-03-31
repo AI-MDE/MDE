@@ -56,6 +56,7 @@
       "when": "file does not already exist",
       "derive_from": ["config.project.name", "config.project.version", "config.ui"],
       "must_include": {
+        "type": "module",
         "scripts": {
           "dev":   "vite",
           "build": "tsc && vite build",
@@ -63,7 +64,7 @@
           "test":  "vitest"
         },
         "dependencies": "derive from config.ui (react/vue + router + tanstack-query + axios)",
-        "devDependencies": "typescript, vite, vitest, @types/react or @types/vue"
+        "devDependencies": "typescript, vite, vitest, @types/react or @types/vue, @testing-library/react, @testing-library/user-event, @testing-library/jest-dom"
       }
     },
     "tsconfig_json": {
@@ -76,16 +77,30 @@
           "strict": true,
           "jsx": "react-jsx",
           "baseUrl": ".",
-          "paths": { "@/*": ["src/*"] }
-        }
+          "paths": {
+            "@/*": ["src/*"],
+            "@components/*": ["src/components/*"],
+            "@pages/*": ["src/pages/*"],
+            "@api/*": ["src/api/*"],
+            "@layout/*": ["src/layout/*"],
+            "@context/*": ["src/context/*"],
+            "@router": ["src/router/index.ts"],
+            "@router/*": ["src/router/*"]
+          }
+        },
+        "include": ["src"],
+        "exclude": ["node_modules", "dist", "src/test"]
       }
     },
     "vite_config": {
       "when": "file does not already exist",
       "filename": "vite.config.ts",
       "must_include": {
-        "resolve.alias": "@ → src/",
-        "server.proxy": "derive from config.ui.apiProxy if set"
+        "resolve.alias": "@ → src/, plus all @pages, @api, @layout, @context, @router aliases matching tsconfig paths",
+        "server.proxy": {
+          "note": "Proxy /api to config.ui.apiProxy (e.g. http://localhost:3000). Do NOT add a rewrite that strips /api — the backend routes are registered with the /api prefix.",
+          "example": "'/api': { target: 'http://localhost:3000', changeOrigin: true }"
+        }
       }
     }
   },
@@ -141,6 +156,11 @@
   "rules": [
     "CRITICAL: config.design.uiModules is the INPUT folder (read-only spec files). config.output.uiSrc is the OUTPUT folder (write all generated code here). Never write into config.design.uiModules.",
     "CRITICAL: Generate .tsx / .ts files only — never .ejs, .hbs, .html, .vue, or any other template format unless config.ui.framework explicitly says so.",
+    "CRITICAL: The Vite proxy must NOT include a rewrite that strips /api. Backend routes are registered as /api/... so the prefix must be forwarded intact.",
+    "CRITICAL: The router must include a default index redirect at the root authenticated route: { index: true, element: <Navigate to='/{first-module-route}' replace /> }. Without this, visiting '/' shows a blank page.",
+    "CRITICAL: Never generate duplicate .js and .tsx files for the same component. Generate .tsx only. If legacy .js files exist they will shadow the .tsx and the fix will appear to have no effect.",
+    "CRITICAL: All mutation onSuccess handlers must call queryClient.invalidateQueries() for every affected query key before navigating. Without this the list page shows stale cached data after save.",
+    "CRITICAL: Error messages shown to users must render the actual server error from error.response.data.error — not a hardcoded generic string. Use: (error as any)?.response?.data?.error ?? error?.message ?? 'fallback message'.",
     "Read config.ui for framework and styling choices before generating any file",
     "Read ui-catalog.json menu array to build the router and Sidebar — menu order = route order",
     "Read each ui-{module}.json for page specs — one component per page",
@@ -153,8 +173,33 @@
     "All delete/destructive actions must show a confirm dialog before proceeding",
     "Do not generate mock data or hardcoded values — all data comes from api/ functions",
     "Do not overwrite scaffold files (package.json, tsconfig.json, vite.config.ts) if they already exist",
-    "Never write outside config.output.uiSrc"
+    "Never write outside config.output.uiSrc",
+    "The sidebar menu filters items by user role — mock auth must default to the highest-privilege role (HR_ADMIN or equivalent) so all modules are visible during development.",
+    "tsconfig.json exclude must include src/test to prevent test files from breaking the production build.",
+    "Any type used in a page component (e.g. actorName on an audit entry) must be declared in the corresponding type file in src/types/. Cross-check all page field references against the type definitions before generating."
   ],
+  "test": {
+    "framework": "vitest",
+    "library": "@testing-library/react",
+    "root": "src/test",
+    "coverage_required_per_page": [
+      "Renders without crashing (smoke test)",
+      "Displays loading state while data is fetching",
+      "Renders correct data when API returns success response",
+      "Renders emptyState message when API returns empty array (list pages)",
+      "Form submission — calls correct API method with correct payload on valid input",
+      "Form validation — shows field-level error messages when required fields are empty",
+      "Form validation — shows error when business rule is violated (e.g. end date before start date)",
+      "Mutation success — navigates to the correct route after successful save/submit",
+      "Mutation error — displays the server error message from response.data.error (not a hardcoded string)",
+      "Confirm modal — appears before destructive actions; action is not called unless user confirms",
+      "Role-based visibility — restricted pages redirect or show 403 when user lacks required role"
+    ],
+    "api_mock_pattern": "Use vi.mock('@api/{module}') to mock API calls. Return resolved/rejected promises. Never make real HTTP calls in unit tests.",
+    "query_client_pattern": "Wrap each test render in a fresh QueryClient with retry: false to prevent infinite retries on error.",
+    "router_pattern": "Wrap renders in MemoryRouter with initialEntries for route-dependent pages.",
+    "note": "Install @testing-library/react, @testing-library/user-event, @testing-library/jest-dom in devDependencies. Exclude src/test from tsconfig.json to avoid build errors."
+  },
   "uses_tools": [
     "file_manager"
   ],

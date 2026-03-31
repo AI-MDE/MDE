@@ -1,0 +1,84 @@
+{
+  "name": "elaborate_system_design",
+  "label": "Elaborate System Design",
+  "phase": "system_design",
+  "intent": "generate",
+  "ai": "required",
+  "requires": {
+    "application": {
+      "from": "config.application.definition",
+      "default": "application/application.json"
+    },
+    "requirements": {
+      "from": "config.ba.requirements",
+      "default": "ba/requirements.md"
+    },
+    "businessFunctions": {
+      "from": "config.ba.businessFunctions",
+      "default": "ba/business-functions.json"
+    },
+    "useCases": {
+      "from": "config.ba.useCases",
+      "default": "ba/use-cases/uc-*.md"
+    },
+    "ldm": {
+      "from": "config.ba.ldm",
+      "default": "ba/data-model/logical-data-model.json"
+    },
+    "architecture": {
+      "from": "config.mde.architecture",
+      "default": "mde/architecture/architecture.json"
+    },
+    "appArchitecture": {
+      "from": "config.design.appArchitecture",
+      "default": "design/application_architecture.json"
+    }
+  },
+  "produces": {
+    "moduleCatalog": {
+      "from": "config.design.moduleCatalog",
+      "default": "design/modules/module-catalog.json"
+    },
+    "moduleJson": {
+      "to": "config.design.modules",
+      "pattern": "{moduleType}/module-{kebab-module}.json"
+    },
+    "moduleMd": {
+      "to": "config.design.modules",
+      "pattern": "{moduleType}/module-{kebab-module}.md"
+    },
+    "entities": {
+      "to": "config.design.entities",
+      "pattern": "ent-{entity}.json"
+    },
+    "uiCatalog": {
+      "to": "config.design.uiModules",
+      "pattern": "ui-catalog.json"
+    },
+    "uiModuleSpec": {
+      "to": "config.design.uiModules",
+      "pattern": "ui-{kebab-module-name}.json"
+    }
+  },
+  "calls": [
+    "physical_entity_identification",
+    "system_design",
+    "module_definition",
+    "ui_module_definition",
+    "diagram_generation"
+  ],
+  "tools": [
+    "file_manager",
+    "json_validator"
+  ],
+  "rules": [
+    "Execute skills in strict order above",
+    "Fail fast on the first failed checkpoint; do not run downstream skills on invalid or partial upstream outputs",
+    "Do not invent requirements; all outputs must be traceable to requirements, business functions, and use cases",
+    "All generated JSON artifacts must pass schema/structure validation before command completion"
+  ],
+  "notes": [
+    "Wrapper command for one-shot system-design elaboration with intermediate checkpoints",
+    "Provides one-command UX while preserving deterministic, stepwise validation boundaries"
+  ]
+}

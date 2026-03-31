@@ -1,0 +1,72 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<title>ERD Interactive Demo</title>
+<!-- Dependency: Cytoscape.js -->
+<script src="https://cdn.jsdelivr.net/npm/cytoscape@3.26.0/dist/cytoscape.min.js"></script>
+<style>
+  body { font-family: system-ui, sans-serif; padding: 2rem; background: #f8f9fa; color: #1b2430; }
+  .controls { margin-bottom: 1rem; display: flex; gap: 0.5rem; }
+  button { padding: 0.6rem 1.2rem; cursor: pointer; border: 1px solid #d9e0ea; border-radius: 4px; background: white; font-weight: 500; }
+  button:hover { background: #f0f4ff; border-color: #2c6bed; }
+  
+  #viewport-frame {
+    width: 100%; height: 600px; background: white; border: 1px solid #d9e0ea;
+    border-radius: 8px; position: relative; overflow: hidden;
+  }
+  #cy-mount { width: 100%; height: 100%; }
+
+  /* Styles for the resize overlay used by erd-manager.js */
+  #node-resize-overlay {
+    display: none;
+    position: absolute;
+    border: 2px dashed #2c6bed;
+    pointer-events: none;
+    z-index: 100;
+  }
+  #node-resize-handle {
+    width: 12px; height: 12px; background: #2c6bed;
+    position: absolute; right: -6px; bottom: -6px;
+    cursor: nwse-resize; pointer-events: auto;
+    border-radius: 50%;
+  }
+</style>
+</head>
+<body>
+
+  <div class="controls">
+    <button onclick="ERDManager.load(sampleData)">Load Sample</button>
+    <button onclick="ERDManager.export()">Save to File</button>
+    <button onclick="ERDManager.import()">Load from File</button>
+  </div>
+
+  <div id="viewport-frame">
+    <div id="cy-mount"></div>
+    
+    <!-- Resize UI elements -->
+    <div id="node-resize-overlay">
+      <div id="node-resize-handle" title="Drag to resize"></div>
+    </div>
+  </div>
+
+  <script src="erd-manager.js"></script>
+  <script>
+    // Sample ERD Data
+    const sampleData = [
+      { group: 'nodes', data: { id: 'e1', name: 'Employee', width: 140, height: 80 }, position: { x: 150, y: 200 } },
+      { group: 'nodes', data: { id: 'e2', name: 'Department', width: 140, height: 80 }, position: { x: 450, y: 200 } },
+      { group: 'edges', data: { id: 'r1', source: 'e1', target: 'e2', relationship: 'belongs_to' } }
+    ];
+
+    // Start the manager on load
+    window.addEventListener('DOMContentLoaded', () => {
+      if (typeof ERDManager !== 'undefined') {
+        ERDManager.init('cy-mount', sampleData);
+      } else {
+        console.error("ERDManager not found. Ensure erd-manager.js is loaded.");
+      }
+    });
+  </script>
+</body>
+</html>

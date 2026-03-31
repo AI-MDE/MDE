@@ -3,21 +3,21 @@
 | | |
 |---|---|
 | **ID** | {{moduleId}} |
-| **Route** | `{{routePrefix}}` |
-| **Entry** | `{{navigation.entryPoint}}` |
+| **Route** | `{{{routePrefix}}}` |
+| **Entry** | `{{{navigation.entryPoint}}}` |
 | **Users** | {{users}} |
 | **Backend Modules** | {{backends}} |
 
 {{purpose}}
 
-{{#subNav}}
+{{#hasSubNav}}
 ## Sub-Navigation
 
 {{#subNav}}
-- [{{label}}]({{route}})
+- **{{label}}** `{{{route}}}`
 {{/subNav}}
 
-{{/subNav}}
+{{/hasSubNav}}
 ## Pages
 
 {{#pages}}
@@ -25,7 +25,7 @@
 
 | | |
 |---|---|
-| **Route** | `{{id}}` |
+| **Route** | `{{{id}}}` |
 | **Pattern** | {{pattern}} |
 | **Menu** | {{menuVisibleLabel}} |
 | **Roles** | {{roles}} |
@@ -37,7 +37,7 @@
 {{#hasActions}}
 **Actions:**
 {{#actions}}
-- {{label}} (`{{type}}`){{#navigatesTo}} → `{{navigatesTo}}`{{/navigatesTo}}
+- {{label}} (`{{type}}`){{#navigatesTo}} → `{{{navigatesTo}}}`{{/navigatesTo}}
 {{/actions}}
 
 {{/hasActions}}
@@ -65,5 +65,5 @@
 ## Navigation Flows
 
 {{#navigation.flows}}
-- `{{from}}` → `{{to}}` via _{{via}}_
+- `{{{from}}}` → `{{{to}}}` via _{{via}}_
 {{/navigation.flows}}

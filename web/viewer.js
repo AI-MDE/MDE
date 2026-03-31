@@ -51,6 +51,14 @@ class DocServer {
                 `  → Run with:  ts-node mde/web/viewer.ts --root=<project-root>`);
         }
         this.config = JSON.parse(fs.readFileSync(configAbs, 'utf8'));
+        this.port = 0;
+        this.browser = null;
+        const mdePath = this.config?.mde?.path;
+        this.allowedRoots = [this.docsRoot];
+        if (typeof mdePath === 'string') {
+            const mdeRoot = path.resolve(this.docsRoot, mdePath);
+            if (mdeRoot !== this.docsRoot) this.allowedRoots.push(mdeRoot);
+        }
         this.htmlFile = path.join(__dirname, 'viewer.html');
         this.cssFile = path.join(__dirname, 'style.css');
         this.clientFile = path.join(__dirname, 'viewer-client.js');
@@ -145,7 +153,7 @@ class DocServer {
         const fallback = path.basename(relFile).replace(/\.[^.]+$/, '');
         if (!labelFrom || labelFrom === 'filename')
             return fallback;
-        const absFile = path.join(this.docsRoot, relFile);
+        const absFile = path.resolve(this.docsRoot, relFile);
         if (!fs.existsSync(absFile))
             return fallback;
         try {
@@ -184,7 +192,7 @@ class DocServer {
         if (file.includes('$config'))
             return null;
         // Skip optional items whose file doesn't exist on disk
-        if (item.includeIfExists && !fs.existsSync(path.join(this.docsRoot, file)))
+        if (item.includeIfExists && !fs.existsSync(path.resolve(this.docsRoot, file)))
             return null;
         return {
             id: item.id,
@@ -211,13 +219,42 @@ class DocServer {
         const labelFrom = scan.labelFrom ?? 'filename';
         const docType = item.docType ?? null;
         const groupBy = scan.groupBy;
-        const absDir = path.join(this.docsRoot, dir);
+        const absDir = path.resolve(this.docsRoot, dir);
         const pattern = this.toFilenamePattern(rawPat, dir);
         const relFiles = scan.recursive
             ? this.listRecursive(absDir, pattern)
             : this.listFlat(absDir, pattern).map(f => `${dir}/${f}`.replace(/\/\//g, '/'));
         if (!relFiles.length)
             return null;
+        if (groupBy === 'phase') {
+            const groupByOrder = scan.groupByOrder ?? [];
+            const byPhase = new Map();
+            for (const relFile of relFiles) {
+                let phase = 'other';
+                try {
+                    const abs = path.resolve(this.docsRoot, relFile);
+                    const obj = JSON.parse(fs.readFileSync(abs, 'utf8').replace(/^\uFEFF/, ''));
+                    if (typeof obj['phase'] === 'string') phase = obj['phase'];
+                } catch { /* leave as 'other' */ }
+                if (!byPhase.has(phase)) byPhase.set(phase, []);
+                byPhase.get(phase).push({
+                    id: this.docId(relFile),
+                    label: this.extractLabel(relFile, labelFrom),
+                    file: relFile,
+                    docType,
+                });
+            }
+            const orderedKeys = [
+                ...groupByOrder.filter(k => byPhase.has(k)),
+                ...[...byPhase.keys()].filter(k => !groupByOrder.includes(k)).sort(),
+            ];
+            const subGroups = orderedKeys.map(phase => ({
+                id: `${item.id}-${phase.replace(/[^a-z0-9]/gi, '-')}`,
+                label: phase.replace(/_/g, ' ').replace(/\b\w/g, c => c.toUpperCase()),
+                docs: byPhase.get(phase),
+            }));
+            return { id: item.id, label: item.label ?? item.id, groups: subGroups };
+        }
         if (groupBy === 'parent-folder' || groupBy === 'module-folder') {
             const byFolder = new Map();
             for (const relFile of relFiles) {
@@ -250,6 +287,103 @@ class DocServer {
             docType,
         }));
         return { id: item.id, label: item.label ?? item.id, docs };
+    }
+    buildRefIndex() {
+        const index = {};
+        const resolveFile = (dotPath) => {
+            const val = this.getConfigAt(dotPath);
+            return typeof val === 'string' ? val : null;
+        };
+        // Module catalog → MOD-xxx
+        const moduleCatalogFile = resolveFile('design.moduleCatalog');
+        if (moduleCatalogFile) {
+            try {
+                const abs = path.resolve(this.docsRoot, moduleCatalogFile);
+                if (fs.existsSync(abs)) {
+                    const data = JSON.parse(fs.readFileSync(abs, 'utf8').replace(/^\uFEFF/, ''));
+                    for (const m of data.catalog?.modules ?? []) {
+                        if (m.id) index[m.id] = { label: m.name ?? m.id, description: m.description ?? '', file: moduleCatalogFile };
+                    }
+                }
+            } catch { /* skip */ }
+        }
+        // Business functions → BF-xxx
+        const bfFile = resolveFile('ba.businessFunctions');
+        if (bfFile) {
+            try {
+                const abs = path.resolve(this.docsRoot, bfFile);
+                if (fs.existsSync(abs)) {
+                    const data = JSON.parse(fs.readFileSync(abs, 'utf8').replace(/^\uFEFF/, ''));
+                    for (const cap of data.capabilities ?? []) {
+                        for (const fn of cap.functions ?? []) {
+                            if (fn.id) index[fn.id] = { label: fn.name ?? fn.id, description: fn.description ?? '', file: bfFile };
+                        }
+                    }
+                }
+            } catch { /* skip */ }
+        }
+        // Entities → ENT-xxx + entity name
+        const entitiesDir = resolveFile('design.entities');
+        if (entitiesDir) {
+            const absDir = path.resolve(this.docsRoot, entitiesDir);
+            if (fs.existsSync(absDir)) {
+                try {
+                    for (const f of fs.readdirSync(absDir).filter(f => /^ent-.*\.json$/.test(f))) {
+                        const relFile = `${entitiesDir}/${f}`.replace(/\/\//g, '/');
+                        const data = JSON.parse(fs.readFileSync(path.resolve(this.docsRoot, relFile), 'utf8').replace(/^\uFEFF/, ''));
+                        const ent = data.entity;
+                        if (!ent) continue;
+                        const entry = { label: ent.name ?? ent.id, description: ent.description ?? '', file: relFile };
+                        if (ent.id)   index[ent.id]   = entry;
+                        if (ent.name) index[ent.name] = entry;
+                    }
+                } catch { /* skip */ }
+            }
+        }
+        // UI catalog → UI-Mxx
+        const uiModulesDir = resolveFile('design.uiModules');
+        if (uiModulesDir) {
+            const uiCatalogFile = `${uiModulesDir}/ui-catalog.json`.replace(/\/\//g, '/');
+            const abs = path.resolve(this.docsRoot, uiCatalogFile);
+            if (fs.existsSync(abs)) {
+                try {
+                    const data = JSON.parse(fs.readFileSync(abs, 'utf8').replace(/^\uFEFF/, ''));
+                    for (const m of data.modules ?? []) {
+                        if (m.id) index[m.id] = { label: m.name ?? m.id, description: m.purpose ?? '', file: uiCatalogFile };
+                    }
+                } catch { /* skip */ }
+            }
+        }
+        return index;
+    }
+    async getBrowser() {
+        if (!this.browser || !this.browser.isConnected()) {
+            const { chromium } = require('@playwright/test');
+            this.browser = await chromium.launch({ headless: true });
+        }
+        return this.browser;
+    }
+    async takeScreenshot(targetUrl) {
+        const browser = await this.getBrowser();
+        const page = await browser.newPage();
+        await page.setViewportSize({ width: 1440, height: 900 });
+        try {
+            // Derive base URL (origin) from targetUrl
+            const parsed = new URL(targetUrl);
+            const loginUrl = `${parsed.origin}/login`;
+            // Log in first (mock auth accepts any credentials)
+            await page.goto(loginUrl, { waitUntil: 'networkidle', timeout: 15000 });
+            await page.fill('input[type="email"]', 'admin@example.com');
+            await page.fill('input[type="password"]', 'password');
+            await page.click('button[type="submit"]');
+            await page.waitForURL(url => !url.toString().includes('/login'), { timeout: 10000 });
+            // Now navigate to the actual target
+            await page.goto(targetUrl, { waitUntil: 'networkidle', timeout: 15000 });
+            await page.waitForTimeout(800);
+            return await page.screenshot({ fullPage: true });
+        } finally {
+            await page.close();
+        }
     }
     buildTree() {
         return this.manifest.sections.map(section => {
@@ -300,8 +434,7 @@ class DocServer {
         });
     }
     isWithinRoot(absPath) {
-        const root = path.resolve(this.docsRoot);
-        return absPath === root || absPath.startsWith(root + path.sep);
+        return this.allowedRoots.some(root => absPath === root || absPath.startsWith(root + path.sep));
     }
     readBody(req) {
         return new Promise(resolve => {
@@ -325,6 +458,18 @@ class DocServer {
             if (url.pathname === '/viewer-client.js') {
                 return this.serveStatic(res, this.clientFile, 'text/javascript');
             }
+            if (url.pathname === '/erd-demo.html') {
+                return this.serveStatic(res, path.join(__dirname, 'erd-demo.html'), 'text/html');
+            }
+            if (url.pathname === '/erd-manager.js') {
+                return this.serveStatic(res, path.join(__dirname, 'erd-manager.js'), 'text/javascript');
+            }
+            if (url.pathname === '/erd-demo.html') {
+                return this.serveStatic(res, path.join(__dirname, 'erd-demo.html'), 'text/html');
+            }
+            if (url.pathname === '/erd-manager.js') {
+                return this.serveStatic(res, path.join(__dirname, 'erd-manager.js'), 'text/javascript');
+            }
             // ── API ──
             if (url.pathname === '/api/manifest') {
                 return this.sendJson(res, this.manifest);
@@ -334,6 +479,46 @@ class DocServer {
             }
             if (url.pathname === '/api/tree') {
                 return this.sendJson(res, this.buildTree());
+            }
+            if (url.pathname === '/api/ref-index') {
+                return this.sendJson(res, this.buildRefIndex());
+            }
+            if (url.pathname.startsWith('/api/image/')) {
+                const relPath = decodeURIComponent(url.pathname.slice('/api/image/'.length));
+                const absPath = path.resolve(this.docsRoot, relPath);
+                if (!this.isWithinRoot(absPath)) { res.writeHead(403); res.end('Forbidden'); return; }
+                if (!fs.existsSync(absPath))     { res.writeHead(404); res.end('Not found'); return; }
+                const data = fs.readFileSync(absPath);
+                res.writeHead(200, { 'Content-Type': 'image/png', 'Content-Length': data.length });
+                res.end(data);
+                return;
+            }
+            if (url.pathname === '/api/screenshots') {
+                const moduleId = url.searchParams.get('module') || '';
+                const screensDir = path.resolve(this.docsRoot, 'docs', 'screens');
+                if (!fs.existsSync(screensDir)) { return this.sendJson(res, []); }
+                const files = fs.readdirSync(screensDir)
+                    .filter(f => f.endsWith('.png') && (!moduleId || f.startsWith(moduleId + '-')))
+                    .sort()
+                    .map(f => `docs/screens/${f}`);
+                return this.sendJson(res, files);
+            }
+            if (url.pathname === '/api/screenshot') {
+                const targetUrl = url.searchParams.get('url');
+                const filename  = url.searchParams.get('filename') || 'page';
+                if (!targetUrl) { res.writeHead(400); res.end('Missing url param'); return; }
+                try {
+                    const screensDir = path.resolve(this.docsRoot, 'docs', 'screens');
+                    fs.mkdirSync(screensDir, { recursive: true });
+                    const png      = await this.takeScreenshot(targetUrl);
+                    const filePath = path.join(screensDir, `${filename}.png`);
+                    fs.writeFileSync(filePath, png);
+                    const relPath  = path.relative(this.docsRoot, filePath).replace(/\\/g, '/');
+                    this.sendJson(res, { saved: relPath });
+                } catch (err) {
+                    res.writeHead(500); res.end(JSON.stringify({ error: err.message }));
+                }
+                return;
             }
             if (url.pathname.startsWith('/api/template/')) {
                 const name = path.basename(decodeURIComponent(url.pathname.slice('/api/template/'.length)));
@@ -413,6 +598,7 @@ class DocServer {
     }
     // ── Server lifecycle ───────────────────────────────────────────────────────
     listen(port) {
+        this.port = port;
         const server = http.createServer((req, res) => {
             this.handle(req, res).catch(err => {
                 this.log('error', `Unhandled: ${err.message}`);

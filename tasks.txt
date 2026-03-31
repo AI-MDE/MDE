@@ -20,3 +20,16 @@ merge: Generate business functions and Use Cases into `Finish Capabilities and U
 --- Improve on Data Model ---
 --- On generate specs or source code , don't overwrite existing logic, only add 
 
+
+
+BUINESS ANALYSIS METHODOLOGY:
+
+ADD BUSINESS EVENTS TO SPECS
+----------------------------
+Rule of thumb:
+If the event changes business state, decisions, obligations, or audit/compliance meaning, it’s business.
+If it describes delivery/infrastructure behavior, it’s technical.
+
+So your instinct is correct: NotificationDispatchFailed should likely live in observability/integration events, not business events.
+
+Refine Use Case
