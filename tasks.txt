@@ -33,3 +33,9 @@ If it describes delivery/infrastructure behavior, it’s technical.
 So your instinct is correct: NotificationDispatchFailed should likely live in observability/integration events, not business events.
 
 Refine Use Case
+
+Viewer:
+
+remove ref to myself
+
+href for BA .md files 
