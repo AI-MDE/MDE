@@ -25,7 +25,7 @@ It is not limited to business analysis. It covers:
 - change management and re-evaluation
 - generation of both **documentation and code**
 
-AI makes this practical without forcing teams into a heavy traditional Model Drive Engineeering platform.
+AI makes this practical without forcing teams into a heavy traditional Model-Driven Engineering platform.
 
 ---
 
@@ -66,261 +66,114 @@ AI-MDE is not:
 
 AI-MDE treats the lifecycle as a connected flow of derivation and validation:
 
-**Raw Inputs → BA Baseline → Architecture & Design → Build Artifacts → Test Assets → Change Impact → Regenerated Outputs**
+**Raw Inputs → Business Analysis → System Design → Development → Deployment — with Governance & Validation throughout**
 
-Instead of treating each phase as isolated manual work, AI-MDE lets AI orchestrate the transitions between phases while keeping structure, rules, traceability, and controlled re-evaluation.
+> Full phase details: [Lifecycle](./docs/help/lifecycle.md)
 
----
+<p align="center">
+  <img src="docs/home/lifecycle-diagram.svg" width="100%"/>
+</p>
 
-## End-to-end lifecycle scope
+```mermaid
+flowchart LR
 
-AI-MDE covers the full lifecycle.
+    subgraph AIMDE["  ai-mde  "]
+        direction TB
+        subgraph KNOW["Knowledge"]
+            direction TB
+            INSTR["AI Instructions\nai-instructions/\norchestrator · commands · skills"]
+            METH["Methodology & SE Knowhow\nmethodology/ · architecture/ · schemas/\nphase rules · layer rules · patterns"]
+        end
+        VIEWER["Viewer"]
+        SCRIPTS["Scripts"]
+    end
 
-### 1. Business Analysis
-AI-MDE ingests raw project material and helps derive:
+    AI(["🧠  AI"])
 
-- goals and scope
-- stakeholders and roles
-- requirements
-- business rules
-- processes and workflows
-- entities and artifacts
-- assumptions, conflicts, and open questions
+    subgraph PROJECT["  project  "]
+        direction TB
+        BA["ba/\nrequirements · use-cases · glossary · analysis"]
+        DES["design/\narchitecture · LDM · modules · entities · SQL · UI"]
+        SRC["src/\ngenerated source code"]
+        TST["tests/\ntest artifacts"]
+        DOCS["docs/ · output/\ndiagrams · exports · validation reports"]
+        STATE["project/\nphase state · questions · logs · change-requests"]
 
-### 2. Architecture and Design
-Once the baseline is strong enough, AI-MDE derives:
+        BA --> |"drives"| DES
+        DES --> |"generates"| SRC
+        DES --> |"defines"| TST
+        SRC --> |"documented in"| DOCS
+        TST --> |"reported in"| DOCS
+        DOCS --> |"tracked in"| STATE
+    end
 
-- system architecture
-- module boundaries
-- integration points
-- data models
-- API contracts
-- workflow and orchestration models
-- design constraints and architectural rules
+    INSTR --> |"instructs"| AI
+    METH --> |"informs"| AI
+    AI --> |"generates"| PROJECT
+    VIEWER --> |"reads · displays"| PROJECT
+    SCRIPTS --> |"validate · setup · sync"| PROJECT
 
-### 3. Development
-AI-MDE supports implementation by generating or guiding:
+    style AIMDE stroke-dasharray: 5 5
+    style PROJECT stroke-dasharray: 5 5
+```
 
-- module specs
-- schemas
-- interfaces
-- DTOs
-- service contracts
-- implementation scaffolds
-- code templates and generated code
+- **ai-mde** — the framework repo: AI instructions and a knowledge base of methodology, architecture rules, and SE patterns that guide every decision the AI makes
+- **🧠 AI** — orchestrated reasoning engine that reads the knowledge base and generates all lifecycle artifacts
+- **project** — a Git repository holding every artifact the AI produces: requirements, design, code, tests, docs, and change records
 
-### 4. Testing and Validation
-AI-MDE can derive and maintain:
-
-- test scenarios
-- traceable test cases
-- validation rules
-- completeness checks
-- impact-aware re-test scope
-- quality and governance artifacts
-
-### 5. Changes
-AI-MDE treats change as a first-class lifecycle concern:
-
-- detect changes in inputs or governed artifacts
-- identify impacted requirements, designs, code, and tests
-- trigger targeted AI re-evaluation
-- regenerate only affected outputs
-- preserve traceability and audit history
-
----
-
-## Lightweight by design
-
-This matters.
-
-AI-MDE is intentionally **lightweight**.
-
-Traditional MDE often becomes heavy because it demands rigid modeling environments, specialized tooling, and high process overhead before value appears.
-
-AI-MDE takes a different path:
-
-- use AI to do the heavy interpretation work
-- use orchestration to control the lifecycle
-- use simple files and repositories as the managed workspace
-- use MCP-connected tools only where they add value
-- generate artifacts incrementally instead of forcing a giant up-front model
-
-That means teams can get lifecycle discipline **without** buying into a heavyweight modeling stack.
+> See [Tool Parts](./docs/help/tool-parts.md) for a full breakdown.
 
 ---
 
 ## Role of AI orchestration
 
-AI is not just answering prompts inside AI-MDE.
-
-AI is orchestrated to perform lifecycle work in a controlled way:
-
-- analyze source material
-- derive missing structure
-- ask targeted clarification questions
-- generate lifecycle artifacts
-- validate outputs against rules
-- detect inconsistencies
-- assess change impact
-- regenerate documentation and code where needed
-
-This is what makes the approach practical. AI provides the adaptive reasoning. MDE provides the lifecycle structure.
+AI is not answering prompts — it is orchestrated to analyze, derive, validate, generate, and regenerate lifecycle artifacts in a controlled, governed pipeline.
 
 ---
 
 ## Role of MCPs
 
-MCPs make AI-MDE more powerful because they let the orchestrated AI work through connected tools and environments instead of staying trapped in chat.
-
-In AI-MDE, MCPs can be used to:
-
-- read and update project artifacts
-- inspect repositories and source files
-- invoke generators and validators
-- interact with documentation systems
-- trigger workflows and automation
-- connect lifecycle steps across tools
-
-So the model is not:
-
-**user asks AI a question**
-
-The model is:
-
-**AI orchestration + MCP-connected capabilities + governed lifecycle rules**
-
-That is a much stronger foundation.
+MCPs connect the AI to tools and environments so it can read and write artifacts, invoke validators, and trigger workflows — beyond chat.
 
 ---
 
 ## The role of MDE
 
-In AI-MDE, model-driven engineering does not mean a giant modeling suite.
-
-It means the important lifecycle elements are explicitly modeled and managed:
-
-- artifacts
-- phases
-- states
-- dependencies
-- rules
-- trace links
-- readiness gates
-- change relationships
-
-MDE is the discipline that makes AI outputs governable.
+MDE is the discipline that makes AI outputs governable — explicitly modeling artifacts, phases, rules, trace links, and change relationships.
 
 ---
 
 ## What AI-MDE generates
 
-AI-MDE is intended to generate both **documentation** and **code-related outputs** across the lifecycle.
-
-Typical generated outputs include:
-
-### Documentation
-- business analysis documents
-- requirements baselines
-- architecture documents
-- design specifications
-- traceability matrices
-- change logs
-- test plans and quality records
-
-### Structured artifacts
-- JSON models
-- rule catalogs
-- module definitions
-- workflow definitions
-- interface specifications
-- validation outputs
-
-### Code-related outputs
-- scaffolds
-- templates
-- contracts
-- schemas
-- DTOs
-- service skeletons
-- test skeletons
-- implementation-ready generated code in selected areas
-
-
-## Operating model
-
-A typical AI-MDE lifecycle loop looks like this:
-
-1. Ingest raw inputs and project artifacts.
-2. Build or refine the BA baseline.
-3. Derive architecture and design outputs.
-4. Generate implementation-oriented specs and code assets.
-5. Derive tests and validation artifacts.
-6. Track all generated outputs in the governed workspace.
-7. Detect changes through files, commits, or tool events.
-8. Re-evaluate only impacted areas.
-9. Regenerate affected documentation, code, and tests.
+Documentation, structured artifacts (JSON models, specs, rule catalogs), and code-related outputs (scaffolds, schemas, DTOs, service skeletons, generated code) — across the full lifecycle.
 
 ---
 
 ## Managed workspace
 
-AI-MDE works well with a Git repository as the primary managed workspace.
-
-That workspace can hold:
-
-- source materials
-- BA artifacts
-- architecture and design artifacts
-- implementation specs
-- generated code
-- test artifacts
-- change records
-- lifecycle state and traceability data
-
-Git provides:
-
-- versioning
-- collaboration
-- rollback
-- review points
-- audit history
-
-This keeps the system simple, transparent, and practical.
+A Git repository holds all lifecycle artifacts — BA, design, code, tests, change records, and traceability data — versioned, reviewable, and auditable.
 
 ---
 
-## Why this is better than BA-only positioning
+## Project viewer
 
-Positioning AI-MDE as a BA tool is too narrow.
-
-BA is only the entry point.
-
-The real value is that AI-MDE can take the project from raw inputs through the rest of the lifecycle using AI orchestration and MCP-enabled execution, while still keeping the work structured, governed, and traceable.
-
-That is the real story.
+A local browser dashboard (`npm run viewer -- --root=<project>` → `http://localhost:4000`) shows phase status, artifact library, command history, open questions, and traceability.
 
 ---
----
+
 ## Install and Quick Guide
-[Install instructions](mde/docs/install.md)
+[Install instructions](./docs/help/install.md)
 
-[How to use](mde/docs/how-to-use-mde.md)
+[How to use](./docs/help/how-to-use-mde.md)
+
+[Lifecycle](./docs/help/lifecycle.md)
+
+[MDE glossary](./docs/help/mde-glossary.md)
 
 ---
 
+## Summary
 
-## in-short 
+**AI-MDE is a lightweight, AI-orchestrated, model-driven engineering framework that uses structured lifecycle control, MCP-connected tools, and governed artifacts to drive project initiation, business analysis, system design, development, governance, and change management across the full software lifecycle.**
 
-**AI-MDE is a lightweight, AI-orchestrated, model-driven engineering framework that uses structured lifecycle control, MCP-connected tools, and governed artifacts to derive business analysis, design, documentation, code, tests, and change-aware updates across the full software lifecycle.**
-
-
-## Final thought
-
-AI-MDE turns AI from a prompting assistant into a **lightweight lifecycle engine**.
-
-Not just for analysis.
-Not just for design.
-Not just for code.
-
-For the whole flow.
+AI-MDE turns AI from a prompting assistant into a **lightweight lifecycle engine** — not just for analysis, not just for design, not just for code, but for the whole flow.
