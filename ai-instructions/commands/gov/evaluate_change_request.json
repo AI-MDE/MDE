@@ -1,0 +1,64 @@
+{
+  "name": "evaluate_change_request",
+  "label": "Evaluate Change Request",
+  "phase": "governance",
+  "intent": "analyze",
+  "ai": "required",
+  "requires": {
+    "changeRequests": {
+      "default": "Requests/*.md"
+    },
+    "requirements": {
+      "from": "config.ba.requirements",
+      "default": "ba/requirements.md"
+    },
+    "useCases": {
+      "from": "config.ba.useCases",
+      "default": "ba/use-cases"
+    },
+    "logicalDataModel": {
+      "from": "config.design.ldm",
+      "default": "ba/data-model/logical-data-model.json"
+    },
+    "moduleCatalog": {
+      "from": "config.design.moduleCatalog",
+      "default": "design/modules/module-catalog.json"
+    },
+    "moduleDefinitions": {
+      "from": "config.design.modules",
+      "default": "design/modules"
+    },
+    "applicationArchitecture": {
+      "from": "config.design.appArchitecture",
+      "default": "design/application_architecture.json"
+    }
+  },
+  "produces": {
+    "impactReport": {
+      "default": "project/change-requests/change-impact-report.md"
+    },
+    "clarificationQuestions": {
+      "from": "config.project_state.questions",
+      "default": "project/questions.json"
+    },
+    "openQueue": {
+      "from": "config.project_state.openQueue",
+      "default": "project/open-queue.json"
+    }
+  },
+  "calls": [
+    "gov/change_request_analysis"
+  ],
+  "tools": [
+    "traceability_engine",
+    "json_validator",
+    "file_manager"
+  ],
+  "rules": [
+    "Treat Requests/*.md as the source placement for incoming change requests",
+    "Produce impact analysis across BA, design, architecture, source, and tests",
+    "Generate clarification questions when decisions are missing or ambiguous",
+    "Use a consistent question-and-answer prompt format in outputs",
+    "Do not apply design or code changes in this command; analysis and questions only"
+  ]
+}

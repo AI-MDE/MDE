@@ -1,0 +1,48 @@
+{
+  "name": "design_compliance_validation",
+  "purpose": "Validate whether system design artifacts comply with BA baseline, design standards, and naming/structure rules.",
+  "inputs": {
+    "requirements": {
+      "from": "config.ba.requirements",
+      "default": "ba/requirements.md"
+    },
+    "useCases": {
+      "from": "config.ba.useCases",
+      "default": "ba/use-cases"
+    },
+    "logicalDataModel": {
+      "from": "config.design.ldm",
+      "default": "ba/data-model/logical-data-model.json"
+    },
+    "entities": {
+      "from": "config.design.entityPattern",
+      "default": "design/entities/ent-*.json"
+    },
+    "moduleCatalog": {
+      "from": "config.design.moduleCatalog",
+      "default": "design/modules/module-catalog.json"
+    },
+    "moduleDefinitions": {
+      "from": "config.design.modules",
+      "default": "design/modules"
+    }
+  },
+  "outputs": {
+    "report": {
+      "from": "config.design.designComplianceReport",
+      "default": "design/design-compliance-report.json"
+    }
+  },
+  "rules": [
+    "Every in-scope FR/BR should map to at least one design module or entity",
+    "Entity naming and semantics should follow business-friendly naming conventions",
+    "Module responsibilities must not conflict with BA scope and business rules",
+    "Flag design artifacts that encode implementation before requirement intent is established"
+  ],
+  "uses_tools": [
+    "traceability_engine",
+    "json_validator",
+    "file_manager"
+  ],
+  "next_phase": null
+}

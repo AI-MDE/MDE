@@ -40,9 +40,9 @@
   "interaction_policy": {
     "execution_mode": "one_command_per_turn",
     "rules": [
-      "Execute exactly one command per user turn — never chain commands automatically.",
+      "Execute exactly one command per user turn â€” never chain commands automatically.",
       "After a command completes, stop. Report results and next_valid_commands, then wait for the user.",
-      "Ambiguous input like 'continue' must be resolved by showing next_valid_commands and asking the user to pick one — never infer and auto-execute.",
+      "Ambiguous input like 'continue' must be resolved by showing next_valid_commands and asking the user to pick one â€” never infer and auto-execute.",
       "Do not infer intent to run multiple commands from vague instructions. Ask instead.",
       "The user must explicitly invoke each next command."
     ]
@@ -56,7 +56,7 @@
       "If the user input is close to multiple commands, return ranked candidates.",
       "Never guess destructive or phase-skipping commands.",
       "Normalize user text to verb + target where possible.",
-      "If user input cannot be resolved to a command, do not guess — show next_valid_commands and ask the user to pick."
+      "If user input cannot be resolved to a command, do not guess â€” show next_valid_commands and ask the user to pick."
     ],
     "examples": [
       {
@@ -124,7 +124,7 @@
     {
       "step": 8,
       "name": "update_project_state",
-      "description": "MANDATORY: Update project/project-state.json — set current_phase, last_command, last_run_at, recommended_next_command, next_valid_commands (with reasons), and artifact statuses. Create the file if it does not exist. Never skip this step."
+      "description": "MANDATORY: Update project/project-state.json â€” set current_phase, last_command, last_run_at, recommended_next_command, next_valid_commands (with reasons), and artifact statuses. Create the file if it does not exist. Never skip this step."
     },
     {
       "step": 9,
@@ -193,10 +193,16 @@
       "allowed_commands": [
         "assess_methodology",
         "assess_architecture",
+        "validate_mde_framework",
+        "validate_project_architecture_compliance",
+        "validate_design_compliance",
+        "validate_project_structure",
+        "evaluate_change_request",
         "validate_traceability",
         "show_phase_status",
         "generate_diagrams",
-        "generate_documentation"
+        "generate_documentation",
+        "export_docs"
       ],
       "exit_conditions_all": []
     }
@@ -259,10 +265,10 @@
     "rules": [
       "After completing or failing any AI command, append one entry to { config.project_state.commandLog }.",
       "If the file does not exist, create it as an empty file.",
-      "Append one newline-delimited JSON line per command — never overwrite existing lines.",
+      "Append one newline-delimited JSON line per command â€” never overwrite existing lines.",
       "Entry schema: { command, label, ai: true, ran_at (ISO 8601), status (success|warning|failed), cost_estimate (object with input_tokens and output_tokens if known, otherwise null), outputs (array of files written) }",
       "cost_estimate should be filled when token counts are available from the session context; otherwise set to null.",
-      "This rule is mandatory — do not skip logging even if the command produced warnings or partial output."
+      "This rule is mandatory â€” do not skip logging even if the command produced warnings or partial output."
     ]
   },
   "post_command_obligations": {

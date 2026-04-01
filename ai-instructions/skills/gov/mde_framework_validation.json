@@ -1,0 +1,43 @@
+{
+  "name": "mde_framework_validation",
+  "purpose": "Validate MDE framework internal consistency (commands, skills, orchestrator, methodology, architecture references).",
+  "inputs": {
+    "commandsRegistry": {
+      "from": "config.mde.commands",
+      "default": "mde/ai-instructions/commands"
+    },
+    "skillsRegistry": {
+      "from": "config.mde.skills",
+      "default": "mde/ai-instructions/skills"
+    },
+    "orchestrator": {
+      "from": "config.mde.orchestrator",
+      "default": "mde/ai-instructions/orchestrator.json"
+    },
+    "methodology": {
+      "from": "config.mde.methodology",
+      "default": "mde/methodology/methodology.json"
+    },
+    "architecture": {
+      "from": "config.mde.architecture",
+      "default": "mde/architecture"
+    }
+  },
+  "outputs": {
+    "report": {
+      "to": "config.output.work",
+      "pattern": "mde-framework-validation-report.json"
+    }
+  },
+  "rules": [
+    "Commands must resolve to existing skill/tool references",
+    "Skills referenced by commands must exist and be unique-resolvable",
+    "Orchestrator phase command names must resolve to command files",
+    "Registry files must be parseable JSON and contain mandatory keys"
+  ],
+  "uses_tools": [
+    "file_manager",
+    "json_validator"
+  ],
+  "next_phase": null
+}

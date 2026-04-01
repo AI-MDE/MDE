@@ -1,0 +1,77 @@
+{
+  "name": "change_request_analysis",
+  "purpose": "Analyze a change request from Requests placement, evaluate impact, and generate clarification questions in a consistent response format.",
+  "inputs": {
+    "changeRequests": {
+      "default": "Requests/*.md"
+    },
+    "requirements": {
+      "from": "config.ba.requirements",
+      "default": "ba/requirements.md"
+    },
+    "useCases": {
+      "from": "config.ba.useCases",
+      "default": "ba/use-cases"
+    },
+    "logicalDataModel": {
+      "from": "config.design.ldm",
+      "default": "ba/data-model/logical-data-model.json"
+    },
+    "moduleCatalog": {
+      "from": "config.design.moduleCatalog",
+      "default": "design/modules/module-catalog.json"
+    },
+    "moduleDefinitions": {
+      "from": "config.design.modules",
+      "default": "design/modules"
+    },
+    "applicationArchitecture": {
+      "from": "config.design.appArchitecture",
+      "default": "design/application_architecture.json"
+    },
+    "sourceManifest": {
+      "from": "config.output.manifest",
+      "default": "src/generated-manifest.json"
+    }
+  },
+  "outputs": {
+    "impactReport": {
+      "default": "project/change-requests/change-impact-report.md"
+    },
+    "clarificationQuestions": {
+      "from": "config.project_state.questions",
+      "default": "project/questions.json"
+    },
+    "openQueue": {
+      "from": "config.project_state.openQueue",
+      "default": "project/open-queue.json"
+    }
+  },
+  "question_prompt_format": {
+    "template": [
+      "Question {n}: <question>",
+      "Why this matters: <impact>",
+      "Expected answer format: <short format hint>",
+      "USER ANSWER:",
+      "<to be filled by user>"
+    ],
+    "rules": [
+      "Questions must be concrete and decision-oriented",
+      "Expected answer format must be explicit (for example: date, enum, formula, yes/no + note)",
+      "Do not ask questions when already answered in the change request"
+    ]
+  },
+  "rules": [
+    "Identify impacted artifacts: BA requirements, use cases, entities, modules, architecture, source code, and tests",
+    "Classify impact by severity: high, medium, low",
+    "Separate gaps requiring clarification from deterministic implementation tasks",
+    "Prefer requirement-level statements in analysis; avoid jumping to implementation details prematurely",
+    "Do not modify design/source artifacts during this analysis command"
+  ],
+  "uses_tools": [
+    "traceability_engine",
+    "json_validator",
+    "file_manager"
+  ],
+  "next_phase": "governance"
+}

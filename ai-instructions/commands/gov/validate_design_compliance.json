@@ -1,0 +1,52 @@
+{
+  "name": "validate_design_compliance",
+  "label": "Validate Design Compliance",
+  "phase": "governance",
+  "intent": "validate",
+  "ai": "required",
+  "requires": {
+    "requirements": {
+      "from": "config.ba.requirements",
+      "default": "ba/requirements.md"
+    },
+    "useCases": {
+      "from": "config.ba.useCases",
+      "default": "ba/use-cases"
+    },
+    "logicalDataModel": {
+      "from": "config.design.ldm",
+      "default": "ba/data-model/logical-data-model.json"
+    },
+    "entities": {
+      "from": "config.design.entityPattern",
+      "default": "design/entities/ent-*.json"
+    },
+    "moduleCatalog": {
+      "from": "config.design.moduleCatalog",
+      "default": "design/modules/module-catalog.json"
+    },
+    "moduleDefinitions": {
+      "from": "config.design.modules",
+      "default": "design/modules"
+    }
+  },
+  "produces": {
+    "report": {
+      "from": "config.design.designComplianceReport",
+      "default": "design/design-compliance-report.json"
+    }
+  },
+  "calls": [
+    "gov/design_compliance_validation"
+  ],
+  "tools": [
+    "traceability_engine",
+    "json_validator",
+    "file_manager"
+  ],
+  "rules": [
+    "Validate BA-to-design consistency for requirements, rules, entities, and modules",
+    "Validate naming and structural standards across design artifacts",
+    "Report gaps, ambiguities, and non-compliant artifacts with severity"
+  ]
+}

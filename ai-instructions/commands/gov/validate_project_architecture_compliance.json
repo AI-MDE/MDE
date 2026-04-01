@@ -1,0 +1,48 @@
+{
+  "name": "validate_project_architecture_compliance",
+  "label": "Validate Project Architecture Compliance",
+  "phase": "governance",
+  "intent": "validate",
+  "ai": "required",
+  "requires": {
+    "applicationArchitecture": {
+      "from": "config.design.appArchitecture",
+      "default": "design/application_architecture.json"
+    },
+    "moduleCatalog": {
+      "from": "config.design.moduleCatalog",
+      "default": "design/modules/module-catalog.json"
+    },
+    "moduleDefinitions": {
+      "from": "config.design.modules",
+      "default": "design/modules"
+    },
+    "sourceManifest": {
+      "from": "config.output.manifest",
+      "default": "src/generated-manifest.json"
+    },
+    "sourceRoot": {
+      "from": "config.output.src",
+      "default": "src"
+    }
+  },
+  "produces": {
+    "report": {
+      "from": "config.design.architectureComplianceReport",
+      "default": "design/architecture-compliance-report.json"
+    }
+  },
+  "calls": [
+    "gov/project_architecture_compliance_validation"
+  ],
+  "tools": [
+    "architecture_validator",
+    "traceability_engine",
+    "file_manager"
+  ],
+  "rules": [
+    "Validate implemented modules and layers against architecture policy",
+    "Validate dependency direction and forbidden cross-layer access",
+    "Report concrete file-level violations and remediation guidance"
+  ]
+}

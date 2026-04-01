@@ -1,0 +1,47 @@
+{
+  "name": "validate_mde_framework",
+  "label": "Validate MDE Framework",
+  "phase": "governance",
+  "intent": "validate",
+  "ai": "optional",
+  "requires": {
+    "commandsRegistry": {
+      "from": "config.mde.commands",
+      "default": "mde/ai-instructions/commands"
+    },
+    "skillsRegistry": {
+      "from": "config.mde.skills",
+      "default": "mde/ai-instructions/skills"
+    },
+    "orchestrator": {
+      "from": "config.mde.orchestrator",
+      "default": "mde/ai-instructions/orchestrator.json"
+    },
+    "methodology": {
+      "from": "config.mde.methodology",
+      "default": "mde/methodology/methodology.json"
+    },
+    "architecture": {
+      "from": "config.mde.architecture",
+      "default": "mde/architecture"
+    }
+  },
+  "produces": {
+    "report": {
+      "to": "config.output.work",
+      "pattern": "mde-framework-validation-report.json"
+    }
+  },
+  "calls": [
+    "gov/mde_framework_validation"
+  ],
+  "tools": [
+    "file_manager",
+    "json_validator"
+  ],
+  "rules": [
+    "Validate command-skill-orchestrator registry integrity and cross references",
+    "Validate methodology and architecture core files are present and parseable",
+    "Report missing, ambiguous, or invalid references with severity"
+  ]
+}

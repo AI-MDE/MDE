@@ -1,0 +1,44 @@
+{
+  "name": "project_architecture_compliance_validation",
+  "purpose": "Validate project implementation and design artifacts against architecture layer/module rules.",
+  "inputs": {
+    "applicationArchitecture": {
+      "from": "config.design.appArchitecture",
+      "default": "design/application_architecture.json"
+    },
+    "moduleCatalog": {
+      "from": "config.design.moduleCatalog",
+      "default": "design/modules/module-catalog.json"
+    },
+    "moduleDefinitions": {
+      "from": "config.design.modules",
+      "default": "design/modules"
+    },
+    "sourceManifest": {
+      "from": "config.output.manifest",
+      "default": "src/generated-manifest.json"
+    },
+    "sourceRoot": {
+      "from": "config.output.src",
+      "default": "src"
+    }
+  },
+  "outputs": {
+    "report": {
+      "from": "config.design.architectureComplianceReport",
+      "default": "design/architecture-compliance-report.json"
+    }
+  },
+  "rules": [
+    "Validate generated source structure against architecture codegen layer paths",
+    "Validate layer dependency direction and forbidden dependencies",
+    "Validate module-to-entity and module-to-endpoint alignment",
+    "Provide file-level findings with severity and recommended fixes"
+  ],
+  "uses_tools": [
+    "architecture_validator",
+    "traceability_engine",
+    "file_manager"
+  ],
+  "next_phase": null
+}
