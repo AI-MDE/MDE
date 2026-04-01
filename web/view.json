@@ -22,7 +22,7 @@
       "phase": "business_analysis",
       "icon": "document-text",
       "items": [
-        { "id": "requirements",         "label": "Requirements",         "docType": "requirements",        "file": "$config.ba.requirements" },
+        { "id": "requirements",         "label": "Requirements",         "docType": "requirements",        "file": "$config.ba.requirements/requirements.md" },
         { "id": "analysis-status",      "label": "Analysis Status",      "docType": "analysis-status",     "file": "$config.ba.analysisStatus" },
         { "id": "glossary",             "label": "Glossary",             "docType": "glossary",            "file": "$config.ba.glossary",   "includeIfExists": true },
         { "id": "business-functions",   "label": "Business Functions",   "docType": "business-functions",  "file": "$config.ba.businessFunctions" },
@@ -242,6 +242,7 @@
           "scan": {
             "dir": "$config.mde.commands",
             "pattern": ".*\\.json$",
+            "recursive": true,
             "labelFrom": "label",
             "groupBy": "phase",
             "groupByOrder": ["project_initiation", "business_analysis", "system_design", "design", "development", "governance"]
@@ -254,7 +255,9 @@
           "scan": {
             "dir": "$config.mde.skills",
             "pattern": ".*\\.json$",
+            "recursive": true,
             "labelFrom": "name",
+            "groupBy": "parent-folder",
             "sortBy": "filename"
           }
         }

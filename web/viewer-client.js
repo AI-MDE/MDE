@@ -61,7 +61,7 @@ function openMethodology() {
  */
 function openAIInstructions() {
   closeMenu();
-  const doc = { id: 'ai-instructions-index', label: 'AI Instructions', file: 'mde/docs/ai-instructions/index.md', docType: 'file' };
+  const doc = { id: 'ai-instructions-orchestrator', label: 'AI Instructions', file: '/dev/ai-mde/ai-instructions/orchestrator.json', docType: 'orchestrator' };
   _adHocDocs[doc.id] = doc;
   loadDoc(doc);
 }

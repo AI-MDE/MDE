@@ -498,6 +498,71 @@ class DocServer {
     });
   }
 
+  private isDirectory(absPath: string): boolean {
+    try {
+      return fs.existsSync(absPath) && fs.statSync(absPath).isDirectory();
+    } catch {
+      return false;
+    }
+  }
+
+  /**
+   * Resolves a requested doc path to an actual readable file.
+   * If the request points to a directory, tries common index files.
+   */
+  private resolveDocReadTarget(absPath: string): { absFile: string; renderedFrom?: string } | null {
+    if (!fs.existsSync(absPath)) return null;
+
+    let stat: fs.Stats;
+    try {
+      stat = fs.statSync(absPath);
+    } catch {
+      return null;
+    }
+
+    if (stat.isFile()) return { absFile: absPath };
+    if (!stat.isDirectory()) return null;
+
+    const candidates = ['index.md', 'README.md', 'index.json'];
+    for (const name of candidates) {
+      const candidate = path.join(absPath, name);
+      if (fs.existsSync(candidate)) {
+        const rel = path.relative(this.docsRoot, candidate).replace(/\\/g, '/');
+        return { absFile: candidate, renderedFrom: rel };
+      }
+    }
+    return null;
+  }
+
+  private buildDirectoryIndexMarkdown(absDir: string, relDir: string): string {
+    const relBase = relDir.replace(/\\/g, '/').replace(/\/+$/, '');
+    const entries = fs.readdirSync(absDir, { withFileTypes: true })
+      .filter(e => !e.name.startsWith('.'))
+      .sort((a, b) => {
+        if (a.isDirectory() !== b.isDirectory()) return a.isDirectory() ? -1 : 1;
+        return a.name.localeCompare(b.name);
+      });
+
+    const lines: string[] = [];
+    lines.push(`# ${path.basename(absDir) || relBase || 'Directory'}`);
+    lines.push('');
+    lines.push(`Generated index for \`${relBase || '/'}\``);
+    lines.push('');
+
+    for (const e of entries) {
+      const target = `${relBase}/${e.name}`.replace(/\/+/g, '/');
+      const label = e.isDirectory() ? `${e.name}/` : e.name;
+      const href = e.isDirectory() ? `${target}/` : target;
+      lines.push(`- [${label}](${href})`);
+    }
+
+    if (entries.length === 0) {
+      lines.push('_This folder is empty._');
+    }
+    lines.push('');
+    return lines.join('\n');
+  }
+
   // ── Request handler ────────────────────────────────────────────────────────
 
   async handle(req: http.IncomingMessage, res: http.ServerResponse): Promise<void> {
@@ -612,11 +677,25 @@ class DocServer {
         }
 
         if (req.method === 'GET') {
-          fs.readFile(absPath, 'utf8', (err, data) => {
+          const target = this.resolveDocReadTarget(absPath);
+          if (!target) {
+            if (this.isDirectory(absPath)) {
+              const dirIndex = this.buildDirectoryIndexMarkdown(absPath, relPath);
+              this.sendJson(res, { content: dirIndex, ext: 'md', renderedFrom: relPath });
+              return;
+            }
+            res.writeHead(404); res.end('Not found'); return;
+          }
+
+          fs.readFile(target.absFile, 'utf8', (err, data) => {
             if (err) { res.writeHead(404); res.end('Not found'); return; }
             const content = data.replace(/^\uFEFF/, '');
-            const ext = path.extname(absPath).slice(1);
-            this.sendJson(res, { content, ext });
+            const ext = path.extname(target.absFile).slice(1);
+            this.sendJson(res, {
+              content,
+              ext,
+              ...(target.renderedFrom ? { renderedFrom: target.renderedFrom } : {}),
+            });
           });
           return;
         }
