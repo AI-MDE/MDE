@@ -1,4 +1,6 @@
 /** @fileoverview Browser client for the MDE Design Document Viewer. */
+const VIEWER_CLIENT_VERSION = '2026-04-01-catalog-v2';
+console.info(`[viewer-client] ${VIEWER_CLIENT_VERSION}`);
 
 // ── State ──────────────────────────────────────────────────────────────────────
 let tree = [];
@@ -1111,6 +1113,33 @@ document.addEventListener('keydown', e => {
   if (e.key === 'ArrowRight') { if (lbIndex < lbImages.length - 1) { lbIndex++; showLightboxImage(); } }
 });
 
+// Mermaid diagram fullscreen overlay
+const diagramFullscreen = document.createElement('div');
+diagramFullscreen.id = 'diagram-fullscreen';
+diagramFullscreen.innerHTML = `
+  <div id="diagram-fullscreen-frame">
+    <div id="diagram-fullscreen-toolbar">
+      <div id="diagram-fullscreen-title">Diagram</div>
+      <button id="diagram-fullscreen-close" type="button" title="Close (Esc)">Close</button>
+    </div>
+    <div id="diagram-fullscreen-canvas"></div>
+  </div>
+`;
+document.body.appendChild(diagramFullscreen);
+
+function closeDiagramFullscreen() {
+  diagramFullscreen.classList.remove('open');
+}
+
+document.getElementById('diagram-fullscreen-close').onclick = closeDiagramFullscreen;
+diagramFullscreen.addEventListener('click', (e) => {
+  if (e.target === diagramFullscreen) closeDiagramFullscreen();
+});
+document.addEventListener('keydown', (e) => {
+  if (!diagramFullscreen.classList.contains('open')) return;
+  if (e.key === 'Escape') closeDiagramFullscreen();
+});
+
 function pageIdToFilename(pageId) {
   return pageId
     .replace(/^\//, '')
@@ -1712,6 +1741,13 @@ async function renderDoc(doc, content, ext, renderedFrom) {
     return;
   }
 
+  // Prefer custom renderers over templates when both exist.
+  // Some templates target legacy schemas and can render empty output.
+  if (docType && CUSTOM_FNS[docType]) {
+    CUSTOM_FNS[docType](body, doc, content);
+    return;
+  }
+
   // Tier 2: template — only for JSON-format docs (templateRef on md docs is an AI guide, not a view template)
   if (catalogEntry?.templateRef && catalogEntry?.format === 'json') {
     await renderFromTemplate(body, { ...doc, docType }, content, catalogEntry.templateRef);
@@ -1764,14 +1800,45 @@ function renderMarkdown(body, content, baseFile) {
       const pre = el.parentElement;
       const div = document.createElement('div');
       div.className = 'mermaid';
-      div.textContent = el.textContent;
+      div.textContent = normalizeMermaidSource(el.textContent || '');
       pre.replaceWith(div);
     } else {
       hljs.highlightElement(el);
     }
   });
   const mermaidNodes = body.querySelectorAll('.mermaid');
-  if (mermaidNodes.length && typeof mermaid !== 'undefined') mermaid.run({ nodes: mermaidNodes });
+  if (mermaidNodes.length) {
+    mermaidNodes.forEach((node, idx) => {
+      const wrap = document.createElement('div');
+      wrap.className = 'diagram-wrap';
+      wrap.innerHTML = `
+        <div class="diagram-toolbar">
+          <button class="diagram-full-btn" type="button" title="Expand diagram">Full screen</button>
+        </div>
+        <div class="diagram-canvas"></div>
+      `;
+      const canvas = wrap.querySelector('.diagram-canvas');
+      node.replaceWith(wrap);
+      canvas.appendChild(node);
+
+      const btn = wrap.querySelector('.diagram-full-btn');
+      btn.addEventListener('click', () => openDiagramFullscreen(canvas, `Diagram ${idx + 1}`));
+    });
+  }
+  const wrappedMermaids = body.querySelectorAll('.diagram-canvas .mermaid');
+  if (wrappedMermaids.length && typeof mermaid !== 'undefined') {
+    Promise.resolve(mermaid.run({ nodes: wrappedMermaids })).catch((err) => {
+      console.error('[mermaid] render failed:', err);
+      wrappedMermaids.forEach((node) => {
+        const wrap = node.closest('.diagram-wrap');
+        if (!wrap) return;
+        const msg = document.createElement('div');
+        msg.className = 'diagram-error';
+        msg.textContent = `Mermaid parse/render error: ${err && err.message ? err.message : String(err)}`;
+        wrap.appendChild(msg);
+      });
+    });
+  }
 
   // Intercept relative links -> load in viewer
   if (baseFile) {
@@ -1788,6 +1855,35 @@ function renderMarkdown(body, content, baseFile) {
       });
     });
   }
+}
+
+function normalizeMermaidSource(source) {
+  let s = String(source || '').replace(/\r/g, '');
+  // Protect against collapsed whitespace joining two statements (e.g. "...| S1    S1 -->|...")
+  s = s.replace(/(\|\s*[A-Za-z0-9_]+)\s+([A-Za-z_][A-Za-z0-9_]*\s*-->\s*\|)/g, '$1;\n    $2');
+  s = s.replace(/(\]\s*[A-Za-z0-9_]+)\s+([A-Za-z_][A-Za-z0-9_]*\s*-->\s*\|)/g, '$1;\n    $2');
+  // Some Mermaid parsers reject semicolon statement separators; strip them.
+  s = s.replace(/;\s*/g, '\n');
+  return s;
+}
+
+function openDiagramFullscreen(sourceEl, fallbackTitle) {
+  const overlay = document.getElementById('diagram-fullscreen');
+  const canvas = document.getElementById('diagram-fullscreen-canvas');
+  const titleEl = document.getElementById('diagram-fullscreen-title');
+  if (!overlay || !canvas || !titleEl || !sourceEl) return;
+
+  canvas.innerHTML = '';
+  const svg = sourceEl.querySelector('svg');
+  const clone = (svg || sourceEl).cloneNode(true);
+  if (svg) {
+    clone.style.maxWidth = '100%';
+    clone.style.maxHeight = '100%';
+    clone.style.height = 'auto';
+  }
+  canvas.appendChild(clone);
+  titleEl.textContent = fallbackTitle || 'Diagram';
+  overlay.classList.add('open');
 }
 
 /**
@@ -2005,32 +2101,32 @@ function renderCommandLog(body, data) {
 function renderModuleCatalog(body, data) {
   const catalog = data.catalog || data;
   const modules = catalog.modules || data.modules || [];
-  const project = catalog.application || data.project || '';
+  const project = catalog.application || catalog.project || data.project || '';
   const version = catalog.version || data.version || '';
+  const date = catalog.last_updated || catalog.generated_at || data.date || '';
   let html = `<div class="md-body"><h1>Module Catalog</h1>
-    <p>${modules.length} modules${project ? ` - <strong>${escHtml(project)}</strong>` : ''}${version ? ` v${escHtml(version)}` : ''}</p></div>
+    <p>${modules.length} modules${project ? ` - <strong>${escHtml(project)}</strong>` : ''}${version ? ` v${escHtml(version)}` : ''}${date ? ` (${escHtml(date)})` : ''}</p>
+    <p style="font-size:11px;color:#6b7280">renderer: ${escHtml(VIEWER_CLIENT_VERSION)}</p></div>
     <table class="cat-table">
-      <thead><tr><th>ID</th><th>Name</th><th>Layer</th><th>Tier</th><th>Owner</th><th>Depends On</th></tr></thead>
+      <thead><tr><th>ID</th><th>Name</th><th>Entities</th><th>APIs</th><th>Source Refs</th></tr></thead>
       <tbody>`;
   modules.forEach(m => {
     const id   = m.moduleId || m.id || '';
     const name = m.moduleName || m.displayName || m.name || '';
-    const layer = m.layer || m.type || '';
-    const tier  = m.tier || '';
-    const owner = m.owner || '';
-    const deps  = (m.dependencies || []).join(', ');
+    const entities = Array.isArray(m.entities) ? m.entities : [];
+    const apis = Array.isArray(m.exposes) ? m.exposes : (m.api && Array.isArray(m.api.endpoints) ? m.api.endpoints : []);
+    const refs = Array.isArray(m.source_refs) ? m.source_refs : (Array.isArray(m.requirements) ? m.requirements : []);
     html += `<tr class="cat-row" onclick="showModulePopover('${escHtml(id)}', this)" data-module-id="${escHtml(id)}">
       <td><code>${escHtml(id)}</code></td>
       <td>${escHtml(name)}</td>
-      <td>${layer ? `<span class="layer-badge ${escHtml(layer)}">${escHtml(layer)}</span>` : '-'}</td>
-      <td>${tier ? `<span class="mc-tier ${escHtml(tier)}">${escHtml(tier)}</span>` : '-'}</td>
-      <td>${escHtml(owner)}</td>
-      <td style="font-size:12px;color:var(--muted)">${escHtml(deps)}</td>
+      <td style="font-size:12px;color:var(--muted)">${entities.length ? entities.map(e => `<code>${escHtml(e)}</code>`).join(' ') : '-'}</td>
+      <td style="font-size:12px;color:var(--muted)">${apis.length ? escHtml(String(apis.length)) : '-'}</td>
+      <td style="font-size:12px;color:var(--muted)">${refs.length ? refs.map(r => `<code>${escHtml(r)}</code>`).join(' ') : '-'}</td>
     </tr>`;
   });
   html += `</tbody></table>`;
   body.innerHTML = html;
-  body._moduleCatalogData = data;
+  body._moduleCatalogData = { project, version, date, modules };
 }
 
 const _modulePopoverCache = {};
@@ -2078,6 +2174,13 @@ function showModulePopover(modId, rowEl) {
  * @param {{project:string, version:string, modules:Array}} data - Parsed module catalog data.
  */
 function renderModuleCatalogByLayer(body, data) {
+  const catalog = data.catalog || data;
+  const normalized = {
+    project: catalog.application || catalog.project || data.project || '',
+    version: catalog.version || data.version || '',
+    date: catalog.last_updated || catalog.generated_at || data.date || '',
+    modules: catalog.modules || data.modules || []
+  };
   const LAYER_ORDER = ['VIEW', 'CTRL', 'SVC', 'BL', 'DAL'];
   const LAYER_DESC  = {
     VIEW: 'UI rendering and client-side state',
@@ -2088,7 +2191,7 @@ function renderModuleCatalogByLayer(body, data) {
   };
 
   const byLayer = {};
-  for (const m of data.modules) {
+  for (const m of normalized.modules) {
     const layer = (m.layer || m.type || 'UNCLASSIFIED').toUpperCase();
     if (!byLayer[layer]) byLayer[layer] = [];
     byLayer[layer].push(m);
@@ -2097,7 +2200,7 @@ function renderModuleCatalogByLayer(body, data) {
   const layers = [...LAYER_ORDER.filter(l => byLayer[l]), ...Object.keys(byLayer).filter(l => !LAYER_ORDER.includes(l))];
 
   let html = `<div class="md-body"><h1>Module Catalogue - By Layer</h1>
-    <p>${data.modules.length} modules &nbsp;&middot;&nbsp; <strong>${data.project}</strong> v${data.version}</p></div>`;
+    <p>${normalized.modules.length} modules${normalized.project ? ` &nbsp;&middot;&nbsp; <strong>${escHtml(normalized.project)}</strong>` : ''}${normalized.version ? ` v${escHtml(normalized.version)}` : ''}${normalized.date ? ` (${escHtml(normalized.date)})` : ''}</p></div>`;
 
   for (const layer of layers) {
     const modules = byLayer[layer] || [];
