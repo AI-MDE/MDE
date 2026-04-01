@@ -43,14 +43,14 @@ class DocServer {
         if (!fs.existsSync(manifestAbs)) {
             throw new Error(`Manifest not found: ${manifestAbs}`);
         }
-        this.manifest = JSON.parse(fs.readFileSync(manifestAbs, 'utf8'));
+        this.manifest = JSON.parse(fs.readFileSync(manifestAbs, 'utf8').replace(/^\uFEFF/, ''));
         const configAbs = path.join(this.docsRoot, this.manifest.config ?? 'configuration.json');
         if (!fs.existsSync(configAbs)) {
             throw new Error(`configuration.json not found at: ${configAbs}\n` +
                 `  → All $config.x.y references will fail to resolve.\n` +
                 `  → Run with:  ts-node mde/web/viewer.ts --root=<project-root>`);
         }
-        this.config = JSON.parse(fs.readFileSync(configAbs, 'utf8'));
+        this.config = JSON.parse(fs.readFileSync(configAbs, 'utf8').replace(/^\uFEFF/, ''));
         this.port = 0;
         this.browser = null;
         const mdePath = this.config?.mde?.path;

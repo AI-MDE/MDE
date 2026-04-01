@@ -1,0 +1,695 @@
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" >
+<head>
+    <meta charset="utf-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" /><link rel="canonical" href="https://ai-mde.github.io/docs/mde-internal-architecture-note-old/" />
+      <link rel="shortcut icon" href="../img/favicon.ico" />
+    <title>MDE Internal Architecture Note - AI-MDE Docs</title>
+    <link rel="stylesheet" href="../css/theme.css" />
+    <link rel="stylesheet" href="../css/theme_extra.css" />
+        <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.8.0/styles/github.min.css" />
+    
+      <script>
+        // Current page data
+        var mkdocs_page_name = "MDE Internal Architecture Note";
+        var mkdocs_page_input_path = "mde-internal-architecture-note-old.md";
+        var mkdocs_page_url = "/docs/mde-internal-architecture-note-old/";
+      </script>
+    
+    <!--[if lt IE 9]>
+      <script src="../js/html5shiv.min.js"></script>
+    <![endif]-->
+      <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.8.0/highlight.min.js"></script>
+      <script>hljs.highlightAll();</script> 
+</head>
+
+<body class="wy-body-for-nav" role="document">
+
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side stickynav">
+    <div class="wy-side-scroll">
+      <div class="wy-side-nav-search">
+          <a href=".." class="icon icon-home"> AI-MDE Docs
+        </a><div role="search">
+  <form id ="rtd-search-form" class="wy-form" action="../search.html" method="get">
+      <input type="text" name="q" placeholder="Search docs" aria-label="Search docs" title="Type search term here" />
+  </form>
+</div>
+      </div>
+
+      <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+              <ul>
+                <li class="toctree-l1"><a class="reference internal" href="..">Home</a>
+                </li>
+              </ul>
+              <ul>
+                <li class="toctree-l1"><a class="reference internal" href="../help/install/">Install</a>
+                </li>
+              </ul>
+              <p class="caption"><span class="caption-text">Help</span></p>
+              <ul>
+                  <li class="toctree-l1"><a class="reference internal" href="../help/how-to-use-mde/">How To Use MDE</a>
+                  </li>
+                  <li class="toctree-l1"><a class="reference internal" href="../help/ai_pipeline_commands/">Pipeline Commands</a>
+                  </li>
+                  <li class="toctree-l1"><a class="reference internal" href="../help/workspace/">Workspace</a>
+                  </li>
+                  <li class="toctree-l1"><a class="reference internal" href="../help/methodology/">Methodology</a>
+                  </li>
+              </ul>
+              <ul>
+                <li class="toctree-l1"><a class="reference internal" href="../lifecycle/">Lifecycle</a>
+                </li>
+              </ul>
+              <ul>
+                <li class="toctree-l1"><a class="reference internal" href="../configuration/">Configuration</a>
+                </li>
+              </ul>
+              <p class="caption"><span class="caption-text">AI Instructions</span></p>
+              <ul>
+                  <li class="toctree-l1"><a class="reference internal" href="../ai-instructions/">Overview</a>
+                  </li>
+                  <li class="toctree-l1"><a class="reference internal" href="../ai-instructions/commands/">Commands</a>
+                  </li>
+                  <li class="toctree-l1"><a class="reference internal" href="../ai-instructions/skills/">Skills</a>
+                  </li>
+              </ul>
+              <p class="caption"><span class="caption-text">Design</span></p>
+              <ul>
+                  <li class="toctree-l1"><a class="reference internal" href="../design/system-design-process/">Process</a>
+                  </li>
+                  <li class="toctree-l1"><a class="reference internal" href="../design/use-case-mapping/">Use-Case Mapping</a>
+                  </li>
+                  <li class="toctree-l1"><a class="reference internal" href="../design/business-events/">Business Events</a>
+                  </li>
+                  <li class="toctree-l1"><a class="reference internal" href="../design/business-app-layering/">App Layering</a>
+                  </li>
+              </ul>
+              <ul>
+                <li class="toctree-l1"><a class="reference internal" href="../changes/">Changes</a>
+                </li>
+              </ul>
+      </div>
+    </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
+      <nav class="wy-nav-top" role="navigation" aria-label="Mobile navigation menu">
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="..">AI-MDE Docs</a>
+        
+      </nav>
+      <div class="wy-nav-content">
+        <div class="rst-content"><div role="navigation" aria-label="breadcrumbs navigation">
+  <ul class="wy-breadcrumbs">
+    <li><a href=".." class="icon icon-home" aria-label="Docs"></a></li>
+      <li class="breadcrumb-item active">MDE Internal Architecture Note</li>
+    <li class="wy-breadcrumbs-aside">
+          <a href="https://github.com/AI-MDE/ai-mde/edit/master/docs/mde-internal-architecture-note-old.md">Edit on AI-MDE/ai-mde</a>
+    </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+            <div class="section" itemprop="articleBody">
+              
+                <h1 id="mde-internal-architecture-note">MDE Internal Architecture Note<a class="headerlink" href="#mde-internal-architecture-note" title="Permanent link">&para;</a></h1>
+<h2 id="1-purpose">1. Purpose<a class="headerlink" href="#1-purpose" title="Permanent link">&para;</a></h2>
+<p>This note defines the internal architecture of <strong>MDE</strong> as a model-driven, document-centric lifecycle engine.</p>
+<p>The core idea is that MDE is not merely a collection of prompts, commands, or files.<br />
+At its center is a <strong>meta-model repository</strong> that defines the lifecycle, artifacts, behavior, and validation rules of the platform.</p>
+<p>MDE should manage the lifecycle of application and system development through:
+- lifecycle definitions
+- phase definitions
+- document types
+- schemas
+- templates
+- commands
+- skills
+- validations
+- generation rules
+- traceability
+- readiness gates</p>
+<p>This makes MDE a governed engineering environment rather than a loose AI assistant.</p>
+<hr />
+<h2 id="2-core-architectural-principle">2. Core Architectural Principle<a class="headerlink" href="#2-core-architectural-principle" title="Permanent link">&para;</a></h2>
+<p>The platform should be understood through this chain:</p>
+<p><strong>Lifecycle -&gt; Phase -&gt; Document Type -&gt; Schema -&gt; Template -&gt; Validation -&gt; Command -&gt; Skill -&gt; Output</strong></p>
+<p>This is the internal backbone of MDE.</p>
+<p>For every lifecycle, MDE should know:
+- what phases exist
+- what documents are expected in each phase
+- which documents are required or optional
+- how each document enters the system
+- which commands operate on it
+- which skill governs that operation
+- how it is validated
+- how it is presented to the user
+- when the phase is considered ready to advance</p>
+<hr />
+<h2 id="3-the-center-of-the-product-meta-model-repository">3. The Center of the Product: Meta-Model Repository<a class="headerlink" href="#3-the-center-of-the-product-meta-model-repository" title="Permanent link">&para;</a></h2>
+<p>The center of MDE should be called the <strong>Meta-Model Repository</strong>.</p>
+<p>This repository is the governing model of the platform. It defines the structure of project lifecycles and the artifacts managed on behalf of the user.</p>
+<p>The meta-model repository should contain:</p>
+<ul>
+<li>lifecycle definitions</li>
+<li>phase definitions</li>
+<li>document type definitions</li>
+<li>document schemas</li>
+<li>document presentation templates</li>
+<li>command definitions</li>
+<li>skill definitions</li>
+<li>validation rules</li>
+<li>generation rules</li>
+<li>readiness gates</li>
+<li>dependency relationships</li>
+<li>traceability rules</li>
+</ul>
+<p>This is more accurate than calling it a catalog, because it is not only a list. It is the formal model that defines what the platform knows and how it behaves.</p>
+<hr />
+<h2 id="4-static-meta-model-vs-runtime-project-state">4. Static Meta-Model vs Runtime Project State<a class="headerlink" href="#4-static-meta-model-vs-runtime-project-state" title="Permanent link">&para;</a></h2>
+<p>A critical architectural distinction is the separation of:</p>
+<h3 id="a-static-meta-model">A. Static Meta-Model<a class="headerlink" href="#a-static-meta-model" title="Permanent link">&para;</a></h3>
+<p>Defines the platform itself:
+- supported lifecycles
+- phases
+- document types
+- schemas
+- templates
+- commands
+- skills
+- validations
+- generation rules</p>
+<h3 id="b-runtime-project-state">B. Runtime Project State<a class="headerlink" href="#b-runtime-project-state" title="Permanent link">&para;</a></h3>
+<p>Defines one active project instance:
+- actual artifacts/documents
+- actual lifecycle and current phase
+- actual user-provided materials
+- actual AI-generated outputs
+- actual validation results
+- actual open issues and queues
+- actual trace links
+- actual change history</p>
+<p>The meta-model governs the runtime state, but the two should remain separate.</p>
+<hr />
+<h2 id="5-main-meta-model-repositories">5. Main Meta-Model Repositories<a class="headerlink" href="#5-main-meta-model-repositories" title="Permanent link">&para;</a></h2>
+<h2 id="51-lifecycle-repository">5.1 Lifecycle Repository<a class="headerlink" href="#51-lifecycle-repository" title="Permanent link">&para;</a></h2>
+<p>The Lifecycle Repository defines supported project and system development lifecycles.</p>
+<p>Examples:
+- predictive
+- iterative / incremental
+- sprint-based agile
+- hybrid</p>
+<p>For each lifecycle, MDE should define:
+- lifecycle identifier
+- description
+- ordered phases
+- mandatory artifacts by phase
+- optional artifacts by phase
+- validation rigor
+- approval expectations
+- change management style
+- readiness gate behavior</p>
+<p>This repository lets MDE adapt the process to the chosen methodology.</p>
+<hr />
+<h2 id="52-phase-repository">5.2 Phase Repository<a class="headerlink" href="#52-phase-repository" title="Permanent link">&para;</a></h2>
+<p>The Phase Repository defines the phases within each lifecycle.</p>
+<p>Examples:
+- discovery
+- business analysis
+- data modeling
+- architecture
+- system design
+- implementation planning</p>
+<p>For each phase:
+- phase identifier
+- display label
+- lifecycle membership
+- purpose
+- entry criteria
+- exit criteria
+- required documents
+- recommended documents
+- commands available in this phase
+- skills commonly used in this phase
+- validation checks
+- readiness gate</p>
+<p>This repository provides the structure for guided progression.</p>
+<hr />
+<h2 id="53-document-type-repository">5.3 Document Type Repository<a class="headerlink" href="#53-document-type-repository" title="Permanent link">&para;</a></h2>
+<p>The Document Type Repository defines every artifact MDE can manage.</p>
+<p>Examples:
+- source inventory
+- discovery findings
+- requirements baseline
+- business capabilities
+- use cases
+- business rules catalog
+- open issues queue
+- conceptual data model
+- logical data model
+- architecture baseline
+- system design
+- traceability matrix
+- change log</p>
+<p>For each document type:
+- id
+- display name
+- purpose
+- lifecycle phases where used
+- status in phase: required / recommended / optional
+- source mode
+- schema reference
+- template reference
+- validation rules
+- generation rules
+- dependencies
+- related commands
+- related skills</p>
+<p>This repository is one of the most important parts of the system.</p>
+<hr />
+<h2 id="54-schema-repository">5.4 Schema Repository<a class="headerlink" href="#54-schema-repository" title="Permanent link">&para;</a></h2>
+<p>Every document type should have a schema.</p>
+<p>The schema provides:
+- machine-readable structure
+- required fields
+- section rules
+- data typing
+- consistency rules
+- interoperability between commands and skills</p>
+<p>Possible forms:
+- JSON schema
+- typed structured model
+- structured markdown schema</p>
+<p>The schema is what allows MDE to validate that a document is complete enough for the next step.</p>
+<hr />
+<h2 id="55-template-repository">5.5 Template Repository<a class="headerlink" href="#55-template-repository" title="Permanent link">&para;</a></h2>
+<p>The Template Repository defines how each document type is presented to the user.</p>
+<p>Templates should support:
+- markdown views
+- HTML-style rendering
+- user-friendly layout
+- sectioned displays
+- non-technical presentation</p>
+<p>This is separate from the schema.</p>
+<ul>
+<li><strong>Schema</strong> = machine form</li>
+<li><strong>Template</strong> = human form</li>
+</ul>
+<p>This separation is important because the internal document may be structured, while the user sees a readable artifact.</p>
+<hr />
+<h2 id="56-command-repository">5.6 Command Repository<a class="headerlink" href="#56-command-repository" title="Permanent link">&para;</a></h2>
+<p>The Command Repository defines the actions users can invoke.</p>
+<p>Commands should be categorized by:
+- lifecycle
+- phase
+- intent
+- write scope
+- required maturity
+- target artifacts
+- linked skill</p>
+<p>Examples:
+- perform business analysis
+- generate clarification batch
+- validate BA completeness
+- derive data model
+- validate noun coverage
+- derive architecture
+- build system design</p>
+<p>Commands should be visible to the user based on:
+- selected lifecycle
+- current phase
+- readiness state
+- available artifacts
+- blocked/unblocked status</p>
+<p>Commands are the user-facing action layer.</p>
+<hr />
+<h2 id="57-skill-repository">5.7 Skill Repository<a class="headerlink" href="#57-skill-repository" title="Permanent link">&para;</a></h2>
+<p>The Skill Repository defines how AI performs each major kind of work.</p>
+<p>Examples:
+- delivery methodology advisor
+- business analysis from sources
+- data model from BA
+- system architecture from BA and data
+- system design from architecture</p>
+<p>Each skill should define:
+- id
+- purpose
+- methodology
+- required input types
+- optional input types
+- expected output types
+- completion criteria
+- behavior on uncertainty
+- validation expectations
+- constraints and guardrails</p>
+<p>Commands choose skills.<br />
+Skills define behavior.</p>
+<hr />
+<h2 id="58-validation-repository">5.8 Validation Repository<a class="headerlink" href="#58-validation-repository" title="Permanent link">&para;</a></h2>
+<p>Validation is a first-class component.</p>
+<p>Validation rules should operate at multiple levels.</p>
+<h3 id="document-level-validation">Document-level validation<a class="headerlink" href="#document-level-validation" title="Permanent link">&para;</a></h3>
+<ul>
+<li>schema completeness</li>
+<li>required fields</li>
+<li>section presence</li>
+<li>field format</li>
+</ul>
+<h3 id="cross-document-validation">Cross-document validation<a class="headerlink" href="#cross-document-validation" title="Permanent link">&para;</a></h3>
+<ul>
+<li>use case references missing capability</li>
+<li>rule references missing requirement</li>
+<li>architecture refers to missing business driver</li>
+<li>data model refers to missing entity or concept</li>
+</ul>
+<h3 id="lifecycle-validation">Lifecycle validation<a class="headerlink" href="#lifecycle-validation" title="Permanent link">&para;</a></h3>
+<ul>
+<li>phase missing mandatory artifacts</li>
+<li>readiness gate not satisfied</li>
+<li>blocking open issues remain</li>
+</ul>
+<h3 id="semantic-validation">Semantic validation<a class="headerlink" href="#semantic-validation" title="Permanent link">&para;</a></h3>
+<ul>
+<li>important business nouns missing from data model</li>
+<li>conflicting requirements remain unresolved</li>
+<li>design moves ahead of insufficient BA</li>
+</ul>
+<p>Validation is a major source of product value.</p>
+<hr />
+<h2 id="59-generation-rule-repository">5.9 Generation Rule Repository<a class="headerlink" href="#59-generation-rule-repository" title="Permanent link">&para;</a></h2>
+<p>Generation rules define how a document may be created or refreshed.</p>
+<p>For each document type, MDE should know:
+- whether it can be provided by the user
+- whether AI can generate it
+- whether it is derived from prior artifacts
+- whether it can be regenerated
+- what inputs are required
+- what skill is responsible
+- what validations run after generation</p>
+<p>Generation rules connect document types to commands and skills.</p>
+<hr />
+<h2 id="510-traceability-repository">5.10 Traceability Repository<a class="headerlink" href="#510-traceability-repository" title="Permanent link">&para;</a></h2>
+<p>Traceability should be explicit and queryable.</p>
+<p>MDE should track links such as:</p>
+<p><strong>Source artifact -&gt; Discovery finding -&gt; Clarification question -&gt; Answer -&gt; Requirement -&gt; Capability -&gt; Use Case -&gt; Data Model -&gt; Architecture -&gt; Design</strong></p>
+<p>Each major artifact should be traceable to earlier evidence and later outputs.</p>
+<p>This repository should support:
+- trace links
+- lineage graphs
+- impact analysis
+- change propagation
+- coverage reporting</p>
+<hr />
+<h2 id="511-readiness-gate-repository">5.11 Readiness Gate Repository<a class="headerlink" href="#511-readiness-gate-repository" title="Permanent link">&para;</a></h2>
+<p>Each phase should have an associated readiness gate.</p>
+<p>A readiness gate determines whether the project is allowed to move forward.</p>
+<p>Examples:
+- BA cannot exit while business domain is unknown
+- data model cannot be accepted while critical nouns remain unmapped
+- architecture cannot proceed while critical BA blockers remain open
+- system design cannot begin without an architecture baseline</p>
+<p>Readiness gates should be lifecycle-aware and configurable.</p>
+<hr />
+<h2 id="6-source-mode-provenance">6. Source Mode / Provenance<a class="headerlink" href="#6-source-mode-provenance" title="Permanent link">&para;</a></h2>
+<p>Every document type should define how it enters the system.</p>
+<p>Suggested source modes:
+- provided_by_user
+- generated_by_ai
+- derived_from_other_documents
+- hybrid_user_plus_ai
+- imported_from_external_tool</p>
+<p>This supports provenance tracking and helps users understand what was:
+- authored by them
+- inferred by AI
+- derived from prior artifacts
+- imported from outside</p>
+<p>This should also support trust and auditability.</p>
+<hr />
+<h2 id="7-runtime-artifact-instances">7. Runtime Artifact Instances<a class="headerlink" href="#7-runtime-artifact-instances" title="Permanent link">&para;</a></h2>
+<p>At runtime, each project will contain artifact instances, not just document types.</p>
+<p>An artifact instance should include:
+- artifact id
+- document type id
+- project id
+- lifecycle and phase
+- current status
+- source mode
+- version
+- path or storage reference
+- schema validation state
+- last updated time
+- originating command
+- originating skill
+- trace links
+- approval state if applicable</p>
+<p>The runtime artifact model is what the system actually manages during project execution.</p>
+<hr />
+<h2 id="8-internal-runtime-layers">8. Internal Runtime Layers<a class="headerlink" href="#8-internal-runtime-layers" title="Permanent link">&para;</a></h2>
+<p>The internal product architecture should be organized into four layers.</p>
+<h2 id="81-meta-model-layer">8.1 Meta-Model Layer<a class="headerlink" href="#81-meta-model-layer" title="Permanent link">&para;</a></h2>
+<p>Defines the static platform model:
+- lifecycles
+- phases
+- doc types
+- schemas
+- templates
+- commands
+- skills
+- validations
+- generation rules
+- readiness gates</p>
+<h2 id="82-project-state-layer">8.2 Project State Layer<a class="headerlink" href="#82-project-state-layer" title="Permanent link">&para;</a></h2>
+<p>Stores runtime project artifacts and state:
+- active lifecycle
+- active phase
+- actual documents
+- question queues
+- validation results
+- trace links
+- change history
+- approvals
+- readiness state</p>
+<h2 id="83-execution-layer">8.3 Execution Layer<a class="headerlink" href="#83-execution-layer" title="Permanent link">&para;</a></h2>
+<p>Runs the actual behavior:
+- command interpreter
+- skill dispatcher
+- generation engine
+- validation engine
+- traceability engine
+- queue manager
+- change manager</p>
+<h2 id="84-presentation-layer">8.4 Presentation Layer<a class="headerlink" href="#84-presentation-layer" title="Permanent link">&para;</a></h2>
+<p>Presents all of this to the user:
+- web viewer
+- document views
+- lifecycle/phase navigation
+- validation results
+- command selection
+- skill visibility
+- queue management
+- traceability exploration</p>
+<hr />
+<h2 id="9-commands-by-lifecycle-and-phase">9. Commands by Lifecycle and Phase<a class="headerlink" href="#9-commands-by-lifecycle-and-phase" title="Permanent link">&para;</a></h2>
+<p>Commands should not be a flat list.</p>
+<p>The UI should surface commands according to:
+- selected lifecycle
+- current phase
+- artifact readiness
+- blocked status
+- recommended next actions</p>
+<p>Examples:</p>
+<h3 id="business-analysis-phase">Business Analysis phase<a class="headerlink" href="#business-analysis-phase" title="Permanent link">&para;</a></h3>
+<ul>
+<li>analyze source materials</li>
+<li>confirm business domain</li>
+<li>derive business capabilities</li>
+<li>derive use cases</li>
+<li>generate clarification batch</li>
+<li>update BA baseline</li>
+<li>validate BA completeness</li>
+</ul>
+<h3 id="data-modeling-phase">Data Modeling phase<a class="headerlink" href="#data-modeling-phase" title="Permanent link">&para;</a></h3>
+<ul>
+<li>derive conceptual data model</li>
+<li>review existing model</li>
+<li>validate noun coverage</li>
+<li>generate logical data model</li>
+</ul>
+<h3 id="architecture-phase">Architecture phase<a class="headerlink" href="#architecture-phase" title="Permanent link">&para;</a></h3>
+<ul>
+<li>derive architecture baseline</li>
+<li>map capabilities to modules</li>
+<li>validate architecture readiness</li>
+</ul>
+<p>This makes the product easier and safer to use.</p>
+<hr />
+<h2 id="10-viewer-explorer">10. Viewer / Explorer<a class="headerlink" href="#10-viewer-explorer" title="Permanent link">&para;</a></h2>
+<p>A web-based viewer is an important internal tool.</p>
+<p>It should expose the product “under the hood.”</p>
+<p>Suggested views:
+- lifecycle view
+- phase view
+- document library view
+- document detail view
+- schema view
+- template preview
+- command explorer
+- skill explorer
+- validation results
+- traceability graph
+- change history</p>
+<p>This serves both operational and transparency purposes.</p>
+<hr />
+<h2 id="11-validation-tools">11. Validation Tools<a class="headerlink" href="#11-validation-tools" title="Permanent link">&para;</a></h2>
+<p>Validation tools should guide users through both input and output quality.</p>
+<p>Validation tools should answer questions like:
+- Is the document structurally valid?
+- Are required fields present?
+- Are the right artifacts available for this phase?
+- Are outputs consistent with prior artifacts?
+- Are unresolved blockers visible?
+- Is the data model complete enough relative to BA?
+- Is the architecture grounded in validated BA and data model?</p>
+<p>Validation should not be just syntax checking. It should include lifecycle and semantic checks.</p>
+<hr />
+<h2 id="12-suggested-core-meta-model-objects">12. Suggested Core Meta-Model Objects<a class="headerlink" href="#12-suggested-core-meta-model-objects" title="Permanent link">&para;</a></h2>
+<p>Recommended core internal objects:</p>
+<ul>
+<li><code>LifecycleModel</code></li>
+<li><code>PhaseModel</code></li>
+<li><code>DocumentType</code></li>
+<li><code>DocumentSchema</code></li>
+<li><code>DocumentTemplate</code></li>
+<li><code>CommandDefinition</code></li>
+<li><code>SkillDefinition</code></li>
+<li><code>ValidationRule</code></li>
+<li><code>GenerationRule</code></li>
+<li><code>ReadinessGate</code></li>
+<li><code>ArtifactInstance</code></li>
+<li><code>TraceLink</code></li>
+<li><code>ProjectState</code></li>
+</ul>
+<p>These objects provide the language of the system.</p>
+<hr />
+<h2 id="13-high-level-example">13. High-Level Example<a class="headerlink" href="#13-high-level-example" title="Permanent link">&para;</a></h2>
+<p>A simplified example for a project could look like this:</p>
+<h3 id="lifecycle">Lifecycle<a class="headerlink" href="#lifecycle" title="Permanent link">&para;</a></h3>
+<p>Hybrid</p>
+<h3 id="current-phase">Current phase<a class="headerlink" href="#current-phase" title="Permanent link">&para;</a></h3>
+<p>Business Analysis</p>
+<h3 id="required-document-types-in-this-phase">Required document types in this phase<a class="headerlink" href="#required-document-types-in-this-phase" title="Permanent link">&para;</a></h3>
+<ul>
+<li>source inventory</li>
+<li>requirements baseline</li>
+<li>business capabilities</li>
+<li>use cases</li>
+<li>business rules</li>
+<li>BA document</li>
+<li>open issues queue</li>
+</ul>
+<h3 id="available-commands">Available commands<a class="headerlink" href="#available-commands" title="Permanent link">&para;</a></h3>
+<ul>
+<li>analyze source materials</li>
+<li>derive business capabilities</li>
+<li>generate clarification batch</li>
+<li>validate BA completeness</li>
+</ul>
+<h3 id="skill-used-by-command">Skill used by command<a class="headerlink" href="#skill-used-by-command" title="Permanent link">&para;</a></h3>
+<ul>
+<li><code>business_analysis_from_sources</code></li>
+</ul>
+<h3 id="outputs-generated">Outputs generated<a class="headerlink" href="#outputs-generated" title="Permanent link">&para;</a></h3>
+<ul>
+<li>requirements baseline</li>
+<li>clarification queue</li>
+<li>BA document draft</li>
+</ul>
+<h3 id="validation">Validation<a class="headerlink" href="#validation" title="Permanent link">&para;</a></h3>
+<ul>
+<li>business domain present</li>
+<li>business capabilities defined</li>
+<li>use cases present or explicitly deferred</li>
+<li>critical blockers visible</li>
+</ul>
+<p>This demonstrates how the meta-model drives execution.</p>
+<hr />
+<h2 id="14-three-additional-concepts-to-keep-explicit">14. Three Additional Concepts to Keep Explicit<a class="headerlink" href="#14-three-additional-concepts-to-keep-explicit" title="Permanent link">&para;</a></h2>
+<p>Three concepts should be added explicitly to the meta-model:</p>
+<h3 id="a-dependency-graph">A. Dependency Graph<a class="headerlink" href="#a-dependency-graph" title="Permanent link">&para;</a></h3>
+<p>Which document types depend on which others.</p>
+<h3 id="b-source-provenance">B. Source Provenance<a class="headerlink" href="#b-source-provenance" title="Permanent link">&para;</a></h3>
+<p>Was the artifact provided, generated, derived, or imported.</p>
+<h3 id="c-readiness-gates">C. Readiness Gates<a class="headerlink" href="#c-readiness-gates" title="Permanent link">&para;</a></h3>
+<p>What must be true before the phase may advance.</p>
+<p>These concepts will become essential as the platform grows.</p>
+<hr />
+<h2 id="15-recommended-naming">15. Recommended Naming<a class="headerlink" href="#15-recommended-naming" title="Permanent link">&para;</a></h2>
+<p>The internal center of MDE should be described as:</p>
+<p><strong>The MDE Meta-Model Repository</strong></p>
+<p>Containing:
+- lifecycle definitions
+- phase definitions
+- document type definitions
+- schemas
+- presentation templates
+- commands
+- skills
+- validation rules
+- generation rules
+- readiness gates
+- traceability rules</p>
+<p>This is the most accurate name for the central architectural concept.</p>
+<hr />
+<h2 id="16-final-view">16. Final View<a class="headerlink" href="#16-final-view" title="Permanent link">&para;</a></h2>
+<p>MDE should be understood as a <strong>document-centric lifecycle engine</strong> governed by a meta-model.</p>
+<p>It manages:
+- what the user may provide
+- what AI may generate
+- what is required by each lifecycle phase
+- how artifacts are validated
+- how outputs are presented
+- how commands and skills operate
+- how traceability and readiness are preserved</p>
+<p>That makes MDE a governed engineering platform rather than a simple AI assistant.</p>
+              
+            </div>
+          </div><footer>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <!-- Copyright etc -->
+  </div>
+
+  Built with <a href="https://www.mkdocs.org/">MkDocs</a> using a <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a> provided by <a href="https://readthedocs.org">Read the Docs</a>.
+</footer>
+          
+        </div>
+      </div>
+
+    </section>
+
+  </div>
+
+  <div class="rst-versions" role="note" aria-label="Versions">
+  <span class="rst-current-version" data-toggle="rst-current-version">
+    
+    
+    
+  </span>
+</div>
+    <script src="../js/jquery-3.6.0.min.js"></script>
+    <script>var base_url = "..";</script>
+    <script src="../js/theme_extra.js"></script>
+    <script src="../js/theme.js"></script>
+      <script src="../search/main.js"></script>
+    <script>
+        jQuery(function () {
+            SphinxRtdTheme.Navigation.enable(true);
+        });
+    </script>
+
+</body>
+</html>

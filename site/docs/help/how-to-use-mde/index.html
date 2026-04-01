@@ -1,0 +1,369 @@
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" >
+<head>
+    <meta charset="utf-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" /><link rel="canonical" href="https://ai-mde.github.io/docs/help/how-to-use-mde/" />
+      <link rel="shortcut icon" href="../../img/favicon.ico" />
+    <title>How To Use MDE - AI-MDE Docs</title>
+    <link rel="stylesheet" href="../../css/theme.css" />
+    <link rel="stylesheet" href="../../css/theme_extra.css" />
+        <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.8.0/styles/github.min.css" />
+    
+      <script>
+        // Current page data
+        var mkdocs_page_name = "How To Use MDE";
+        var mkdocs_page_input_path = "help\\how-to-use-mde.md";
+        var mkdocs_page_url = "/docs/help/how-to-use-mde/";
+      </script>
+    
+    <!--[if lt IE 9]>
+      <script src="../../js/html5shiv.min.js"></script>
+    <![endif]-->
+      <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.8.0/highlight.min.js"></script>
+      <script>hljs.highlightAll();</script> 
+</head>
+
+<body class="wy-body-for-nav" role="document">
+
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side stickynav">
+    <div class="wy-side-scroll">
+      <div class="wy-side-nav-search">
+          <a href="../.." class="icon icon-home"> AI-MDE Docs
+        </a><div role="search">
+  <form id ="rtd-search-form" class="wy-form" action="../../search.html" method="get">
+      <input type="text" name="q" placeholder="Search docs" aria-label="Search docs" title="Type search term here" />
+  </form>
+</div>
+      </div>
+
+      <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+              <ul>
+                <li class="toctree-l1"><a class="reference internal" href="../..">Home</a>
+                </li>
+              </ul>
+              <ul>
+                <li class="toctree-l1"><a class="reference internal" href="../install/">Install</a>
+                </li>
+              </ul>
+              <p class="caption"><span class="caption-text">Help</span></p>
+              <ul class="current">
+                  <li class="toctree-l1 current"><a class="reference internal current" href="./">How To Use MDE</a>
+    <ul class="current">
+    <li class="toctree-l2"><a class="reference internal" href="#mode-1-ide-only-claude-code-vs-code-no-viewer">Mode 1 — IDE Only (Claude Code + VS Code, no viewer)</a>
+        <ul>
+    <li class="toctree-l3"><a class="reference internal" href="#setup">Setup</a>
+    </li>
+    <li class="toctree-l3"><a class="reference internal" href="#how-commands-work">How commands work</a>
+    </li>
+    <li class="toctree-l3"><a class="reference internal" href="#typical-session-flow">Typical session flow</a>
+    </li>
+    <li class="toctree-l3"><a class="reference internal" href="#where-ai-reads-from-and-writes-to">Where AI reads from and writes to</a>
+    </li>
+    <li class="toctree-l3"><a class="reference internal" href="#tips-for-ide-mode">Tips for IDE mode</a>
+    </li>
+        </ul>
+    </li>
+    <li class="toctree-l2"><a class="reference internal" href="#mode-2-with-the-viewer">Mode 2 — With the Viewer</a>
+        <ul>
+    <li class="toctree-l3"><a class="reference internal" href="#start-the-viewer">Start the viewer</a>
+    </li>
+    <li class="toctree-l3"><a class="reference internal" href="#what-the-viewer-shows">What the viewer shows</a>
+    </li>
+    <li class="toctree-l3"><a class="reference internal" href="#workflow-with-viewer-open">Workflow with viewer open</a>
+    </li>
+    <li class="toctree-l3"><a class="reference internal" href="#when-to-use-the-viewer">When to use the viewer</a>
+    </li>
+        </ul>
+    </li>
+    <li class="toctree-l2"><a class="reference internal" href="#choosing-a-mode">Choosing a mode</a>
+    </li>
+    </ul>
+                  </li>
+                  <li class="toctree-l1"><a class="reference internal" href="../ai_pipeline_commands/">Pipeline Commands</a>
+                  </li>
+                  <li class="toctree-l1"><a class="reference internal" href="../workspace/">Workspace</a>
+                  </li>
+                  <li class="toctree-l1"><a class="reference internal" href="../methodology/">Methodology</a>
+                  </li>
+              </ul>
+              <ul>
+                <li class="toctree-l1"><a class="reference internal" href="../../lifecycle/">Lifecycle</a>
+                </li>
+              </ul>
+              <ul>
+                <li class="toctree-l1"><a class="reference internal" href="../../configuration/">Configuration</a>
+                </li>
+              </ul>
+              <p class="caption"><span class="caption-text">AI Instructions</span></p>
+              <ul>
+                  <li class="toctree-l1"><a class="reference internal" href="../../ai-instructions/">Overview</a>
+                  </li>
+                  <li class="toctree-l1"><a class="reference internal" href="../../ai-instructions/commands/">Commands</a>
+                  </li>
+                  <li class="toctree-l1"><a class="reference internal" href="../../ai-instructions/skills/">Skills</a>
+                  </li>
+              </ul>
+              <p class="caption"><span class="caption-text">Design</span></p>
+              <ul>
+                  <li class="toctree-l1"><a class="reference internal" href="../../design/system-design-process/">Process</a>
+                  </li>
+                  <li class="toctree-l1"><a class="reference internal" href="../../design/use-case-mapping/">Use-Case Mapping</a>
+                  </li>
+                  <li class="toctree-l1"><a class="reference internal" href="../../design/business-events/">Business Events</a>
+                  </li>
+                  <li class="toctree-l1"><a class="reference internal" href="../../design/business-app-layering/">App Layering</a>
+                  </li>
+              </ul>
+              <ul>
+                <li class="toctree-l1"><a class="reference internal" href="../../changes/">Changes</a>
+                </li>
+              </ul>
+      </div>
+    </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
+      <nav class="wy-nav-top" role="navigation" aria-label="Mobile navigation menu">
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../..">AI-MDE Docs</a>
+        
+      </nav>
+      <div class="wy-nav-content">
+        <div class="rst-content"><div role="navigation" aria-label="breadcrumbs navigation">
+  <ul class="wy-breadcrumbs">
+    <li><a href="../.." class="icon icon-home" aria-label="Docs"></a></li>
+          <li class="breadcrumb-item">Help</li>
+      <li class="breadcrumb-item active">How To Use MDE</li>
+    <li class="wy-breadcrumbs-aside">
+          <a href="https://github.com/AI-MDE/ai-mde/edit/master/docs/help/how-to-use-mde.md">Edit on AI-MDE/ai-mde</a>
+    </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+            <div class="section" itemprop="articleBody">
+              
+                <h1 id="how-to-use-mde">How to Use MDE<a class="headerlink" href="#how-to-use-mde" title="Permanent link">&para;</a></h1>
+<p>MDE is a command-driven, AI-orchestrated model-driven engineering framework.
+You control the lifecycle by issuing explicit commands. AI executes the work through a governed skill pipeline.</p>
+<p>There are two ways to work with MDE:</p>
+<ol>
+<li><strong>IDE mode</strong> — using Claude Code (or any AI coding assistant) directly inside VS Code, with no browser needed.</li>
+<li><strong>Viewer mode</strong> — running the local web viewer alongside your IDE for a visual project dashboard.</li>
+</ol>
+<hr />
+<h2 id="mode-1-ide-only-claude-code-vs-code-no-viewer">Mode 1 — IDE Only (Claude Code + VS Code, no viewer)<a class="headerlink" href="#mode-1-ide-only-claude-code-vs-code-no-viewer" title="Permanent link">&para;</a></h2>
+<p>This is the primary working mode. All interaction happens through the Claude Code chat panel inside VS Code.</p>
+<h3 id="setup">Setup<a class="headerlink" href="#setup" title="Permanent link">&para;</a></h3>
+<ol>
+<li>Open the project root folder (<code>c:\ai-mde</code> or your host project) in VS Code.</li>
+<li>Open the Claude Code panel (side panel or <code>Ctrl+Shift+P → Claude Code</code>).</li>
+<li>Confirm <code>CLAUDE.md</code> is present at the project root — it bootstraps the AI with MDE instructions.</li>
+</ol>
+<p>No server, no browser, no additional tools needed.</p>
+<h3 id="how-commands-work">How commands work<a class="headerlink" href="#how-commands-work" title="Permanent link">&para;</a></h3>
+<p>Type commands directly in the Claude Code chat — natural language or the exact command name. The orchestrator resolves them.</p>
+<pre><code>Perform Business Analysis
+Build System Design
+Validate Requirements
+Generate LDM
+Show Phase Status
+</code></pre>
+<p>You can also use the canonical command name:</p>
+<pre><code class="language-claude">perform_business_analysis
+build_system_design
+validate_requirements
+</code></pre>
+<p>To see all available commands, ask:</p>
+<pre><code class="language-claude">List all MDE commands
+</code></pre>
+<h3 id="typical-session-flow">Typical session flow<a class="headerlink" href="#typical-session-flow" title="Permanent link">&para;</a></h3>
+<pre><code>Initiate Project
+</code></pre>
+<ol>
+<li>Drop source material into ba/discovery/ then run:</li>
+</ol>
+<pre><code class="language-claude">Perform Business Analysis
+</code></pre>
+<ol>
+<li>Review and answer questions in project/questions.json, then:</li>
+</ol>
+<pre><code>Validate Requirements
+</code></pre>
+<ol>
+<li>Move to design</li>
+</ol>
+<pre><code>Build System Design
+
+Generate LDM
+</code></pre>
+<ol>
+<li>Inspect current phase and what is allowed next</li>
+</ol>
+<pre><code>Show Phase Status
+</code></pre>
+<h3 id="where-ai-reads-from-and-writes-to">Where AI reads from and writes to<a class="headerlink" href="#where-ai-reads-from-and-writes-to" title="Permanent link">&para;</a></h3>
+<table>
+<thead>
+<tr>
+<th>Input</th>
+<th>Path</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Source material to analyze</td>
+<td><code>ba/discovery/</code></td>
+</tr>
+<tr>
+<td>Requirements baseline</td>
+<td><code>ba/requirements.md</code></td>
+</tr>
+<tr>
+<td>Analysis status</td>
+<td><code>ba/analysis-status.md</code></td>
+</tr>
+<tr>
+<td>Active questions</td>
+<td><code>project/questions.json</code></td>
+</tr>
+<tr>
+<td>Open issues</td>
+<td><code>project/open-queue.json</code></td>
+</tr>
+<tr>
+<td>Application definition</td>
+<td><code>application/application.json</code></td>
+</tr>
+<tr>
+<td>Project state</td>
+<td><code>project/project-state.json</code></td>
+</tr>
+<tr>
+<td>Command log</td>
+<td><code>project/logs/command-log.json</code></td>
+</tr>
+</tbody>
+</table>
+<p>All outputs are written to these paths. You can read, edit, and commit them like any other files.</p>
+<h3 id="tips-for-ide-mode">Tips for IDE mode<a class="headerlink" href="#tips-for-ide-mode" title="Permanent link">&para;</a></h3>
+<ul>
+<li>Drop new source files into <code>ba/discovery/</code> before running <code>Perform Business Analysis</code>.</li>
+<li>After AI generates questions in <code>project/questions.json</code>, answer them directly in the file, then re-run validation.</li>
+<li>Ask <code>Show Phase Status</code> to see what is complete, what is missing, and what commands are available next.</li>
+<li>The command log at <code>project/logs/command-log.json</code> records every AI command run — useful for reviewing what was done.</li>
+</ul>
+<hr />
+<h2 id="mode-2-with-the-viewer">Mode 2 — With the Viewer<a class="headerlink" href="#mode-2-with-the-viewer" title="Permanent link">&para;</a></h2>
+<p>The viewer is a local web app that gives you a visual dashboard of your project artifacts, phase status, and outputs. Use it alongside Claude Code in VS Code — the two do not conflict.</p>
+<h3 id="start-the-viewer">Start the viewer<a class="headerlink" href="#start-the-viewer" title="Permanent link">&para;</a></h3>
+<p>From the project root:</p>
+<pre><code class="language-bash">npm run viewer -- -- --root=c:\dev\my-project 
+</code></pre>
+<p>or </p>
+<pre><code class="language-bash">
+ts-node web/app.ts --root=c:\dev\my-project
+
+</code></pre>
+<p>The viewer starts at <strong>http://localhost:4000</strong> and opens automatically in your default browser.</p>
+<h3 id="what-the-viewer-shows">What the viewer shows<a class="headerlink" href="#what-the-viewer-shows" title="Permanent link">&para;</a></h3>
+<p><img alt="Business Requirements" src="./images/viewer-BA-1.png" /></p>
+<ul>
+<li><strong>Phase status</strong> — which phases are complete, in progress, or blocked</li>
+<li><strong>Artifact library</strong> — browse generated documents (requirements, architecture, LDM, module specs, etc.)</li>
+<li><strong>Command history</strong> — what commands have run and their status</li>
+<li><strong>Open questions and issues</strong> — current items in <code>project/questions.json</code> and <code>project/open-queue.json</code></li>
+<li><strong>Traceability</strong> — links from requirements through design to generated outputs</li>
+</ul>
+<h3 id="workflow-with-viewer-open">Workflow with viewer open<a class="headerlink" href="#workflow-with-viewer-open" title="Permanent link">&para;</a></h3>
+<p>The viewer reads from the same project files that Claude Code writes to. No sync step is needed — refresh the browser after each AI command to see updated outputs.</p>
+<pre><code>1. Open VS Code + Claude Code panel
+2. In a terminal: npm run viewer  → opens http://localhost:4000
+3. Issue commands through Claude Code chat
+4. Refresh the viewer to see results
+</code></pre>
+<h3 id="when-to-use-the-viewer">When to use the viewer<a class="headerlink" href="#when-to-use-the-viewer" title="Permanent link">&para;</a></h3>
+<ul>
+<li>Reviewing AI-generated artifacts with stakeholders (share screen on the browser view)</li>
+<li>Checking phase readiness before moving to the next phase</li>
+<li>Browsing the artifact library without reading raw files</li>
+<li>Reviewing open questions and validation issues at a glance</li>
+</ul>
+<hr />
+<h2 id="choosing-a-mode">Choosing a mode<a class="headerlink" href="#choosing-a-mode" title="Permanent link">&para;</a></h2>
+<table>
+<thead>
+<tr>
+<th>Situation</th>
+<th>Recommended mode</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Active development, writing commands, iterating fast</td>
+<td>IDE only</td>
+</tr>
+<tr>
+<td>Reviewing outputs, sharing with non-technical stakeholders</td>
+<td>Viewer</td>
+</tr>
+<tr>
+<td>Full working session</td>
+<td>Both — IDE for commands, viewer for review</td>
+</tr>
+<tr>
+<td>Headless / CI pipeline</td>
+<td>IDE only (no viewer needed)</td>
+</tr>
+</tbody>
+</table>
+              
+            </div>
+          </div><footer>
+    <div class="rst-footer-buttons" role="navigation" aria-label="Footer Navigation">
+        <a href="../install/" class="btn btn-neutral float-left" title="Install"><span class="icon icon-circle-arrow-left"></span> Previous</a>
+        <a href="../ai_pipeline_commands/" class="btn btn-neutral float-right" title="Pipeline Commands">Next <span class="icon icon-circle-arrow-right"></span></a>
+    </div>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <!-- Copyright etc -->
+  </div>
+
+  Built with <a href="https://www.mkdocs.org/">MkDocs</a> using a <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a> provided by <a href="https://readthedocs.org">Read the Docs</a>.
+</footer>
+          
+        </div>
+      </div>
+
+    </section>
+
+  </div>
+
+  <div class="rst-versions" role="note" aria-label="Versions">
+  <span class="rst-current-version" data-toggle="rst-current-version">
+    
+    
+      <span><a href="../install/" style="color: #fcfcfc">&laquo; Previous</a></span>
+    
+    
+      <span><a href="../ai_pipeline_commands/" style="color: #fcfcfc">Next &raquo;</a></span>
+    
+  </span>
+</div>
+    <script src="../../js/jquery-3.6.0.min.js"></script>
+    <script>var base_url = "../..";</script>
+    <script src="../../js/theme_extra.js"></script>
+    <script src="../../js/theme.js"></script>
+      <script src="../../search/main.js"></script>
+    <script>
+        jQuery(function () {
+            SphinxRtdTheme.Navigation.enable(true);
+        });
+    </script>
+
+</body>
+</html>

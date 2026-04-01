@@ -1,0 +1,584 @@
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" >
+<head>
+    <meta charset="utf-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" /><link rel="canonical" href="https://ai-mde.github.io/docs/home/ai-mde-discussion-notes/" />
+      <link rel="shortcut icon" href="../../img/favicon.ico" />
+    <title>AI-MDE Discussion Notes - AI-MDE Docs</title>
+    <link rel="stylesheet" href="../../css/theme.css" />
+    <link rel="stylesheet" href="../../css/theme_extra.css" />
+        <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.8.0/styles/github.min.css" />
+    
+      <script>
+        // Current page data
+        var mkdocs_page_name = "AI-MDE Discussion Notes";
+        var mkdocs_page_input_path = "home\\ai-mde-discussion-notes.md";
+        var mkdocs_page_url = "/docs/home/ai-mde-discussion-notes/";
+      </script>
+    
+    <!--[if lt IE 9]>
+      <script src="../../js/html5shiv.min.js"></script>
+    <![endif]-->
+      <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.8.0/highlight.min.js"></script>
+      <script>hljs.highlightAll();</script> 
+</head>
+
+<body class="wy-body-for-nav" role="document">
+
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side stickynav">
+    <div class="wy-side-scroll">
+      <div class="wy-side-nav-search">
+          <a href="../.." class="icon icon-home"> AI-MDE Docs
+        </a><div role="search">
+  <form id ="rtd-search-form" class="wy-form" action="../../search.html" method="get">
+      <input type="text" name="q" placeholder="Search docs" aria-label="Search docs" title="Type search term here" />
+  </form>
+</div>
+      </div>
+
+      <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+              <ul>
+                <li class="toctree-l1"><a class="reference internal" href="../..">Home</a>
+                </li>
+              </ul>
+              <ul>
+                <li class="toctree-l1"><a class="reference internal" href="../../help/install/">Install</a>
+                </li>
+              </ul>
+              <p class="caption"><span class="caption-text">Help</span></p>
+              <ul>
+                  <li class="toctree-l1"><a class="reference internal" href="../../help/how-to-use-mde/">How To Use MDE</a>
+                  </li>
+                  <li class="toctree-l1"><a class="reference internal" href="../../help/ai_pipeline_commands/">Pipeline Commands</a>
+                  </li>
+                  <li class="toctree-l1"><a class="reference internal" href="../../help/workspace/">Workspace</a>
+                  </li>
+                  <li class="toctree-l1"><a class="reference internal" href="../../help/methodology/">Methodology</a>
+                  </li>
+              </ul>
+              <ul>
+                <li class="toctree-l1"><a class="reference internal" href="../../lifecycle/">Lifecycle</a>
+                </li>
+              </ul>
+              <ul>
+                <li class="toctree-l1"><a class="reference internal" href="../../configuration/">Configuration</a>
+                </li>
+              </ul>
+              <p class="caption"><span class="caption-text">AI Instructions</span></p>
+              <ul>
+                  <li class="toctree-l1"><a class="reference internal" href="../../ai-instructions/">Overview</a>
+                  </li>
+                  <li class="toctree-l1"><a class="reference internal" href="../../ai-instructions/commands/">Commands</a>
+                  </li>
+                  <li class="toctree-l1"><a class="reference internal" href="../../ai-instructions/skills/">Skills</a>
+                  </li>
+              </ul>
+              <p class="caption"><span class="caption-text">Design</span></p>
+              <ul>
+                  <li class="toctree-l1"><a class="reference internal" href="../../design/system-design-process/">Process</a>
+                  </li>
+                  <li class="toctree-l1"><a class="reference internal" href="../../design/use-case-mapping/">Use-Case Mapping</a>
+                  </li>
+                  <li class="toctree-l1"><a class="reference internal" href="../../design/business-events/">Business Events</a>
+                  </li>
+                  <li class="toctree-l1"><a class="reference internal" href="../../design/business-app-layering/">App Layering</a>
+                  </li>
+              </ul>
+              <ul>
+                <li class="toctree-l1"><a class="reference internal" href="../../changes/">Changes</a>
+                </li>
+              </ul>
+      </div>
+    </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
+      <nav class="wy-nav-top" role="navigation" aria-label="Mobile navigation menu">
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../..">AI-MDE Docs</a>
+        
+      </nav>
+      <div class="wy-nav-content">
+        <div class="rst-content"><div role="navigation" aria-label="breadcrumbs navigation">
+  <ul class="wy-breadcrumbs">
+    <li><a href="../.." class="icon icon-home" aria-label="Docs"></a></li>
+      <li class="breadcrumb-item active">AI-MDE Discussion Notes</li>
+    <li class="wy-breadcrumbs-aside">
+          <a href="https://github.com/AI-MDE/ai-mde/edit/master/docs/home/ai-mde-discussion-notes.md">Edit on AI-MDE/ai-mde</a>
+    </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+            <div class="section" itemprop="articleBody">
+              
+                <h1 id="ai-mde-discussion-notes">AI-MDE Discussion Notes<a class="headerlink" href="#ai-mde-discussion-notes" title="Permanent link">&para;</a></h1>
+<h2 id="1-core-product-direction">1. Core Product Direction<a class="headerlink" href="#1-core-product-direction" title="Permanent link">&para;</a></h2>
+<p>AI-MDE should not begin by asking the user for a formal requirements document or for a framework artifact such as Zachman output.</p>
+<p>The stronger approach is:</p>
+<p><strong>raw inputs -&gt; guided discovery -&gt; business analysis baseline -&gt; data model -&gt; architecture -&gt; system design</strong></p>
+<p>The system should lead the process, not force the user to know what to provide up front.</p>
+<p>The user may provide:
+- notes
+- source documents
+- spreadsheets
+- screenshots
+- forms
+- reports
+- sample outputs
+- emails
+- process descriptions
+- diagrams
+- sample data
+- table structures
+- design fragments</p>
+<p>AI-MDE should:
+- analyze what is already known
+- detect missing information
+- ask focused questions
+- propose likely answers where appropriate
+- keep unresolved items in queue
+- update structured artifacts incrementally</p>
+<hr />
+<h2 id="2-business-analysis-stage">2. Business Analysis Stage<a class="headerlink" href="#2-business-analysis-stage" title="Permanent link">&para;</a></h2>
+<p>The BA stage is the foundation of the product.</p>
+<p>Its purpose is to:
+- absorb messy source inputs
+- extract structured business knowledge
+- distinguish explicit facts from inference and assumptions
+- identify contradictions and gaps
+- ask the next highest-value questions
+- build a traceable BA baseline suitable for later design</p>
+<p>The BA stage should produce:
+- source inventory
+- discovery findings
+- terminology map
+- clarification log
+- assumptions register
+- conflict register
+- requirements baseline
+- business rules catalog
+- entity/artifact catalog
+- business analysis document
+- design readiness summary
+- traceability matrix
+- change log</p>
+<p>The BA stage should not be treated as a summary exercise. It should behave like a disciplined business analyst.</p>
+<hr />
+<h2 id="3-audit-trail">3. Audit Trail<a class="headerlink" href="#3-audit-trail" title="Permanent link">&para;</a></h2>
+<p>A full audit trail is required.</p>
+<p>The system should record:
+- what source artifacts were used
+- what findings were extracted
+- what questions were asked
+- why each question was asked
+- how the user answered
+- what changed because of the answer
+- what remains unresolved
+- what is explicit, inferred, assumed, or conflicting</p>
+<p>Trace chain:</p>
+<p><strong>Source artifact -&gt; Discovery finding -&gt; Clarification question -&gt; User answer -&gt; Requirement update -&gt; BA section -&gt; Design driver</strong></p>
+<p>The audit trail should be structured, not just a raw transcript.</p>
+<hr />
+<h2 id="4-ai-led-discovery">4. AI-Led Discovery<a class="headerlink" href="#4-ai-led-discovery" title="Permanent link">&para;</a></h2>
+<p>AI-MDE should take the lead.</p>
+<p>The user should not need to orchestrate the workflow manually.</p>
+<p>The AI should:
+- analyze source material
+- build a provisional baseline
+- identify missing information
+- ask the next best questions
+- update the baseline after each answer
+- maintain queue and traceability
+- decide when the BA baseline is mature enough for the next phase</p>
+<p>The user’s role is to:
+- provide source material
+- answer clarification questions
+- correct misunderstandings
+- review outputs
+- approve progression</p>
+<hr />
+<h2 id="5-trust-and-standards-positioning">5. Trust and Standards Positioning<a class="headerlink" href="#5-trust-and-standards-positioning" title="Permanent link">&para;</a></h2>
+<p>AI-MDE should not claim to be a human BA expert.</p>
+<p>Its credibility comes from:
+- standards-aligned method
+- evidence-based extraction from project artifacts
+- explicit clarification and audit trail
+- clear separation of fact, inference, assumption, and unresolved issues</p>
+<p>Core reference basis discussed:
+- IIBA BABOK / Business Analysis Standard / Glossary
+- PMI business analysis guidance
+- ISO/IEC/IEEE requirements engineering guidance
+- APQC PCF for process and operational reference
+- OMG BPMN and DMN for process and decision modeling</p>
+<p>The positioning should be:</p>
+<p>AI-MDE is a standards-aligned business analysis and design assistant that works from project evidence, asks targeted clarification questions, and produces traceable outputs for human review.</p>
+<hr />
+<h2 id="6-qa-handling">6. Q/A Handling<a class="headerlink" href="#6-qa-handling" title="Permanent link">&para;</a></h2>
+<p>Q/A should not rely only on free-form chat.</p>
+<p>The preferred practical model is:
+- AI generates a structured clarification batch
+- user answers in a controlled format
+- unanswered items remain in queue
+- AI re-evaluates and updates the baseline</p>
+<p>Supported answer modes:
+- pick from likely answers
+- edit a likely answer
+- provide free-text answer
+- defer to queue / work backlog</p>
+<p>Each question should include:
+- why it is relevant
+- current understanding
+- likely answer candidates when possible
+- a user response section
+- queue/defer option</p>
+<p>This can later be rendered by the UI.</p>
+<hr />
+<h2 id="7-json-driven-clarification-ui">7. JSON-Driven Clarification UI<a class="headerlink" href="#7-json-driven-clarification-ui" title="Permanent link">&para;</a></h2>
+<p>A strong pattern is:
+- AI generates question-batch JSON
+- UI renders questions
+- user selects/edits/defer answers
+- unresolved items remain in queue
+- updated JSON is returned to AI
+- AI updates BA artifacts and logs</p>
+<p>This is cleaner than raw markdown once productized.</p>
+<hr />
+<h2 id="8-role-of-mde">8. Role of MDE<a class="headerlink" href="#8-role-of-mde" title="Permanent link">&para;</a></h2>
+<p>MDE is not just branding.</p>
+<p>MDE should be the orchestrator and state manager.</p>
+<p>AI handles:
+- extraction
+- interpretation
+- gap detection
+- question generation
+- rewriting and output generation</p>
+<p>MDE handles:
+- lifecycle control
+- methodology
+- file/folder conventions
+- change detection
+- state tracking
+- traceability
+- orchestration
+- targeted re-evaluation
+- readiness gating</p>
+<p>MDE should know:
+- stage states
+- command states
+- artifact states
+- unresolved issues
+- change handling rules</p>
+<hr />
+<h2 id="9-change-management-and-git">9. Change Management and Git<a class="headerlink" href="#9-change-management-and-git" title="Permanent link">&para;</a></h2>
+<p>AI-MDE should support both:
+- formal change control
+- iterative refinement</p>
+<p>Git should be treated as the baseline version and audit mechanism for project artifacts.</p>
+<p>Tracked artifacts may include:
+- BA baseline
+- requirements
+- business rules
+- capabilities
+- use cases
+- clarification queue
+- data model
+- architecture outputs
+- change log
+- traceability matrix</p>
+<hr />
+<h2 id="10-delivery-methodology-skill">10. Delivery Methodology Skill<a class="headerlink" href="#10-delivery-methodology-skill" title="Permanent link">&para;</a></h2>
+<p>Delivery methodology should be treated as a first-class expertise area.</p>
+<p>AI-MDE should help the user choose and validate the lifecycle approach:
+- predictive
+- iterative / incremental
+- sprint-based agile
+- hybrid</p>
+<p>The methodology skill should:
+- explain lifecycle options
+- assess fit for the initiative
+- walk the user through tradeoffs
+- validate the chosen mode against project reality
+- tailor artifact rigor, approvals, stage gates, and change handling accordingly</p>
+<p>Methodology should influence:
+- BA rigor
+- approval formality
+- change control
+- data modeling depth
+- architecture progression
+- design progression
+- iteration cadence</p>
+<hr />
+<h2 id="11-business-domain">11. Business Domain<a class="headerlink" href="#11-business-domain" title="Permanent link">&para;</a></h2>
+<p>Business domain is a required property.</p>
+<p>AI-MDE should identify and confirm the business domain early.</p>
+<p>Examples:
+- insurance claims
+- healthcare scheduling
+- procurement
+- HR onboarding
+- loan processing</p>
+<p>AI-MDE should also ask whether domain references may be consulted:
+- project artifacts only
+- project artifacts plus domain guidance
+- domain guidance only as suggestions</p>
+<p>Project evidence remains the primary source of truth.</p>
+<hr />
+<h2 id="12-business-capabilities">12. Business Capabilities<a class="headerlink" href="#12-business-capabilities" title="Permanent link">&para;</a></h2>
+<p>The term closest to the standard discussion is <strong>business capabilities</strong>, though the plain-language idea is “major business functions the application supports.”</p>
+<p>These are not departments or responsibilities.
+They are the major business-level things the target application enables users to do.</p>
+<p>Examples for a claims system:
+- Claim Intake
+- Claim Review
+- Claim Decisioning
+- Payout Management
+- Status Tracking
+- Document Management
+- Notification Management
+- Reporting and Oversight</p>
+<p>Business capabilities should be treated as a prelude to use cases.</p>
+<p>Progression:</p>
+<p><strong>Business Domain -&gt; Business Capabilities -&gt; Use Cases -&gt; Requirements -&gt; Design</strong></p>
+<hr />
+<h2 id="13-hybrid-documentation-handling">13. Hybrid Documentation Handling<a class="headerlink" href="#13-hybrid-documentation-handling" title="Permanent link">&para;</a></h2>
+<p>Discovery must assume the user may provide hybrid documentation.</p>
+<p>Source material may mix:
+- business analysis notes
+- requirements
+- design fragments
+- diagrams
+- data models
+- table structures
+- technical details
+- sample data
+- screenshots
+- APIs
+- report layouts</p>
+<p>AI-MDE should:
+- extract business meaning wherever possible
+- classify source fragments by evidence type
+- avoid treating design as automatically approved business truth
+- preserve technical/design artifacts for later phases
+- note data samples and schemas for data modeling later</p>
+<p>Suggested evidence categories:
+- business requirement evidence
+- business rule evidence
+- process/workflow evidence
+- capability/use case evidence
+- data/entity evidence
+- architecture/design evidence
+- technical implementation evidence
+- sample/reference data
+- ambiguous/mixed</p>
+<hr />
+<h2 id="14-data-modeling-phase">14. Data Modeling Phase<a class="headerlink" href="#14-data-modeling-phase" title="Permanent link">&para;</a></h2>
+<p>After BA is sufficiently stable, AI-MDE should derive a data model if the user did not already provide one.</p>
+<p>Progression:
+- conceptual data model
+- logical data model
+- physical model later if needed</p>
+<p>Inputs may include:
+- BA document
+- business capabilities
+- use cases
+- business rules
+- entities/artifacts catalog
+- hybrid technical artifacts
+- sample data
+- table structures
+- schemas
+- existing data model</p>
+<p>If a data model already exists, AI-MDE should review and validate it rather than blindly regenerate it.</p>
+<hr />
+<h2 id="15-data-modeling-expert-skill">15. Data Modeling Expert Skill<a class="headerlink" href="#15-data-modeling-expert-skill" title="Permanent link">&para;</a></h2>
+<p>A dedicated data modeling skill is needed.</p>
+<p>Its roles:
+- derive a conceptual/logical model when missing
+- review an existing model
+- validate completeness against the BA baseline
+- compare nouns/concepts in BA to the model
+- identify missing entities, attributes, relationships, roles, synonyms, statuses, and unresolved concepts</p>
+<p>Important rule:
+Do not force every noun into an entity.</p>
+<p>Classify significant nouns as:
+- entity
+- attribute
+- relationship concept
+- role / actor
+- status / state
+- business rule term
+- synonym / alias
+- derived concept
+- reference data
+- out of scope
+- unresolved</p>
+<p>Outputs may include:
+- conceptual data model
+- logical data model draft
+- noun classification matrix
+- coverage report
+- missing concept report
+- open questions</p>
+<hr />
+<h2 id="16-architecture-and-system-design-skills">16. Architecture and System Design Skills<a class="headerlink" href="#16-architecture-and-system-design-skills" title="Permanent link">&para;</a></h2>
+<p>After BA and data modeling, a major architecture skill is needed.</p>
+<p>Architecture skill should:
+- derive logical architecture
+- identify modules/components
+- define boundaries and integrations
+- map business capabilities and use cases to architectural structure
+- preserve traceability back to BA and data model</p>
+<p>After architecture, a system design skill should:
+- refine the architecture
+- define detailed design artifacts
+- APIs
+- workflows
+- persistence design
+- module specs
+- interface contracts</p>
+<p>Major skills catalog discussed:
+- delivery_methodology_advisor
+- business_analysis_from_sources
+- data_model_from_ba
+- system_architecture_from_ba_and_data
+- system_design_from_architecture</p>
+<hr />
+<h2 id="17-commands-and-skills">17. Commands and Skills<a class="headerlink" href="#17-commands-and-skills" title="Permanent link">&para;</a></h2>
+<p>A key design discussion was the relationship between commands and skills.</p>
+<ul>
+<li><strong>Command</strong> = what the user wants to do</li>
+<li><strong>Skill</strong> = how AI should do it</li>
+</ul>
+<p><code>commands.json</code> should define:
+- command name
+- label
+- phase
+- intent
+- whether AI is required
+- linked skill</p>
+<p>Skill files should define:
+- purpose
+- methodology
+- required input types
+- optional input types
+- output types
+- completion criteria
+- constraints</p>
+<p>The connection is:
+- command selects the skill
+- skill provides the method
+- runtime context completes the execution</p>
+<p>Multiple skill files are preferable to one large skills file.</p>
+<hr />
+<h2 id="18-runtime-context-and-placeholder-resolution">18. Runtime Context and Placeholder Resolution<a class="headerlink" href="#18-runtime-context-and-placeholder-resolution" title="Permanent link">&para;</a></h2>
+<p>Static command and skill files are not enough by themselves.</p>
+<p>A runtime layer must resolve placeholders such as:
+- <code>{requirements-json}</code>
+- <code>{use-cases-dir}/*.md</code>
+- <code>{business-functions}</code></p>
+<p>The runtime layer resolves these against the current workspace/project state.</p>
+<p>The AI should not resolve placeholders itself.
+It should receive already resolved context or an instruction bundle that performs dynamic expansion appropriately.</p>
+<hr />
+<h2 id="19-claude-gemini-codex-interaction-model">19. Claude / Gemini / Codex Interaction Model<a class="headerlink" href="#19-claude-gemini-codex-interaction-model" title="Permanent link">&para;</a></h2>
+<p>A key discussion was how the model is actually invoked when the user types directly into AI tooling such as Codex or Gemini.</p>
+<p>Important conclusions:
+- raw AI consoles do not natively know <code>commands.json</code> or <code>skills.json</code>
+- a runtime interpretation layer or prompt convention is needed
+- Claude Code supports custom slash commands with markdown files and shell-expansion (<code>!</code>) which can act as the runtime bridge
+- Gemini tends to treat custom schema fields as prompt guidance rather than hard contracts
+- plan-based Codex has usage limits and is better suited as a development assistant than a production orchestration engine</p>
+<p>For Claude specifically, generated command/prompt files with shell expansion provide a strong non-API runtime mechanism.</p>
+<hr />
+<h2 id="20-trust-model">20. Trust Model<a class="headerlink" href="#20-trust-model" title="Permanent link">&para;</a></h2>
+<p>For developer/self-hosted mode, the trust issue is not only storage of API keys but what the tool can do with them.</p>
+<p>Trust should be reduced through:
+- explicit task contracts
+- visible commands and skills
+- file allowlists
+- preview before send
+- local logging
+- dry run mode
+- bounded command behavior
+- explicit write permissions
+- visible prompts/templates</p>
+<p>User-initiated, model-governed AI execution is the right pattern.</p>
+<hr />
+<h2 id="21-va-help-site-reference-site-direction">21. VA Help Site / Reference Site Direction<a class="headerlink" href="#21-va-help-site-reference-site-direction" title="Permanent link">&para;</a></h2>
+<p>The discussion concluded that a help/reference site should not start by reinventing all BA content.</p>
+<p>It should link to and build upon existing strong references such as:
+- IIBA BABOK / Business Analysis Standard / Glossary / KnowledgeHub
+- APQC Process Classification Framework
+- OMG BPMN
+- OMG DMN</p>
+<p>The site should eventually contain:
+- BA foundations
+- domain identification guidance
+- business capability guidance
+- process/rule/data modeling references
+- domain packs
+- AI-MDE-specific method guidance</p>
+<hr />
+<h2 id="22-overall-product-view-emerging">22. Overall Product View Emerging<a class="headerlink" href="#22-overall-product-view-emerging" title="Permanent link">&para;</a></h2>
+<p>The AI-MDE product is evolving into a guided engineering platform with major expertise areas:</p>
+<ul>
+<li>Delivery Methodology</li>
+<li>Business Analysis</li>
+<li>Data Modeling</li>
+<li>System Architecture</li>
+<li>System Design</li>
+</ul>
+<p>The product should:
+- lead discovery
+- structure evidence
+- ask focused questions
+- preserve traceability
+- support hybrid documentation
+- derive business capabilities and use cases
+- derive/validate data model
+- derive architecture
+- refine detailed system design
+- adapt behavior to the selected lifecycle methodology</p>
+              
+            </div>
+          </div><footer>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <!-- Copyright etc -->
+  </div>
+
+  Built with <a href="https://www.mkdocs.org/">MkDocs</a> using a <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a> provided by <a href="https://readthedocs.org">Read the Docs</a>.
+</footer>
+          
+        </div>
+      </div>
+
+    </section>
+
+  </div>
+
+  <div class="rst-versions" role="note" aria-label="Versions">
+  <span class="rst-current-version" data-toggle="rst-current-version">
+    
+    
+    
+  </span>
+</div>
+    <script src="../../js/jquery-3.6.0.min.js"></script>
+    <script>var base_url = "../..";</script>
+    <script src="../../js/theme_extra.js"></script>
+    <script src="../../js/theme.js"></script>
+      <script src="../../search/main.js"></script>
+    <script>
+        jQuery(function () {
+            SphinxRtdTheme.Navigation.enable(true);
+        });
+    </script>
+
+</body>
+</html>

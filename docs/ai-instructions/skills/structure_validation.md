@@ -10,14 +10,6 @@
 
 Validate that the physical folder structure matches the configuration
 
-## Inputs
-
-- ../../configuration.json
-
-## Outputs
-
-- ../../output/work/structure-validation-report.json
-
 ## Rules
 
 - Fail if critical root folders are missing

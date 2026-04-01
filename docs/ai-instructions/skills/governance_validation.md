@@ -10,20 +10,6 @@
 
 Validate traceability, phase completeness, TOGAF/Zachman coverage, and missing artifacts
 
-## Inputs
-
-- ../../ba/requirements.md
-- ../../design/modules/module-catalog.json
-- ../../design/modules/module-tests.json
-- ../../mde/methodology/methodology.json
-- ../../project/project-state.json
-
-## Outputs
-
-- ../../design/trace-matrix.json
-- ../../output/work/phase-status-report.json
-- ../../design/governance-report.json
-
 ## Rules
 
 - Every requirement should map to functions, modules, and tests where relevant

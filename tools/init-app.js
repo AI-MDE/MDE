@@ -1,4 +1,7 @@
-#!/usr/bin/env node
+﻿#!/usr/bin/env node
+/**
+ * Purpose: Initializes project scaffolding and baseline state files for an MDE-managed application.
+ */
 const fs = require('fs');
 const path = require('path');
 const { ConfigurationManager } = require('./lib/config-manager');
@@ -259,7 +262,7 @@ function buildFiles(config) {
           version: '0.1.0',
           private: true,
           scripts: {
-            validate: 'node mde/tools/validate-config.js configuration.json',
+            validate: 'node scripts/validate-config.js configuration.json',
             viewer: 'node mde/web/viewer.js',
           },
         },
@@ -361,3 +364,4 @@ function run() {
 }
 
 run();
+

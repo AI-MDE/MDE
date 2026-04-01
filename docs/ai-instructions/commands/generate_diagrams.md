@@ -13,17 +13,6 @@
 
 - diagram_generation
 
-## Requires
-
-- ../../ba/data-model/logical-data-model.json
-- ../../design/application_architecture.json
-- ../../design/modules/module-catalog.json
-
-## Produces
-
-- ../../output/docs/diagrams/*.md
-- ../../output/docs/diagrams/*.svg
-
 ## Tools
 
 - file_manager

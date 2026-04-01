@@ -13,17 +13,6 @@
 
 - governance_validation
 
-## Requires
-
-- ../../ba/requirements.md
-- ../../design/modules/module-catalog.json
-- ../../design/modules/module-tests.json
-
-## Produces
-
-- ../../design/traceability-validation-report.json
-- ../../design/trace-matrix.json
-
 ## Tools
 
 - traceability_engine

@@ -14,15 +14,6 @@
 
 Delegates to skill: `ldm_coverage_validation`
 
-## Requires
-
-- ../../ba/requirements.md
-- ../../ba/data-model/logical-data-model.json
-
-## Produces
-
-- ../../work/ldm-coverage-report.json
-
 ## Tools
 
 - file_manager

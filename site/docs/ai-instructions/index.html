@@ -1,0 +1,300 @@
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" >
+<head>
+    <meta charset="utf-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" /><link rel="canonical" href="https://ai-mde.github.io/docs/ai-instructions/" />
+      <link rel="shortcut icon" href="../img/favicon.ico" />
+    <title>Overview - AI-MDE Docs</title>
+    <link rel="stylesheet" href="../css/theme.css" />
+    <link rel="stylesheet" href="../css/theme_extra.css" />
+        <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.8.0/styles/github.min.css" />
+    
+      <script>
+        // Current page data
+        var mkdocs_page_name = "Overview";
+        var mkdocs_page_input_path = "ai-instructions\\index.md";
+        var mkdocs_page_url = "/docs/ai-instructions/";
+      </script>
+    
+    <!--[if lt IE 9]>
+      <script src="../js/html5shiv.min.js"></script>
+    <![endif]-->
+      <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.8.0/highlight.min.js"></script>
+      <script>hljs.highlightAll();</script> 
+</head>
+
+<body class="wy-body-for-nav" role="document">
+
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side stickynav">
+    <div class="wy-side-scroll">
+      <div class="wy-side-nav-search">
+          <a href=".." class="icon icon-home"> AI-MDE Docs
+        </a><div role="search">
+  <form id ="rtd-search-form" class="wy-form" action="../search.html" method="get">
+      <input type="text" name="q" placeholder="Search docs" aria-label="Search docs" title="Type search term here" />
+  </form>
+</div>
+      </div>
+
+      <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+              <ul>
+                <li class="toctree-l1"><a class="reference internal" href="..">Home</a>
+                </li>
+              </ul>
+              <ul>
+                <li class="toctree-l1"><a class="reference internal" href="../help/install/">Install</a>
+                </li>
+              </ul>
+              <p class="caption"><span class="caption-text">Help</span></p>
+              <ul>
+                  <li class="toctree-l1"><a class="reference internal" href="../help/how-to-use-mde/">How To Use MDE</a>
+                  </li>
+                  <li class="toctree-l1"><a class="reference internal" href="../help/ai_pipeline_commands/">Pipeline Commands</a>
+                  </li>
+                  <li class="toctree-l1"><a class="reference internal" href="../help/workspace/">Workspace</a>
+                  </li>
+                  <li class="toctree-l1"><a class="reference internal" href="../help/methodology/">Methodology</a>
+                  </li>
+              </ul>
+              <ul>
+                <li class="toctree-l1"><a class="reference internal" href="../lifecycle/">Lifecycle</a>
+                </li>
+              </ul>
+              <ul>
+                <li class="toctree-l1"><a class="reference internal" href="../configuration/">Configuration</a>
+                </li>
+              </ul>
+              <p class="caption"><span class="caption-text">AI Instructions</span></p>
+              <ul class="current">
+                  <li class="toctree-l1 current"><a class="reference internal current" href="./">Overview</a>
+    <ul class="current">
+    <li class="toctree-l2"><a class="reference internal" href="#contents">Contents</a>
+    </li>
+    <li class="toctree-l2"><a class="reference internal" href="#what-the-ai-instruction-system-is">What the AI Instruction System Is</a>
+        <ul>
+    <li class="toctree-l3"><a class="reference internal" href="#how-it-works">How it works</a>
+    </li>
+    <li class="toctree-l3"><a class="reference internal" href="#does-the-ai-actually-follow-it">Does the AI actually follow it?</a>
+    </li>
+    <li class="toctree-l3"><a class="reference internal" href="#practical-significance">Practical significance</a>
+    </li>
+    <li class="toctree-l3"><a class="reference internal" href="#relationship-between-json-and-docs">Relationship between JSON and docs</a>
+    </li>
+        </ul>
+    </li>
+    <li class="toctree-l2"><a class="reference internal" href="#architectural-decisions">Architectural Decisions</a>
+        <ul>
+    <li class="toctree-l3"><a class="reference internal" href="#why-paths-are-hardcoded-in-skill-and-command-files">Why paths are hardcoded in skill and command files</a>
+    </li>
+    <li class="toctree-l3"><a class="reference internal" href="#planned-generated-skill-and-command-files">Planned: generated skill and command files</a>
+    </li>
+        </ul>
+    </li>
+    </ul>
+                  </li>
+                  <li class="toctree-l1"><a class="reference internal" href="commands/">Commands</a>
+                  </li>
+                  <li class="toctree-l1"><a class="reference internal" href="skills/">Skills</a>
+                  </li>
+              </ul>
+              <p class="caption"><span class="caption-text">Design</span></p>
+              <ul>
+                  <li class="toctree-l1"><a class="reference internal" href="../design/system-design-process/">Process</a>
+                  </li>
+                  <li class="toctree-l1"><a class="reference internal" href="../design/use-case-mapping/">Use-Case Mapping</a>
+                  </li>
+                  <li class="toctree-l1"><a class="reference internal" href="../design/business-events/">Business Events</a>
+                  </li>
+                  <li class="toctree-l1"><a class="reference internal" href="../design/business-app-layering/">App Layering</a>
+                  </li>
+              </ul>
+              <ul>
+                <li class="toctree-l1"><a class="reference internal" href="../changes/">Changes</a>
+                </li>
+              </ul>
+      </div>
+    </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
+      <nav class="wy-nav-top" role="navigation" aria-label="Mobile navigation menu">
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="..">AI-MDE Docs</a>
+        
+      </nav>
+      <div class="wy-nav-content">
+        <div class="rst-content"><div role="navigation" aria-label="breadcrumbs navigation">
+  <ul class="wy-breadcrumbs">
+    <li><a href=".." class="icon icon-home" aria-label="Docs"></a></li>
+          <li class="breadcrumb-item">AI Instructions</li>
+      <li class="breadcrumb-item active">Overview</li>
+    <li class="wy-breadcrumbs-aside">
+          <a href="https://github.com/AI-MDE/ai-mde/edit/master/docs/ai-instructions/index.md">Edit on AI-MDE/ai-mde</a>
+    </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+            <div class="section" itemprop="articleBody">
+              
+                <h1 id="ai-instructions-overview">AI Instructions — Overview<a class="headerlink" href="#ai-instructions-overview" title="Permanent link">&para;</a></h1>
+<p>This folder contains markdown documentation generated from the JSON source files in <code>mde/ai-instructions/</code>.
+All files here are produced by <a href="../../scripts/syncAIInstrToDocs.js"><code>mde/scripts/syncAIInstrToDocs.js</code></a> and should not be edited by hand.</p>
+<h2 id="contents">Contents<a class="headerlink" href="#contents" title="Permanent link">&para;</a></h2>
+<table>
+<thead>
+<tr>
+<th>Document</th>
+<th>Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><a href="orchestrator/">orchestrator.md</a></td>
+<td>Full orchestrator reference — phases, pipeline, error handling, response contract</td>
+</tr>
+<tr>
+<td><a href="commands/">commands/</a></td>
+<td>One doc per command (22 total)</td>
+</tr>
+<tr>
+<td><a href="skills/">skills/</a></td>
+<td>One doc per skill (19 total)</td>
+</tr>
+</tbody>
+</table>
+<p>To regenerate:</p>
+<pre><code class="language-bash">node mde/scripts/syncAIInstrToDocs.js
+</code></pre>
+<hr />
+<h2 id="what-the-ai-instruction-system-is">What the AI Instruction System Is<a class="headerlink" href="#what-the-ai-instruction-system-is" title="Permanent link">&para;</a></h2>
+<p><code>mde/ai-instructions/</code> is <strong>not executable code</strong>. There is no runtime engine that parses and enforces it. It is a set of structured instruction documents designed to be read by an AI model and used to govern the AI's own behavior during a session.</p>
+<h3 id="how-it-works">How it works<a class="headerlink" href="#how-it-works" title="Permanent link">&para;</a></h3>
+<p>The chain is:</p>
+<ol>
+<li><code>CLAUDE.md</code> (or <code>AGENT.md</code>) is auto-loaded at session start — it tells the AI to read <code>orchestrator.json</code> and the command/skill registries as the source of truth.</li>
+<li>The AI reads the orchestrator and registries into its context window.</li>
+<li>From that point forward, the AI self-governs according to those rules — resolving commands correctly, following the 9-step pipeline, blocking on missing prerequisites, and formatting responses per the response contract.</li>
+</ol>
+<h3 id="does-the-ai-actually-follow-it">Does the AI actually follow it?<a class="headerlink" href="#does-the-ai-actually-follow-it" title="Permanent link">&para;</a></h3>
+<p>Conditionally — yes, but with caveats:</p>
+<ul>
+<li>A capable model will generally respect the phase rules, execution pipeline, and response contract because it read them and treats them as authoritative instructions.</li>
+<li>There is <strong>no enforcement mechanism</strong>. If the AI hallucinates, skips a step, or invents an artifact, nothing catches it. The system relies entirely on the model's instruction-following fidelity.</li>
+<li>Adherence is stronger for well-structured rules (e.g., response contract fields, error handling actions) and weaker for subtle rules (e.g., "never guess destructive commands") that depend on judgment.</li>
+</ul>
+<h3 id="practical-significance">Practical significance<a class="headerlink" href="#practical-significance" title="Permanent link">&para;</a></h3>
+<ul>
+<li><strong>Reproducibility</strong> — any session that loads these files should behave consistently across runs and models.</li>
+<li><strong>Team contract</strong> — anyone reading them knows exactly what the AI is supposed to do and can hold it accountable.</li>
+<li><strong>Behavioral control point</strong> — changing phase rules, adding commands, or adjusting error handling in the JSON directly changes what the AI will do. The JSON is the thing to edit; this folder documents the result.</li>
+</ul>
+<h3 id="relationship-between-json-and-docs">Relationship between JSON and docs<a class="headerlink" href="#relationship-between-json-and-docs" title="Permanent link">&para;</a></h3>
+<table>
+<thead>
+<tr>
+<th>Layer</th>
+<th>Path</th>
+<th>Purpose</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Source of truth</td>
+<td><code>mde/ai-instructions/*.json</code></td>
+<td>What the AI reads and obeys</td>
+</tr>
+<tr>
+<td>Generated docs</td>
+<td><code>mde/docs/ai-instructions/</code></td>
+<td>Human-readable reference, kept in sync by script</td>
+</tr>
+</tbody>
+</table>
+<hr />
+<h2 id="architectural-decisions">Architectural Decisions<a class="headerlink" href="#architectural-decisions" title="Permanent link">&para;</a></h2>
+<h3 id="why-paths-are-hardcoded-in-skill-and-command-files">Why paths are hardcoded in skill and command files<a class="headerlink" href="#why-paths-are-hardcoded-in-skill-and-command-files" title="Permanent link">&para;</a></h3>
+<p>File paths in <code>skills/*.json</code> and <code>commands/*.json</code> are hardcoded (e.g. <code>../../ba/requirements.md</code>) rather than using logical names (e.g. <code>requirements_baseline</code>) resolved from the orchestrator's <code>inputs</code> map.</p>
+<p>This is intentional. The system operates in two modes:</p>
+<table>
+<thead>
+<tr>
+<th>Mode</th>
+<th>Path resolution</th>
+<th>Reliability</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><strong>API mode</strong> (<code>run-skill-api.js</code>)</td>
+<td>Tool resolves paths before the AI sees them</td>
+<td>High — deterministic</td>
+</tr>
+<tr>
+<td><strong>Console mode</strong> (Claude Code, Gemini)</td>
+<td>AI resolves paths at runtime from context</td>
+<td>Medium — model-dependent</td>
+</tr>
+</tbody>
+</table>
+<p>In console mode the AI reads instruction files directly. If it had to resolve logical names from the orchestrator's <code>inputs</code> map, it would be one more indirection that could fail — especially in long sessions where early context fades. Hardcoded paths are seen directly and cannot be misresolved.</p>
+<h3 id="planned-generated-skill-and-command-files">Planned: generated skill and command files<a class="headerlink" href="#planned-generated-skill-and-command-files" title="Permanent link">&para;</a></h3>
+<p>When the workspace structure changes, skill and command files should ideally be regenerated with updated paths rather than edited by hand. The intended future pipeline is:</p>
+<pre><code>methodology.json   ──┐
+configuration.json ──┼──► generateOrchestrator.js ──► orchestrator.json
+                      │
+configuration.json ──┴──► generateSkills.js ──► skills/*.json
+                                     │
+                                     └──► syncAIInstrToDocs.js ──► docs/
+</code></pre>
+<p>Until <code>generateSkills.js</code> exists, path changes in <code>configuration.json</code> require manually updating the affected skill and command files.</p>
+              
+            </div>
+          </div><footer>
+    <div class="rst-footer-buttons" role="navigation" aria-label="Footer Navigation">
+        <a href="../configuration/" class="btn btn-neutral float-left" title="Configuration"><span class="icon icon-circle-arrow-left"></span> Previous</a>
+        <a href="commands/" class="btn btn-neutral float-right" title="Commands">Next <span class="icon icon-circle-arrow-right"></span></a>
+    </div>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <!-- Copyright etc -->
+  </div>
+
+  Built with <a href="https://www.mkdocs.org/">MkDocs</a> using a <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a> provided by <a href="https://readthedocs.org">Read the Docs</a>.
+</footer>
+          
+        </div>
+      </div>
+
+    </section>
+
+  </div>
+
+  <div class="rst-versions" role="note" aria-label="Versions">
+  <span class="rst-current-version" data-toggle="rst-current-version">
+    
+    
+      <span><a href="../configuration/" style="color: #fcfcfc">&laquo; Previous</a></span>
+    
+    
+      <span><a href="commands/" style="color: #fcfcfc">Next &raquo;</a></span>
+    
+  </span>
+</div>
+    <script src="../js/jquery-3.6.0.min.js"></script>
+    <script>var base_url = "..";</script>
+    <script src="../js/theme_extra.js"></script>
+    <script src="../js/theme.js"></script>
+      <script src="../search/main.js"></script>
+    <script>
+        jQuery(function () {
+            SphinxRtdTheme.Navigation.enable(true);
+        });
+    </script>
+
+</body>
+</html>

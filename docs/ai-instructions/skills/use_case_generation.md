@@ -17,20 +17,6 @@ Generate business use cases from requirements and lifecycle context, then normal
 - Requirements exist but BA/use-cases are incomplete
 - Need to refresh use-case docs after baseline changes
 
-### Required
-
-- ../../ba/requirements.md
-
-### Optional
-
-- ../../ba/use-cases/*.md
-- ../../ba/business-functions.json
-- ../../project/project-state.json
-
-## Outputs
-
-- ../../ba/use-cases/uc-*.md
-
 ## Methodology
 
 - Read requirements baseline and identify core user/system goals, actors, and workflow steps.

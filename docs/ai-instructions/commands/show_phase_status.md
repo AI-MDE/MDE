@@ -13,15 +13,6 @@
 
 - governance_validation
 
-## Requires
-
-- ../../project/project-state.json
-- ../../mde/methodology/methodology.json
-
-## Produces
-
-- ../../output/work/phase-status-report.json
-
 ## Tools
 
 - file_manager

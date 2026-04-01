@@ -1,0 +1,553 @@
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" >
+<head>
+    <meta charset="utf-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" /><link rel="canonical" href="https://ai-mde.github.io/docs/formal_schemas/" />
+      <link rel="shortcut icon" href="../img/favicon.ico" />
+    <title>Formal Schemas for AI-Driven Multi-Phase Application Development - AI-MDE Docs</title>
+    <link rel="stylesheet" href="../css/theme.css" />
+    <link rel="stylesheet" href="../css/theme_extra.css" />
+        <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.8.0/styles/github.min.css" />
+    
+      <script>
+        // Current page data
+        var mkdocs_page_name = "Formal Schemas for AI-Driven Multi-Phase Application Development";
+        var mkdocs_page_input_path = "formal_schemas.md";
+        var mkdocs_page_url = "/docs/formal_schemas/";
+      </script>
+    
+    <!--[if lt IE 9]>
+      <script src="../js/html5shiv.min.js"></script>
+    <![endif]-->
+      <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.8.0/highlight.min.js"></script>
+      <script>hljs.highlightAll();</script> 
+</head>
+
+<body class="wy-body-for-nav" role="document">
+
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side stickynav">
+    <div class="wy-side-scroll">
+      <div class="wy-side-nav-search">
+          <a href=".." class="icon icon-home"> AI-MDE Docs
+        </a><div role="search">
+  <form id ="rtd-search-form" class="wy-form" action="../search.html" method="get">
+      <input type="text" name="q" placeholder="Search docs" aria-label="Search docs" title="Type search term here" />
+  </form>
+</div>
+      </div>
+
+      <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+              <ul>
+                <li class="toctree-l1"><a class="reference internal" href="..">Home</a>
+                </li>
+              </ul>
+              <ul>
+                <li class="toctree-l1"><a class="reference internal" href="../help/install/">Install</a>
+                </li>
+              </ul>
+              <p class="caption"><span class="caption-text">Help</span></p>
+              <ul>
+                  <li class="toctree-l1"><a class="reference internal" href="../help/how-to-use-mde/">How To Use MDE</a>
+                  </li>
+                  <li class="toctree-l1"><a class="reference internal" href="../help/ai_pipeline_commands/">Pipeline Commands</a>
+                  </li>
+                  <li class="toctree-l1"><a class="reference internal" href="../help/workspace/">Workspace</a>
+                  </li>
+                  <li class="toctree-l1"><a class="reference internal" href="../help/methodology/">Methodology</a>
+                  </li>
+              </ul>
+              <ul>
+                <li class="toctree-l1"><a class="reference internal" href="../lifecycle/">Lifecycle</a>
+                </li>
+              </ul>
+              <ul>
+                <li class="toctree-l1"><a class="reference internal" href="../configuration/">Configuration</a>
+                </li>
+              </ul>
+              <p class="caption"><span class="caption-text">AI Instructions</span></p>
+              <ul>
+                  <li class="toctree-l1"><a class="reference internal" href="../ai-instructions/">Overview</a>
+                  </li>
+                  <li class="toctree-l1"><a class="reference internal" href="../ai-instructions/commands/">Commands</a>
+                  </li>
+                  <li class="toctree-l1"><a class="reference internal" href="../ai-instructions/skills/">Skills</a>
+                  </li>
+              </ul>
+              <p class="caption"><span class="caption-text">Design</span></p>
+              <ul>
+                  <li class="toctree-l1"><a class="reference internal" href="../design/system-design-process/">Process</a>
+                  </li>
+                  <li class="toctree-l1"><a class="reference internal" href="../design/use-case-mapping/">Use-Case Mapping</a>
+                  </li>
+                  <li class="toctree-l1"><a class="reference internal" href="../design/business-events/">Business Events</a>
+                  </li>
+                  <li class="toctree-l1"><a class="reference internal" href="../design/business-app-layering/">App Layering</a>
+                  </li>
+              </ul>
+              <ul>
+                <li class="toctree-l1"><a class="reference internal" href="../changes/">Changes</a>
+                </li>
+              </ul>
+      </div>
+    </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
+      <nav class="wy-nav-top" role="navigation" aria-label="Mobile navigation menu">
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="..">AI-MDE Docs</a>
+        
+      </nav>
+      <div class="wy-nav-content">
+        <div class="rst-content"><div role="navigation" aria-label="breadcrumbs navigation">
+  <ul class="wy-breadcrumbs">
+    <li><a href=".." class="icon icon-home" aria-label="Docs"></a></li>
+      <li class="breadcrumb-item active">Formal Schemas for AI-Driven Multi-Phase Application Development</li>
+    <li class="wy-breadcrumbs-aside">
+          <a href="https://github.com/AI-MDE/ai-mde/edit/master/docs/formal_schemas.md">Edit on AI-MDE/ai-mde</a>
+    </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+            <div class="section" itemprop="articleBody">
+              
+                <h1 id="formal-schemas-for-ai-driven-multi-phase-application-development">Formal Schemas for AI-Driven Multi-Phase Application Development<a class="headerlink" href="#formal-schemas-for-ai-driven-multi-phase-application-development" title="Permanent link">&para;</a></h1>
+<p>This document defines machine-readable schema shapes for each phase in the pipeline. These are not tied to one programming language. They are intended to serve as canonical handoff contracts between phases.</p>
+<hr />
+<h1 id="1-requirement-record-schema">1. Requirement Record Schema<a class="headerlink" href="#1-requirement-record-schema" title="Permanent link">&para;</a></h1>
+<pre><code class="language-json">{
+  &quot;$schema&quot;: &quot;https://json-schema.org/draft/2020-12/schema&quot;,
+  &quot;title&quot;: &quot;RequirementRecord&quot;,
+  &quot;type&quot;: &quot;object&quot;,
+  &quot;required&quot;: [&quot;project&quot;, &quot;goals&quot;, &quot;actors&quot;],
+  &quot;properties&quot;: {
+    &quot;project&quot;: { &quot;type&quot;: &quot;string&quot; },
+    &quot;goals&quot;: {
+      &quot;type&quot;: &quot;array&quot;,
+      &quot;items&quot;: { &quot;type&quot;: &quot;string&quot; }
+    },
+    &quot;actors&quot;: {
+      &quot;type&quot;: &quot;array&quot;,
+      &quot;items&quot;: { &quot;type&quot;: &quot;string&quot; }
+    },
+    &quot;constraints&quot;: {
+      &quot;type&quot;: &quot;array&quot;,
+      &quot;items&quot;: { &quot;type&quot;: &quot;string&quot; }
+    },
+    &quot;assumptions&quot;: {
+      &quot;type&quot;: &quot;array&quot;,
+      &quot;items&quot;: { &quot;type&quot;: &quot;string&quot; }
+    },
+    &quot;open_questions&quot;: {
+      &quot;type&quot;: &quot;array&quot;,
+      &quot;items&quot;: { &quot;type&quot;: &quot;string&quot; }
+    },
+    &quot;sources&quot;: {
+      &quot;type&quot;: &quot;array&quot;,
+      &quot;items&quot;: { &quot;type&quot;: &quot;string&quot; }
+    }
+  }
+}
+</code></pre>
+<hr />
+<h1 id="2-requirements-catalog-schema">2. Requirements Catalog Schema<a class="headerlink" href="#2-requirements-catalog-schema" title="Permanent link">&para;</a></h1>
+<pre><code class="language-json">{
+  &quot;$schema&quot;: &quot;https://json-schema.org/draft/2020-12/schema&quot;,
+  &quot;title&quot;: &quot;RequirementsCatalog&quot;,
+  &quot;type&quot;: &quot;object&quot;,
+  &quot;required&quot;: [&quot;requirements&quot;],
+  &quot;properties&quot;: {
+    &quot;requirements&quot;: {
+      &quot;type&quot;: &quot;array&quot;,
+      &quot;items&quot;: {
+        &quot;type&quot;: &quot;object&quot;,
+        &quot;required&quot;: [&quot;id&quot;, &quot;title&quot;, &quot;type&quot;, &quot;description&quot;, &quot;priority&quot;],
+        &quot;properties&quot;: {
+          &quot;id&quot;: { &quot;type&quot;: &quot;string&quot; },
+          &quot;title&quot;: { &quot;type&quot;: &quot;string&quot; },
+          &quot;type&quot;: {
+            &quot;type&quot;: &quot;string&quot;,
+            &quot;enum&quot;: [&quot;functional&quot;, &quot;non_functional&quot;, &quot;constraint&quot;, &quot;business_rule&quot;]
+          },
+          &quot;description&quot;: { &quot;type&quot;: &quot;string&quot; },
+          &quot;priority&quot;: {
+            &quot;type&quot;: &quot;string&quot;,
+            &quot;enum&quot;: [&quot;critical&quot;, &quot;high&quot;, &quot;medium&quot;, &quot;low&quot;]
+          },
+          &quot;acceptance_criteria&quot;: {
+            &quot;type&quot;: &quot;array&quot;,
+            &quot;items&quot;: { &quot;type&quot;: &quot;string&quot; }
+          },
+          &quot;related_functions&quot;: {
+            &quot;type&quot;: &quot;array&quot;,
+            &quot;items&quot;: { &quot;type&quot;: &quot;string&quot; }
+          },
+          &quot;related_use_cases&quot;: {
+            &quot;type&quot;: &quot;array&quot;,
+            &quot;items&quot;: { &quot;type&quot;: &quot;string&quot; }
+          }
+        }
+      }
+    }
+  }
+}
+</code></pre>
+<hr />
+<h1 id="3-business-function-breakdown-schema">3. Business Function Breakdown Schema<a class="headerlink" href="#3-business-function-breakdown-schema" title="Permanent link">&para;</a></h1>
+<pre><code class="language-json">{
+  &quot;$schema&quot;: &quot;https://json-schema.org/draft/2020-12/schema&quot;,
+  &quot;title&quot;: &quot;BusinessFunctionBreakdown&quot;,
+  &quot;type&quot;: &quot;object&quot;,
+  &quot;required&quot;: [&quot;functions&quot;],
+  &quot;properties&quot;: {
+    &quot;functions&quot;: {
+      &quot;type&quot;: &quot;array&quot;,
+      &quot;items&quot;: {
+        &quot;type&quot;: &quot;object&quot;,
+        &quot;required&quot;: [&quot;id&quot;, &quot;name&quot;],
+        &quot;properties&quot;: {
+          &quot;id&quot;: { &quot;type&quot;: &quot;string&quot; },
+          &quot;name&quot;: { &quot;type&quot;: &quot;string&quot; },
+          &quot;parent_id&quot;: { &quot;type&quot;: [&quot;string&quot;, &quot;null&quot;] },
+          &quot;description&quot;: { &quot;type&quot;: &quot;string&quot; },
+          &quot;children&quot;: {
+            &quot;type&quot;: &quot;array&quot;,
+            &quot;items&quot;: { &quot;type&quot;: &quot;string&quot; }
+          }
+        }
+      }
+    }
+  }
+}
+</code></pre>
+<hr />
+<h1 id="4-use-case-schema">4. Use Case Schema<a class="headerlink" href="#4-use-case-schema" title="Permanent link">&para;</a></h1>
+<pre><code class="language-json">{
+  &quot;$schema&quot;: &quot;https://json-schema.org/draft/2020-12/schema&quot;,
+  &quot;title&quot;: &quot;UseCases&quot;,
+  &quot;type&quot;: &quot;object&quot;,
+  &quot;required&quot;: [&quot;use_cases&quot;],
+  &quot;properties&quot;: {
+    &quot;use_cases&quot;: {
+      &quot;type&quot;: &quot;array&quot;,
+      &quot;items&quot;: {
+        &quot;type&quot;: &quot;object&quot;,
+        &quot;required&quot;: [&quot;id&quot;, &quot;name&quot;, &quot;primary_actor&quot;, &quot;main_flow&quot;],
+        &quot;properties&quot;: {
+          &quot;id&quot;: { &quot;type&quot;: &quot;string&quot; },
+          &quot;name&quot;: { &quot;type&quot;: &quot;string&quot; },
+          &quot;primary_actor&quot;: { &quot;type&quot;: &quot;string&quot; },
+          &quot;supporting_actors&quot;: {
+            &quot;type&quot;: &quot;array&quot;,
+            &quot;items&quot;: { &quot;type&quot;: &quot;string&quot; }
+          },
+          &quot;preconditions&quot;: {
+            &quot;type&quot;: &quot;array&quot;,
+            &quot;items&quot;: { &quot;type&quot;: &quot;string&quot; }
+          },
+          &quot;main_flow&quot;: {
+            &quot;type&quot;: &quot;array&quot;,
+            &quot;items&quot;: { &quot;type&quot;: &quot;string&quot; }
+          },
+          &quot;alternate_flows&quot;: {
+            &quot;type&quot;: &quot;array&quot;,
+            &quot;items&quot;: { &quot;type&quot;: &quot;string&quot; }
+          },
+          &quot;postconditions&quot;: {
+            &quot;type&quot;: &quot;array&quot;,
+            &quot;items&quot;: { &quot;type&quot;: &quot;string&quot; }
+          },
+          &quot;related_requirements&quot;: {
+            &quot;type&quot;: &quot;array&quot;,
+            &quot;items&quot;: { &quot;type&quot;: &quot;string&quot; }
+          }
+        }
+      }
+    }
+  }
+}
+</code></pre>
+<hr />
+<h1 id="5-system-design-schema">5. System Design Schema<a class="headerlink" href="#5-system-design-schema" title="Permanent link">&para;</a></h1>
+<pre><code class="language-json">{
+  &quot;$schema&quot;: &quot;https://json-schema.org/draft/2020-12/schema&quot;,
+  &quot;title&quot;: &quot;SystemDesign&quot;,
+  &quot;type&quot;: &quot;object&quot;,
+  &quot;required&quot;: [&quot;system_name&quot;, &quot;modules&quot;],
+  &quot;properties&quot;: {
+    &quot;system_name&quot;: { &quot;type&quot;: &quot;string&quot; },
+    &quot;design_principles&quot;: {
+      &quot;type&quot;: &quot;array&quot;,
+      &quot;items&quot;: { &quot;type&quot;: &quot;string&quot; }
+    },
+    &quot;external_actors&quot;: {
+      &quot;type&quot;: &quot;array&quot;,
+      &quot;items&quot;: { &quot;type&quot;: &quot;string&quot; }
+    },
+    &quot;external_systems&quot;: {
+      &quot;type&quot;: &quot;array&quot;,
+      &quot;items&quot;: { &quot;type&quot;: &quot;string&quot; }
+    },
+    &quot;modules&quot;: {
+      &quot;type&quot;: &quot;array&quot;,
+      &quot;items&quot;: {
+        &quot;type&quot;: &quot;object&quot;,
+        &quot;required&quot;: [&quot;name&quot;, &quot;responsibilities&quot;],
+        &quot;properties&quot;: {
+          &quot;name&quot;: { &quot;type&quot;: &quot;string&quot; },
+          &quot;responsibilities&quot;: {
+            &quot;type&quot;: &quot;array&quot;,
+            &quot;items&quot;: { &quot;type&quot;: &quot;string&quot; }
+          },
+          &quot;depends_on&quot;: {
+            &quot;type&quot;: &quot;array&quot;,
+            &quot;items&quot;: { &quot;type&quot;: &quot;string&quot; }
+          },
+          &quot;requirements&quot;: {
+            &quot;type&quot;: &quot;array&quot;,
+            &quot;items&quot;: { &quot;type&quot;: &quot;string&quot; }
+          }
+        }
+      }
+    }
+  }
+}
+</code></pre>
+<hr />
+<h1 id="6-module-charter-schema">6. Module Charter Schema<a class="headerlink" href="#6-module-charter-schema" title="Permanent link">&para;</a></h1>
+<pre><code class="language-json">{
+  &quot;$schema&quot;: &quot;https://json-schema.org/draft/2020-12/schema&quot;,
+  &quot;title&quot;: &quot;ModuleCharter&quot;,
+  &quot;type&quot;: &quot;object&quot;,
+  &quot;required&quot;: [&quot;module&quot;, &quot;purpose&quot;, &quot;responsibilities&quot;],
+  &quot;properties&quot;: {
+    &quot;module&quot;: { &quot;type&quot;: &quot;string&quot; },
+    &quot;purpose&quot;: { &quot;type&quot;: &quot;string&quot; },
+    &quot;responsibilities&quot;: {
+      &quot;type&quot;: &quot;array&quot;,
+      &quot;items&quot;: { &quot;type&quot;: &quot;string&quot; }
+    },
+    &quot;non_responsibilities&quot;: {
+      &quot;type&quot;: &quot;array&quot;,
+      &quot;items&quot;: { &quot;type&quot;: &quot;string&quot; }
+    },
+    &quot;owned_entities&quot;: {
+      &quot;type&quot;: &quot;array&quot;,
+      &quot;items&quot;: { &quot;type&quot;: &quot;string&quot; }
+    },
+    &quot;dependencies&quot;: {
+      &quot;type&quot;: &quot;array&quot;,
+      &quot;items&quot;: { &quot;type&quot;: &quot;string&quot; }
+    },
+    &quot;interfaces&quot;: {
+      &quot;type&quot;: &quot;array&quot;,
+      &quot;items&quot;: { &quot;type&quot;: &quot;string&quot; }
+    },
+    &quot;requirements&quot;: {
+      &quot;type&quot;: &quot;array&quot;,
+      &quot;items&quot;: { &quot;type&quot;: &quot;string&quot; }
+    },
+    &quot;use_cases&quot;: {
+      &quot;type&quot;: &quot;array&quot;,
+      &quot;items&quot;: { &quot;type&quot;: &quot;string&quot; }
+    }
+  }
+}
+</code></pre>
+<hr />
+<h1 id="7-module-specification-schema">7. Module Specification Schema<a class="headerlink" href="#7-module-specification-schema" title="Permanent link">&para;</a></h1>
+<pre><code class="language-json">{
+  &quot;$schema&quot;: &quot;https://json-schema.org/draft/2020-12/schema&quot;,
+  &quot;title&quot;: &quot;ModuleSpecification&quot;,
+  &quot;type&quot;: &quot;object&quot;,
+  &quot;required&quot;: [&quot;module&quot;, &quot;entities&quot;, &quot;rules&quot;, &quot;states&quot;],
+  &quot;properties&quot;: {
+    &quot;module&quot;: { &quot;type&quot;: &quot;string&quot; },
+    &quot;entities&quot;: {
+      &quot;type&quot;: &quot;array&quot;,
+      &quot;items&quot;: {
+        &quot;type&quot;: &quot;object&quot;,
+        &quot;required&quot;: [&quot;name&quot;, &quot;fields&quot;],
+        &quot;properties&quot;: {
+          &quot;name&quot;: { &quot;type&quot;: &quot;string&quot; },
+          &quot;fields&quot;: {
+            &quot;type&quot;: &quot;array&quot;,
+            &quot;items&quot;: {
+              &quot;type&quot;: &quot;object&quot;,
+              &quot;required&quot;: [&quot;name&quot;, &quot;type&quot;],
+              &quot;properties&quot;: {
+                &quot;name&quot;: { &quot;type&quot;: &quot;string&quot; },
+                &quot;type&quot;: { &quot;type&quot;: &quot;string&quot; },
+                &quot;required&quot;: { &quot;type&quot;: &quot;boolean&quot; },
+                &quot;description&quot;: { &quot;type&quot;: &quot;string&quot; }
+              }
+            }
+          }
+        }
+      }
+    },
+    &quot;rules&quot;: {
+      &quot;type&quot;: &quot;array&quot;,
+      &quot;items&quot;: {
+        &quot;type&quot;: &quot;object&quot;,
+        &quot;required&quot;: [&quot;id&quot;, &quot;condition&quot;, &quot;action&quot;],
+        &quot;properties&quot;: {
+          &quot;id&quot;: { &quot;type&quot;: &quot;string&quot; },
+          &quot;condition&quot;: { &quot;type&quot;: &quot;string&quot; },
+          &quot;action&quot;: { &quot;type&quot;: &quot;string&quot; }
+        }
+      }
+    },
+    &quot;states&quot;: {
+      &quot;type&quot;: &quot;array&quot;,
+      &quot;items&quot;: { &quot;type&quot;: &quot;string&quot; }
+    },
+    &quot;transitions&quot;: {
+      &quot;type&quot;: &quot;array&quot;,
+      &quot;items&quot;: {
+        &quot;type&quot;: &quot;object&quot;,
+        &quot;required&quot;: [&quot;from&quot;, &quot;to&quot;, &quot;trigger&quot;],
+        &quot;properties&quot;: {
+          &quot;from&quot;: { &quot;type&quot;: &quot;string&quot; },
+          &quot;to&quot;: { &quot;type&quot;: &quot;string&quot; },
+          &quot;trigger&quot;: { &quot;type&quot;: &quot;string&quot; }
+        }
+      }
+    },
+    &quot;errors&quot;: {
+      &quot;type&quot;: &quot;array&quot;,
+      &quot;items&quot;: { &quot;type&quot;: &quot;string&quot; }
+    },
+    &quot;events&quot;: {
+      &quot;type&quot;: &quot;array&quot;,
+      &quot;items&quot;: { &quot;type&quot;: &quot;string&quot; }
+    }
+  }
+}
+</code></pre>
+<hr />
+<h1 id="8-test-pack-schema">8. Test Pack Schema<a class="headerlink" href="#8-test-pack-schema" title="Permanent link">&para;</a></h1>
+<pre><code class="language-json">{
+  &quot;$schema&quot;: &quot;https://json-schema.org/draft/2020-12/schema&quot;,
+  &quot;title&quot;: &quot;ModuleTestPack&quot;,
+  &quot;type&quot;: &quot;object&quot;,
+  &quot;required&quot;: [&quot;acceptance_tests&quot;],
+  &quot;properties&quot;: {
+    &quot;acceptance_tests&quot;: {
+      &quot;type&quot;: &quot;array&quot;,
+      &quot;items&quot;: {
+        &quot;type&quot;: &quot;object&quot;,
+        &quot;required&quot;: [&quot;id&quot;, &quot;scenario&quot;, &quot;expected&quot;],
+        &quot;properties&quot;: {
+          &quot;id&quot;: { &quot;type&quot;: &quot;string&quot; },
+          &quot;requirement&quot;: { &quot;type&quot;: &quot;string&quot; },
+          &quot;scenario&quot;: { &quot;type&quot;: &quot;string&quot; },
+          &quot;expected&quot;: { &quot;type&quot;: &quot;string&quot; }
+        }
+      }
+    },
+    &quot;contract_tests&quot;: {
+      &quot;type&quot;: &quot;array&quot;,
+      &quot;items&quot;: {
+        &quot;type&quot;: &quot;object&quot;,
+        &quot;required&quot;: [&quot;id&quot;, &quot;interface&quot;, &quot;condition&quot;],
+        &quot;properties&quot;: {
+          &quot;id&quot;: { &quot;type&quot;: &quot;string&quot; },
+          &quot;interface&quot;: { &quot;type&quot;: &quot;string&quot; },
+          &quot;condition&quot;: { &quot;type&quot;: &quot;string&quot; },
+          &quot;expected&quot;: { &quot;type&quot;: &quot;string&quot; }
+        }
+      }
+    }
+  }
+}
+</code></pre>
+<hr />
+<h1 id="9-traceability-matrix-schema">9. Traceability Matrix Schema<a class="headerlink" href="#9-traceability-matrix-schema" title="Permanent link">&para;</a></h1>
+<pre><code class="language-json">{
+  &quot;$schema&quot;: &quot;https://json-schema.org/draft/2020-12/schema&quot;,
+  &quot;title&quot;: &quot;TraceabilityMatrix&quot;,
+  &quot;type&quot;: &quot;object&quot;,
+  &quot;required&quot;: [&quot;trace&quot;],
+  &quot;properties&quot;: {
+    &quot;trace&quot;: {
+      &quot;type&quot;: &quot;array&quot;,
+      &quot;items&quot;: {
+        &quot;type&quot;: &quot;object&quot;,
+        &quot;required&quot;: [&quot;requirement&quot;, &quot;module&quot;],
+        &quot;properties&quot;: {
+          &quot;requirement&quot;: { &quot;type&quot;: &quot;string&quot; },
+          &quot;business_function&quot;: { &quot;type&quot;: &quot;string&quot; },
+          &quot;use_case&quot;: { &quot;type&quot;: &quot;string&quot; },
+          &quot;module&quot;: { &quot;type&quot;: &quot;string&quot; },
+          &quot;specs&quot;: {
+            &quot;type&quot;: &quot;array&quot;,
+            &quot;items&quot;: { &quot;type&quot;: &quot;string&quot; }
+          },
+          &quot;tests&quot;: {
+            &quot;type&quot;: &quot;array&quot;,
+            &quot;items&quot;: { &quot;type&quot;: &quot;string&quot; }
+          },
+          &quot;code&quot;: {
+            &quot;type&quot;: &quot;array&quot;,
+            &quot;items&quot;: { &quot;type&quot;: &quot;string&quot; }
+          }
+        }
+      }
+    }
+  }
+}
+</code></pre>
+<hr />
+<h1 id="notes">Notes<a class="headerlink" href="#notes" title="Permanent link">&para;</a></h1>
+<ul>
+<li>Use JSON Schema for validation where possible.</li>
+<li>Use OpenAPI for API contracts.</li>
+<li>Use BPMN for workflow models.</li>
+<li>Use DMN for decision logic.</li>
+<li>Keep IDs stable across phases.</li>
+<li>Do not let downstream phases invent upstream identifiers.</li>
+</ul>
+              
+            </div>
+          </div><footer>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <!-- Copyright etc -->
+  </div>
+
+  Built with <a href="https://www.mkdocs.org/">MkDocs</a> using a <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a> provided by <a href="https://readthedocs.org">Read the Docs</a>.
+</footer>
+          
+        </div>
+      </div>
+
+    </section>
+
+  </div>
+
+  <div class="rst-versions" role="note" aria-label="Versions">
+  <span class="rst-current-version" data-toggle="rst-current-version">
+    
+    
+    
+  </span>
+</div>
+    <script src="../js/jquery-3.6.0.min.js"></script>
+    <script>var base_url = "..";</script>
+    <script src="../js/theme_extra.js"></script>
+    <script src="../js/theme.js"></script>
+      <script src="../search/main.js"></script>
+    <script>
+        jQuery(function () {
+            SphinxRtdTheme.Navigation.enable(true);
+        });
+    </script>
+
+</body>
+</html>

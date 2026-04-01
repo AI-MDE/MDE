@@ -1,4 +1,7 @@
 #!/usr/bin/env node
+/**
+ * Purpose: Generates DAL artifacts from design/model inputs using configured project paths.
+ */
 const fs = require('fs');
 const path = require('path');
 const { ConfigurationManager } = require('./lib/config-manager');

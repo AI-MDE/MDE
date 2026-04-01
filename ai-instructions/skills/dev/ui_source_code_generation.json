@@ -1,0 +1,229 @@
+{
+  "name": "ui_source_code_generation",
+  "purpose": "Generate frontend UI source code from UI module specs. Produces one component per page, a router, shared layout with menu, and an auth guard â€” all derived from ui-catalog.json and ui-{module}.json specs.",
+  "inputs": {
+    "configuration": {
+      "from": "config._self",
+      "default": "configuration.json"
+    },
+    "application": {
+      "from": "config.application.definition",
+      "default": "application/application.json"
+    },
+    "uiCatalog": {
+      "from": "config.design.uiModules",
+      "pattern": "ui-catalog.json",
+      "default": "design/modules/ui/ui-catalog.json"
+    },
+    "uiModuleSpecs": {
+      "from": "config.design.uiModules",
+      "pattern": "ui-*.json",
+      "default": "design/modules/ui/ui-*.json"
+    },
+    "moduleCatalog": {
+      "from": "config.design.moduleCatalog",
+      "default": "design/modules/module-catalog.json"
+    },
+    "entities": {
+      "from": "config.design.entityPattern",
+      "default": "design/entities/ent-*.json"
+    },
+    "architecture": {
+      "from": "config.mde.architecture",
+      "pattern": "architecture.json",
+      "default": "mde/architecture/architecture.json"
+    }
+  },
+  "outputs": {
+    "uiSrc": {
+      "to": "config.output.uiSrc",
+      "default": "ui/src"
+    }
+  },
+  "change_handling": {
+    "purpose": "When requirements change, regenerate impacted UI artifacts from source specs instead of only validating existing code.",
+    "upstream_sources": [
+      "ba/requirements.md",
+      "ba/use-cases/uc-*.md",
+      "design/modules/ui/ui-catalog.json",
+      "design/modules/ui/ui-*.json",
+      "design/modules/module-catalog.json",
+      "design/entities/ent-*.json",
+      "application/application.json"
+    ],
+    "workflow": [
+      "Detect changed upstream sources since last successful generate_ui_source_code run.",
+      "Map each changed source to impacted UI modules/pages/routes/types/api clients.",
+      "Regenerate every impacted artifact under config.output.uiSrc.",
+      "Do not treat a successful build as proof of functional alignment to changed requirements.",
+      "If route/menu/page specs changed, regenerate router and sidebar even when individual page files still compile."
+    ]
+  },
+  "tech": {
+    "from": "config.ui",
+    "fields": {
+      "framework":   "react | vue | angular â€” default react",
+      "language":    "typescript â€” always",
+      "router":      "react-router-dom v6 | vue-router | angular-router",
+      "styling":     "tailwind | css-modules | styled-components â€” default tailwind",
+      "stateClient": "tanstack-query | swr | none â€” default tanstack-query",
+      "authScheme":  "jwt-bearer | session | none â€” default jwt-bearer"
+    }
+  },
+  "scaffold": {
+    "package_json": {
+      "when": "file does not already exist",
+      "derive_from": ["config.project.name", "config.project.version", "config.ui"],
+      "must_include": {
+        "type": "module",
+        "scripts": {
+          "dev":   "vite",
+          "build": "tsc && vite build",
+          "preview": "vite preview",
+          "test":  "vitest"
+        },
+        "dependencies": "derive from config.ui (react/vue + router + tanstack-query + axios)",
+        "devDependencies": "typescript, vite, vitest, @types/react or @types/vue, @testing-library/react, @testing-library/user-event, @testing-library/jest-dom"
+      }
+    },
+    "tsconfig_json": {
+      "when": "file does not already exist",
+      "must_include": {
+        "compilerOptions": {
+          "target": "ES2020",
+          "module": "ESNext",
+          "moduleResolution": "bundler",
+          "strict": true,
+          "jsx": "react-jsx",
+          "baseUrl": ".",
+          "paths": {
+            "@/*": ["src/*"],
+            "@components/*": ["src/components/*"],
+            "@pages/*": ["src/pages/*"],
+            "@api/*": ["src/api/*"],
+            "@layout/*": ["src/layout/*"],
+            "@context/*": ["src/context/*"],
+            "@router": ["src/router/index.ts"],
+            "@router/*": ["src/router/*"]
+          }
+        },
+        "include": ["src"],
+        "exclude": ["node_modules", "dist", "src/test"]
+      }
+    },
+    "vite_config": {
+      "when": "file does not already exist",
+      "filename": "vite.config.ts",
+      "must_include": {
+        "resolve.alias": "@ â†’ src/, plus all @pages, @api, @layout, @context, @router aliases matching tsconfig paths",
+        "server.proxy": {
+          "note": "Proxy /api to config.ui.apiProxy (e.g. http://localhost:3000). Do NOT add a rewrite that strips /api â€” the backend routes are registered with the /api prefix.",
+          "example": "'/api': { target: 'http://localhost:3000', changeOrigin: true }"
+        }
+      }
+    }
+  },
+  "folder_structure": {
+    "note": "All paths are RELATIVE TO config.output.uiSrc (e.g. /dev/myapp/ui/src). Do NOT write to design/ or any other folder.",
+    "root": "{config.output.uiSrc}",
+    "layout": "{config.output.uiSrc}/layout/ â€” AppShell, Sidebar, TopBar, AuthGuard",
+    "router": "{config.output.uiSrc}/router/ â€” index.tsx with all routes",
+    "types":  "{config.output.uiSrc}/types/ â€” one .ts file per entity",
+    "api":    "{config.output.uiSrc}/api/ â€” one .ts file per backend module",
+    "modules": "{config.output.uiSrc}/modules/{kebab-module-name}/",
+    "pages":  "{config.output.uiSrc}/modules/{kebab-module-name}/pages/ â€” one .tsx per page",
+    "components": "{config.output.uiSrc}/modules/{kebab-module-name}/components/"
+  },
+  "generation_order": [
+    "scaffold files in parent of config.output.uiSrc: package.json, tsconfig.json, vite.config.ts if absent",
+    "{config.output.uiSrc}/types/{Entity}.ts â€” one per entity file",
+    "{config.output.uiSrc}/api/{kebab-module}.ts â€” one per backend module",
+    "{config.output.uiSrc}/layout/AppShell.tsx",
+    "{config.output.uiSrc}/layout/Sidebar.tsx â€” nav menu from ui-catalog.menu",
+    "{config.output.uiSrc}/layout/AuthGuard.tsx",
+    "{config.output.uiSrc}/router/index.tsx â€” all routes, lazy-loaded",
+    "{config.output.uiSrc}/modules/{module}/pages/{PageName}.tsx â€” one per page spec",
+    "{config.output.uiSrc}/modules/{module}/index.ts â€” barrel export"
+  ],
+  "page_generation_rules": {
+    "dashboard": "Render summary cards derived from shows[]. Each card navigates to the target listed in actions[type=navigate].",
+    "list": "Render a table or card list. Columns from shows[]. Add filter controls from filters[]. Each row navigates to detail via actions[type=navigate]. Render emptyState when data is empty.",
+    "detail": "Render all fields as read-only. Add action buttons from actions[]. Confirm modal before any type=confirm action.",
+    "form": "Render a form with one input per field in validation[]. Apply validation rules. Submit via actions[type=submit]. Cancel navigates back.",
+    "wizard": "Render a step indicator. Each step is a separate component. Next/Back buttons. Submit only on final step.",
+    "modal": "Render as a dialog overlay. Confirm/Cancel buttons only. No navigation within the modal.",
+    "split-view": "Left pane = list, right pane = detail or form. Selection in list updates right pane."
+  },
+  "api_client_rules": [
+    "One file per backend module â€” src/api/{kebab-module}.ts",
+    "Derive endpoints from module-catalog exposes[] array",
+    "All calls use a shared baseClient (axios or fetch wrapper) from src/api/client.ts",
+    "Return typed responses using entity types from src/types/",
+    "Auth header injected by baseClient interceptor using authScheme from config.ui"
+  ],
+  "auth_rules": [
+    "AuthGuard wraps every route â€” redirects to login if unauthenticated",
+    "requiredRoles on a page maps to actor names from application.json",
+    "If the current user's role is not in requiredRoles, render a 403 component, not a redirect"
+  ],
+  "naming_rules": {
+    "component_file": "PascalCase.tsx â€” e.g. MyLeaveDashboard.tsx, SubmitLeaveRequest.tsx",
+    "route_file":     "kebab-case from routePrefix â€” e.g. my-leave, team-approvals",
+    "api_file":       "kebab-module.ts â€” matches module-catalog moduleName kebab",
+    "type_file":      "PascalCase.ts â€” matches entity name from ent-*.json"
+  },
+  "rules": [
+    "If requirements or use cases changed, re-derive UI behavior from updated source artifacts before generating files.",
+    "When upstream source files changed, regenerate impacted modules/pages/types/api files; do not only run compile or build checks.",
+    "A build-only pass is validation, not generation. Do not mark generation complete unless impacted UI artifacts were reconciled with changed requirements.",
+    "CRITICAL: config.design.uiModules is the INPUT folder (read-only spec files). config.output.uiSrc is the OUTPUT folder (write all generated code here). Never write into config.design.uiModules.",
+    "CRITICAL: Generate .tsx / .ts files only â€” never .ejs, .hbs, .html, .vue, or any other template format unless config.ui.framework explicitly says so.",
+    "CRITICAL: The Vite proxy must NOT include a rewrite that strips /api. Backend routes are registered as /api/... so the prefix must be forwarded intact.",
+    "CRITICAL: The router must include a default index redirect at the root authenticated route: { index: true, element: <Navigate to='/{first-module-route}' replace /> }. Without this, visiting '/' shows a blank page.",
+    "CRITICAL: Never generate duplicate .js and .tsx files for the same component. Generate .tsx only. If legacy .js files exist they will shadow the .tsx and the fix will appear to have no effect.",
+    "CRITICAL: All mutation onSuccess handlers must call queryClient.invalidateQueries() for every affected query key before navigating. Without this the list page shows stale cached data after save.",
+    "CRITICAL: Error messages shown to users must render the actual server error from error.response.data.error â€” not a hardcoded generic string. Use: (error as any)?.response?.data?.error ?? error?.message ?? 'fallback message'.",
+    "Read config.ui for framework and styling choices before generating any file",
+    "Read ui-catalog.json menu array to build the router and Sidebar â€” menu order = route order",
+    "Read each ui-{module}.json for page specs â€” one component per page",
+    "subNav in a module spec â†’ render a TabBar or secondary nav within the module's AppShell slot",
+    "navigation.menuVisible=true pages are direct routes; menuVisible=false pages are nested/child routes",
+    "Every page component receives typed props â€” no any",
+    "Derive column and field names from shows[] and validation[] in the page spec â€” do not invent fields",
+    "Every form must implement all validation rules from the page spec",
+    "All list pages must render emptyState string when the data array is empty",
+    "All delete/destructive actions must show a confirm dialog before proceeding",
+    "Do not generate mock data or hardcoded values â€” all data comes from api/ functions",
+    "Do not overwrite scaffold files (package.json, tsconfig.json, vite.config.ts) if they already exist",
+    "Never write outside config.output.uiSrc",
+    "The sidebar menu filters items by user role â€” mock auth must default to the highest-privilege role (HR_ADMIN or equivalent) so all modules are visible during development.",
+    "tsconfig.json exclude must include src/test to prevent test files from breaking the production build.",
+    "Any type used in a page component (e.g. actorName on an audit entry) must be declared in the corresponding type file in src/types/. Cross-check all page field references against the type definitions before generating."
+  ],
+  "test": {
+    "framework": "vitest",
+    "library": "@testing-library/react",
+    "root": "src/test",
+    "coverage_required_per_page": [
+      "Renders without crashing (smoke test)",
+      "Displays loading state while data is fetching",
+      "Renders correct data when API returns success response",
+      "Renders emptyState message when API returns empty array (list pages)",
+      "Form submission â€” calls correct API method with correct payload on valid input",
+      "Form validation â€” shows field-level error messages when required fields are empty",
+      "Form validation â€” shows error when business rule is violated (e.g. end date before start date)",
+      "Mutation success â€” navigates to the correct route after successful save/submit",
+      "Mutation error â€” displays the server error message from response.data.error (not a hardcoded string)",
+      "Confirm modal â€” appears before destructive actions; action is not called unless user confirms",
+      "Role-based visibility â€” restricted pages redirect or show 403 when user lacks required role"
+    ],
+    "api_mock_pattern": "Use vi.mock('@api/{module}') to mock API calls. Return resolved/rejected promises. Never make real HTTP calls in unit tests.",
+    "query_client_pattern": "Wrap each test render in a fresh QueryClient with retry: false to prevent infinite retries on error.",
+    "router_pattern": "Wrap renders in MemoryRouter with initialEntries for route-dependent pages.",
+    "note": "Install @testing-library/react, @testing-library/user-event, @testing-library/jest-dom in devDependencies. Exclude src/test from tsconfig.json to avoid build errors."
+  },
+  "uses_tools": [
+    "file_manager"
+  ],
+  "next_phase": "development"
+}

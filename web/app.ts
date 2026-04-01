@@ -9,17 +9,27 @@ const __dirname  = path.dirname(__filename);
 
 /**
  * CLI wrapper for viewer.js to run from a project directory.
- * Usage: ts-node mde/web/app.ts --root=<project-root>
+ * Usage:
+ *   ts-node web/app.ts <project-root> <port>
+ *   ts-node web/app.ts --root=<project-root> --port=<port>
  */
 
 const viewerPath: string = path.join(__dirname, 'viewer.ts');
+const argv = process.argv.slice(2);
 
 const parseArg = (prefix: string): string | undefined =>
-  process.argv.find(a => a.startsWith(prefix))?.slice(prefix.length);
+  argv.find(a => a.startsWith(prefix))?.slice(prefix.length);
 
-const rootArg: string | undefined = parseArg('--root=');
+const positionalArgs: string[] = argv.filter(a => !a.startsWith('--'));
+const rootArg: string | undefined = positionalArgs[0] ?? parseArg('--root=');
+const portArg: string | undefined = positionalArgs[1] ?? parseArg('--port=');
+
 const projectRoot: string = rootArg ? path.resolve(rootArg) : process.cwd();
-const viewerPort: number = parseInt(parseArg('--port=') ?? '4000', 10);
+const viewerPort: number = parseInt(portArg ?? '4000', 10);
+if (!Number.isFinite(viewerPort) || viewerPort <= 0) {
+  console.error(`[viewer] Invalid port: ${portArg}`);
+  process.exit(1);
+}
 const viewerUrl: string = `http://localhost:${viewerPort}/`;
 
 const checkPortAvailable = (port: number): Promise<boolean> =>
@@ -73,7 +83,7 @@ checkPortAvailable(viewerPort).then((available) => {
     process.exit(1);
   }
 
-  const child: ChildProcess = spawn(process.execPath, [viewerPath, `--root=${projectRoot}`], {
+  const child: ChildProcess = spawn(process.execPath, [viewerPath, `--root=${projectRoot}`, `--port=${viewerPort}`], {
     stdio: 'inherit',
   });
 

@@ -1,0 +1,56 @@
+{
+  "name": "business_function_generation",
+  "label": "Business Function Generation",
+  "category": "business_analysis",
+  "purpose": "Generate business capabilities/functions from requirements as a precursor to use-case generation.",
+  "when_to_use": [
+    "Business-analysis baseline exists and capability model is missing",
+    "Use-case generation should be grounded in business functions",
+    "Need standardized function catalog for downstream traceability"
+  ],
+  "inputs": {
+    "requirements": {
+      "from": "config.ba.requirements",
+      "default": "ba/"
+    },
+    "businessFunctions": {
+      "from": "config.ba.businessFunctions",
+      "default": "ba/business-functions.json"
+    },
+    "projectState": {
+      "from": "config.project_state.state",
+      "default": "project/project-state.json"
+    }
+  },
+  "methodology": [
+    "Extract top-level capabilities from requirements baseline.",
+    "Derive core business functions under each capability.",
+    "Define capabilities/functions by business value and observable outcomes, not by technical mechanisms.",
+    "Use business-facing names with clear scope; avoid mechanical/storage terms in capability/function names.",
+    "Keep names concise and domain-aligned.",
+    "Write deterministic JSON schema with stable identifiers.",
+    "AI-first generation with deterministic tool fallback."
+  ],
+  "outputs": {
+    "businessFunctions": {
+      "from": "config.ba.businessFunctions",
+      "default": "ba/business-functions.json"
+    }
+  },
+  "tooling": {
+    "primary_tool": "mde/tools/generate-business-functions.js",
+    "mode": "ai_first"
+  },
+  "completion_criteria": [
+    "business-functions.json exists and parses.",
+    "Each function has id, name, description, and outcomes.",
+    "Capability/function names and descriptions remain business-facing and avoid technology, schema, API, or infrastructure solution wording.",
+    "Catalog is sufficient to anchor use-case generation."
+  ],
+  "constraints": [
+    "Do not model pure technical mechanisms (for example logging, persistence implementation, API transport, messaging infrastructure) as business capabilities.",
+    "Do not use mechanical names (Entry, Row, Log Table, Entity Table) as canonical capability/function labels.",
+    "Notification, audit, and history may be capabilities only when framed as stakeholder/compliance/business outcomes; keep implementation mechanics out of capability definitions."
+  ]
+}
+

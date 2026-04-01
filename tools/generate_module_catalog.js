@@ -1,4 +1,7 @@
 #!/usr/bin/env node
+/**
+ * Purpose: Generates the module catalog that defines module boundaries, types, and ownership.
+ */
 const fs = require('fs');
 const path = require('path');
 const argv = process.argv.slice(2);

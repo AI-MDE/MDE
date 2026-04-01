@@ -14,14 +14,6 @@
 
 Delegates to skill: `business_function_generation`
 
-## Requires
-
-- ../../ba/requirements.md
-
-## Produces
-
-- ../../ba/business-functions.json
-
 ## Tools
 
 - file_manager

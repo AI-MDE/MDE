@@ -1,3 +1,6 @@
+/**
+ * Purpose: TypeScript source for configuration loading, resolution, and validation utilities.
+ */
 import fs from 'fs';
 import path from 'path';
 

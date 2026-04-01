@@ -1,0 +1,71 @@
+{
+  "name": "use_case_generation",
+  "label": "Use Case Generation",
+  "category": "business_analysis",
+  "purpose": "Generate business use cases from requirements and lifecycle context, then normalize output to repository standards.",
+  "when_to_use": [
+    "User asks to generate initial use cases from BA baseline",
+    "Requirements exist but BA/use-cases are incomplete",
+    "Need to refresh use-case docs after baseline changes"
+  ],
+  "inputs": {
+    "requirements": {
+      "from": "config.ba.requirements",
+      "default": "ba/"
+    },
+    "useCases": {
+      "from": "config.ba.useCasePattern",
+      "default": "ba/use-cases/uc-*.md"
+    },
+    "businessFunctions": {
+      "from": "config.ba.businessFunctions",
+      "default": "ba/business-functions.json"
+    },
+    "projectState": {
+      "from": "config.project_state.state",
+      "default": "project/project-state.json"
+    }
+  },
+  "methodology": [
+    "Read requirements baseline and identify core user/system goals, actors, and workflow steps.",
+    "Follow methodology/ba-methods.md sections 9 and 10 for use case definition and derivation discipline.",
+    "Apply methodology/ba-methods.md section 10.2A Use Case Granularity Decision Rule before finalizing use case boundaries.",
+    "Draft concise use cases with consistent numbering and naming.",
+    "Ensure each use case includes: Description, Actors, Preconditions, Main Flow, Postconditions.",
+    "Prefer incremental creation; keep existing files unless overwrite is explicitly requested.",
+    "After AI drafting, run tool normalization/write flow to persist consistent markdown."
+  ],
+  "outputs": {
+    "useCases": {
+      "to": "config.ba.useCases",
+      "pattern": "uc-*.md"
+    }
+  },
+  "artifacts": [
+    {
+      "from": "config.ba.useCases",
+      "default": "ba/use-cases"
+    }
+  ],
+  "tooling": {
+    "primary_tool": "mde/tools/generate-use-cases.js",
+    "mode": "ai_first_with_fallback",
+    "fallback_behavior": "When AI is unavailable, tool generates deterministic baseline use cases."
+  },
+  "completion_criteria": [
+    "At least one use case is generated when baseline supports it.",
+    "Output files follow uc-###-<slug>.md naming.",
+    "All generated use cases contain required sections.",
+    "Project state is updated with generated artifacts."
+  ],
+  "constraints": [
+    "Do not invent domain-critical constraints not present in baseline.",
+    "Do not create standalone use cases for atomic actions (submit, cancel, approve, reject, update, save, notify) unless they satisfy the standalone criteria in methodology/ba-methods.md section 10.2A.",
+    "When standalone criteria are not met, model such actions as main, alternate, or exception flows inside a broader actor-goal use case.",
+    "Do not embed implementation design (specific APIs, DB tables/columns, frameworks, or infrastructure products) in use-case steps unless explicitly required by source policy or regulation.",
+    "Keep use cases goal-oriented and actor-centric, describing what must happen and expected outcomes rather than how software is technically implemented.",
+    "Do not overwrite existing use-case files unless force/explicit overwrite is requested.",
+    "Do not emit partial documents missing required sections."
+  ]
+}
+

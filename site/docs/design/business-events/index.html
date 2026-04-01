@@ -1,0 +1,440 @@
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" >
+<head>
+    <meta charset="utf-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" /><link rel="canonical" href="https://ai-mde.github.io/docs/design/business-events/" />
+      <link rel="shortcut icon" href="../../img/favicon.ico" />
+    <title>Business Events - AI-MDE Docs</title>
+    <link rel="stylesheet" href="../../css/theme.css" />
+    <link rel="stylesheet" href="../../css/theme_extra.css" />
+        <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.8.0/styles/github.min.css" />
+    
+      <script>
+        // Current page data
+        var mkdocs_page_name = "Business Events";
+        var mkdocs_page_input_path = "design\\business-events.md";
+        var mkdocs_page_url = "/docs/design/business-events/";
+      </script>
+    
+    <!--[if lt IE 9]>
+      <script src="../../js/html5shiv.min.js"></script>
+    <![endif]-->
+      <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.8.0/highlight.min.js"></script>
+      <script>hljs.highlightAll();</script> 
+</head>
+
+<body class="wy-body-for-nav" role="document">
+
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side stickynav">
+    <div class="wy-side-scroll">
+      <div class="wy-side-nav-search">
+          <a href="../.." class="icon icon-home"> AI-MDE Docs
+        </a><div role="search">
+  <form id ="rtd-search-form" class="wy-form" action="../../search.html" method="get">
+      <input type="text" name="q" placeholder="Search docs" aria-label="Search docs" title="Type search term here" />
+  </form>
+</div>
+      </div>
+
+      <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+              <ul>
+                <li class="toctree-l1"><a class="reference internal" href="../..">Home</a>
+                </li>
+              </ul>
+              <ul>
+                <li class="toctree-l1"><a class="reference internal" href="../../help/install/">Install</a>
+                </li>
+              </ul>
+              <p class="caption"><span class="caption-text">Help</span></p>
+              <ul>
+                  <li class="toctree-l1"><a class="reference internal" href="../../help/how-to-use-mde/">How To Use MDE</a>
+                  </li>
+                  <li class="toctree-l1"><a class="reference internal" href="../../help/ai_pipeline_commands/">Pipeline Commands</a>
+                  </li>
+                  <li class="toctree-l1"><a class="reference internal" href="../../help/workspace/">Workspace</a>
+                  </li>
+                  <li class="toctree-l1"><a class="reference internal" href="../../help/methodology/">Methodology</a>
+                  </li>
+              </ul>
+              <ul>
+                <li class="toctree-l1"><a class="reference internal" href="../../lifecycle/">Lifecycle</a>
+                </li>
+              </ul>
+              <ul>
+                <li class="toctree-l1"><a class="reference internal" href="../../configuration/">Configuration</a>
+                </li>
+              </ul>
+              <p class="caption"><span class="caption-text">AI Instructions</span></p>
+              <ul>
+                  <li class="toctree-l1"><a class="reference internal" href="../../ai-instructions/">Overview</a>
+                  </li>
+                  <li class="toctree-l1"><a class="reference internal" href="../../ai-instructions/commands/">Commands</a>
+                  </li>
+                  <li class="toctree-l1"><a class="reference internal" href="../../ai-instructions/skills/">Skills</a>
+                  </li>
+              </ul>
+              <p class="caption"><span class="caption-text">Design</span></p>
+              <ul class="current">
+                  <li class="toctree-l1"><a class="reference internal" href="../system-design-process/">Process</a>
+                  </li>
+                  <li class="toctree-l1"><a class="reference internal" href="../use-case-mapping/">Use-Case Mapping</a>
+                  </li>
+                  <li class="toctree-l1 current"><a class="reference internal current" href="./">Business Events</a>
+    <ul class="current">
+    <li class="toctree-l2"><a class="reference internal" href="#purpose">Purpose</a>
+    </li>
+    <li class="toctree-l2"><a class="reference internal" href="#responsibility-split">Responsibility split</a>
+    </li>
+    <li class="toctree-l2"><a class="reference internal" href="#example-claimdenied">Example: ClaimDenied</a>
+    </li>
+    <li class="toctree-l2"><a class="reference internal" href="#interaction-diagram">Interaction diagram</a>
+    </li>
+    <li class="toctree-l2"><a class="reference internal" href="#event-contract-shape">Event contract shape</a>
+        <ul>
+    <li class="toctree-l3"><a class="reference internal" href="#base-envelope">Base envelope</a>
+    </li>
+    <li class="toctree-l3"><a class="reference internal" href="#specific-event-types">Specific event types</a>
+    </li>
+    <li class="toctree-l3"><a class="reference internal" href="#who-uses-what">Who uses what</a>
+    </li>
+        </ul>
+    </li>
+    <li class="toctree-l2"><a class="reference internal" href="#publisher-interface">Publisher interface</a>
+    </li>
+    <li class="toctree-l2"><a class="reference internal" href="#who-creates-the-event">Who creates the event</a>
+    </li>
+    <li class="toctree-l2"><a class="reference internal" href="#delivery-options">Delivery options</a>
+    </li>
+    <li class="toctree-l2"><a class="reference internal" href="#what-can-consume-events">What can consume events</a>
+    </li>
+    <li class="toctree-l2"><a class="reference internal" href="#where-not-to-put-event-concerns">Where NOT to put event concerns</a>
+    </li>
+    <li class="toctree-l2"><a class="reference internal" href="#folder-structure">Folder structure</a>
+    </li>
+    <li class="toctree-l2"><a class="reference internal" href="#reference">Reference</a>
+    </li>
+    </ul>
+                  </li>
+                  <li class="toctree-l1"><a class="reference internal" href="../business-app-layering/">App Layering</a>
+                  </li>
+              </ul>
+              <ul>
+                <li class="toctree-l1"><a class="reference internal" href="../../changes/">Changes</a>
+                </li>
+              </ul>
+      </div>
+    </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
+      <nav class="wy-nav-top" role="navigation" aria-label="Mobile navigation menu">
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../..">AI-MDE Docs</a>
+        
+      </nav>
+      <div class="wy-nav-content">
+        <div class="rst-content"><div role="navigation" aria-label="breadcrumbs navigation">
+  <ul class="wy-breadcrumbs">
+    <li><a href="../.." class="icon icon-home" aria-label="Docs"></a></li>
+          <li class="breadcrumb-item">Design</li>
+      <li class="breadcrumb-item active">Business Events</li>
+    <li class="wy-breadcrumbs-aside">
+          <a href="https://github.com/AI-MDE/ai-mde/edit/master/docs/design/business-events.md">Edit on AI-MDE/ai-mde</a>
+    </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+            <div class="section" itemprop="articleBody">
+              
+                <h1 id="business-events-in-the-architecture">Business Events in the Architecture<a class="headerlink" href="#business-events-in-the-architecture" title="Permanent link">&para;</a></h1>
+<h2 id="purpose">Purpose<a class="headerlink" href="#purpose" title="Permanent link">&para;</a></h2>
+<p>This document defines where business events fit in the architecture and how a business event like <code>ClaimDenied</code> flows through the system.</p>
+<p>The architecture:</p>
+<ul>
+<li><strong>Domain Entity</strong> — owns object truth and state transitions</li>
+<li><strong>UseCase</strong> — owns workflow, authorization, and orchestration</li>
+<li><strong>QueryService</strong> — owns reads</li>
+<li><strong>Infrastructure / Adapter</strong> — owns persistence, messaging, external systems</li>
+<li><strong>DTO</strong> — used at boundaries and for event contracts</li>
+</ul>
+<hr />
+<h2 id="responsibility-split">Responsibility split<a class="headerlink" href="#responsibility-split" title="Permanent link">&para;</a></h2>
+<table>
+<thead>
+<tr>
+<th>Layer</th>
+<th>Role in events</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Domain Entity</td>
+<td>Decides whether the state change is legal. Does not emit events.</td>
+</tr>
+<tr>
+<td>UseCase</td>
+<td>Decides that an event should be emitted after a successful business action. Creates the event object.</td>
+</tr>
+<tr>
+<td>Infrastructure</td>
+<td>Decides how the event is delivered. Implements the publisher interface.</td>
+</tr>
+</tbody>
+</table>
+<hr />
+<h2 id="example-claimdenied">Example: <code>ClaimDenied</code><a class="headerlink" href="#example-claimdenied" title="Permanent link">&para;</a></h2>
+<p>When a claim is denied:</p>
+<ol>
+<li>Actor is authorized</li>
+<li>Claim is loaded</li>
+<li>Domain Entity allows the denial (<code>claim.deny()</code>)</li>
+<li>Claim is saved</li>
+<li>UseCase emits a <code>ClaimDenied</code> event through the publisher port</li>
+</ol>
+<pre><code class="language-text">Controller
+ -&gt; DenyClaimUseCase
+ -&gt; ClaimRepository.findById()
+ -&gt; Claim.deny()
+ -&gt; ClaimRepository.save()
+ -&gt; DomainEventPublisher.publish(ClaimDenied)
+ -&gt; return response
+</code></pre>
+<hr />
+<h2 id="interaction-diagram">Interaction diagram<a class="headerlink" href="#interaction-diagram" title="Permanent link">&para;</a></h2>
+<pre><code class="language-mermaid">sequenceDiagram
+    actor User
+    participant C as Controller
+    participant U as DenyClaimUseCase
+    participant R as ClaimRepository
+    participant E as Claim Entity
+    participant DB as Database
+    participant P as DomainEventPublisher
+
+    User-&gt;&gt;C: deny claim
+    C-&gt;&gt;U: execute(command, actor)
+    U-&gt;&gt;R: findById(claimId)
+    R-&gt;&gt;DB: SELECT claim
+    DB--&gt;&gt;R: row
+    R--&gt;&gt;U: Claim entity
+    U-&gt;&gt;E: deny()
+    E--&gt;&gt;U: status becomes denied or rule violation
+    U-&gt;&gt;R: save(claim)
+    R-&gt;&gt;DB: UPDATE claim
+    DB--&gt;&gt;R: success
+    U-&gt;&gt;P: publish(ClaimDeniedEvent)
+    P--&gt;&gt;U: success
+    U--&gt;&gt;C: done
+    C--&gt;&gt;User: 204 No Content
+</code></pre>
+<hr />
+<h2 id="event-contract-shape">Event contract shape<a class="headerlink" href="#event-contract-shape" title="Permanent link">&para;</a></h2>
+<p>Events use a <strong>typed envelope</strong> pattern — one base type for the publisher, specific payload types per event.</p>
+<h3 id="base-envelope">Base envelope<a class="headerlink" href="#base-envelope" title="Permanent link">&para;</a></h3>
+<pre><code class="language-ts">// shared/events/domain-event.ts
+export type DomainEvent&lt;T = unknown&gt; = {
+  eventType: string;
+  occurredAt: string;
+  aggregateId: string;
+  aggregateType: string;
+  payload: T;
+};
+</code></pre>
+<p>Used by the publisher interface and infrastructure — generic, serialisable.</p>
+<h3 id="specific-event-types">Specific event types<a class="headerlink" href="#specific-event-types" title="Permanent link">&para;</a></h3>
+<pre><code class="language-ts">// {module}/dto/{module}.events.ts
+export type ClaimDeniedEvent = DomainEvent&lt;{
+  claimId: string;
+  claimNumber: string;
+  claimantId: string;
+  reason: string;
+}&gt;;
+
+export type ClaimApprovedEvent = DomainEvent&lt;{
+  claimId: string;
+  claimNumber: string;
+  claimantId: string;
+  approvedAmount: number;
+}&gt;;
+</code></pre>
+<p>Each specific type is a declaration only — no extra classes, just a constrained alias of the base.</p>
+<h3 id="who-uses-what">Who uses what<a class="headerlink" href="#who-uses-what" title="Permanent link">&para;</a></h3>
+<table>
+<thead>
+<tr>
+<th>Layer</th>
+<th>Uses</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>UseCase (producer)</td>
+<td>Specific typed event — full payload type safety</td>
+</tr>
+<tr>
+<td>Publisher interface</td>
+<td>Base <code>DomainEvent</code> — accepts any event</td>
+</tr>
+<tr>
+<td>Infrastructure</td>
+<td>Base <code>DomainEvent</code> — serialises generically</td>
+</tr>
+<tr>
+<td>Consumer</td>
+<td>Narrows by <code>eventType</code> discriminator to access typed payload</td>
+</tr>
+</tbody>
+</table>
+<p>Event contracts live in the <code>dto</code> layer of the owning module.</p>
+<hr />
+<h2 id="publisher-interface">Publisher interface<a class="headerlink" href="#publisher-interface" title="Permanent link">&para;</a></h2>
+<p>The UseCase depends on an interface (port), not an implementation.</p>
+<pre><code class="language-ts">export interface DomainEventPublisher {
+  publish(event: DomainEvent): Promise&lt;void&gt;;
+}
+</code></pre>
+<p>The infrastructure layer provides the implementation — database outbox, message bus, or any other delivery mechanism. The UseCase does not know or care which.</p>
+<p>This keeps the delivery mechanism replaceable without touching business logic.</p>
+<hr />
+<h2 id="who-creates-the-event">Who creates the event<a class="headerlink" href="#who-creates-the-event" title="Permanent link">&para;</a></h2>
+<p><strong>Pattern A (recommended): UseCase creates the event from entity state</strong></p>
+<pre><code class="language-ts">claim.deny(now);
+await claimRepository.save(claim);
+
+const s = claim.getSnapshot();
+const event: ClaimDeniedEvent = {
+  eventType: &quot;ClaimDenied&quot;,
+  occurredAt: now.toISOString(),
+  payload: {
+    claimId: s.id,
+    claimNumber: s.claimNumber,
+    claimantId: s.claimantId,
+    status: s.status
+  }
+};
+await eventPublisher.publish(event);
+</code></pre>
+<p>Simple, explicit, easy to test.</p>
+<p><strong>Pattern B: Entity records domain events internally</strong></p>
+<p>The entity accumulates pending events; the UseCase dispatches them after save. Useful in richer event-driven models but adds machinery. Start with Pattern A.</p>
+<hr />
+<h2 id="delivery-options">Delivery options<a class="headerlink" href="#delivery-options" title="Permanent link">&para;</a></h2>
+<p><strong>Option 1 — Publish immediately after save</strong></p>
+<p>Simple. Risk: if save succeeds but publish fails, the event is lost.
+Acceptable for low-stakes notifications.</p>
+<p><strong>Option 2 — Outbox Pattern (recommended when reliability matters)</strong></p>
+<pre><code class="language-text">1. save entity
+2. insert event row in same DB transaction
+3. background worker reads unsent rows
+4. worker delivers to message bus
+5. row marked as sent
+</code></pre>
+<p>Outbox flow:</p>
+<pre><code class="language-mermaid">sequenceDiagram
+    participant U as UseCase
+    participant DB as Database
+    participant O as Outbox Table
+    participant W as Outbox Worker
+    participant B as Message Bus
+
+    U-&gt;&gt;DB: UPDATE entity
+    U-&gt;&gt;O: INSERT event row (same transaction)
+    O--&gt;&gt;U: recorded
+
+    W-&gt;&gt;O: read unsent rows
+    O--&gt;&gt;W: event row
+    W-&gt;&gt;B: publish event
+    B--&gt;&gt;W: acknowledged
+    W-&gt;&gt;O: mark row sent
+</code></pre>
+<p>Eliminates lost events when reliability matters.</p>
+<hr />
+<h2 id="what-can-consume-events">What can consume events<a class="headerlink" href="#what-can-consume-events" title="Permanent link">&para;</a></h2>
+<ul>
+<li>notification service</li>
+<li>audit logger</li>
+<li>reporting pipeline</li>
+<li>fraud / risk service</li>
+<li>downstream systems</li>
+<li>analytics</li>
+</ul>
+<p>One business event, many independent consumers.</p>
+<hr />
+<h2 id="where-not-to-put-event-concerns">Where NOT to put event concerns<a class="headerlink" href="#where-not-to-put-event-concerns" title="Permanent link">&para;</a></h2>
+<ul>
+<li><strong>Domain Entity</strong> — must not import a publisher or know about delivery</li>
+<li><strong>Controller</strong> — must not publish events directly</li>
+<li><strong>QueryService</strong> — reads must not emit events</li>
+</ul>
+<hr />
+<h2 id="folder-structure">Folder structure<a class="headerlink" href="#folder-structure" title="Permanent link">&para;</a></h2>
+<pre><code class="language-text">{module}/
+  application/
+    use-cases/
+      deny-claim.use-case.ts
+    ports/
+      domain-event-publisher.ts      ← interface (port)
+  domain/
+    {module}.entity.ts
+  infrastructure/
+    messaging/
+      outbox-event-publisher.ts      ← implementation
+    persistence/
+      outbox.repository.ts           ← if using outbox pattern
+</code></pre>
+<hr />
+<h2 id="reference">Reference<a class="headerlink" href="#reference" title="Permanent link">&para;</a></h2>
+<ul>
+<li>Architecture: <code>mde/architecture/architecture.json</code></li>
+<li>Layering guide: <code>mde/docs/design/business-app-layering.md</code></li>
+</ul>
+              
+            </div>
+          </div><footer>
+    <div class="rst-footer-buttons" role="navigation" aria-label="Footer Navigation">
+        <a href="../use-case-mapping/" class="btn btn-neutral float-left" title="Use-Case Mapping"><span class="icon icon-circle-arrow-left"></span> Previous</a>
+        <a href="../business-app-layering/" class="btn btn-neutral float-right" title="App Layering">Next <span class="icon icon-circle-arrow-right"></span></a>
+    </div>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <!-- Copyright etc -->
+  </div>
+
+  Built with <a href="https://www.mkdocs.org/">MkDocs</a> using a <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a> provided by <a href="https://readthedocs.org">Read the Docs</a>.
+</footer>
+          
+        </div>
+      </div>
+
+    </section>
+
+  </div>
+
+  <div class="rst-versions" role="note" aria-label="Versions">
+  <span class="rst-current-version" data-toggle="rst-current-version">
+    
+    
+      <span><a href="../use-case-mapping/" style="color: #fcfcfc">&laquo; Previous</a></span>
+    
+    
+      <span><a href="../business-app-layering/" style="color: #fcfcfc">Next &raquo;</a></span>
+    
+  </span>
+</div>
+    <script src="../../js/jquery-3.6.0.min.js"></script>
+    <script>var base_url = "../..";</script>
+    <script src="../../js/theme_extra.js"></script>
+    <script src="../../js/theme.js"></script>
+      <script src="../../search/main.js"></script>
+    <script>
+        jQuery(function () {
+            SphinxRtdTheme.Navigation.enable(true);
+        });
+    </script>
+
+</body>
+</html>

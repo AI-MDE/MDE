@@ -1,6 +1,6 @@
 {
   "name": "docs_export",
-  "purpose": "Generate a standalone Node.js script (scripts/exportDocs.js) that exports all viewer documents to MkDocs or Confluence. The script calls the running viewer's REST API to fetch the document tree, templates, and content — then renders each doc through its Mustache template and writes output files.",
+  "purpose": "Generate a standalone Node.js script (scripts/exportDocs.js) that exports all viewer documents to MkDocs or Confluence. The script calls the running viewer's REST API to fetch the document tree, templates, and content â€” then renders each doc through its Mustache template and writes output files.",
 
   "inputs": {
     "configuration": {
@@ -8,10 +8,10 @@
       "default": "configuration.json"
     },
     "viewerApi": {
-      "note": "Live viewer REST API — must be running at config.export.viewerUrl",
+      "note": "Live viewer REST API â€” must be running at config.export.viewerUrl",
       "endpoints": {
         "/api/tree":            "Full document tree (sections, groups, docs)",
-        "/api/catalog":         "document-catalog.json — docType → templateRef mapping",
+        "/api/catalog":         "document-catalog.json â€” docType â†’ templateRef mapping",
         "/api/doc/{relPath}":   "Raw file content + extension",
         "/api/template/{name}": "Mustache template source",
         "/api/screenshots":     "List of screenshot PNG paths"
@@ -64,36 +64,36 @@
 
   "script_generation": {
     "output":  "scripts/exportDocs.js",
-    "runtime": "Node.js CommonJS — no ESM, no TypeScript, no build step",
+    "runtime": "Node.js CommonJS â€” no ESM, no TypeScript, no build step",
 
     "viewer_api_usage": [
-      "GET /api/tree    → full doc tree (sections[]{ label, docs[], groups[] })",
-      "GET /api/catalog → { document_types: [{ id, templateRef, format }] }",
-      "GET /api/doc/{encodeURIComponent(file)} → { content, ext }",
-      "GET /api/template/{name} → raw Mustache template string"
+      "GET /api/tree    â†’ full doc tree (sections[]{ label, docs[], groups[] })",
+      "GET /api/catalog â†’ { document_types: [{ id, templateRef, format }] }",
+      "GET /api/doc/{encodeURIComponent(file)} â†’ { content, ext }",
+      "GET /api/template/{name} â†’ raw Mustache template string"
     ],
 
     "rendering_pipeline": [
-      "If doc has no file → skip (virtual doc)",
-      "If docType is in SKIP_TYPES (source-code, ui-source-code, sql, schema-state, sample-data) → skip",
-      "If ext === 'md' → use content as-is",
-      "If ext === 'json' AND catalogEntry.templateRef exists → normalize data + Mustache.render → Markdown",
-      "Otherwise → wrap raw content in fenced code block"
+      "If doc has no file â†’ skip (virtual doc)",
+      "If docType is in SKIP_TYPES (source-code, ui-source-code, sql, schema-state, sample-data) â†’ skip",
+      "If ext === 'md' â†’ use content as-is",
+      "If ext === 'json' AND catalogEntry.templateRef exists â†’ normalize data + Mustache.render â†’ Markdown",
+      "Otherwise â†’ wrap raw content in fenced code block"
     ],
 
     "normalizers_required": {
-      "business-functions": "capabilities[] → items[]{id,name,description, children[]{id,name,parentId,outcomes[]}}",
-      "ui-module-spec":     "pages[] → add roles, requirements, menuVisibleLabel, hasActions, hasFilters, hasValidation booleans",
-      "orchestrator":       "phase_rules → phase_rules_list[]{phase, allowed_commands (joined), exit_conditions[]}",
+      "business-functions": "capabilities[] â†’ items[]{id,name,description, children[]{id,name,parentId,outcomes[]}}",
+      "ui-module-spec":     "pages[] â†’ add roles, requirements, menuVisibleLabel, hasActions, hasFilters, hasValidation booleans",
+      "orchestrator":       "phase_rules â†’ phase_rules_list[]{phase, allowed_commands (joined), exit_conditions[]}",
       "mde-command":        "flatten requires/produces objects to key-value lists",
       "mde-skill":          "flatten inputs/outputs objects to key-value lists",
-      "all others":         "pass data through unchanged — template handles it"
+      "all others":         "pass data through unchanged â€” template handles it"
     },
 
     "mkdocs_output": {
       "structure": "output/export/mkdocs/docs/{sectionSlug}/{groupSlug?}/{docSlug}.md",
-      "index":     "output/export/mkdocs/docs/index.md — site name + generated date",
-      "assets":    "output/export/mkdocs/docs/assets/screenshots/*.png — copied from config.screenshots.outputDir",
+      "index":     "output/export/mkdocs/docs/index.md â€” site name + generated date",
+      "assets":    "output/export/mkdocs/docs/assets/screenshots/*.png â€” copied from config.screenshots.outputDir",
       "yml": {
         "fields": ["site_name", "docs_dir: docs", "theme.name", "nav (mirrors tree hierarchy)"],
         "nav_format": "- SectionLabel:\n  - DocLabel: section/doc.md\n  - GroupLabel:\n    - DocLabel: section/group/doc.md"
@@ -102,32 +102,32 @@
 
     "confluence_output": {
       "api": "POST /rest/api/content for each page",
-      "auth": "Basic auth — base64(email:apiToken)",
+      "auth": "Basic auth â€” base64(email:apiToken)",
       "body_format": "{ type:'page', title, space:{key}, ancestors:[{id:parentId}], body:{storage:{value:html, representation:'storage'}} }",
       "html_conversion": "Convert rendered Markdown to HTML using marked npm package",
       "hierarchy": "One root page per export run, one section page per tree section, one content page per doc",
-      "requires_config": "config.export.confluence: baseUrl, spaceKey, email, apiToken — abort with clear message if missing"
+      "requires_config": "config.export.confluence: baseUrl, spaceKey, email, apiToken â€” abort with clear message if missing"
     },
 
     "error_handling": [
-      "If viewer is unreachable → abort with: 'Cannot reach viewer at {url} — is it running?'",
-      "If a doc fails to render → log [skip] docLabel: reason, continue",
-      "If Confluence page creation fails → log [fail] title: error, continue",
+      "If viewer is unreachable â†’ abort with: 'Cannot reach viewer at {url} â€” is it running?'",
+      "If a doc fails to render â†’ log [skip] docLabel: reason, continue",
+      "If Confluence page creation fails â†’ log [fail] title: error, continue",
       "Print per-doc [ok]/[skip]/[fail] lines for CI visibility"
     ]
   },
 
   "rules": [
-    "CRITICAL: Script must be pure CommonJS — no import/export, no TypeScript.",
-    "CRITICAL: Use the viewer's /api/tree and /api/catalog to discover all docs — never hardcode paths.",
-    "CRITICAL: Patch package.json by reading and merging — never overwrite.",
-    "CRITICAL: Patch configuration.json by reading and merging — never overwrite existing keys.",
-    "CRITICAL: Confluence auth credentials go in configuration.json with empty defaults — never hardcode tokens.",
+    "CRITICAL: Script must be pure CommonJS â€” no import/export, no TypeScript.",
+    "CRITICAL: Use the viewer's /api/tree and /api/catalog to discover all docs â€” never hardcode paths.",
+    "CRITICAL: Patch package.json by reading and merging â€” never overwrite.",
+    "CRITICAL: Patch configuration.json by reading and merging â€” never overwrite existing keys.",
+    "CRITICAL: Confluence auth credentials go in configuration.json with empty defaults â€” never hardcode tokens.",
     "Template rendering must use the mustache npm package (require('mustache')).",
     "Confluence HTML conversion must use the marked npm package (require('marked')).",
     "Screenshots are copied from config.screenshots.outputDir to docs/assets/screenshots/.",
     "mkdocs.yml nav must mirror the tree hierarchy from /api/tree.",
-    "Skipped doc types: source-code, ui-source-code, sql, schema-state, sample-data — these are too verbose for documentation."
+    "Skipped doc types: source-code, ui-source-code, sql, schema-state, sample-data â€” these are too verbose for documentation."
   ],
 
   "uses_tools": [

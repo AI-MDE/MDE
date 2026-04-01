@@ -1,4 +1,7 @@
-#!/usr/bin/env node
+﻿#!/usr/bin/env node
+/**
+ * Purpose: Generates ERD outputs from logical/physical data model artifacts.
+ */
 const fs = require('fs');
 const path = require('path');
 const { ConfigurationManager } = require('./lib/config-manager');
@@ -20,7 +23,7 @@ function main() {
   const manager = ConfigurationManager.fromArgv(process.argv.slice(2), { defaultConfigPath: 'configuration.json' });
   const root = manager.getProjectRoot();
   const inPath = path.resolve(root, 'ba/data-model/logical-data-model.json');
-  const outDir = path.resolve(root, 'output/docs/diagrams');
+  const outDir = path.resolve(root, 'docs/diagrams');
   const outPath = path.join(outDir, 'erd.md');
 
   if (!fs.existsSync(inPath)) {
@@ -74,3 +77,4 @@ function main() {
 }
 
 main();
+

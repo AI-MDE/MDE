@@ -13,16 +13,6 @@
 
 - logical_data_model
 
-## Requires
-
-- ../../ba/requirements.md
-- ../../ba/glossary.md
-- ../../design/application_architecture.json
-
-## Produces
-
-- ../../ba/data-model/logical-data-model.json
-
 ## Tools
 
 - file_manager

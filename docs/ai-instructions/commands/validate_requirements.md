@@ -13,14 +13,6 @@
 
 - requirements_validation
 
-## Requires
-
-- ../../ba/requirements.md
-
-## Produces
-
-- ../../ba/requirements-validation-report.json
-
 ## Tools
 
 - file_manager

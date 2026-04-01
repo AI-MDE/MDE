@@ -9,22 +9,11 @@
 
 ## Purpose
 
-Translate logical data model entities into physical entity definitions — one file per table — applying architecture rules for fields, indexes, state machines, business rules, and events
-
-## Inputs
-
-- ../../ba/data-model/logical-data-model.json
-- ../../ba/requirements.md
-- ../../design/application_architecture.json
-- ../../mde/architecture/
-
-## Outputs
-
-- ../../design/entities/ent-{entity}.json
+Translate logical data model entities into physical entity definitions â€” one file per table â€” applying architecture rules for fields, indexes, state machines, business rules, and events
 
 ## Rules
 
-- One output file per physical table — filename: ent-{kebab-case-name}.json
+- One output file per physical table â€” filename: ent-{kebab-case-name}.json
 - Derive fields from LDM entity attributes; apply data-rules for standard columns
 - Add version_no for workflow and master_data module types per concurrency-rules
 - Add stateMachine block for workflow module type; derive states and transitions from requirements

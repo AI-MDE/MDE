@@ -1,0 +1,942 @@
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" >
+<head>
+    <meta charset="utf-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" /><link rel="canonical" href="https://ai-mde.github.io/docs/home/ai-mde-ba-proposal/" />
+      <link rel="shortcut icon" href="../../img/favicon.ico" />
+    <title>AI-MDE Proposal - AI-MDE Docs</title>
+    <link rel="stylesheet" href="../../css/theme.css" />
+    <link rel="stylesheet" href="../../css/theme_extra.css" />
+        <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.8.0/styles/github.min.css" />
+    
+      <script>
+        // Current page data
+        var mkdocs_page_name = "AI-MDE Proposal";
+        var mkdocs_page_input_path = "home\\ai-mde-ba-proposal.md";
+        var mkdocs_page_url = "/docs/home/ai-mde-ba-proposal/";
+      </script>
+    
+    <!--[if lt IE 9]>
+      <script src="../../js/html5shiv.min.js"></script>
+    <![endif]-->
+      <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.8.0/highlight.min.js"></script>
+      <script>hljs.highlightAll();</script> 
+</head>
+
+<body class="wy-body-for-nav" role="document">
+
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side stickynav">
+    <div class="wy-side-scroll">
+      <div class="wy-side-nav-search">
+          <a href="../.." class="icon icon-home"> AI-MDE Docs
+        </a><div role="search">
+  <form id ="rtd-search-form" class="wy-form" action="../../search.html" method="get">
+      <input type="text" name="q" placeholder="Search docs" aria-label="Search docs" title="Type search term here" />
+  </form>
+</div>
+      </div>
+
+      <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+              <ul>
+                <li class="toctree-l1"><a class="reference internal" href="../..">Home</a>
+                </li>
+              </ul>
+              <ul>
+                <li class="toctree-l1"><a class="reference internal" href="../../help/install/">Install</a>
+                </li>
+              </ul>
+              <p class="caption"><span class="caption-text">Help</span></p>
+              <ul>
+                  <li class="toctree-l1"><a class="reference internal" href="../../help/how-to-use-mde/">How To Use MDE</a>
+                  </li>
+                  <li class="toctree-l1"><a class="reference internal" href="../../help/ai_pipeline_commands/">Pipeline Commands</a>
+                  </li>
+                  <li class="toctree-l1"><a class="reference internal" href="../../help/workspace/">Workspace</a>
+                  </li>
+                  <li class="toctree-l1"><a class="reference internal" href="../../help/methodology/">Methodology</a>
+                  </li>
+              </ul>
+              <ul>
+                <li class="toctree-l1"><a class="reference internal" href="../../lifecycle/">Lifecycle</a>
+                </li>
+              </ul>
+              <ul>
+                <li class="toctree-l1"><a class="reference internal" href="../../configuration/">Configuration</a>
+                </li>
+              </ul>
+              <p class="caption"><span class="caption-text">AI Instructions</span></p>
+              <ul>
+                  <li class="toctree-l1"><a class="reference internal" href="../../ai-instructions/">Overview</a>
+                  </li>
+                  <li class="toctree-l1"><a class="reference internal" href="../../ai-instructions/commands/">Commands</a>
+                  </li>
+                  <li class="toctree-l1"><a class="reference internal" href="../../ai-instructions/skills/">Skills</a>
+                  </li>
+              </ul>
+              <p class="caption"><span class="caption-text">Design</span></p>
+              <ul>
+                  <li class="toctree-l1"><a class="reference internal" href="../../design/system-design-process/">Process</a>
+                  </li>
+                  <li class="toctree-l1"><a class="reference internal" href="../../design/use-case-mapping/">Use-Case Mapping</a>
+                  </li>
+                  <li class="toctree-l1"><a class="reference internal" href="../../design/business-events/">Business Events</a>
+                  </li>
+                  <li class="toctree-l1"><a class="reference internal" href="../../design/business-app-layering/">App Layering</a>
+                  </li>
+              </ul>
+              <ul>
+                <li class="toctree-l1"><a class="reference internal" href="../../changes/">Changes</a>
+                </li>
+              </ul>
+      </div>
+    </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
+      <nav class="wy-nav-top" role="navigation" aria-label="Mobile navigation menu">
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../..">AI-MDE Docs</a>
+        
+      </nav>
+      <div class="wy-nav-content">
+        <div class="rst-content"><div role="navigation" aria-label="breadcrumbs navigation">
+  <ul class="wy-breadcrumbs">
+    <li><a href="../.." class="icon icon-home" aria-label="Docs"></a></li>
+      <li class="breadcrumb-item active">AI-MDE Proposal</li>
+    <li class="wy-breadcrumbs-aside">
+          <a href="https://github.com/AI-MDE/ai-mde/edit/master/docs/home/ai-mde-ba-proposal.md">Edit on AI-MDE/ai-mde</a>
+    </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+            <div class="section" itemprop="articleBody">
+              
+                <h1 id="ai-mde-proposal">AI-MDE Proposal<a class="headerlink" href="#ai-mde-proposal" title="Permanent link">&para;</a></h1>
+<h2 id="ai-led-business-analysis-for-model-driven-engineering">AI-Led Business Analysis for Model-Driven Engineering<a class="headerlink" href="#ai-led-business-analysis-for-model-driven-engineering" title="Permanent link">&para;</a></h2>
+<h2 id="1-executive-summary">1. Executive Summary<a class="headerlink" href="#1-executive-summary" title="Permanent link">&para;</a></h2>
+<p>AI-MDE should not begin by asking users for a formal requirements document, a Zachman output, or a fully articulated business specification. In real projects, users rarely possess a clean requirements package. They usually have a mix of notes, spreadsheets, forms, screenshots, reports, emails, current process descriptions, and pain points.</p>
+<p>This proposal defines <strong>AI-MDE</strong> as an <strong>AI-led Business Analysis capability</strong> that:</p>
+<ul>
+<li>ingests raw project artifacts and rough user input</li>
+<li>analyzes and structures business knowledge from those inputs</li>
+<li>detects gaps, contradictions, and unresolved assumptions</li>
+<li>asks targeted clarification questions</li>
+<li>maintains a complete audit trail of questions, answers, assumptions, and changes</li>
+<li>produces a structured, traceable <strong>Business Analysis baseline</strong></li>
+<li>uses that baseline later to derive architecture and system design</li>
+</ul>
+<p>The core idea is simple:</p>
+<p><strong>Raw Inputs -&gt; Discovery -&gt; Guided Clarification -&gt; Business Analysis Baseline -&gt; Architecture and Design</strong></p>
+<p>This makes AI-MDE more practical, more credible, and more useful than tools that demand polished requirements upfront.</p>
+<hr />
+<h2 id="2-problem-statement">2. Problem Statement<a class="headerlink" href="#2-problem-statement" title="Permanent link">&para;</a></h2>
+<p>Most software and transformation initiatives start with incomplete, fragmented, and inconsistent information. Stakeholders often know what is painful in the current process, what outcomes they want, and what artifacts they use, but they cannot easily express those needs as structured requirements.</p>
+<p>Traditional intake approaches fail because they often assume the user can provide:</p>
+<ul>
+<li>a formal requirements document</li>
+<li>a business architecture artifact</li>
+<li>a complete enterprise analysis framework output</li>
+<li>a clean functional specification</li>
+</ul>
+<p>In many cases, that expectation is unrealistic.</p>
+<p>AI-MDE addresses this problem by shifting the burden of analysis from the user to the AI. The user provides whatever material exists. AI-MDE takes the lead in discovery, requirement development, and structured business analysis.</p>
+<hr />
+<h2 id="3-proposed-positioning-for-ai-mde">3. Proposed Positioning for AI-MDE<a class="headerlink" href="#3-proposed-positioning-for-ai-mde" title="Permanent link">&para;</a></h2>
+<p>AI-MDE should be positioned as:</p>
+<blockquote>
+<p><strong>A standards-aligned, AI-led business analysis and model-driven engineering assistant that analyzes raw project materials, identifies missing information, asks targeted clarification questions, maintains a full audit trail, and produces a structured BA baseline ready for architecture and design.</strong></p>
+</blockquote>
+<p>This is stronger than positioning it as:</p>
+<ul>
+<li>an AI that writes specs</li>
+<li>a command-driven requirement tool</li>
+<li>a replacement for a certified business analyst</li>
+</ul>
+<p>It is better described as a disciplined, evidence-driven analysis engine that supports discovery and design readiness.</p>
+<hr />
+<h2 id="4-why-this-approach-is-better">4. Why This Approach Is Better<a class="headerlink" href="#4-why-this-approach-is-better" title="Permanent link">&para;</a></h2>
+<h3 id="41-better-than-asking-for-a-requirements-document">4.1 Better than asking for a requirements document<a class="headerlink" href="#41-better-than-asking-for-a-requirements-document" title="Permanent link">&para;</a></h3>
+<p>Most users do not have one.</p>
+<h3 id="42-better-than-asking-for-a-zachman-output">4.2 Better than asking for a Zachman output<a class="headerlink" href="#42-better-than-asking-for-a-zachman-output" title="Permanent link">&para;</a></h3>
+<p>Most users cannot produce one, and it is often too abstract as an intake mechanism.</p>
+<h3 id="43-better-than-a-command-driven-ux">4.3 Better than a command-driven UX<a class="headerlink" href="#43-better-than-a-command-driven-ux" title="Permanent link">&para;</a></h3>
+<p>Users should not need to know which analysis step comes next. AI-MDE should lead the process.</p>
+<h3 id="44-better-than-jumping-straight-to-architecture">4.4 Better than jumping straight to architecture<a class="headerlink" href="#44-better-than-jumping-straight-to-architecture" title="Permanent link">&para;</a></h3>
+<p>Architecture without a disciplined BA stage usually bakes assumptions into design too early.</p>
+<hr />
+<h2 id="5-guiding-principles">5. Guiding Principles<a class="headerlink" href="#5-guiding-principles" title="Permanent link">&para;</a></h2>
+<p>AI-MDE should operate on the following principles:</p>
+<ol>
+<li>
+<p><strong>AI leads the process</strong>
+   The user provides material and answers questions. AI-MDE orchestrates discovery.</p>
+</li>
+<li>
+<p><strong>Evidence over guesswork</strong>
+   Project artifacts and stakeholder answers are the primary source of truth.</p>
+</li>
+<li>
+<p><strong>Standards-aligned method</strong>
+   The BA stage should align with recognized BA and requirements-engineering practices.</p>
+</li>
+<li>
+<p><strong>Traceability by design</strong>
+   Every major statement in the BA baseline should be traceable to artifacts, questions, answers, or explicit assumptions.</p>
+</li>
+<li>
+<p><strong>Progressive refinement</strong>
+   Requirements are discovered and refined iteratively, not demanded upfront.</p>
+</li>
+<li>
+<p><strong>No fake certainty</strong>
+   AI-MDE should distinguish between explicit facts, inferences, assumptions, and open issues.</p>
+</li>
+<li>
+<p><strong>BA before architecture</strong>
+   The architecture stage should consume an approved or stable BA baseline, not raw notes.</p>
+</li>
+</ol>
+<hr />
+<h2 id="6-reference-foundation">6. Reference Foundation<a class="headerlink" href="#6-reference-foundation" title="Permanent link">&para;</a></h2>
+<p>AI-MDE should not claim authority based on personality or unsupported expertise. Its credibility should come from applying recognized references and methods.</p>
+<h3 id="61-ba-and-analysis-references">6.1 BA and analysis references<a class="headerlink" href="#61-ba-and-analysis-references" title="Permanent link">&para;</a></h3>
+<p>AI-MDE should align with the discipline represented by:</p>
+<ul>
+<li><strong>IIBA BABOK Guide</strong></li>
+<li><strong>PMI Guide to Business Analysis / Business Analysis for Practitioners</strong></li>
+<li><strong>ISO/IEC/IEEE 29148</strong> for requirements engineering and quality</li>
+</ul>
+<h3 id="62-project-specific-evidence">6.2 Project-specific evidence<a class="headerlink" href="#62-project-specific-evidence" title="Permanent link">&para;</a></h3>
+<p>The real project truth comes from:</p>
+<ul>
+<li>source documents</li>
+<li>spreadsheets</li>
+<li>emails</li>
+<li>SOPs</li>
+<li>screenshots</li>
+<li>reports</li>
+<li>current system outputs</li>
+<li>user answers</li>
+<li>organizational policies</li>
+<li>domain regulations where applicable</li>
+</ul>
+<h3 id="63-proper-claim">6.3 Proper claim<a class="headerlink" href="#63-proper-claim" title="Permanent link">&para;</a></h3>
+<p>AI-MDE should say:</p>
+<blockquote>
+<p>It applies recognized business analysis and requirements-engineering practices to project-specific evidence, while maintaining a full traceable audit trail for human review.</p>
+</blockquote>
+<hr />
+<h2 id="7-scope-of-the-ba-stage">7. Scope of the BA Stage<a class="headerlink" href="#7-scope-of-the-ba-stage" title="Permanent link">&para;</a></h2>
+<p>The BA stage in AI-MDE should be responsible for:</p>
+<ul>
+<li>intake of messy source material</li>
+<li>extraction of business knowledge</li>
+<li>stakeholder and role identification</li>
+<li>process and workflow discovery</li>
+<li>business rule extraction</li>
+<li>data/entity/artifact identification</li>
+<li>gap analysis</li>
+<li>contradiction detection</li>
+<li>clarification questioning</li>
+<li>requirement baseline development</li>
+<li>design-readiness assessment</li>
+</ul>
+<p>It should <strong>not</strong> claim to replace stakeholder accountability, final approval, or domain expert judgment.</p>
+<hr />
+<h2 id="8-inputs-to-the-ba-stage">8. Inputs to the BA Stage<a class="headerlink" href="#8-inputs-to-the-ba-stage" title="Permanent link">&para;</a></h2>
+<p>AI-MDE should accept any useful source material, including:</p>
+<ul>
+<li>notes</li>
+<li>process descriptions</li>
+<li>forms</li>
+<li>spreadsheets</li>
+<li>reports</li>
+<li>screenshots</li>
+<li>emails</li>
+<li>SOPs</li>
+<li>templates</li>
+<li>current system outputs</li>
+<li>sample cases</li>
+<li>rough goals</li>
+<li>pain points and complaints</li>
+</ul>
+<p>The user should not need to pre-structure these materials.</p>
+<hr />
+<h2 id="9-ai-led-operating-model">9. AI-Led Operating Model<a class="headerlink" href="#9-ai-led-operating-model" title="Permanent link">&para;</a></h2>
+<p>The user should not be expected to drive the process with commands. AI-MDE should take the lead.</p>
+<h3 id="91-user-role">9.1 User role<a class="headerlink" href="#91-user-role" title="Permanent link">&para;</a></h3>
+<p>The user should mainly:</p>
+<ul>
+<li>upload or describe what they have</li>
+<li>answer targeted questions</li>
+<li>review drafts</li>
+<li>correct misunderstandings</li>
+<li>confirm or reject assumptions</li>
+<li>approve progression</li>
+</ul>
+<h3 id="92-ai-mde-role">9.2 AI-MDE role<a class="headerlink" href="#92-ai-mde-role" title="Permanent link">&para;</a></h3>
+<p>AI-MDE should automatically:</p>
+<ul>
+<li>inspect source artifacts</li>
+<li>extract findings</li>
+<li>normalize terms</li>
+<li>detect missing information</li>
+<li>identify contradictions</li>
+<li>generate the next best questions</li>
+<li>update the BA baseline</li>
+<li>maintain the audit trail</li>
+<li>decide when the BA baseline is design-ready</li>
+</ul>
+<hr />
+<h2 id="10-ba-stage-flow">10. BA Stage Flow<a class="headerlink" href="#10-ba-stage-flow" title="Permanent link">&para;</a></h2>
+<p>The BA stage should operate as a structured loop.</p>
+<h3 id="step-1-intake-and-classification">Step 1: Intake and Classification<a class="headerlink" href="#step-1-intake-and-classification" title="Permanent link">&para;</a></h3>
+<p>Analyze all source materials and create a source inventory.</p>
+<p><strong>Output:</strong>
+- source register
+- source metadata
+- source relevance and confidence tags</p>
+<h3 id="step-2-extraction">Step 2: Extraction<a class="headerlink" href="#step-2-extraction" title="Permanent link">&para;</a></h3>
+<p>Extract structured business information from all sources.</p>
+<p><strong>What to extract:</strong>
+- goals
+- actors
+- workflow steps
+- artifacts
+- rules
+- integrations
+- constraints
+- pain points
+- ambiguities</p>
+<p><strong>Output:</strong>
+- discovery findings</p>
+<h3 id="step-3-consolidation-and-normalization">Step 3: Consolidation and Normalization<a class="headerlink" href="#step-3-consolidation-and-normalization" title="Permanent link">&para;</a></h3>
+<p>Merge duplicates, normalize terminology, and detect contradictions.</p>
+<p><strong>Output:</strong>
+- terminology map
+- normalized findings
+- conflict register</p>
+<h3 id="step-4-guided-clarification">Step 4: Guided Clarification<a class="headerlink" href="#step-4-guided-clarification" title="Permanent link">&para;</a></h3>
+<p>Generate and ask the highest-value questions needed to close major gaps.</p>
+<p><strong>Output:</strong>
+- clarification log
+- answered questions
+- unresolved questions</p>
+<h3 id="step-5-requirement-shaping">Step 5: Requirement Shaping<a class="headerlink" href="#step-5-requirement-shaping" title="Permanent link">&para;</a></h3>
+<p>Convert findings and answers into structured requirements.</p>
+<p><strong>Output:</strong>
+- business requirements
+- functional requirements
+- non-functional requirements
+- business rules catalog
+- entity and artifact catalog</p>
+<h3 id="step-6-ba-document-generation">Step 6: BA Document Generation<a class="headerlink" href="#step-6-ba-document-generation" title="Permanent link">&para;</a></h3>
+<p>Generate and continuously update the structured Business Analysis document.</p>
+<p><strong>Output:</strong>
+- BA baseline
+- BA document draft
+- design driver summary</p>
+<hr />
+<h2 id="11-question-strategy">11. Question Strategy<a class="headerlink" href="#11-question-strategy" title="Permanent link">&para;</a></h2>
+<p>The AI should ask the questions, not wait for the user to know what to request next.</p>
+<h3 id="111-question-categories">11.1 Question categories<a class="headerlink" href="#111-question-categories" title="Permanent link">&para;</a></h3>
+<p>AI-MDE should ask focused questions in areas such as:</p>
+<ul>
+<li>business problem and goals</li>
+<li>scope and boundaries</li>
+<li>users and roles</li>
+<li>process steps and decisions</li>
+<li>exceptions and alternate flows</li>
+<li>inputs and outputs</li>
+<li>business rules and thresholds</li>
+<li>integrations</li>
+<li>audit and reporting needs</li>
+<li>non-functional constraints</li>
+</ul>
+<h3 id="112-question-quality-rules">11.2 Question quality rules<a class="headerlink" href="#112-question-quality-rules" title="Permanent link">&para;</a></h3>
+<p>Questions should be:</p>
+<ul>
+<li>few in number</li>
+<li>high-value</li>
+<li>grouped by topic</li>
+<li>directly tied to gaps found in source evidence</li>
+<li>prioritized by architecture and business impact</li>
+</ul>
+<p>AI-MDE should avoid flooding users with long generic questionnaires.</p>
+<hr />
+<h2 id="12-audit-trail-requirement">12. Audit Trail Requirement<a class="headerlink" href="#12-audit-trail-requirement" title="Permanent link">&para;</a></h2>
+<p>A full audit trail is mandatory.</p>
+<p>The BA stage should preserve:</p>
+<ul>
+<li>source artifacts used</li>
+<li>findings extracted from them</li>
+<li>questions asked</li>
+<li>reason each question was asked</li>
+<li>user answers</li>
+<li>assumptions made</li>
+<li>conflicts found</li>
+<li>changes to the requirement baseline</li>
+<li>links from evidence to BA sections and design drivers</li>
+</ul>
+<h3 id="121-why-this-matters">12.1 Why this matters<a class="headerlink" href="#121-why-this-matters" title="Permanent link">&para;</a></h3>
+<p>Without an audit trail, the BA baseline becomes a black box.</p>
+<p>With an audit trail, reviewers can always ask:</p>
+<ul>
+<li>Why is this requirement here?</li>
+<li>Which answer introduced this rule?</li>
+<li>Is this an explicit fact or an inference?</li>
+<li>What changed between versions?</li>
+</ul>
+<hr />
+<h2 id="13-required-traceability-chain">13. Required Traceability Chain<a class="headerlink" href="#13-required-traceability-chain" title="Permanent link">&para;</a></h2>
+<p>AI-MDE should support this chain:</p>
+<p><strong>Source Artifact -&gt; Discovery Finding -&gt; Clarification Question -&gt; User Answer -&gt; Requirement Update -&gt; BA Section -&gt; Design Driver</strong></p>
+<p>That chain is central to trust, quality, and later system design.</p>
+<hr />
+<h2 id="14-information-status-model">14. Information Status Model<a class="headerlink" href="#14-information-status-model" title="Permanent link">&para;</a></h2>
+<p>Every meaningful item in the BA stage should be labeled as one of the following:</p>
+<ul>
+<li><strong>Explicit</strong> - directly stated in a source or by the user</li>
+<li><strong>Inferred</strong> - reasonably concluded from patterns or multiple signals</li>
+<li><strong>Assumed</strong> - temporary placeholder due to missing information</li>
+<li><strong>Pending Confirmation</strong> - identified but not yet confirmed</li>
+<li><strong>Conflicting</strong> - contradicted by another source or answer</li>
+<li><strong>Confirmed</strong> - validated by user or authoritative source</li>
+<li><strong>Superseded</strong> - replaced by newer confirmed information</li>
+</ul>
+<p>This prevents fake certainty and improves trust.</p>
+<hr />
+<h2 id="15-core-ba-outputs">15. Core BA Outputs<a class="headerlink" href="#15-core-ba-outputs" title="Permanent link">&para;</a></h2>
+<p>The BA stage should produce the following deliverables.</p>
+<h3 id="151-source-inventory">15.1 Source Inventory<a class="headerlink" href="#151-source-inventory" title="Permanent link">&para;</a></h3>
+<p>A structured list of all source material used.</p>
+<h3 id="152-discovery-findings">15.2 Discovery Findings<a class="headerlink" href="#152-discovery-findings" title="Permanent link">&para;</a></h3>
+<p>A categorized set of extracted observations and candidate facts.</p>
+<h3 id="153-clarification-log">15.3 Clarification Log<a class="headerlink" href="#153-clarification-log" title="Permanent link">&para;</a></h3>
+<p>A full record of questions, answers, reasons, and impact.</p>
+<h3 id="154-assumption-register">15.4 Assumption Register<a class="headerlink" href="#154-assumption-register" title="Permanent link">&para;</a></h3>
+<p>All temporary assumptions awaiting validation.</p>
+<h3 id="155-conflict-register">15.5 Conflict Register<a class="headerlink" href="#155-conflict-register" title="Permanent link">&para;</a></h3>
+<p>Contradictions across source material or user answers.</p>
+<h3 id="156-requirement-baseline">15.6 Requirement Baseline<a class="headerlink" href="#156-requirement-baseline" title="Permanent link">&para;</a></h3>
+<p>Structured requirements derived from source evidence and clarification.</p>
+<h3 id="157-business-rules-catalog">15.7 Business Rules Catalog<a class="headerlink" href="#157-business-rules-catalog" title="Permanent link">&para;</a></h3>
+<p>A formal list of rules, triggers, conditions, effects, and exceptions.</p>
+<h3 id="158-entity-and-artifact-catalog">15.8 Entity and Artifact Catalog<a class="headerlink" href="#158-entity-and-artifact-catalog" title="Permanent link">&para;</a></h3>
+<p>Definitions of business entities, documents, inputs, outputs, and lifecycle roles.</p>
+<h3 id="159-business-analysis-document">15.9 Business Analysis Document<a class="headerlink" href="#159-business-analysis-document" title="Permanent link">&para;</a></h3>
+<p>The main structured analysis document used later for architecture.</p>
+<h3 id="1510-design-driver-summary">15.10 Design Driver Summary<a class="headerlink" href="#1510-design-driver-summary" title="Permanent link">&para;</a></h3>
+<p>The subset of requirements most likely to shape solution architecture.</p>
+<h3 id="1511-traceability-matrix">15.11 Traceability Matrix<a class="headerlink" href="#1511-traceability-matrix" title="Permanent link">&para;</a></h3>
+<p>A matrix linking source, finding, question, answer, requirement, and BA section.</p>
+<h3 id="1512-change-log">15.12 Change Log<a class="headerlink" href="#1512-change-log" title="Permanent link">&para;</a></h3>
+<p>A record of how the baseline evolved over time.</p>
+<hr />
+<h2 id="16-standard-business-analysis-document-structure">16. Standard Business Analysis Document Structure<a class="headerlink" href="#16-standard-business-analysis-document-structure" title="Permanent link">&para;</a></h2>
+<p>AI-MDE should use a stable template for the BA document.</p>
+<pre><code class="language-markdown"># Business Analysis Document
+
+## 1. Executive Summary
+## 2. Business Problem and Objectives
+## 3. Scope and Out of Scope
+## 4. Stakeholders and User Roles
+## 5. Current State Overview
+## 6. Pain Points and Gaps
+## 7. Target Business Capabilities
+## 8. Business Process Overview
+## 9. Business Rules and Decision Logic
+## 10. Functional Requirements
+## 11. Non-Functional Requirements
+## 12. Data and Business Entities
+## 13. Inputs, Outputs, and Artifacts
+## 14. External Systems and Integrations
+## 15. Risks, Assumptions, and Dependencies
+## 16. Open Questions and Unresolved Items
+## 17. Prioritization
+## 18. Design Readiness Summary
+</code></pre>
+<hr />
+<h2 id="17-internal-ba-objects-for-ai-mde">17. Internal BA Objects for AI-MDE<a class="headerlink" href="#17-internal-ba-objects-for-ai-mde" title="Permanent link">&para;</a></h2>
+<p>To support structured operation, AI-MDE should maintain internal objects such as:</p>
+<h3 id="sourceartifact">SourceArtifact<a class="headerlink" href="#sourceartifact" title="Permanent link">&para;</a></h3>
+<p>Represents one input source.</p>
+<p>Suggested fields:
+- id
+- title
+- type
+- owner
+- date
+- content reference
+- authority level
+- tags</p>
+<h3 id="discoveryfinding">DiscoveryFinding<a class="headerlink" href="#discoveryfinding" title="Permanent link">&para;</a></h3>
+<p>Represents one extracted fact, observation, or inference.</p>
+<p>Suggested fields:
+- id
+- category
+- statement
+- source references
+- confidence
+- explicit or inferred
+- related entities
+- related workflow step</p>
+<h3 id="clarificationquestion">ClarificationQuestion<a class="headerlink" href="#clarificationquestion" title="Permanent link">&para;</a></h3>
+<p>Represents one question generated by AI-MDE.</p>
+<p>Suggested fields:
+- id
+- category
+- question text
+- reason
+- priority
+- affects sections
+- blocking for design</p>
+<h3 id="answerlogentry">AnswerLogEntry<a class="headerlink" href="#answerlogentry" title="Permanent link">&para;</a></h3>
+<p>Represents the response to one question.</p>
+<p>Suggested fields:
+- id
+- question id
+- answer text
+- answered by
+- answered at
+- confidence</p>
+<h3 id="requirementitem">RequirementItem<a class="headerlink" href="#requirementitem" title="Permanent link">&para;</a></h3>
+<p>Represents one normalized requirement.</p>
+<p>Suggested fields:
+- id
+- type
+- statement
+- rationale
+- source references
+- status
+- priority</p>
+<h3 id="businessrule">BusinessRule<a class="headerlink" href="#businessrule" title="Permanent link">&para;</a></h3>
+<p>Represents one rule or decision condition.</p>
+<p>Suggested fields:
+- id
+- trigger
+- condition
+- effect
+- exceptions
+- source references</p>
+<h3 id="businessentity">BusinessEntity<a class="headerlink" href="#businessentity" title="Permanent link">&para;</a></h3>
+<p>Represents one business concept.</p>
+<p>Suggested fields:
+- name
+- description
+- attributes
+- lifecycle relevance
+- related artifacts</p>
+<h3 id="artifactdefinition">ArtifactDefinition<a class="headerlink" href="#artifactdefinition" title="Permanent link">&para;</a></h3>
+<p>Represents a business artifact or document.</p>
+<p>Suggested fields:
+- name
+- purpose
+- producer
+- consumer
+- required fields
+- lifecycle
+- storage location if known</p>
+<h3 id="requirementchangeentry">RequirementChangeEntry<a class="headerlink" href="#requirementchangeentry" title="Permanent link">&para;</a></h3>
+<p>Represents one baseline change caused by clarification or new evidence.</p>
+<p>Suggested fields:
+- id
+- triggered by question
+- triggered by answer
+- affected object
+- previous value
+- new value
+- rationale
+- changed at</p>
+<hr />
+<h2 id="18-what-done-means-for-the-ba-stage">18. What “Done” Means for the BA Stage<a class="headerlink" href="#18-what-done-means-for-the-ba-stage" title="Permanent link">&para;</a></h2>
+<p>The BA stage is ready to hand over to architecture when:</p>
+<ul>
+<li>the business problem is clear</li>
+<li>scope is reasonably bounded</li>
+<li>the main actors are known</li>
+<li>the core workflow is understood</li>
+<li>key business entities and artifacts are identified</li>
+<li>major business rules are captured</li>
+<li>key non-functional constraints are visible</li>
+<li>main integrations are identified</li>
+<li>significant contradictions are resolved or explicitly logged</li>
+<li>architecture-driving requirements are visible</li>
+</ul>
+<p>This does not require perfect certainty. It requires enough structured clarity for grounded design.</p>
+<hr />
+<h2 id="19-bridge-to-architecture">19. Bridge to Architecture<a class="headerlink" href="#19-bridge-to-architecture" title="Permanent link">&para;</a></h2>
+<p>The BA stage should explicitly identify <strong>design drivers</strong> that will shape architecture, such as:</p>
+<ul>
+<li>approval workflow complexity</li>
+<li>audit and traceability requirements</li>
+<li>document lifecycle control</li>
+<li>external system integration</li>
+<li>configurable business rules</li>
+<li>role-based access control</li>
+<li>reporting and analytics needs</li>
+<li>performance constraints</li>
+<li>retention and compliance requirements</li>
+<li>multi-tenant support if applicable</li>
+</ul>
+<p>These design drivers become the formal handoff into the architecture stage.</p>
+<hr />
+<h2 id="20-recommended-ai-mde-user-experience">20. Recommended AI-MDE User Experience<a class="headerlink" href="#20-recommended-ai-mde-user-experience" title="Permanent link">&para;</a></h2>
+<p>The user experience should feel like this:</p>
+<ol>
+<li>User uploads or describes whatever they have.</li>
+<li>AI-MDE analyzes the material.</li>
+<li>AI-MDE identifies what is known and what is missing.</li>
+<li>AI-MDE asks the next best clarification questions.</li>
+<li>AI-MDE updates the BA baseline and audit trail.</li>
+<li>AI-MDE produces a progressively improving BA output.</li>
+<li>AI-MDE determines when the BA baseline is mature enough for architecture.</li>
+</ol>
+<p>The user should not need to drive the tool with technical commands.</p>
+<hr />
+<h2 id="21-recommended-v1-scope">21. Recommended V1 Scope<a class="headerlink" href="#21-recommended-v1-scope" title="Permanent link">&para;</a></h2>
+<p>For the first strong version of AI-MDE, the BA capability should focus on:</p>
+<ul>
+<li>multi-artifact intake</li>
+<li>structured extraction of business findings</li>
+<li>terminology normalization</li>
+<li>contradiction detection</li>
+<li>targeted question generation</li>
+<li>requirement baseline generation</li>
+<li>business rule extraction</li>
+<li>entity and artifact cataloging</li>
+<li>complete clarification and change audit trail</li>
+<li>BA document generation</li>
+<li>design driver identification</li>
+<li>traceability back to evidence</li>
+</ul>
+<p>This is already substantial and valuable without overreaching.</p>
+<hr />
+<h2 id="22-benefits">22. Benefits<a class="headerlink" href="#22-benefits" title="Permanent link">&para;</a></h2>
+<p>If implemented this way, AI-MDE will provide these benefits:</p>
+<ul>
+<li>lowers the burden on users who cannot articulate requirements formally</li>
+<li>improves requirement quality before architecture starts</li>
+<li>increases trust through transparency and auditability</li>
+<li>reduces hidden assumptions</li>
+<li>keeps architecture grounded in evidence</li>
+<li>supports iterative refinement instead of one-time intake failure</li>
+<li>creates reusable, traceable project knowledge</li>
+</ul>
+<hr />
+<h2 id="23-risks-and-safeguards">23. Risks and Safeguards<a class="headerlink" href="#23-risks-and-safeguards" title="Permanent link">&para;</a></h2>
+<h3 id="risk-ai-invents-certainty">Risk: AI invents certainty<a class="headerlink" href="#risk-ai-invents-certainty" title="Permanent link">&para;</a></h3>
+<p><strong>Safeguard:</strong> force explicit labeling of fact, inference, assumption, and open issue.</p>
+<h3 id="risk-users-are-overwhelmed-by-questions">Risk: Users are overwhelmed by questions<a class="headerlink" href="#risk-users-are-overwhelmed-by-questions" title="Permanent link">&para;</a></h3>
+<p><strong>Safeguard:</strong> limit each round to the highest-value questions only.</p>
+<h3 id="risk-conflicting-source-materials-create-ambiguity">Risk: Conflicting source materials create ambiguity<a class="headerlink" href="#risk-conflicting-source-materials-create-ambiguity" title="Permanent link">&para;</a></h3>
+<p><strong>Safeguard:</strong> keep a conflict register and never silently resolve major contradictions.</p>
+<h3 id="risk-output-becomes-generic-and-detached-from-reality">Risk: Output becomes generic and detached from reality<a class="headerlink" href="#risk-output-becomes-generic-and-detached-from-reality" title="Permanent link">&para;</a></h3>
+<p><strong>Safeguard:</strong> anchor all major findings and requirements to source evidence and clarification history.</p>
+<h3 id="risk-ai-mde-is-challenged-on-credibility">Risk: AI-MDE is challenged on credibility<a class="headerlink" href="#risk-ai-mde-is-challenged-on-credibility" title="Permanent link">&para;</a></h3>
+<p><strong>Safeguard:</strong> align method to recognized BA and requirements-engineering references, and make the audit trail reviewable.</p>
+<hr />
+<h2 id="24-recommended-proposal-statement">24. Recommended Proposal Statement<a class="headerlink" href="#24-recommended-proposal-statement" title="Permanent link">&para;</a></h2>
+<p>AI-MDE should be developed as an <strong>AI-led Business Analysis engine</strong> for model-driven engineering.</p>
+<p>Its role is to transform fragmented project inputs into a structured, traceable, and design-ready BA baseline by:</p>
+<ul>
+<li>applying recognized business analysis discipline</li>
+<li>using project evidence as the primary truth source</li>
+<li>identifying missing information and contradictions</li>
+<li>asking targeted clarification questions</li>
+<li>maintaining a full audit trail</li>
+<li>producing a BA document suitable for later architecture and system design</li>
+</ul>
+<p>This is the correct foundation for the broader AI-MDE vision.</p>
+<hr />
+<h2 id="25-role-of-mde-in-the-ba-stage">25. Role of MDE in the BA Stage<a class="headerlink" href="#25-role-of-mde-in-the-ba-stage" title="Permanent link">&para;</a></h2>
+<p>The <strong>MDE</strong> part of AI-MDE should not be treated as branding only. It should play a concrete orchestration role around the AI-driven BA process.</p>
+<p>Without MDE, the AI is mainly a smart assistant reacting to prompts. With MDE, the process becomes governed, stateful, traceable, and repeatable.</p>
+<h3 id="251-mde-as-orchestrator-and-state-manager">25.1 MDE as orchestrator and state manager<a class="headerlink" href="#251-mde-as-orchestrator-and-state-manager" title="Permanent link">&para;</a></h3>
+<p>In this model:</p>
+<ul>
+<li><strong>AI</strong> performs extraction, interpretation, question generation, clarification, and structured rewriting</li>
+<li><strong>MDE</strong> provides method, structure, state control, file watching, impact mapping, and re-evaluation orchestration</li>
+</ul>
+<p>MDE should therefore be responsible for:</p>
+<ul>
+<li>defining the BA methodology and operating rules</li>
+<li>defining the tracked artifact types and folder structure</li>
+<li>defining the lifecycle states of sources, questions, requirements, and BA readiness</li>
+<li>watching tracked files and folders for meaningful changes</li>
+<li>deciding what needs to be re-evaluated when changes occur</li>
+<li>invoking the AI with the correct context and instructions</li>
+<li>preserving audit trail, traceability, and change history</li>
+<li>deciding when the BA baseline is stable enough to move forward</li>
+</ul>
+<h3 id="252-file-watching-and-targeted-re-evaluation">25.2 File watching and targeted re-evaluation<a class="headerlink" href="#252-file-watching-and-targeted-re-evaluation" title="Permanent link">&para;</a></h3>
+<p>MDE should support a watched BA workspace, for example:</p>
+<pre><code class="language-text">/ba/sources/
+/ba/questions/
+/ba/topics/
+/ba/answers/
+/ba/config/
+</code></pre>
+<p>When a tracked file changes, MDE should not simply re-run everything. It should determine the impacted analysis objects and trigger <strong>targeted AI re-evaluation</strong>.</p>
+<p>Examples:</p>
+<ul>
+<li>if a source document changes, refresh findings tied to that source</li>
+<li>if a pending question file is answered, parse the answer and update linked requirements and rules</li>
+<li>if a topic document changes, re-evaluate only the affected BA area</li>
+<li>if an answer invalidates an earlier assumption, mark related assumptions stale and update the baseline</li>
+</ul>
+<h3 id="253-mde-event-flow">25.3 MDE event flow<a class="headerlink" href="#253-mde-event-flow" title="Permanent link">&para;</a></h3>
+<p>A typical event-driven cycle should work like this:</p>
+<ol>
+<li>a tracked file changes</li>
+<li>MDE detects the change</li>
+<li>MDE maps the change to impacted BA objects</li>
+<li>MDE invokes the AI with the changed context and re-evaluation instructions</li>
+<li>AI refreshes findings, requirements, rules, and BA sections</li>
+<li>MDE records the delta in the audit trail and updates state</li>
+</ol>
+<h3 id="254-mde-managed-lifecycle-and-states">25.4 MDE-managed lifecycle and states<a class="headerlink" href="#254-mde-managed-lifecycle-and-states" title="Permanent link">&para;</a></h3>
+<p>This is where the model-driven aspect becomes concrete. MDE should manage lifecycle states such as:</p>
+<h4 id="source-state">Source state<a class="headerlink" href="#source-state" title="Permanent link">&para;</a></h4>
+<ul>
+<li>new</li>
+<li>analyzed</li>
+<li>changed</li>
+<li>superseded</li>
+</ul>
+<h4 id="question-state">Question state<a class="headerlink" href="#question-state" title="Permanent link">&para;</a></h4>
+<ul>
+<li>drafted</li>
+<li>asked</li>
+<li>answered</li>
+<li>reviewed</li>
+<li>resolved</li>
+<li>follow-up-needed</li>
+</ul>
+<h4 id="requirement-state">Requirement state<a class="headerlink" href="#requirement-state" title="Permanent link">&para;</a></h4>
+<ul>
+<li>extracted</li>
+<li>inferred</li>
+<li>assumed</li>
+<li>confirmed</li>
+<li>disputed</li>
+<li>superseded</li>
+</ul>
+<h4 id="ba-stage-state">BA stage state<a class="headerlink" href="#ba-stage-state" title="Permanent link">&para;</a></h4>
+<ul>
+<li>intake</li>
+<li>discovery-active</li>
+<li>clarification-needed</li>
+<li>baseline-drafting</li>
+<li>baseline-stable</li>
+<li>design-ready</li>
+</ul>
+<p>These states allow MDE to control progression instead of relying on ad hoc prompting.</p>
+<h3 id="255-mde-to-ai-instruction-model">25.5 MDE-to-AI instruction model<a class="headerlink" href="#255-mde-to-ai-instruction-model" title="Permanent link">&para;</a></h3>
+<p>When MDE detects change, it should send targeted instructions to the AI rather than a vague request to “re-evaluate everything.”</p>
+<p>A strong instruction should include items such as:</p>
+<ul>
+<li>changed artifact identifier</li>
+<li>impacted BA objects</li>
+<li>linked assumptions or open issues</li>
+<li>affected outputs to refresh</li>
+<li>required audit trail updates</li>
+<li>whether only deltas or full section refreshes are needed</li>
+</ul>
+<p>Example:</p>
+<ul>
+<li>changed artifact: <code>approval-flow.md</code></li>
+<li>impacted objects: approval rules, workflow routing, role definitions</li>
+<li>linked open issue: approver authority threshold</li>
+<li>outputs to refresh: <code>business-rules.md</code>, <code>requirements.md</code>, <code>business-analysis-document.md</code>, <code>clarification-log.md</code></li>
+<li>required action: update only impacted sections and record before/after delta</li>
+</ul>
+<h3 id="256-practical-value-of-mde-in-this-proposal">25.6 Practical value of MDE in this proposal<a class="headerlink" href="#256-practical-value-of-mde-in-this-proposal" title="Permanent link">&para;</a></h3>
+<p>This gives MDE a clear and non-trivial role.</p>
+<p>MDE is what turns the BA capability from “AI helps write documents” into a <strong>model-driven engineering process</strong> with:</p>
+<ul>
+<li>explicit models</li>
+<li>explicit states</li>
+<li>explicit transitions</li>
+<li>watched artifacts</li>
+<li>controlled re-evaluation</li>
+<li>traceable outputs</li>
+<li>repeatable progression toward design readiness</li>
+</ul>
+<h3 id="257-recommended-definition">25.7 Recommended definition<a class="headerlink" href="#257-recommended-definition" title="Permanent link">&para;</a></h3>
+<p>A concise definition of the MDE role in AI-MDE is:</p>
+<blockquote>
+<p><strong>MDE governs the analysis lifecycle: it supplies method and structure, watches tracked artifacts for change, tracks state and traceability, and orchestrates targeted AI re-evaluation to keep the BA baseline current.</strong></p>
+</blockquote>
+<hr />
+<h2 id="26-change-management-and-git-based-tracking">26. Change Management and Git-Based Tracking<a class="headerlink" href="#26-change-management-and-git-based-tracking" title="Permanent link">&para;</a></h2>
+<p>Change management should be built into the BA stage from the start. In practice, some projects will use <strong>formal change requests</strong>, while others will evolve through <strong>iterative clarification and process refinement</strong>. AI-MDE should support both models without losing control, traceability, or auditability.</p>
+<h3 id="261-two-valid-change-modes">26.1 Two valid change modes<a class="headerlink" href="#261-two-valid-change-modes" title="Permanent link">&para;</a></h3>
+<p>AI-MDE should support at least these two operating modes:</p>
+<h4 id="formal-change-request-mode">Formal change request mode<a class="headerlink" href="#formal-change-request-mode" title="Permanent link">&para;</a></h4>
+<p>Used when the organization requires explicit approval and controlled scope updates.</p>
+<p>Typical characteristics:
+- change request identifier
+- requester and approver
+- reason for change
+- impacted BA sections
+- impact assessment
+- approval decision
+- effective date</p>
+<h4 id="iterative-refinement-mode">Iterative refinement mode<a class="headerlink" href="#iterative-refinement-mode" title="Permanent link">&para;</a></h4>
+<p>Used when the team is still discovering the process and evolving the baseline through repeated clarification.</p>
+<p>Typical characteristics:
+- ongoing updates to questions, answers, assumptions, and rules
+- lighter-weight change capture
+- frequent baseline revisions
+- rapid feedback cycles
+- no heavy approval gate for every refinement</p>
+<p>Both should still be tracked.</p>
+<h3 id="262-git-as-the-baseline-change-ledger">26.2 Git as the baseline change ledger<a class="headerlink" href="#262-git-as-the-baseline-change-ledger" title="Permanent link">&para;</a></h3>
+<p>The BA workspace should be committed to Git and treated as a managed project artifact set.</p>
+<p>Git should provide:
+- version history of all BA documents and supporting files
+- commit-based traceability of requirement evolution
+- diff visibility for reviewers
+- rollback to earlier states if needed
+- branch-based experimentation or controlled reviews</p>
+<p>This means AI-MDE should not only update files; it should update them in a way that is compatible with disciplined Git review.</p>
+<h3 id="263-what-should-be-tracked-in-git">26.3 What should be tracked in Git<a class="headerlink" href="#263-what-should-be-tracked-in-git" title="Permanent link">&para;</a></h3>
+<p>At minimum, the following should be versioned:</p>
+<ul>
+<li>source inventory</li>
+<li>discovery findings</li>
+<li>clarification log</li>
+<li>assumption register</li>
+<li>conflict register</li>
+<li>requirement baseline</li>
+<li>business rules catalog</li>
+<li>entity and artifact catalog</li>
+<li>business analysis document</li>
+<li>traceability matrix</li>
+<li>change log</li>
+<li>question files and answered question files where retained</li>
+</ul>
+<h3 id="264-change-event-handling">26.4 Change event handling<a class="headerlink" href="#264-change-event-handling" title="Permanent link">&para;</a></h3>
+<p>Whenever a meaningful change occurs, AI-MDE should capture:</p>
+<ul>
+<li>what changed</li>
+<li>why it changed</li>
+<li>what triggered the change</li>
+<li>which BA objects were affected</li>
+<li>whether the change was formal or iterative</li>
+<li>whether new questions were introduced</li>
+<li>whether design readiness was impacted</li>
+</ul>
+<h3 id="265-recommended-git-aware-workflow">26.5 Recommended Git-aware workflow<a class="headerlink" href="#265-recommended-git-aware-workflow" title="Permanent link">&para;</a></h3>
+<p>A practical workflow would be:</p>
+<ol>
+<li>AI-MDE updates BA artifacts after new evidence or answers.</li>
+<li>AI-MDE summarizes the delta.</li>
+<li>The user reviews the changed files.</li>
+<li>Changes are committed to Git.</li>
+<li>Commit message reflects the business meaning of the change.</li>
+<li>The audit trail links the change to the relevant questions, answers, sources, and requirements.</li>
+</ol>
+<h3 id="266-commit-discipline">26.6 Commit discipline<a class="headerlink" href="#266-commit-discipline" title="Permanent link">&para;</a></h3>
+<p>Commit messages should reflect business analysis intent, not just file edits.</p>
+<p>Examples:
+- <code>Clarify approval thresholds for finance vs manager routing</code>
+- <code>Update reporting requirements after stakeholder answers</code>
+- <code>Resolve open issue on record retention period</code>
+- <code>Add formal change request CR-004 for escalation workflow revision</code></p>
+<p>This makes Git history useful as part of the audit trail.</p>
+<h3 id="267-relationship-between-change-management-and-mde">26.7 Relationship between change management and MDE<a class="headerlink" href="#267-relationship-between-change-management-and-mde" title="Permanent link">&para;</a></h3>
+<p>This is another place where the MDE layer matters.</p>
+<p>MDE should:
+- classify the change type
+- determine impacted objects
+- trigger targeted AI re-evaluation
+- update lifecycle states
+- preserve links between the change and affected outputs
+- help prepare a coherent Git-ready delta</p>
+<h3 id="268-recommended-principle">26.8 Recommended principle<a class="headerlink" href="#268-recommended-principle" title="Permanent link">&para;</a></h3>
+<p>A concise principle for AI-MDE is:</p>
+<blockquote>
+<p><strong>Business analysis outputs are living engineering artifacts. They must support both formal change control and iterative refinement, with Git-based history used as a practical baseline for traceability and review.</strong></p>
+</blockquote>
+<hr />
+<h2 id="27-next-steps">27. Next Steps<a class="headerlink" href="#27-next-steps" title="Permanent link">&para;</a></h2>
+<p>The next recommended deliverables for AI-MDE are:</p>
+<ol>
+<li>
+<p><strong>BA Methodology Note</strong>
+   A short formal document stating method, references, evidence hierarchy, and limitations.</p>
+</li>
+<li>
+<p><strong>BA Output Schema</strong>
+   A machine-usable schema for findings, questions, answers, requirements, rules, and trace links.</p>
+</li>
+<li>
+<p><strong>Audit Trail Schema</strong>
+   A dedicated model for question/answer/change traceability.</p>
+</li>
+<li>
+<p><strong>BA Document Template</strong>
+   The standard markdown or JSON structure used across projects.</p>
+</li>
+<li>
+<p><strong>Readiness Criteria</strong>
+   A formal checklist that determines when the BA baseline is mature enough for architecture.</p>
+</li>
+</ol>
+<hr />
+<h2 id="methodology">Methodology<a class="headerlink" href="#methodology" title="Permanent link">&para;</a></h2>
+<p>AI-MDE supports predictive, iterative, and hybrid delivery models.
+In predictive settings, it can operate with formal stage gates, baseline approvals, and change requests.
+In iterative settings, it can continuously refine the BA baseline across short delivery cycles such as Scrum sprints.
+In hybrid settings, it can maintain formal traceability and governance while supporting incremental elaboration and implementation.</p>
+<h2 id="27-closing">27. Closing<a class="headerlink" href="#27-closing" title="Permanent link">&para;</a></h2>
+<p>This proposal defines a realistic and credible direction for AI-MDE.</p>
+<p>The central idea is not to force users to behave like trained analysts. The central idea is to let AI-MDE do the heavy lifting of business analysis in a disciplined, transparent, and traceable way.</p>
+<p>That is what makes the approach practical.
+That is what makes it trustworthy.
+And that is what makes it suitable as the foundation for later system architecture and design.</p>
+              
+            </div>
+          </div><footer>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <!-- Copyright etc -->
+  </div>
+
+  Built with <a href="https://www.mkdocs.org/">MkDocs</a> using a <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a> provided by <a href="https://readthedocs.org">Read the Docs</a>.
+</footer>
+          
+        </div>
+      </div>
+
+    </section>
+
+  </div>
+
+  <div class="rst-versions" role="note" aria-label="Versions">
+  <span class="rst-current-version" data-toggle="rst-current-version">
+    
+    
+    
+  </span>
+</div>
+    <script src="../../js/jquery-3.6.0.min.js"></script>
+    <script>var base_url = "../..";</script>
+    <script src="../../js/theme_extra.js"></script>
+    <script src="../../js/theme.js"></script>
+      <script src="../../search/main.js"></script>
+    <script>
+        jQuery(function () {
+            SphinxRtdTheme.Navigation.enable(true);
+        });
+    </script>
+
+</body>
+</html>

@@ -1,0 +1,48 @@
+{
+  "name": "validate_traceability",
+  "label": "Validate Traceability",
+  "phase": "governance",
+  "intent": "validate",
+  "ai": "optional",
+  "requires": {
+    "requirements": {
+      "from": "config.ba.requirements",
+      "default": "ba/"
+    },
+    "catalog": {
+      "from": "config.design.moduleCatalog",
+      "default": "design/modules/module-catalog.json"
+    },
+    "moduleTests": {
+      "from": "config.design.moduleTests",
+      "default": "design/modules/module-tests.json"
+    }
+  },
+  "produces": {
+    "traceabilityReport": {
+      "from": "config.design.traceabilityReport",
+      "default": "design/traceability-validation-report.json"
+    },
+    "traceMatrix": {
+      "from": "config.design.traceMatrix",
+      "default": "design/trace-matrix.json"
+    },
+    "changeRequestAiResponse": {
+      "default": "project/change-requests/{request-slug}/ai/05-validate-traceability.md"
+    },
+    "changeRequestDocChanges": {
+      "default": "project/change-requests/{request-slug}/changes/doc-changes.md"
+    }
+  },
+  "calls": [
+    "governance_validation"
+  ],
+  "tools": [
+    "traceability_engine",
+    "file_manager"
+  ],
+  "rules": [
+    "Every requirement must map to at least one module and one test",
+    "In change-request mode, write command response to ai/05-validate-traceability.md and append trace/design documentation updates to changes/doc-changes.md."
+  ]
+}

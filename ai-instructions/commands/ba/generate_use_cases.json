@@ -1,0 +1,33 @@
+{
+  "name": "generate_use_cases",
+  "label": "Generate Use Cases",
+  "phase": "business_analysis",
+  "intent": "generate",
+  "ai": "required",
+  "skill": "use_case_generation",
+  "requires": {
+    "requirements": {
+      "from": "config.ba.requirements",
+      "default": "ba/"
+    },
+    "businessFunctions": {
+      "from": "config.ba.businessFunctions",
+      "default": "ba/business-functions.json"
+    }
+  },
+  "produces": {
+    "useCases": {
+      "to": "config.ba.useCases",
+      "pattern": "uc-*.md"
+    }
+  },
+  "tools": [
+    "file_manager"
+  ],
+  "rules": [
+    "Use consistent UC numbering and naming.",
+    "Each use case must include actors, preconditions, main flow, and postconditions.",
+    "AI drafts content first, then persist normalized markdown files.",
+    "Do not overwrite existing use cases unless explicitly requested."
+  ]
+}

@@ -1,0 +1,43 @@
+{
+  "name": "requirements_validation",
+  "purpose": "Validate requirement artifacts for clarity, completeness, ambiguity, and readiness for design",
+  "inputs": {
+    "requirements": {
+      "from": "config.ba.requirements",
+      "default": "ba/"
+    },
+    "useCases": {
+      "from": "config.ba.useCasePattern",
+      "default": "ba/use-cases/uc-*.md"
+    },
+    "businessFunctions": {
+      "from": "config.ba.businessFunctions",
+      "default": "ba/business-functions.json"
+    }
+  },
+  "outputs": {
+    "report": {
+      "from": "config.ba.requirementsValidationReport",
+      "default": "ba/requirements-validation-report.json"
+    }
+  },
+  "artifacts": [
+    {
+      "default": "ba"
+    }
+  ],
+  "rules": [
+    "Do not introduce technical architecture",
+    "Detect and flag solution leakage in requirements (technology/vendor choices, API/table design, framework-level prescriptions) unless explicitly mandated by source constraints",
+    "Detect and flag mechanical/storage-oriented canonical business names (for example Entry, Row, Log Table) and recommend business-first names with explicit scope",
+    "Prefer requirement phrasing that states business intent, expected outcome, constraints, and verifiable acceptance conditions",
+    "Flag ambiguity explicitly",
+    "Ensure each requirement has an ID and acceptance criteria where applicable"
+  ],
+  "uses_tools": [
+    "file_manager",
+    "json_validator",
+    "traceability_engine"
+  ],
+  "next_phase": "system_design"
+}

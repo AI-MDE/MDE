@@ -1,0 +1,73 @@
+{
+  "name": "system_design",
+  "purpose": "Generate architecture and design artifacts from validated business analysis outputs, following the iterative design process defined in system-design-process.md",
+  "inputs": {
+    "requirements": {
+      "from": "config.ba.requirements",
+      "default": "ba/"
+    },
+    "useCases": {
+      "from": "config.ba.useCasePattern",
+      "default": "ba/use-cases/uc-*.md"
+    },
+    "businessFunctions": {
+      "from": "config.ba.businessFunctions",
+      "default": "ba/business-functions.json"
+    },
+    "architecture": {
+      "from": "config.mde.architecture",
+      "default": "mde/architecture/architecture.json"
+    },
+    "designProcess": {
+      "from": "config.mde.docs.designProcess",
+      "default": "mde/docs/design/system-design-process.md"
+    },
+    "useCaseMapping": {
+      "from": "config.mde.docs.useCaseMapping",
+      "default": "mde/docs/design/use-case-mapping.md"
+    }
+  },
+  "outputs": {
+    "appArchitecture": {
+      "from": "config.design.appArchitecture",
+      "default": "design/application_architecture.json"
+    },
+    "moduleCatalog": {
+      "from": "config.design.moduleCatalog",
+      "default": "design/modules/module-catalog.json"
+    }
+  },
+  "artifacts": [
+    {
+      "from": "config.design.appArchitecture",
+      "default": "design/application_architecture.json"
+    },
+    {
+      "from": "config.design.moduleCatalog",
+      "default": "design/modules/module-catalog.json"
+    }
+  ],
+  "process": {
+    "step_1a": "Extract aggregate roots from schema â€” each becomes: Entity, Repository port, Repository impl, Mapper",
+    "step_1b": "Map write operations from use cases to Service classes â€” one per committed verb (see use-case-mapping.md)",
+    "step_1c": "Map read requirements to QueryService classes â€” one per screen or endpoint",
+    "step_1d": "Classify business rules: domain (invariants, state transitions) vs service (authorization, workflow) vs controller (request validation)",
+    "step_2": "Record each module in catalogue with: name, type, layer, aggregate, dependencies, constraints",
+    "step_3": "If UI not defined, make explicit screen assumptions â€” document basis and revisit condition; do not defer QueryService identification"
+  },
+  "rules": [
+    "Module types must be drawn from architecture.json module_types: workflow, master_data, integration, reporting, rule_engine",
+    "Every write use case must produce exactly one Service class and one Command type",
+    "Every read requirement must produce exactly one QueryService class and one ReadDto",
+    "Every aggregate root must have: Entity, Repository port (interface), Repository impl, Mapper",
+    "Reads route through query_service -> data_access â€” never through service or domain",
+    "Writes route through service -> domain Entity -> data_access",
+    "Requirement-to-module traceability must exist for every business rule",
+    "Patterns must be explicit and drawn from architecture.json patterns",
+    "Runtime components and code modules must be distinguished"
+  ],
+  "uses_tools": [
+    "file_manager"
+  ],
+  "next_phase": "module_definition"
+}

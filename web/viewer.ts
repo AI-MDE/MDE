@@ -106,7 +106,7 @@ class DocServer {
       throw new Error(`Manifest not found: ${manifestAbs}`);
     }
 
-    this.manifest = JSON.parse(fs.readFileSync(manifestAbs, 'utf8')) as DocsManifest;
+    this.manifest = JSON.parse(fs.readFileSync(manifestAbs, 'utf8').replace(/^\uFEFF/, '')) as DocsManifest;
 
     const configAbs = path.join(this.docsRoot, this.manifest.config ?? 'configuration.json');
     if (!fs.existsSync(configAbs)) {
@@ -116,7 +116,7 @@ class DocServer {
         `  → Run with:  ts-node mde/web/viewer.ts --root=<project-root>`
       );
     }
-    this.config = JSON.parse(fs.readFileSync(configAbs, 'utf8')) as Record<string, unknown>;
+    this.config = JSON.parse(fs.readFileSync(configAbs, 'utf8').replace(/^\uFEFF/, '')) as Record<string, unknown>;
 
     const mdePath = (this.config as Record<string, Record<string, string>>)?.mde?.path;
     this.allowedRoots = [this.docsRoot];
@@ -474,7 +474,12 @@ class DocServer {
   // ── HTTP helpers ───────────────────────────────────────────────────────────
 
   private sendJson(res: http.ServerResponse, data: unknown, status = 200): void {
-    res.writeHead(status, { 'Content-Type': 'application/json' });
+    res.writeHead(status, {
+      'Content-Type': 'application/json',
+      'Cache-Control': 'no-store, no-cache, must-revalidate',
+      'Pragma': 'no-cache',
+      'Expires': '0',
+    });
     res.end(JSON.stringify(data));
   }
 

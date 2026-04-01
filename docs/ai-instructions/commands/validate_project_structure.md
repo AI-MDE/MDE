@@ -13,14 +13,6 @@
 
 - structure_validation
 
-## Requires
-
-- ../../configuration.json
-
-## Produces
-
-- ../../output/work/structure-validation-report.json
-
 ## Tools
 
 - file_manager

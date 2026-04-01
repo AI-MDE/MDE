@@ -1,0 +1,459 @@
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" >
+<head>
+    <meta charset="utf-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" /><link rel="canonical" href="https://ai-mde.github.io/docs/lifecycle/" />
+      <link rel="shortcut icon" href="../img/favicon.ico" />
+    <title>Lifecycle - AI-MDE Docs</title>
+    <link rel="stylesheet" href="../css/theme.css" />
+    <link rel="stylesheet" href="../css/theme_extra.css" />
+        <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.8.0/styles/github.min.css" />
+    
+      <script>
+        // Current page data
+        var mkdocs_page_name = "Lifecycle";
+        var mkdocs_page_input_path = "lifecycle.md";
+        var mkdocs_page_url = "/docs/lifecycle/";
+      </script>
+    
+    <!--[if lt IE 9]>
+      <script src="../js/html5shiv.min.js"></script>
+    <![endif]-->
+      <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.8.0/highlight.min.js"></script>
+      <script>hljs.highlightAll();</script> 
+</head>
+
+<body class="wy-body-for-nav" role="document">
+
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side stickynav">
+    <div class="wy-side-scroll">
+      <div class="wy-side-nav-search">
+          <a href=".." class="icon icon-home"> AI-MDE Docs
+        </a><div role="search">
+  <form id ="rtd-search-form" class="wy-form" action="../search.html" method="get">
+      <input type="text" name="q" placeholder="Search docs" aria-label="Search docs" title="Type search term here" />
+  </form>
+</div>
+      </div>
+
+      <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+              <ul>
+                <li class="toctree-l1"><a class="reference internal" href="..">Home</a>
+                </li>
+              </ul>
+              <ul>
+                <li class="toctree-l1"><a class="reference internal" href="../help/install/">Install</a>
+                </li>
+              </ul>
+              <p class="caption"><span class="caption-text">Help</span></p>
+              <ul>
+                  <li class="toctree-l1"><a class="reference internal" href="../help/how-to-use-mde/">How To Use MDE</a>
+                  </li>
+                  <li class="toctree-l1"><a class="reference internal" href="../help/ai_pipeline_commands/">Pipeline Commands</a>
+                  </li>
+                  <li class="toctree-l1"><a class="reference internal" href="../help/workspace/">Workspace</a>
+                  </li>
+                  <li class="toctree-l1"><a class="reference internal" href="../help/methodology/">Methodology</a>
+                  </li>
+              </ul>
+              <ul class="current">
+                <li class="toctree-l1 current"><a class="reference internal current" href="./">Lifecycle</a>
+    <ul class="current">
+    <li class="toctree-l2"><a class="reference internal" href="#command-availability-by-phase">Command Availability by Phase</a>
+    </li>
+    <li class="toctree-l2"><a class="reference internal" href="#phase-summary">Phase Summary</a>
+    </li>
+    </ul>
+                </li>
+              </ul>
+              <ul>
+                <li class="toctree-l1"><a class="reference internal" href="../configuration/">Configuration</a>
+                </li>
+              </ul>
+              <p class="caption"><span class="caption-text">AI Instructions</span></p>
+              <ul>
+                  <li class="toctree-l1"><a class="reference internal" href="../ai-instructions/">Overview</a>
+                  </li>
+                  <li class="toctree-l1"><a class="reference internal" href="../ai-instructions/commands/">Commands</a>
+                  </li>
+                  <li class="toctree-l1"><a class="reference internal" href="../ai-instructions/skills/">Skills</a>
+                  </li>
+              </ul>
+              <p class="caption"><span class="caption-text">Design</span></p>
+              <ul>
+                  <li class="toctree-l1"><a class="reference internal" href="../design/system-design-process/">Process</a>
+                  </li>
+                  <li class="toctree-l1"><a class="reference internal" href="../design/use-case-mapping/">Use-Case Mapping</a>
+                  </li>
+                  <li class="toctree-l1"><a class="reference internal" href="../design/business-events/">Business Events</a>
+                  </li>
+                  <li class="toctree-l1"><a class="reference internal" href="../design/business-app-layering/">App Layering</a>
+                  </li>
+              </ul>
+              <ul>
+                <li class="toctree-l1"><a class="reference internal" href="../changes/">Changes</a>
+                </li>
+              </ul>
+      </div>
+    </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
+      <nav class="wy-nav-top" role="navigation" aria-label="Mobile navigation menu">
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="..">AI-MDE Docs</a>
+        
+      </nav>
+      <div class="wy-nav-content">
+        <div class="rst-content"><div role="navigation" aria-label="breadcrumbs navigation">
+  <ul class="wy-breadcrumbs">
+    <li><a href=".." class="icon icon-home" aria-label="Docs"></a></li>
+      <li class="breadcrumb-item active">Lifecycle</li>
+    <li class="wy-breadcrumbs-aside">
+          <a href="https://github.com/AI-MDE/ai-mde/edit/master/docs/lifecycle.md">Edit on AI-MDE/ai-mde</a>
+    </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+            <div class="section" itemprop="articleBody">
+              
+                <h1 id="mde-workflow-lifecycle">MDE Workflow Lifecycle<a class="headerlink" href="#mde-workflow-lifecycle" title="Permanent link">&para;</a></h1>
+<blockquote>
+<p>Generated from <code>mde/ai-instructions/orchestrator.json</code></p>
+</blockquote>
+<pre><code class="language-mermaid">flowchart TD
+
+    subgraph GOV[&quot;⟳ governance  —  available at every phase&quot;]
+        GOV_CMD[&quot;assess_methodology  ·  assess_architecture  ·  identify_external_references  ·  validate_traceability  ·  show_phase_status  ·  generate_diagrams  ·  generate_documentation&quot;]
+    end
+
+    subgraph P0[&quot;① project_initiation&quot;]
+        P0_CMD[&quot;initiate_project
+select_methodology
+select_architecture&quot;]
+    end
+
+    subgraph P1[&quot;② business_analysis&quot;]
+        P1_CMD[&quot;identify_domain
+identify_external_references
+perform_business_analysis
+generate_business_functions
+generate_use_cases
+validate_requirements&quot;]
+    end
+
+    subgraph P2[&quot;③ system_design&quot;]
+        P2_CMD[&quot;build_system_design
+generate_ldm
+validate_ldm_coverage
+generate_modules
+validate_architecture&quot;]
+    end
+
+    subgraph P3[&quot;④ development&quot;]
+        P3_CMD[&quot;generate_source_code
+generate_sample_data&quot;]
+    end
+
+    GOV -.-&gt; P0 &amp; P1 &amp; P2 &amp; P3
+
+    P0 --&gt;|&quot;project/project-state.json exists or initialization was intentionally skipped&quot;| P1
+    P1 --&gt;|&quot;ba/requirements.md exists&quot;| P2
+    P2 --&gt;|&quot;design/application_architecture.json exists&quot;| P3
+
+    style GOV fill:#f1f5f9,stroke:#94a3b8,color:#334155
+    style P0  fill:#dbeafe,stroke:#3b82f6,color:#1e3a5f
+    style P1  fill:#dcfce7,stroke:#22c55e,color:#14532d
+    style P2  fill:#fef9c3,stroke:#eab308,color:#713f12
+    style P3  fill:#ffedd5,stroke:#f97316,color:#7c2d12
+</code></pre>
+<hr />
+<h2 id="command-availability-by-phase">Command Availability by Phase<a class="headerlink" href="#command-availability-by-phase" title="Permanent link">&para;</a></h2>
+<table>
+<thead>
+<tr>
+<th>Command</th>
+<th>① project initiation</th>
+<th>② business analysis</th>
+<th>③ system design</th>
+<th>④ development</th>
+<th>⟳ always</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>initiate_project</code></td>
+<td>✓</td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+</tr>
+<tr>
+<td><code>select_methodology</code></td>
+<td>✓</td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+</tr>
+<tr>
+<td><code>select_architecture</code></td>
+<td>✓</td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+</tr>
+<tr>
+<td><code>identify_domain</code></td>
+<td></td>
+<td>✓</td>
+<td></td>
+<td></td>
+<td></td>
+</tr>
+<tr>
+<td><code>identify_external_references</code></td>
+<td></td>
+<td>✓</td>
+<td></td>
+<td></td>
+<td>✓</td>
+</tr>
+<tr>
+<td><code>perform_business_analysis</code></td>
+<td></td>
+<td>✓</td>
+<td></td>
+<td></td>
+<td></td>
+</tr>
+<tr>
+<td><code>generate_business_functions</code></td>
+<td></td>
+<td>✓</td>
+<td></td>
+<td></td>
+<td></td>
+</tr>
+<tr>
+<td><code>generate_use_cases</code></td>
+<td></td>
+<td>✓</td>
+<td></td>
+<td></td>
+<td></td>
+</tr>
+<tr>
+<td><code>validate_requirements</code></td>
+<td></td>
+<td>✓</td>
+<td></td>
+<td></td>
+<td></td>
+</tr>
+<tr>
+<td><code>build_system_design</code></td>
+<td></td>
+<td></td>
+<td>✓</td>
+<td></td>
+<td></td>
+</tr>
+<tr>
+<td><code>generate_ldm</code></td>
+<td></td>
+<td></td>
+<td>✓</td>
+<td></td>
+<td></td>
+</tr>
+<tr>
+<td><code>validate_ldm_coverage</code></td>
+<td></td>
+<td></td>
+<td>✓</td>
+<td></td>
+<td></td>
+</tr>
+<tr>
+<td><code>generate_modules</code></td>
+<td></td>
+<td></td>
+<td>✓</td>
+<td></td>
+<td></td>
+</tr>
+<tr>
+<td><code>validate_architecture</code></td>
+<td></td>
+<td></td>
+<td>✓</td>
+<td></td>
+<td></td>
+</tr>
+<tr>
+<td><code>generate_source_code</code></td>
+<td></td>
+<td></td>
+<td></td>
+<td>✓</td>
+<td></td>
+</tr>
+<tr>
+<td><code>generate_sample_data</code></td>
+<td></td>
+<td></td>
+<td></td>
+<td>✓</td>
+<td></td>
+</tr>
+<tr>
+<td><code>assess_methodology</code></td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+<td>✓</td>
+</tr>
+<tr>
+<td><code>assess_architecture</code></td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+<td>✓</td>
+</tr>
+<tr>
+<td><code>validate_traceability</code></td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+<td>✓</td>
+</tr>
+<tr>
+<td><code>show_phase_status</code></td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+<td>✓</td>
+</tr>
+<tr>
+<td><code>generate_diagrams</code></td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+<td>✓</td>
+</tr>
+<tr>
+<td><code>generate_documentation</code></td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+<td>✓</td>
+</tr>
+</tbody>
+</table>
+<hr />
+<h2 id="phase-summary">Phase Summary<a class="headerlink" href="#phase-summary" title="Permanent link">&para;</a></h2>
+<table>
+<thead>
+<tr>
+<th>#</th>
+<th>Phase</th>
+<th>Entry Condition</th>
+<th>Exit Condition</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>①</td>
+<td><code>project_initiation</code></td>
+<td>—</td>
+<td>../../project/project-state.json exists or initialization was intentionally skipped</td>
+</tr>
+<tr>
+<td>②</td>
+<td><code>business_analysis</code></td>
+<td>—</td>
+<td>../../ba/requirements.md exists, ../../ba/analysis-status.md exists, ../../project/questions.json exists, ../../project/open-queue.json exists</td>
+</tr>
+<tr>
+<td>③</td>
+<td><code>system_design</code></td>
+<td>../../ba/requirements.md exists</td>
+<td>../../design/application_architecture.json exists, ../../design/modules/module-catalog.json exists, at least one module definition exists in design/modules/</td>
+</tr>
+<tr>
+<td>④</td>
+<td><code>development</code></td>
+<td>schema.json exists for target module</td>
+<td>development artifacts exist for the target command</td>
+</tr>
+<tr>
+<td>⟳</td>
+<td><code>governance</code></td>
+<td>—</td>
+<td>—</td>
+</tr>
+</tbody>
+</table>
+<blockquote>
+<p>Solid arrows = phase progression. Dashed arrows = governance commands available at every phase.</p>
+</blockquote>
+              
+            </div>
+          </div><footer>
+    <div class="rst-footer-buttons" role="navigation" aria-label="Footer Navigation">
+        <a href="../help/methodology/" class="btn btn-neutral float-left" title="Methodology"><span class="icon icon-circle-arrow-left"></span> Previous</a>
+        <a href="../configuration/" class="btn btn-neutral float-right" title="Configuration">Next <span class="icon icon-circle-arrow-right"></span></a>
+    </div>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <!-- Copyright etc -->
+  </div>
+
+  Built with <a href="https://www.mkdocs.org/">MkDocs</a> using a <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a> provided by <a href="https://readthedocs.org">Read the Docs</a>.
+</footer>
+          
+        </div>
+      </div>
+
+    </section>
+
+  </div>
+
+  <div class="rst-versions" role="note" aria-label="Versions">
+  <span class="rst-current-version" data-toggle="rst-current-version">
+    
+    
+      <span><a href="../help/methodology/" style="color: #fcfcfc">&laquo; Previous</a></span>
+    
+    
+      <span><a href="../configuration/" style="color: #fcfcfc">Next &raquo;</a></span>
+    
+  </span>
+</div>
+    <script src="../js/jquery-3.6.0.min.js"></script>
+    <script>var base_url = "..";</script>
+    <script src="../js/theme_extra.js"></script>
+    <script src="../js/theme.js"></script>
+      <script src="../search/main.js"></script>
+    <script>
+        jQuery(function () {
+            SphinxRtdTheme.Navigation.enable(true);
+        });
+    </script>
+
+</body>
+</html>

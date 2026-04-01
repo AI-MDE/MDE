@@ -1,0 +1,568 @@
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" >
+<head>
+    <meta charset="utf-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" /><link rel="canonical" href="https://ai-mde.github.io/docs/design/system-design-process/" />
+      <link rel="shortcut icon" href="../../img/favicon.ico" />
+    <title>Process - AI-MDE Docs</title>
+    <link rel="stylesheet" href="../../css/theme.css" />
+    <link rel="stylesheet" href="../../css/theme_extra.css" />
+        <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.8.0/styles/github.min.css" />
+    
+      <script>
+        // Current page data
+        var mkdocs_page_name = "Process";
+        var mkdocs_page_input_path = "design\\system-design-process.md";
+        var mkdocs_page_url = "/docs/design/system-design-process/";
+      </script>
+    
+    <!--[if lt IE 9]>
+      <script src="../../js/html5shiv.min.js"></script>
+    <![endif]-->
+      <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.8.0/highlight.min.js"></script>
+      <script>hljs.highlightAll();</script> 
+</head>
+
+<body class="wy-body-for-nav" role="document">
+
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side stickynav">
+    <div class="wy-side-scroll">
+      <div class="wy-side-nav-search">
+          <a href="../.." class="icon icon-home"> AI-MDE Docs
+        </a><div role="search">
+  <form id ="rtd-search-form" class="wy-form" action="../../search.html" method="get">
+      <input type="text" name="q" placeholder="Search docs" aria-label="Search docs" title="Type search term here" />
+  </form>
+</div>
+      </div>
+
+      <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+              <ul>
+                <li class="toctree-l1"><a class="reference internal" href="../..">Home</a>
+                </li>
+              </ul>
+              <ul>
+                <li class="toctree-l1"><a class="reference internal" href="../../help/install/">Install</a>
+                </li>
+              </ul>
+              <p class="caption"><span class="caption-text">Help</span></p>
+              <ul>
+                  <li class="toctree-l1"><a class="reference internal" href="../../help/how-to-use-mde/">How To Use MDE</a>
+                  </li>
+                  <li class="toctree-l1"><a class="reference internal" href="../../help/ai_pipeline_commands/">Pipeline Commands</a>
+                  </li>
+                  <li class="toctree-l1"><a class="reference internal" href="../../help/workspace/">Workspace</a>
+                  </li>
+                  <li class="toctree-l1"><a class="reference internal" href="../../help/methodology/">Methodology</a>
+                  </li>
+              </ul>
+              <ul>
+                <li class="toctree-l1"><a class="reference internal" href="../../lifecycle/">Lifecycle</a>
+                </li>
+              </ul>
+              <ul>
+                <li class="toctree-l1"><a class="reference internal" href="../../configuration/">Configuration</a>
+                </li>
+              </ul>
+              <p class="caption"><span class="caption-text">AI Instructions</span></p>
+              <ul>
+                  <li class="toctree-l1"><a class="reference internal" href="../../ai-instructions/">Overview</a>
+                  </li>
+                  <li class="toctree-l1"><a class="reference internal" href="../../ai-instructions/commands/">Commands</a>
+                  </li>
+                  <li class="toctree-l1"><a class="reference internal" href="../../ai-instructions/skills/">Skills</a>
+                  </li>
+              </ul>
+              <p class="caption"><span class="caption-text">Design</span></p>
+              <ul class="current">
+                  <li class="toctree-l1 current"><a class="reference internal current" href="./">Process</a>
+    <ul class="current">
+    <li class="toctree-l2"><a class="reference internal" href="#note">NOTE</a>
+    </li>
+    <li class="toctree-l2"><a class="reference internal" href="#purpose">Purpose</a>
+    </li>
+    <li class="toctree-l2"><a class="reference internal" href="#the-loop">The Loop</a>
+    </li>
+    <li class="toctree-l2"><a class="reference internal" href="#related-ai-commands">Related AI Commands</a>
+        <ul>
+    <li class="toctree-l3"><a class="reference internal" href="#data-thread-what-each-command-does">Data Thread — what each command does</a>
+    </li>
+    <li class="toctree-l3"><a class="reference internal" href="#module-thread-what-each-command-does">Module Thread — what each command does</a>
+    </li>
+        </ul>
+    </li>
+    <li class="toctree-l2"><a class="reference internal" href="#inputs-required">Inputs Required</a>
+    </li>
+    <li class="toctree-l2"><a class="reference internal" href="#step-1-identify-modules">Step 1 — Identify Modules</a>
+        <ul>
+    <li class="toctree-l3"><a class="reference internal" href="#1a-extract-aggregate-roots-from-the-schema">1a. Extract aggregate roots from the schema</a>
+    </li>
+    <li class="toctree-l3"><a class="reference internal" href="#1b-map-use-cases-to-usecase-classes">1b. Map use cases to UseCase classes</a>
+    </li>
+    <li class="toctree-l3"><a class="reference internal" href="#1c-identify-read-modules">1c. Identify read modules</a>
+    </li>
+    <li class="toctree-l3"><a class="reference internal" href="#1d-classify-business-rules">1d. Classify business rules</a>
+    </li>
+    <li class="toctree-l3"><a class="reference internal" href="#1e-record-the-module-catalogue">1e. Record the module catalogue</a>
+    </li>
+        </ul>
+    </li>
+    <li class="toctree-l2"><a class="reference internal" href="#step-2-spec-modules">Step 2 — Spec Modules</a>
+        <ul>
+    <li class="toctree-l3"><a class="reference internal" href="#spec-contents-per-module-type">Spec contents per module type</a>
+    </li>
+        </ul>
+    </li>
+    <li class="toctree-l2"><a class="reference internal" href="#step-3-assume-ui-and-generate">Step 3 — Assume UI and Generate</a>
+        <ul>
+    <li class="toctree-l3"><a class="reference internal" href="#how-to-assume-ui">How to assume UI</a>
+    </li>
+    <li class="toctree-l3"><a class="reference internal" href="#generation-order">Generation order</a>
+    </li>
+    <li class="toctree-l3"><a class="reference internal" href="#per-module-generation-contract">Per-module generation contract</a>
+    </li>
+        </ul>
+    </li>
+    <li class="toctree-l2"><a class="reference internal" href="#step-4-build-and-run">Step 4 — Build and Run</a>
+    </li>
+    <li class="toctree-l2"><a class="reference internal" href="#output-structure">Output Structure</a>
+    </li>
+    <li class="toctree-l2"><a class="reference internal" href="#reference">Reference</a>
+    </li>
+    </ul>
+                  </li>
+                  <li class="toctree-l1"><a class="reference internal" href="../use-case-mapping/">Use-Case Mapping</a>
+                  </li>
+                  <li class="toctree-l1"><a class="reference internal" href="../business-events/">Business Events</a>
+                  </li>
+                  <li class="toctree-l1"><a class="reference internal" href="../business-app-layering/">App Layering</a>
+                  </li>
+              </ul>
+              <ul>
+                <li class="toctree-l1"><a class="reference internal" href="../../changes/">Changes</a>
+                </li>
+              </ul>
+      </div>
+    </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
+      <nav class="wy-nav-top" role="navigation" aria-label="Mobile navigation menu">
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../..">AI-MDE Docs</a>
+        
+      </nav>
+      <div class="wy-nav-content">
+        <div class="rst-content"><div role="navigation" aria-label="breadcrumbs navigation">
+  <ul class="wy-breadcrumbs">
+    <li><a href="../.." class="icon icon-home" aria-label="Docs"></a></li>
+          <li class="breadcrumb-item">Design</li>
+      <li class="breadcrumb-item active">Process</li>
+    <li class="wy-breadcrumbs-aside">
+          <a href="https://github.com/AI-MDE/ai-mde/edit/master/docs/design/system-design-process.md">Edit on AI-MDE/ai-mde</a>
+    </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+            <div class="section" itemprop="articleBody">
+              
+                <h1 id="system-design-process">System Design Process<a class="headerlink" href="#system-design-process" title="Permanent link">&para;</a></h1>
+<h2 id="note">NOTE<a class="headerlink" href="#note" title="Permanent link">&para;</a></h2>
+<p>All file paths in commands and skills are logical names must be translated according to  <code>configuration.json</code>.</p>
+<h2 id="purpose">Purpose<a class="headerlink" href="#purpose" title="Permanent link">&para;</a></h2>
+<p>This document defines the iterative process for moving from business requirements and a database schema to a running application, using the layering architecture defined in <code>business-app-layering-notes.md</code>.</p>
+<hr />
+<h2 id="the-loop">The Loop<a class="headerlink" href="#the-loop" title="Permanent link">&para;</a></h2>
+<p>The process is a cycle, not a one-pass waterfall.</p>
+<pre><code>  ┌─────────────────────────────────────────┐
+  │                                         ▼
+Step 1        Step 2        Step 3        Step 4
+Identify  →   Spec      →  Assume UI  →  Build &amp; Run
+Modules       Modules       &amp; Generate    then loop back
+</code></pre>
+<p>Each pass through the loop either adds new modules or refines existing ones based on what running the app reveals.</p>
+<h2 id="related-ai-commands">Related AI Commands<a class="headerlink" href="#related-ai-commands" title="Permanent link">&para;</a></h2>
+<p>Two threads run through the process. The Data Thread must produce a schema before the Module Thread can generate code.</p>
+<pre><code>Data Thread          Module Thread
+─────────────        ─────────────────────────────────
+generate_ldm    ──┐
+validate_ldm_      │  (schema ready)
+  coverage         │
+generate_pdm        ├──▶  build_system_design    [Step 1 — Identify]
+generate_schema ───┘      generate_modules       [Step 1–2 — Catalog + Spec]
+generate_sample_data      validate_architecture  [Step 2 — Review]
+                          generate_source_code   [Step 3 — Generate]
+</code></pre>
+<h3 id="data-thread-what-each-command-does">Data Thread — what each command does<a class="headerlink" href="#data-thread-what-each-command-does" title="Permanent link">&para;</a></h3>
+<table>
+<thead>
+<tr>
+<th>Command</th>
+<th>Purpose</th>
+<th>Process step</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>generate_ldm</code></td>
+<td>Generate Logical Data Model from requirements</td>
+<td>Pre-Step 1</td>
+</tr>
+<tr>
+<td><code>validate_ldm_coverage</code></td>
+<td>Check LDM covers all use cases and business rules</td>
+<td>Pre-Step 1</td>
+</tr>
+<tr>
+<td><code>generate_pdm</code></td>
+<td>Generate Physical Data Model from LDM</td>
+<td>Pre-Step 1</td>
+</tr>
+<tr>
+<td><code>generate_schema</code></td>
+<td>Generate SQL schema from PDM</td>
+<td>Pre-Step 1</td>
+</tr>
+<tr>
+<td><code>generate_sample_data</code></td>
+<td>Generate seed data for all tables</td>
+<td>Step 4</td>
+</tr>
+</tbody>
+</table>
+<h3 id="module-thread-what-each-command-does">Module Thread — what each command does<a class="headerlink" href="#module-thread-what-each-command-does" title="Permanent link">&para;</a></h3>
+<table>
+<thead>
+<tr>
+<th>Command</th>
+<th>Purpose</th>
+<th>Process step</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>build_system_design</code></td>
+<td>Produce initial module catalogue from use cases + schema</td>
+<td>Step 1 — Identify</td>
+</tr>
+<tr>
+<td><code>generate_modules</code></td>
+<td>Build/refresh catalog + full definition for every module</td>
+<td>Step 1–2</td>
+</tr>
+<tr>
+<td><code>validate_architecture</code></td>
+<td>Check catalogue for coverage, layering, and dependency violations</td>
+<td>Step 2 — Review</td>
+</tr>
+<tr>
+<td><code>generate_source_code</code></td>
+<td>Generate all layers for a module from its spec</td>
+<td>Step 3 — Generate</td>
+</tr>
+</tbody>
+</table>
+<hr />
+<h2 id="inputs-required">Inputs Required<a class="headerlink" href="#inputs-required" title="Permanent link">&para;</a></h2>
+<table>
+<thead>
+<tr>
+<th>Input</th>
+<th>Content</th>
+<th>Location</th>
+<th>Required for</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Use cases</td>
+<td>Actor, goal, steps, preconditions</td>
+<td><code>ba/requirements.md</code></td>
+<td>Steps 1–2</td>
+</tr>
+<tr>
+<td>Business rules</td>
+<td>Invariants, constraints, workflow rules</td>
+<td><code>ba/requirements.md</code></td>
+<td>Steps 1–2</td>
+</tr>
+<tr>
+<td>DB schema</td>
+<td>Tables, columns, PKs, FKs, constraints</td>
+<td><code>design/sql/schema.json</code></td>
+<td>All steps</td>
+</tr>
+<tr>
+<td>Architecture reference</td>
+<td>Layer responsibilities, decision guide</td>
+<td><code>mde/docs/design/business-app-layering.md</code></td>
+<td>All steps</td>
+</tr>
+</tbody>
+</table>
+<p>UI does not need to be formally defined before starting. Step 3 handles this with assumptions.</p>
+<hr />
+<h2 id="step-1-identify-modules">Step 1 — Identify Modules<a class="headerlink" href="#step-1-identify-modules" title="Permanent link">&para;</a></h2>
+<p>The goal is a <strong>module catalogue</strong> — a list of every class that needs to exist, with enough definition to spec and generate it.</p>
+<h3 id="1a-extract-aggregate-roots-from-the-schema">1a. Extract aggregate roots from the schema<a class="headerlink" href="#1a-extract-aggregate-roots-from-the-schema" title="Permanent link">&para;</a></h3>
+<p>Each table that is an aggregate root (own identity, not a pure child table) becomes a module.</p>
+<p>For each aggregate root you will need:
+- Domain Entity
+- Repository port (interface)
+- Repository implementation
+- Mapper</p>
+<p>Use FK relationships to identify child tables (e.g. <code>order_item</code> belongs to <code>order</code>).</p>
+<p><strong>Output:</strong> list of aggregate root modules.</p>
+<h3 id="1b-map-use-cases-to-usecase-classes">1b. Map use cases to UseCase classes<a class="headerlink" href="#1b-map-use-cases-to-usecase-classes" title="Permanent link">&para;</a></h3>
+<p>Each write operation in the use case list becomes a UseCase class. See <code>use-case-mapping.md</code> for the full mapping rules.</p>
+<p>For each write operation:
+- Name the UseCase (<code>&lt;Verb&gt;&lt;Noun&gt;UseCase</code>)
+- Identify the Command input type
+- Identify which aggregate it operates on
+- Note cross-aggregate dependencies</p>
+<p><strong>Output:</strong> list of UseCase + Command pairs.</p>
+<h3 id="1c-identify-read-modules">1c. Identify read modules<a class="headerlink" href="#1c-identify-read-modules" title="Permanent link">&para;</a></h3>
+<p>For each screen or endpoint that reads data, identify a QueryService.</p>
+<p>At this stage, name the QueryService and note what aggregate it reads from. The exact DTO shape is resolved in Step 3 when UI is assumed.</p>
+<p><strong>Output:</strong> list of QueryService candidates with their aggregate.</p>
+<h3 id="1d-classify-business-rules">1d. Classify business rules<a class="headerlink" href="#1d-classify-business-rules" title="Permanent link">&para;</a></h3>
+<p>For each business rule, assign it to an owner using the decision guide:</p>
+<table>
+<thead>
+<tr>
+<th>Rule type</th>
+<th>Belongs in</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Object invariant (impossible state)</td>
+<td>Domain Entity</td>
+</tr>
+<tr>
+<td>State transition guard</td>
+<td>Domain Entity</td>
+</tr>
+<tr>
+<td>Action precondition (workflow)</td>
+<td>UseCase</td>
+</tr>
+<tr>
+<td>Actor permission check</td>
+<td>UseCase</td>
+</tr>
+<tr>
+<td>Multi-object coordination</td>
+<td>UseCase</td>
+</tr>
+<tr>
+<td>Request field validation</td>
+<td>Controller / boundary</td>
+</tr>
+</tbody>
+</table>
+<p><strong>Output:</strong> each rule annotated with its owner class.</p>
+<h3 id="1e-record-the-module-catalogue">1e. Record the module catalogue<a class="headerlink" href="#1e-record-the-module-catalogue" title="Permanent link">&para;</a></h3>
+<p>For each module, record:</p>
+<pre><code>name:         ClaimRepository
+type:         Repository port
+layer:        Application — ports
+aggregate:    Claim
+dependencies: (none)
+constraints:  must not import infrastructure
+notes:        interface only; implemented by PostgresClaimRepository
+</code></pre>
+<p>Full type list:</p>
+<ul>
+<li><code>DomainEntity</code></li>
+<li><code>UseCase</code></li>
+<li><code>Command</code></li>
+<li><code>QueryService</code></li>
+<li><code>Repository port</code></li>
+<li><code>Repository impl</code></li>
+<li><code>Mapper</code></li>
+<li><code>Controller</code></li>
+<li><code>Router</code></li>
+<li><code>DTO</code> (request / response / read model)</li>
+<li><code>ErrorHandler</code></li>
+<li><code>Container</code> (DI wiring)</li>
+</ul>
+<hr />
+<h2 id="step-2-spec-modules">Step 2 — Spec Modules<a class="headerlink" href="#step-2-spec-modules" title="Permanent link">&para;</a></h2>
+<p>For each module in the catalogue, write a spec before generating code.</p>
+<p>The spec is the contract the generator works from. It must be complete enough that generation requires no guessing.</p>
+<h3 id="spec-contents-per-module-type">Spec contents per module type<a class="headerlink" href="#spec-contents-per-module-type" title="Permanent link">&para;</a></h3>
+<p><strong>Domain Entity</strong>
+- Fields and types
+- State machine (valid statuses and transitions)
+- Business rules assigned to this entity (from 1d)
+- Factory method signature (<code>create</code> / <code>rehydrate</code>)</p>
+<p><strong>UseCase</strong>
+- Command fields and types
+- Authorization rule
+- Steps: load → act → save
+- Domain entity method called
+- Side effects — for each: notifications, audit log, business event
+  - Does this operation emit a business event? (see <code>business-events.md</code>)
+  - If yes: event type, payload fields, delivery requirement (fire-and-forget vs outbox)
+- Error cases (not found, concurrency, authorization denied)</p>
+<p><strong>QueryService</strong>
+- Input filters / parameters
+- Output DTO fields — see Step 3 for UI assumption
+- Tables / joins involved
+- Sort and pagination behaviour</p>
+<p><strong>Repository port</strong>
+- Method signatures only
+- Return types</p>
+<p><strong>Mapper</strong>
+- DB column → domain field mappings
+- Any type coercions (e.g. <code>string</code> → <code>Date</code>, snake_case → camelCase)</p>
+<p><strong>Controller</strong>
+- HTTP method and route
+- Request binding (params, body, query)
+- UseCase or QueryService called
+- Response status and shape</p>
+<hr />
+<h2 id="step-3-assume-ui-and-generate">Step 3 — Assume UI and Generate<a class="headerlink" href="#step-3-assume-ui-and-generate" title="Permanent link">&para;</a></h2>
+<p>UI does not need to be formally signed off before generating. Make explicit assumptions about what each screen shows, document them, and generate based on those assumptions.</p>
+<h3 id="how-to-assume-ui">How to assume UI<a class="headerlink" href="#how-to-assume-ui" title="Permanent link">&para;</a></h3>
+<p>For each QueryService identified in Step 1c:</p>
+<ol>
+<li>Name the screen (e.g. "Claim List", "Claim Detail", "Agent Dashboard")</li>
+<li>List the fields the screen most likely needs based on the use cases and schema</li>
+<li>List likely filters (status, date range, assigned agent, etc.)</li>
+<li>Record the assumption explicitly</li>
+</ol>
+<p>Example assumption record:</p>
+<pre><code>screen:       Claim List
+assumed fields: id, claimant name, status, submitted date, assigned agent
+assumed filters: status, date range
+assumption basis: standard list view pattern; covers supervisor and agent workflows
+revisit if:   stakeholder requires additional columns or grouping
+</code></pre>
+<p>Assumptions are cheap to change. Deferring generation until UI is formally defined is expensive.</p>
+<h3 id="generation-order">Generation order<a class="headerlink" href="#generation-order" title="Permanent link">&para;</a></h3>
+<p>Generate in dependency order — lower layers first:</p>
+<ol>
+<li>Shared types and errors (<code>DomainError</code>, <code>NotFoundError</code>, etc.)</li>
+<li>Domain Entities (no dependencies)</li>
+<li>Commands (no dependencies)</li>
+<li>Repository ports / interfaces (depend on entities)</li>
+<li>UseCases (depend on entities, commands, repository ports)</li>
+<li>Mappers (depend on entities and DB row types)</li>
+<li>Repository implementations (depend on mapper, DB client, port interface)</li>
+<li>QueryServices (depend on DB client, DTOs)</li>
+<li>Controllers (depend on use cases and query services)</li>
+<li>Routers (depend on controllers)</li>
+<li>DI container (wires all implementations to ports)</li>
+<li>Server entry point</li>
+</ol>
+<h3 id="per-module-generation-contract">Per-module generation contract<a class="headerlink" href="#per-module-generation-contract" title="Permanent link">&para;</a></h3>
+<p>The generator needs from the spec:
+- Module name and type
+- Layer
+- Dependencies (by name)
+- Business rules (for Entity and UseCase)
+- Input/output types (Command shape, DTO shape)
+- Constraints (optimistic locking, auth, validation)</p>
+<hr />
+<h2 id="step-4-build-and-run">Step 4 — Build and Run<a class="headerlink" href="#step-4-build-and-run" title="Permanent link">&para;</a></h2>
+<p>Run the application and validate against the use cases.</p>
+<p><strong>Check:</strong>
+- Does each write operation work end-to-end?
+- Does each screen show the right data?
+- Are business rules enforced correctly?
+- Do error cases return the right responses?</p>
+<p><strong>What triggers a loop back to Step 1:</strong>
+- A screen needs data the current QueryService doesn't provide
+- A use case step was missed during identification
+- Running the app reveals a missing module or wrong assumption
+- Stakeholder feedback changes the UI or business rules</p>
+<p>Record what changed and why, then re-enter Step 1 for the affected modules only. Do not regenerate the entire catalogue — scope the loop to what changed.</p>
+<hr />
+<h2 id="output-structure">Output Structure<a class="headerlink" href="#output-structure" title="Permanent link">&para;</a></h2>
+<pre><code>src/
+  app/
+    shared/
+      errors/       domain errors, error handler
+      auth/         actor context, auth interface
+      db/           db client interface
+    container.ts    DI wiring
+  modules/
+    &lt;module&gt;/
+      domain/       Entity, types
+      application/
+        commands/   Command types
+        use-cases/  UseCase classes + specs
+        queries/    QueryService classes
+        ports/      Repository interfaces
+      infrastructure/
+        &lt;module&gt;.mapper.ts
+        postgres-&lt;module&gt;.repository.ts
+      api/
+        &lt;module&gt;.controller.ts + spec
+        &lt;module&gt;.router.ts
+  web/              server-rendered route handlers
+  views/            EJS templates
+  seed/             sample data + load script
+  server.ts         entry point
+</code></pre>
+<hr />
+<h2 id="reference">Reference<a class="headerlink" href="#reference" title="Permanent link">&para;</a></h2>
+<ul>
+<li>Architecture decisions: <code>mde/docs/design/business-app-layering.md</code></li>
+<li>Use case mapping: <code>mde/docs/design/use-case-mapping.md</code></li>
+<li>Business events: <code>mde/docs/design/business-events.md</code></li>
+<li>Example implementation: <code>sample-app/src/</code></li>
+</ul>
+              
+            </div>
+          </div><footer>
+    <div class="rst-footer-buttons" role="navigation" aria-label="Footer Navigation">
+        <a href="../../ai-instructions/skills/" class="btn btn-neutral float-left" title="Skills"><span class="icon icon-circle-arrow-left"></span> Previous</a>
+        <a href="../use-case-mapping/" class="btn btn-neutral float-right" title="Use-Case Mapping">Next <span class="icon icon-circle-arrow-right"></span></a>
+    </div>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <!-- Copyright etc -->
+  </div>
+
+  Built with <a href="https://www.mkdocs.org/">MkDocs</a> using a <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a> provided by <a href="https://readthedocs.org">Read the Docs</a>.
+</footer>
+          
+        </div>
+      </div>
+
+    </section>
+
+  </div>
+
+  <div class="rst-versions" role="note" aria-label="Versions">
+  <span class="rst-current-version" data-toggle="rst-current-version">
+    
+    
+      <span><a href="../../ai-instructions/skills/" style="color: #fcfcfc">&laquo; Previous</a></span>
+    
+    
+      <span><a href="../use-case-mapping/" style="color: #fcfcfc">Next &raquo;</a></span>
+    
+  </span>
+</div>
+    <script src="../../js/jquery-3.6.0.min.js"></script>
+    <script>var base_url = "../..";</script>
+    <script src="../../js/theme_extra.js"></script>
+    <script src="../../js/theme.js"></script>
+      <script src="../../search/main.js"></script>
+    <script>
+        jQuery(function () {
+            SphinxRtdTheme.Navigation.enable(true);
+        });
+    </script>
+
+</body>
+</html>

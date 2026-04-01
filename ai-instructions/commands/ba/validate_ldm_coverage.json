@@ -1,0 +1,33 @@
+{
+  "name": "validate_ldm_coverage",
+  "label": "Validate LDM Coverage",
+  "phase": "system_design",
+  "intent": "validate",
+  "ai": "required",
+  "skill": "ldm_coverage_validation",
+  "requires": {
+    "requirements": {
+      "from": "config.ba.requirements",
+      "default": "ba/"
+    },
+    "ldm": {
+      "from": "config.ba.ldmFile",
+      "default": "ba/data-model/logical-data-model.json"
+    }
+  },
+  "produces": {
+    "report": {
+      "to": "config.output.work",
+      "pattern": "ldm-coverage-report.json"
+    }
+  },
+  "tools": [
+    "file_manager"
+  ],
+  "rules": [
+    "Verify that BA noun terms are covered by entity, attribute, relationship, actor/role, or synonym mappings.",
+    "Report explicit gaps with suggested canonical mappings.",
+    "Do not mutate LDM during validation.",
+    "Prefer semantic AI reasoning over token-only heuristics."
+  ]
+}

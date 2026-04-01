@@ -34,8 +34,29 @@
     }
   },
   "produces": {
+    "requestFolder": {
+      "default": "project/change-requests/{request-slug}/"
+    },
+    "requestCopy": {
+      "default": "project/change-requests/{request-slug}/request.md"
+    },
+    "aiResponse": {
+      "default": "project/change-requests/{request-slug}/ai/01-evaluate-change-request.md"
+    },
     "impactReport": {
-      "default": "project/change-requests/change-impact-report.md"
+      "default": "project/change-requests/{request-slug}/impact/impact-report.md"
+    },
+    "clarificationQuestionsDoc": {
+      "default": "project/change-requests/{request-slug}/impact/clarification-questions.md"
+    },
+    "changeManifest": {
+      "default": "project/change-requests/{request-slug}/manifest.json"
+    },
+    "docChanges": {
+      "default": "project/change-requests/{request-slug}/changes/doc-changes.md"
+    },
+    "codeChanges": {
+      "default": "project/change-requests/{request-slug}/changes/code-changes.md"
     },
     "clarificationQuestions": {
       "from": "config.project_state.questions",
@@ -56,9 +77,14 @@
   ],
   "rules": [
     "Treat Requests/*.md as the source placement for incoming change requests",
+    "Derive request-slug from the selected request filename and create project/change-requests/{request-slug}/",
+    "Copy the original request into project/change-requests/{request-slug}/request.md before analysis output",
     "Produce impact analysis across BA, design, architecture, source, and tests",
     "Generate clarification questions when decisions are missing or ambiguous",
     "Use a consistent question-and-answer prompt format in outputs",
-    "Do not apply design or code changes in this command; analysis and questions only"
+    "Write AI narrative response to project/change-requests/{request-slug}/ai/01-evaluate-change-request.md",
+    "Do not apply design or code changes in this command; analysis and questions only",
+    "This command is the mandatory first step for any change request workflow before requirement, design, or code updates",
+    "Required follow-up sequence after this command: refine_business_requirements -> elaborate_system_design -> validate_design_compliance -> validate_traceability -> generate_diagrams"
   ]
 }

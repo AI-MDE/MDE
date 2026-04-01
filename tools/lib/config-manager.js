@@ -1,3 +1,6 @@
+/**
+ * Purpose: Provides configuration loading, resolution, and validation utilities used by tool scripts.
+ */
 const fs = require('fs');
 const path = require('path');
 

@@ -1,0 +1,37 @@
+{
+  "name": "export_docs",
+  "label": "Export Documentation",
+  "phase": "governance",
+  "intent": "generate",
+  "ai": "optional",
+  "requires": {
+    "config": {
+      "default": "configuration.json"
+    },
+    "viewer": {
+      "note": "Viewer must be running at config.export.viewerUrl (default http://localhost:4000)"
+    }
+  },
+  "produces": {
+    "mkdocs": {
+      "to": "config.export.mkdocs.docsDir",
+      "default": "output/export/mkdocs/docs"
+    },
+    "mkdocsYml": {
+      "to": "config.export.mkdocs.ymlPath",
+      "default": "output/export/mkdocs/mkdocs.yml"
+    }
+  },
+  "calls": [
+    "docs_export"
+  ],
+  "tools": [
+    "file_manager"
+  ],
+  "rules": [
+    "Add export section to configuration.json if absent",
+    "Generate scripts/exportDocs.js â€” must be runnable with node, no build step",
+    "Patch package.json to add export:mkdocs and export:confluence scripts",
+    "Add mustache and marked to devDependencies in package.json"
+  ]
+}

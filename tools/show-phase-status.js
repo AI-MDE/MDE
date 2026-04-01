@@ -1,4 +1,7 @@
 #!/usr/bin/env node
+/**
+ * Purpose: Reports project phase/status readiness using orchestrator rules and project-state artifacts.
+ */
 const fs = require('fs');
 const path = require('path');
 const { ConfigurationManager } = require('./lib/config-manager');

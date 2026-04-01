@@ -9,15 +9,6 @@
 
 ---
 
-## Requires
-
-- ../../application/application.json
-- ../../ba/domain-brief.md
-
-## Produces
-
-- ../../ba/external-references.md
-
 ## Rules
 
 - Identify all applicable standards, regulations, and protocols for the domain (e.g. HL7, GDPR, ISO 27001, FHIR, PCI-DSS)

@@ -9,15 +9,6 @@
 
 ---
 
-## Requires
-
-- ../../application/application.json
-- ../../mde/methodology/methodology-decision.md
-
-## Produces
-
-- ../../design/architecture-decision.md
-
 ## Rules
 
 - Present at least two candidate architecture patterns relevant to the application type (e.g. monolith, microservices, event-driven, serverless)

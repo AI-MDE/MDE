@@ -1,0 +1,71 @@
+Business event:
+-----------
+An occurrence, internal or external to the organization, that changes the state of the business, creates a business need, triggers a business process, affects a business rule, or requires a business response.
+
+Key characteristics
+
+A business event is usually:
+
+observable — something happened
+business-relevant — it matters to operations, policy, compliance, customer service, finance, etc.
+state-changing or response-triggering — it causes action, decision, validation, notification, or tracking
+time-based — it occurs at a definite moment, even if its effects continue
+Typical types
+
+External business events
+
+customer submits a claim
+supplier misses a delivery
+payment is received
+regulator issues a new rule
+
+Internal business events
+
+policy is approved
+claim exceeds threshold
+contract expires
+inventory falls below minimum
+In business analysis / requirements terms
+
+In the requirements domain, a business event is important because it often:
+
+triggers a use case
+starts or advances a workflow
+invokes a business rule
+creates or updates a business record
+produces a required outcome
+Simple relation to use cases
+
+A useful way to think about it:
+
+Business event = what happened
+Use case = how the business/system responds
+
+Example:
+
+Business event: Customer submits claim
+Use case: Register and validate claim
+Distinction from related terms
+
+A business event is not the same as:
+
+business process — the sequence of activities
+business rule — the policy or condition applied
+use case — the response behavior
+data entity — the information being stored
+
+It is the triggering occurrence around which those may operate.
+
+Formal wording for your AI-MDE context
+
+You could define it this way in your method:
+
+A business event is a business-significant occurrence that triggers, modifies, or constrains business behavior and must be considered during requirements refinement because it may initiate a use case, invoke business rules, and change the state of business entities.
+
+Examples
+Customer places an order
+Invoice becomes overdue
+Loan application is rejected
+User password reset is requested
+Employee reaches approval limit
+Subscription renews automatically

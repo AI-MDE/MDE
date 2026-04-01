@@ -1,0 +1,251 @@
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" >
+<head>
+    <meta charset="utf-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" /><link rel="canonical" href="https://ai-mde.github.io/docs/configuration/" />
+      <link rel="shortcut icon" href="../img/favicon.ico" />
+    <title>Configuration - AI-MDE Docs</title>
+    <link rel="stylesheet" href="../css/theme.css" />
+    <link rel="stylesheet" href="../css/theme_extra.css" />
+        <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.8.0/styles/github.min.css" />
+    
+      <script>
+        // Current page data
+        var mkdocs_page_name = "Configuration";
+        var mkdocs_page_input_path = "configuration.md";
+        var mkdocs_page_url = "/docs/configuration/";
+      </script>
+    
+    <!--[if lt IE 9]>
+      <script src="../js/html5shiv.min.js"></script>
+    <![endif]-->
+      <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.8.0/highlight.min.js"></script>
+      <script>hljs.highlightAll();</script> 
+</head>
+
+<body class="wy-body-for-nav" role="document">
+
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side stickynav">
+    <div class="wy-side-scroll">
+      <div class="wy-side-nav-search">
+          <a href=".." class="icon icon-home"> AI-MDE Docs
+        </a><div role="search">
+  <form id ="rtd-search-form" class="wy-form" action="../search.html" method="get">
+      <input type="text" name="q" placeholder="Search docs" aria-label="Search docs" title="Type search term here" />
+  </form>
+</div>
+      </div>
+
+      <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+              <ul>
+                <li class="toctree-l1"><a class="reference internal" href="..">Home</a>
+                </li>
+              </ul>
+              <ul>
+                <li class="toctree-l1"><a class="reference internal" href="../help/install/">Install</a>
+                </li>
+              </ul>
+              <p class="caption"><span class="caption-text">Help</span></p>
+              <ul>
+                  <li class="toctree-l1"><a class="reference internal" href="../help/how-to-use-mde/">How To Use MDE</a>
+                  </li>
+                  <li class="toctree-l1"><a class="reference internal" href="../help/ai_pipeline_commands/">Pipeline Commands</a>
+                  </li>
+                  <li class="toctree-l1"><a class="reference internal" href="../help/workspace/">Workspace</a>
+                  </li>
+                  <li class="toctree-l1"><a class="reference internal" href="../help/methodology/">Methodology</a>
+                  </li>
+              </ul>
+              <ul>
+                <li class="toctree-l1"><a class="reference internal" href="../lifecycle/">Lifecycle</a>
+                </li>
+              </ul>
+              <ul class="current">
+                <li class="toctree-l1 current"><a class="reference internal current" href="./">Configuration</a>
+    <ul class="current">
+    <li class="toctree-l2"><a class="reference internal" href="#overview">Overview</a>
+    </li>
+    <li class="toctree-l2"><a class="reference internal" href="#root-configurationjson">Root configuration.json</a>
+    </li>
+    <li class="toctree-l2"><a class="reference internal" href="#metamodelappstructurejson">metaModel/appStructure.json</a>
+    </li>
+    <li class="toctree-l2"><a class="reference internal" href="#metamodeldoctypesjson">metaModel/doctypes.json</a>
+    </li>
+    <li class="toctree-l2"><a class="reference internal" href="#viewer-behavior">Viewer Behavior</a>
+    </li>
+    <li class="toctree-l2"><a class="reference internal" href="#validation">Validation</a>
+    </li>
+    <li class="toctree-l2"><a class="reference internal" href="#seed-templates">Seed Templates</a>
+    </li>
+    </ul>
+                </li>
+              </ul>
+              <p class="caption"><span class="caption-text">AI Instructions</span></p>
+              <ul>
+                  <li class="toctree-l1"><a class="reference internal" href="../ai-instructions/">Overview</a>
+                  </li>
+                  <li class="toctree-l1"><a class="reference internal" href="../ai-instructions/commands/">Commands</a>
+                  </li>
+                  <li class="toctree-l1"><a class="reference internal" href="../ai-instructions/skills/">Skills</a>
+                  </li>
+              </ul>
+              <p class="caption"><span class="caption-text">Design</span></p>
+              <ul>
+                  <li class="toctree-l1"><a class="reference internal" href="../design/system-design-process/">Process</a>
+                  </li>
+                  <li class="toctree-l1"><a class="reference internal" href="../design/use-case-mapping/">Use-Case Mapping</a>
+                  </li>
+                  <li class="toctree-l1"><a class="reference internal" href="../design/business-events/">Business Events</a>
+                  </li>
+                  <li class="toctree-l1"><a class="reference internal" href="../design/business-app-layering/">App Layering</a>
+                  </li>
+              </ul>
+              <ul>
+                <li class="toctree-l1"><a class="reference internal" href="../changes/">Changes</a>
+                </li>
+              </ul>
+      </div>
+    </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
+      <nav class="wy-nav-top" role="navigation" aria-label="Mobile navigation menu">
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="..">AI-MDE Docs</a>
+        
+      </nav>
+      <div class="wy-nav-content">
+        <div class="rst-content"><div role="navigation" aria-label="breadcrumbs navigation">
+  <ul class="wy-breadcrumbs">
+    <li><a href=".." class="icon icon-home" aria-label="Docs"></a></li>
+      <li class="breadcrumb-item active">Configuration</li>
+    <li class="wy-breadcrumbs-aside">
+          <a href="https://github.com/AI-MDE/ai-mde/edit/master/docs/configuration.md">Edit on AI-MDE/ai-mde</a>
+    </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+            <div class="section" itemprop="articleBody">
+              
+                <h1 id="configuration-specification">Configuration Specification<a class="headerlink" href="#configuration-specification" title="Permanent link">&para;</a></h1>
+<h2 id="overview">Overview<a class="headerlink" href="#overview" title="Permanent link">&para;</a></h2>
+<p>The host root <code>configuration.json</code> is a thin bootstrap config. Model structure lives in:
+- <code>metaModel/appStructure.json</code> — viewer catalog and patterns (read directly by the viewer)
+- <code>metaModel/doctypes.json</code> — doctype definitions (loaded via <code>ConfigurationManager</code>)</p>
+<h2 id="root-configurationjson">Root configuration.json<a class="headerlink" href="#root-configurationjson" title="Permanent link">&para;</a></h2>
+<p>Required metadata:
+- <code>Methodology</code>
+- <code>Project-Type</code>
+- <code>Project-Name</code>
+- <code>Description</code>
+- <code>MDT-path</code>
+- <code>Author</code>
+- <code>Version</code></p>
+<p>Required model pointer:
+- <code>metaModel.doctypes</code> (path to <code>doctypes.json</code>)</p>
+<p>Documentation-only sections (not loaded at runtime):</p>
+<p><code>meta</code> — pointers to workspace model sources:
+- <code>methodology</code> → <code>mde/methodology/methodology.json</code> (source of truth for phases and lifecycle)
+- <code>appStructure</code> → <code>metaModel/appStructure.json</code> (viewer catalog, generated from methodology)</p>
+<p><code>ai</code> — pointers to AI instruction sources:
+- <code>orchestrator</code> → <code>mde/ai-instructions/orchestrator.json</code>
+- <code>commands</code> → <code>mde/ai-instructions/commands/</code>
+- <code>skills</code> → <code>mde/ai-instructions/skills/</code></p>
+<h2 id="metamodelappstructurejson">metaModel/appStructure.json<a class="headerlink" href="#metamodelappstructurejson" title="Permanent link">&para;</a></h2>
+<p>Viewer-only config — read directly by the viewer, not merged into the config object.</p>
+<p>Contains:
+- <code>patterns</code> — filename regex patterns for doc scanning
+- <code>catalog</code> — the viewer sidebar tree (phases, groups, docs)</p>
+<p><code>catalog</code> is the viewer tree source of truth. Edit this file or regenerate with:</p>
+<pre><code class="language-powershell">node mde/scripts/generateAppStructure.js
+</code></pre>
+<h2 id="metamodeldoctypesjson">metaModel/doctypes.json<a class="headerlink" href="#metamodeldoctypesjson" title="Permanent link">&para;</a></h2>
+<p>Contains doctype definitions:
+- <code>ids</code>
+- <code>recommendedCommands</code> (exception-only; empty by default)
+- <code>template</code></p>
+<p>Rule:
+- File paths belong in <code>catalog</code>, not in doctypes.</p>
+<h2 id="viewer-behavior">Viewer Behavior<a class="headerlink" href="#viewer-behavior" title="Permanent link">&para;</a></h2>
+<p>The viewer reads:
+- <code>catalog</code> and <code>patterns</code> directly from <code>metaModel/appStructure.json</code>
+- <code>doctypes</code> from <code>doctypes.json</code> (via <code>ConfigurationManager</code>)
+- command definitions from <code>mde/ai-instructions/commands/*.json</code></p>
+<h2 id="validation">Validation<a class="headerlink" href="#validation" title="Permanent link">&para;</a></h2>
+<pre><code class="language-powershell">node .\mde\tools\validate-config.js .\configuration.json
+</code></pre>
+<pre><code class="language-powershell">node .\tests\test-web-viewer.js
+</code></pre>
+<h2 id="seed-templates">Seed Templates<a class="headerlink" href="#seed-templates" title="Permanent link">&para;</a></h2>
+<p><code>initiate_project</code> / <code>init-app</code> can seed core JSON files from:
+- <code>mde/templates/seeds/doctypes.json.tpl</code>
+- <code>mde/templates/seeds/orchestrator.json.tpl</code></p>
+<p>Templates are also available for creating new AI instruction files:
+- <code>mde/templates/seeds/command.json.tpl</code>
+- <code>mde/templates/seeds/skill.json.tpl</code>
+- <code>mde/templates/seeds/tool-command.js.tpl</code></p>
+<p>Tokens supported in seed templates:
+- <code>{{PROJECT_NAME}}</code>
+- <code>{{PROJECT_TYPE}}</code>
+- <code>{{DESCRIPTION}}</code>
+- <code>{{MDE_PATH}}</code></p>
+<p>Additional tokens for new command/skill templates:
+- <code>{{COMMAND_NAME}}</code>
+- <code>{{COMMAND_LABEL}}</code>
+- <code>{{PHASE}}</code>
+- <code>{{INTENT}}</code>
+- <code>{{AI_MODE}}</code>
+- <code>{{SKILL_NAME}}</code>
+- <code>{{SKILL_PURPOSE}}</code>
+- <code>{{NEXT_PHASE}}</code></p>
+              
+            </div>
+          </div><footer>
+    <div class="rst-footer-buttons" role="navigation" aria-label="Footer Navigation">
+        <a href="../lifecycle/" class="btn btn-neutral float-left" title="Lifecycle"><span class="icon icon-circle-arrow-left"></span> Previous</a>
+        <a href="../ai-instructions/" class="btn btn-neutral float-right" title="Overview">Next <span class="icon icon-circle-arrow-right"></span></a>
+    </div>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <!-- Copyright etc -->
+  </div>
+
+  Built with <a href="https://www.mkdocs.org/">MkDocs</a> using a <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a> provided by <a href="https://readthedocs.org">Read the Docs</a>.
+</footer>
+          
+        </div>
+      </div>
+
+    </section>
+
+  </div>
+
+  <div class="rst-versions" role="note" aria-label="Versions">
+  <span class="rst-current-version" data-toggle="rst-current-version">
+    
+    
+      <span><a href="../lifecycle/" style="color: #fcfcfc">&laquo; Previous</a></span>
+    
+    
+      <span><a href="../ai-instructions/" style="color: #fcfcfc">Next &raquo;</a></span>
+    
+  </span>
+</div>
+    <script src="../js/jquery-3.6.0.min.js"></script>
+    <script>var base_url = "..";</script>
+    <script src="../js/theme_extra.js"></script>
+    <script src="../js/theme.js"></script>
+      <script src="../search/main.js"></script>
+    <script>
+        jQuery(function () {
+            SphinxRtdTheme.Navigation.enable(true);
+        });
+    </script>
+
+</body>
+</html>

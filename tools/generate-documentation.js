@@ -1,4 +1,7 @@
 #!/usr/bin/env node
+/**
+ * Purpose: Generates project documentation outputs from BA/design/development artifacts.
+ */
 const path = require('path');
 const { ConfigurationManager } = require('./lib/config-manager');
 const argv = process.argv.slice(2);

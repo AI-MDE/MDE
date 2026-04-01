@@ -17,19 +17,6 @@ Generate business capabilities/functions from requirements as a precursor to use
 - Use-case generation should be grounded in business functions
 - Need standardized function catalog for downstream traceability
 
-### Required
-
-- ../../ba/requirements.md
-
-### Optional
-
-- ../../ba/business-functions.json
-- ../../project/project-state.json
-
-## Outputs
-
-- ../../ba/business-functions.json
-
 ## Methodology
 
 - Extract top-level capabilities from requirements baseline.

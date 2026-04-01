@@ -1,0 +1,44 @@
+{
+  "name": "refine_business_requirements",
+  "label": "Refine Business Requirements",
+  "phase": "business_analysis",
+  "intent": "generate",
+  "ai": "required",
+  "calls": [
+    "ba/business_analysis_from_sources",
+    "ba/business_function_generation",
+    "ba/use_case_generation",
+    "ba/logical_data_model",
+    "ba/requirements_validation",
+    "ba/glossary_generation"
+    ],
+  "requires": {
+    "requirements": {
+      "from": "config.ba.requirements",
+      "default": "ba/"
+    }
+  },
+  "produces": {
+    "businessFunctions": {
+      "from": "config.ba.businessFunctions",
+      "default": "ba/business-functions.json"
+    },
+    "changeRequestAiResponse": {
+      "default": "project/change-requests/{request-slug}/ai/02-refine-business-requirements.md"
+    },
+    "changeRequestDocChanges": {
+      "default": "project/change-requests/{request-slug}/changes/doc-changes.md"
+    }
+  },
+  "tools": [
+    "file_manager"
+  ],
+  "rules": [
+    "Generate capability/function hierarchy before detailed use-case generation.",
+    "Include function id, name, description, and outcomes.",
+    "AI drafts first, then persist normalized JSON output.",
+    "When executed for a change request, consume the latest change impact report before updating BA artifacts.",
+    "In change-request mode, this command must run after evaluate_change_request and before elaborate_system_design.",
+    "In change-request mode, write command response to ai/02-refine-business-requirements.md and append impacted BA/doc files to changes/doc-changes.md."
+  ]
+}

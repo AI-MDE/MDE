@@ -13,18 +13,6 @@
 
 - source_code_generation
 
-## Requires
-
-- ../../design/modules/<type>/<module>/schema.json
-- ../../design/modules/<type>/<module>/rules.json
-- ../../design/modules/<type>/<module>/state-machine.json
-- ../../design/modules/<type>/<module>/api.yaml
-
-## Produces
-
-- ../../src/<layer>/**/*.ts
-- generated-manifest.json
-
 ## Tools
 
 - file_manager
@@ -33,3 +21,4 @@
 
 - Generate code from module specs
 - Respect architecture layer rules
+- Generated methods in controller/service/domain/query_service/data_access layers must include method-level traceability docs with @requirement and @design_concern tags

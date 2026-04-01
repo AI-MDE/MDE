@@ -19,6 +19,10 @@
     "diagrams": {
       "to": "config.output.docs",
       "pattern": "diagrams/*.md"
+    },
+    "moduleInteractionDiagram": {
+      "to": "config.output.docs",
+      "pattern": "diagrams/module-interaction-by-name.md"
     }
   },
   "artifacts": [
@@ -29,6 +33,8 @@
   ],
   "rules": [
     "Render LDM, architecture, interaction, and dataflow diagrams",
+    "Render a dedicated module interaction diagram using module names as nodes and labels",
+    "Derive module-to-module links from canonical architecture and module catalog dependencies",
     "Use canonical sources as inputs"
   ],
   "uses_tools": [

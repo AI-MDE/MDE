@@ -1,0 +1,36 @@
+site_name: AI-MDE Docs
+site_url: https://ai-mde.github.io/docs/
+repo_url: https://github.com/AI-MDE/ai-mde
+repo_name: AI-MDE/ai-mde
+docs_dir: .
+site_dir: ../site/docs
+use_directory_urls: true
+
+theme:
+  name: readthedocs
+
+nav:
+  - Home: index.md
+  - Install: help/install.md
+  - Help:
+      - How To Use MDE: help/how-to-use-mde.md
+      - Pipeline Commands: help/ai_pipeline_commands.md
+      - Workspace: help/workspace.md
+      - Methodology: help/methodology.md
+  - Lifecycle: lifecycle.md
+  - Configuration: configuration.md
+  - AI Instructions:
+      - Overview: ai-instructions/index.md
+      - Commands: ai-instructions/commands/index.md
+      - Skills: ai-instructions/skills/index.md
+  - Design:
+      - Process: design/system-design-process.md
+      - Use-Case Mapping: design/use-case-mapping.md
+      - Business Events: design/business-events.md
+      - App Layering: design/business-app-layering.md
+  - Changes: changes.md
+
+markdown_extensions:
+  - admonition
+  - toc:
+      permalink: true

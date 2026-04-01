@@ -1,0 +1,42 @@
+{
+  "name": "generate_source_code",
+  "label": "Generate Source Code",
+  "phase": "development",
+  "intent": "generate",
+  "ai": "required",
+  "requires": {
+    "moduleDefinitions": {
+      "from": "config.design.modules",
+      "default": "design/modules/**/*.json"
+    }
+  },
+  "requires_note": "Each module is a consolidated JSON file containing schema, rules, state machine, and API inline. Split-file format (schema.json, rules.json, etc.) is not used.",
+  "produces": {
+    "src": {
+      "to": "config.output.src",
+      "pattern": "{module}/**/*.ts"
+    },
+    "manifest": {
+      "from": "config.output.manifest",
+      "default": "generated-manifest.json"
+    },
+    "changeRequestAiResponse": {
+      "default": "project/change-requests/{request-slug}/ai/07-generate-source-code.md"
+    },
+    "changeRequestCodeChanges": {
+      "default": "project/change-requests/{request-slug}/changes/code-changes.md"
+    }
+  },
+  "calls": [
+    "dev/source_code_generation"
+  ],
+  "tools": [
+    "file_manager"
+  ],
+  "rules": [
+    "Generate code from module specs",
+    "Respect architecture layer rules",
+    "Generated methods in controller/service/domain/query_service/data_access layers must include method-level traceability docs with @requirement and @design_concern tags",
+    "In change-request mode, write command response to ai/07-generate-source-code.md and append all modified source/test files to changes/code-changes.md."
+  ]
+}

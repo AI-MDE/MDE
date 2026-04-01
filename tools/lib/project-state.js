@@ -1,3 +1,6 @@
+/**
+ * Purpose: Provides helpers to read/update project state and command-log artifacts consistently.
+ */
 const fs = require('fs');
 const path = require('path');
 

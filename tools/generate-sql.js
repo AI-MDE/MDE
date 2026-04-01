@@ -1,5 +1,8 @@
 #!/usr/bin/env node
 /**
+ * Purpose: Generates SQL DDL and schema state snapshots (and alters on subsequent runs) from entity definitions.
+ */
+/**
  * Generate PostgreSQL DDL from entity JSON files.
  *
  * First run  → writes SQL/schema.sql + SQL/schema-state.json

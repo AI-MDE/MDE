@@ -13,14 +13,6 @@
 
 - diagram_generation
 
-## Requires
-
-- ../../ba/data-model/logical-data-model.json
-
-## Produces
-
-- ../../output/docs/diagrams/erd.md
-
 ## Tools
 
 - file_manager

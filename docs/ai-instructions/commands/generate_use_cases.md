@@ -14,15 +14,6 @@
 
 Delegates to skill: `use_case_generation`
 
-## Requires
-
-- ../../ba/requirements.md
-- ../../ba/business-functions.json
-
-## Produces
-
-- ../../ba/use-cases/uc-*.md
-
 ## Tools
 
 - file_manager

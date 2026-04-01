@@ -1,4 +1,7 @@
 #!/usr/bin/env node
+/**
+ * Purpose: Generates per-module specification artifacts from catalog and design inputs.
+ */
 const fs = require('fs');
 const path = require('path');
 const argv = process.argv.slice(2);

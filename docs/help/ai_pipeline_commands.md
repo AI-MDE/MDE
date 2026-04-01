@@ -1,52 +1,16 @@
-﻿# AI-Driven Development Pipeline â€” Commands, Skills, MCP
+﻿# AI-Driven Pipeline — Architecture Reference
 
-## Overview
-
-This document captures the design for building a multi-phase AI-driven software engineering system using:
-
-- Skills (AI reasoning units)
-- MCP Tools (execution & validation)
-- Command Layer (user-driven workflow)
-
----
-
-## Core Insight
-
-This is NOT a chatbot.
-
-This is a:
-
-**Command-driven AI engineering workbench**
+MDE is a command-driven, AI-orchestrated engineering system — not a chatbot. See [How to Use MDE](./how-to-use-mde.md) for the user guide and [Lifecycle](../lifecycle.md) for the phase diagram.
 
 ---
 
 ## Architecture Layers
 
-### Streamlined Commands:
-┌────────────────────────────────────────────────────────────┐
-│                EXECUTION PIPELINE (AI-MDE)                 │
-│                                                            │
-│   1. refine-business-requirements                          │
-│        ↓                                                   │
-│   2. elaborate-system-design                               │
-│        ↓                                                   │
-│   3. generate-source-code                                  │
-│        ↓                                                   │
-│   4. package-application                                   │
-│        ↓                                                   │
-│   5. deploy-and-test                                       │
-│                                                            │
-└────────────────────────────────────────────────────────────┘
-
-These are NOT prompts â€” they are structured commands.
-
----
-
-### 2. Orchestrator
+### 1. Orchestrator
 
 Responsible for:
 
-- Mapping user command â†’ internal command
+- Mapping user command → internal command
 - Checking prerequisites
 - Calling skills
 - Invoking MCP tools
@@ -55,7 +19,7 @@ Responsible for:
 
 ---
 
-### 3. Skills (AI Reasoning)
+### 2. Skills (AI Reasoning)
 
 Examples:
 
@@ -73,7 +37,7 @@ Responsibilities:
 
 ---
 
-### 4. MCP Tools (Execution Layer)
+### 3. MCP Tools (Execution Layer)
 
 Examples:
 
@@ -154,61 +118,6 @@ Define all commands in:
 
 ---
 
-## Example Flow
-
-User:
-> Validate Requirements
-
-Orchestrator:
-1. Resolve command
-2. Check requirements exist
-3. Call validation skill
-4. Run json_validator
-5. Generate report
-
----
-
-User:
-> Build System Design
-
-Orchestrator:
-1. Check requirements complete
-2. Call system_design skill
-3. Generate architecture.json / architecture.json
-
----
-
-User:
-> Generate LDM
-
-Orchestrator:
-1. Check architecture exists
-2. Call LDM skill
-3. Generate data model artifacts
-
----
-
-## Project State Tracking
-
-File: `project-state.json`
-
-```json
-{
-  "current_phase": "system_design",
-  "completed_commands": [
-    "validate_requirements",
-    "build_system_design"
-  ],
-  "artifacts": {
-    "requirements": "complete",
-    "architecture": "complete",
-    "ldm": "missing"
-  }
-}
-```
-
----
-
 ## Key Design Principles
 
 ### 1. Commands are first-class
@@ -254,17 +163,4 @@ An important consideration of AI is to minimize tokens sent and received through
         
 
 ---
-
-## Final Insight
-
-This system becomes:
-
-> **AI-Orchestrated Model-Driven Engineering Platform**
-
-Not:
-- a chatbot
-- not just prompts
-- not just tools
-
-But a structured, controllable, extensible engineering system.
 

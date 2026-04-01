@@ -1,5 +1,8 @@
 #!/usr/bin/env node
 /**
+ * Purpose: Legacy compatibility entry point that forwards project initialization behavior.
+ */
+/**
  * Legacy compatibility entry point for project initialization.
  *
  * Preferred command:

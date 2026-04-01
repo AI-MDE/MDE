@@ -11,21 +11,12 @@
 
 Generate a logical data model grounded in requirements, glossary, and architecture
 
-## Inputs
-
-- ../../ba/requirements.md
-- ../../ba/glossary.md
-- ../../design/application_architecture.json
-
-## Outputs
-
-- ../../ba/data-model/logical-data-model.json
-
 ## Rules
 
 - Use business vocabulary
 - Separate conceptual entities from physical implementation
 - Record ownership and relationships explicitly
+- For each business-state entity, require lifecycle attribution fields (createdAt, createdByUserId, updatedAt, updatedByUserId). Keep decision actor attribution in immutable audit/history entries and do not add decision-specific actor columns on master entities.
 
 ## Tools Used
 

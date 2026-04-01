@@ -1,0 +1,329 @@
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" >
+<head>
+    <meta charset="utf-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" /><link rel="canonical" href="https://ai-mde.github.io/docs/UUID_GENERATION_SPEC/" />
+      <link rel="shortcut icon" href="../img/favicon.ico" />
+    <title>UUID Generation Specification - AI-MDE Docs</title>
+    <link rel="stylesheet" href="../css/theme.css" />
+    <link rel="stylesheet" href="../css/theme_extra.css" />
+        <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.8.0/styles/github.min.css" />
+    
+      <script>
+        // Current page data
+        var mkdocs_page_name = "UUID Generation Specification";
+        var mkdocs_page_input_path = "UUID_GENERATION_SPEC.md";
+        var mkdocs_page_url = "/docs/UUID_GENERATION_SPEC/";
+      </script>
+    
+    <!--[if lt IE 9]>
+      <script src="../js/html5shiv.min.js"></script>
+    <![endif]-->
+      <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.8.0/highlight.min.js"></script>
+      <script>hljs.highlightAll();</script> 
+</head>
+
+<body class="wy-body-for-nav" role="document">
+
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side stickynav">
+    <div class="wy-side-scroll">
+      <div class="wy-side-nav-search">
+          <a href=".." class="icon icon-home"> AI-MDE Docs
+        </a><div role="search">
+  <form id ="rtd-search-form" class="wy-form" action="../search.html" method="get">
+      <input type="text" name="q" placeholder="Search docs" aria-label="Search docs" title="Type search term here" />
+  </form>
+</div>
+      </div>
+
+      <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+              <ul>
+                <li class="toctree-l1"><a class="reference internal" href="..">Home</a>
+                </li>
+              </ul>
+              <ul>
+                <li class="toctree-l1"><a class="reference internal" href="../help/install/">Install</a>
+                </li>
+              </ul>
+              <p class="caption"><span class="caption-text">Help</span></p>
+              <ul>
+                  <li class="toctree-l1"><a class="reference internal" href="../help/how-to-use-mde/">How To Use MDE</a>
+                  </li>
+                  <li class="toctree-l1"><a class="reference internal" href="../help/ai_pipeline_commands/">Pipeline Commands</a>
+                  </li>
+                  <li class="toctree-l1"><a class="reference internal" href="../help/workspace/">Workspace</a>
+                  </li>
+                  <li class="toctree-l1"><a class="reference internal" href="../help/methodology/">Methodology</a>
+                  </li>
+              </ul>
+              <ul>
+                <li class="toctree-l1"><a class="reference internal" href="../lifecycle/">Lifecycle</a>
+                </li>
+              </ul>
+              <ul>
+                <li class="toctree-l1"><a class="reference internal" href="../configuration/">Configuration</a>
+                </li>
+              </ul>
+              <p class="caption"><span class="caption-text">AI Instructions</span></p>
+              <ul>
+                  <li class="toctree-l1"><a class="reference internal" href="../ai-instructions/">Overview</a>
+                  </li>
+                  <li class="toctree-l1"><a class="reference internal" href="../ai-instructions/commands/">Commands</a>
+                  </li>
+                  <li class="toctree-l1"><a class="reference internal" href="../ai-instructions/skills/">Skills</a>
+                  </li>
+              </ul>
+              <p class="caption"><span class="caption-text">Design</span></p>
+              <ul>
+                  <li class="toctree-l1"><a class="reference internal" href="../design/system-design-process/">Process</a>
+                  </li>
+                  <li class="toctree-l1"><a class="reference internal" href="../design/use-case-mapping/">Use-Case Mapping</a>
+                  </li>
+                  <li class="toctree-l1"><a class="reference internal" href="../design/business-events/">Business Events</a>
+                  </li>
+                  <li class="toctree-l1"><a class="reference internal" href="../design/business-app-layering/">App Layering</a>
+                  </li>
+              </ul>
+              <ul>
+                <li class="toctree-l1"><a class="reference internal" href="../changes/">Changes</a>
+                </li>
+              </ul>
+      </div>
+    </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
+      <nav class="wy-nav-top" role="navigation" aria-label="Mobile navigation menu">
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="..">AI-MDE Docs</a>
+        
+      </nav>
+      <div class="wy-nav-content">
+        <div class="rst-content"><div role="navigation" aria-label="breadcrumbs navigation">
+  <ul class="wy-breadcrumbs">
+    <li><a href=".." class="icon icon-home" aria-label="Docs"></a></li>
+      <li class="breadcrumb-item active">UUID Generation Specification</li>
+    <li class="wy-breadcrumbs-aside">
+          <a href="https://github.com/AI-MDE/ai-mde/edit/master/docs/UUID_GENERATION_SPEC.md">Edit on AI-MDE/ai-mde</a>
+    </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+            <div class="section" itemprop="articleBody">
+              
+                <h1 id="uuid-generation-specification">UUID Generation Specification<a class="headerlink" href="#uuid-generation-specification" title="Permanent link">&para;</a></h1>
+<h2 id="overview">Overview<a class="headerlink" href="#overview" title="Permanent link">&para;</a></h2>
+<p>All ID fields in sample data must use <strong>RFC 4122 v4 UUIDs</strong>, not placeholder or sequential formats.</p>
+<h2 id="format-requirements">Format Requirements<a class="headerlink" href="#format-requirements" title="Permanent link">&para;</a></h2>
+<h3 id="valid-uuid-format">Valid UUID Format<a class="headerlink" href="#valid-uuid-format" title="Permanent link">&para;</a></h3>
+<pre><code>xxxxxxxx-xxxx-4xxx-yxxx-xxxxxxxxxxxx
+
+Examples:
+- 550e8400-e29b-41d4-a716-446655440001
+- 660e8400-e29b-41d4-a716-446655440002
+- 880e8400-e29b-41d4-a716-446655440007
+</code></pre>
+<h3 id="invalid-formats-do-not-use">Invalid Formats (DO NOT USE)<a class="headerlink" href="#invalid-formats-do-not-use" title="Permanent link">&para;</a></h3>
+<pre><code>❌ emp-00000001-0000-0000-0000-000000000001  (placeholder with entity prefix)
+❌ lt-00000001-0000-0000-0000-000000000001   (placeholder with entity prefix)
+❌ lr-00000001-0000-0000-0000-000000000001   (placeholder with entity prefix)
+❌ 1, 2, 3, 4...                            (sequential integers)
+❌ auto-generated                            (non-UUID text)
+</code></pre>
+<h2 id="deterministic-uuid-generation-strategy">Deterministic UUID Generation Strategy<a class="headerlink" href="#deterministic-uuid-generation-strategy" title="Permanent link">&para;</a></h2>
+<p>When generating sample data, use a <strong>deterministic seed approach</strong> to ensure UUIDs are reproducible:</p>
+<h3 id="entity-type-prefixes-deterministic-first-octet">Entity Type Prefixes (Deterministic First Octet)<a class="headerlink" href="#entity-type-prefixes-deterministic-first-octet" title="Permanent link">&para;</a></h3>
+<p>Map each entity type to a unique UUID prefix:</p>
+<table>
+<thead>
+<tr>
+<th>Entity Type</th>
+<th>First Octet</th>
+<th>Example UUIDs</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>employees</td>
+<td>550e8400</td>
+<td>550e8400-e29b-41d4-a716-446655440001</td>
+</tr>
+<tr>
+<td>leave_types</td>
+<td>660e8400</td>
+<td>660e8400-e29b-41d4-a716-446655440001</td>
+</tr>
+<tr>
+<td>leave_balances</td>
+<td>770e8400</td>
+<td>770e8400-e29b-41d4-a716-446655440001</td>
+</tr>
+<tr>
+<td>leave_requests</td>
+<td>880e8400</td>
+<td>880e8400-e29b-41d4-a716-446655440001</td>
+</tr>
+<tr>
+<td>leave_audit_entries</td>
+<td>990e8400</td>
+<td>990e8400-e29b-41d4-a716-446655440001</td>
+</tr>
+<tr>
+<td>notifications</td>
+<td>aa0e8400</td>
+<td>aa0e8400-e29b-41d4-a716-446655440001</td>
+</tr>
+</tbody>
+</table>
+<h3 id="sequence-pattern">Sequence Pattern<a class="headerlink" href="#sequence-pattern" title="Permanent link">&para;</a></h3>
+<p>For each entity instance, increment the last octets:</p>
+<pre><code>Entity: employees
+Records: 5
+
+Employee 1: 550e8400-e29b-41d4-a716-446655440001
+Employee 2: 550e8400-e29b-41d4-a716-446655440002
+Employee 3: 550e8400-e29b-41d4-a716-446655440003
+Employee 4: 550e8400-e29b-41d4-a716-446655440004
+Employee 5: 550e8400-e29b-41d4-a716-446655440005
+</code></pre>
+<h2 id="implementation-in-code">Implementation in Code<a class="headerlink" href="#implementation-in-code" title="Permanent link">&para;</a></h2>
+<h3 id="nodejs-using-uuid-package">Node.js (using uuid package)<a class="headerlink" href="#nodejs-using-uuid-package" title="Permanent link">&para;</a></h3>
+<pre><code class="language-javascript">const { v4: uuidv4 } = require('uuid');
+
+// Generate random v4 UUIDs
+const randomId = uuidv4();  // e.g., &quot;f47ac10b-58cc-4372-a567-0e02b2c3d479&quot;
+
+// For deterministic UUIDs, use namespace (v3) or custom seeding
+function generateDeterministicUUID(entityType, sequence) {
+  // Map entity type to prefix
+  const prefixes = {
+    'employees': '550e8400',
+    'leave_types': '660e8400',
+    'leave_balances': '770e8400',
+    'leave_requests': '880e8400',
+    'leave_audit_entries': '990e8400',
+    'notifications': 'aa0e8400'
+  };
+
+  const prefix = prefixes[entityType];
+  const paddedSequence = String(sequence).padStart(10, '0');
+
+  return `${prefix}-e29b-41d4-a716-${paddedSequence}`;
+}
+
+// Usage
+const emp1 = generateDeterministicUUID('employees', 1);
+// Result: &quot;550e8400-e29b-41d4-a716-0000000001&quot;
+</code></pre>
+<h3 id="python-alternative">Python (Alternative)<a class="headerlink" href="#python-alternative" title="Permanent link">&para;</a></h3>
+<pre><code class="language-python">import uuid
+
+# Random v4 UUID
+random_id = str(uuid.uuid4())  # e.g., &quot;f47ac10b-58cc-4372-a567-0e02b2c3d479&quot;
+
+# Deterministic UUID generation
+def generate_deterministic_uuid(entity_type: str, sequence: int) -&gt; str:
+    prefixes = {
+        'employees': '550e8400',
+        'leave_types': '660e8400',
+        'leave_balances': '770e8400',
+        'leave_requests': '880e8400',
+        'leave_audit_entries': '990e8400',
+        'notifications': 'aa0e8400'
+    }
+
+    prefix = prefixes[entity_type]
+    padded_seq = str(sequence).zfill(10)
+    return f&quot;{prefix}-e29b-41d4-a716-{padded_seq}&quot;
+
+# Usage
+emp1 = generate_deterministic_uuid('employees', 1)
+# Result: &quot;550e8400-e29b-41d4-a716-0000000001&quot;
+</code></pre>
+<h2 id="referential-integrity-rules">Referential Integrity Rules<a class="headerlink" href="#referential-integrity-rules" title="Permanent link">&para;</a></h2>
+<p>When one entity references another:</p>
+<pre><code class="language-json">{
+  &quot;id&quot;: &quot;880e8400-e29b-41d4-a716-446655440001&quot;,
+  &quot;employee_id&quot;: &quot;550e8400-e29b-41d4-a716-446655440003&quot;,
+  &quot;leave_type_id&quot;: &quot;660e8400-e29b-41d4-a716-446655440001&quot;
+}
+</code></pre>
+<p><strong>CRITICAL</strong>: The referenced IDs MUST match exactly the IDs in the referenced entity's data file:</p>
+<pre><code class="language-json">// employees.json
+{ &quot;id&quot;: &quot;550e8400-e29b-41d4-a716-446655440003&quot;, ... }
+
+// leave_types.json
+{ &quot;id&quot;: &quot;660e8400-e29b-41d4-a716-446655440001&quot;, ... }
+</code></pre>
+<h2 id="database-validation">Database Validation<a class="headerlink" href="#database-validation" title="Permanent link">&para;</a></h2>
+<p>PostgreSQL will validate UUID format on INSERT:</p>
+<pre><code class="language-sql">-- This works (valid RFC 4122 v4 UUID)
+INSERT INTO employees (id, name) 
+VALUES ('550e8400-e29b-41d4-a716-446655440001', 'John Doe');
+
+-- This FAILS (invalid format)
+INSERT INTO employees (id, name) 
+VALUES ('emp-00000001-0000-0000-0000-000000000001', 'John Doe');
+-- ERROR: invalid input syntax for type uuid
+</code></pre>
+<h2 id="checklist-for-data-generation-scripts">Checklist for Data Generation Scripts<a class="headerlink" href="#checklist-for-data-generation-scripts" title="Permanent link">&para;</a></h2>
+<p>When implementing sample data generation:</p>
+<ul>
+<li>[ ] All ID fields use RFC 4122 v4 UUID format</li>
+<li>[ ] UUID generation is deterministic per entity type</li>
+<li>[ ] Each entity type gets a unique first octet prefix</li>
+<li>[ ] Foreign key references use matching UUIDs from source entities</li>
+<li>[ ] All UUIDs are valid and conform to RFC 4122</li>
+<li>[ ] Loading script uses parameterized queries</li>
+<li>[ ] Loading script verifies referential integrity before INSERT</li>
+<li>[ ] Database constraints validated after load</li>
+</ul>
+<h2 id="references">References<a class="headerlink" href="#references" title="Permanent link">&para;</a></h2>
+<ul>
+<li><a href="https://tools.ietf.org/html/rfc4122">RFC 4122 - UUID Specification</a></li>
+<li><a href="https://www.npmjs.com/package/uuid">Node.js uuid Package</a></li>
+<li><a href="https://www.postgresql.org/docs/current/datatype-uuid.html">PostgreSQL UUID Type</a></li>
+</ul>
+              
+            </div>
+          </div><footer>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <!-- Copyright etc -->
+  </div>
+
+  Built with <a href="https://www.mkdocs.org/">MkDocs</a> using a <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a> provided by <a href="https://readthedocs.org">Read the Docs</a>.
+</footer>
+          
+        </div>
+      </div>
+
+    </section>
+
+  </div>
+
+  <div class="rst-versions" role="note" aria-label="Versions">
+  <span class="rst-current-version" data-toggle="rst-current-version">
+    
+    
+    
+  </span>
+</div>
+    <script src="../js/jquery-3.6.0.min.js"></script>
+    <script>var base_url = "..";</script>
+    <script src="../js/theme_extra.js"></script>
+    <script src="../js/theme.js"></script>
+      <script src="../search/main.js"></script>
+    <script>
+        jQuery(function () {
+            SphinxRtdTheme.Navigation.enable(true);
+        });
+    </script>
+
+</body>
+</html>

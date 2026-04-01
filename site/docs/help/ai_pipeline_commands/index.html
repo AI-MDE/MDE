@@ -1,0 +1,449 @@
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" >
+<head>
+    <meta charset="utf-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" /><link rel="canonical" href="https://ai-mde.github.io/docs/help/ai_pipeline_commands/" />
+      <link rel="shortcut icon" href="../../img/favicon.ico" />
+    <title>Pipeline Commands - AI-MDE Docs</title>
+    <link rel="stylesheet" href="../../css/theme.css" />
+    <link rel="stylesheet" href="../../css/theme_extra.css" />
+        <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.8.0/styles/github.min.css" />
+    
+      <script>
+        // Current page data
+        var mkdocs_page_name = "Pipeline Commands";
+        var mkdocs_page_input_path = "help\\ai_pipeline_commands.md";
+        var mkdocs_page_url = "/docs/help/ai_pipeline_commands/";
+      </script>
+    
+    <!--[if lt IE 9]>
+      <script src="../../js/html5shiv.min.js"></script>
+    <![endif]-->
+      <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.8.0/highlight.min.js"></script>
+      <script>hljs.highlightAll();</script> 
+</head>
+
+<body class="wy-body-for-nav" role="document">
+
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side stickynav">
+    <div class="wy-side-scroll">
+      <div class="wy-side-nav-search">
+          <a href="../.." class="icon icon-home"> AI-MDE Docs
+        </a><div role="search">
+  <form id ="rtd-search-form" class="wy-form" action="../../search.html" method="get">
+      <input type="text" name="q" placeholder="Search docs" aria-label="Search docs" title="Type search term here" />
+  </form>
+</div>
+      </div>
+
+      <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+              <ul>
+                <li class="toctree-l1"><a class="reference internal" href="../..">Home</a>
+                </li>
+              </ul>
+              <ul>
+                <li class="toctree-l1"><a class="reference internal" href="../install/">Install</a>
+                </li>
+              </ul>
+              <p class="caption"><span class="caption-text">Help</span></p>
+              <ul class="current">
+                  <li class="toctree-l1"><a class="reference internal" href="../how-to-use-mde/">How To Use MDE</a>
+                  </li>
+                  <li class="toctree-l1 current"><a class="reference internal current" href="./">Pipeline Commands</a>
+    <ul class="current">
+    <li class="toctree-l2"><a class="reference internal" href="#overview">Overview</a>
+    </li>
+    <li class="toctree-l2"><a class="reference internal" href="#core-insight">Core Insight</a>
+    </li>
+    <li class="toctree-l2"><a class="reference internal" href="#architecture-layers">Architecture Layers</a>
+        <ul>
+    <li class="toctree-l3"><a class="reference internal" href="#streamlined-commands">Streamlined Commands:</a>
+    </li>
+    <li class="toctree-l3"><a class="reference internal" href="#2-orchestrator">2. Orchestrator</a>
+    </li>
+    <li class="toctree-l3"><a class="reference internal" href="#3-skills-ai-reasoning">3. Skills (AI Reasoning)</a>
+    </li>
+    <li class="toctree-l3"><a class="reference internal" href="#4-mcp-tools-execution-layer">4. MCP Tools (Execution Layer)</a>
+    </li>
+        </ul>
+    </li>
+    <li class="toctree-l2"><a class="reference internal" href="#command-registry">Command Registry</a>
+    </li>
+    <li class="toctree-l2"><a class="reference internal" href="#command-schema">Command Schema</a>
+    </li>
+    <li class="toctree-l2"><a class="reference internal" href="#command-categories">Command Categories</a>
+        <ul>
+    <li class="toctree-l3"><a class="reference internal" href="#validation">Validation</a>
+    </li>
+    <li class="toctree-l3"><a class="reference internal" href="#generation">Generation</a>
+    </li>
+    <li class="toctree-l3"><a class="reference internal" href="#refinement">Refinement</a>
+    </li>
+    <li class="toctree-l3"><a class="reference internal" href="#governance">Governance</a>
+    </li>
+        </ul>
+    </li>
+    <li class="toctree-l2"><a class="reference internal" href="#example-flow">Example Flow</a>
+    </li>
+    <li class="toctree-l2"><a class="reference internal" href="#project-state-tracking">Project State Tracking</a>
+    </li>
+    <li class="toctree-l2"><a class="reference internal" href="#key-design-principles">Key Design Principles</a>
+        <ul>
+    <li class="toctree-l3"><a class="reference internal" href="#1-commands-are-first-class">1. Commands are first-class</a>
+    </li>
+    <li class="toctree-l3"><a class="reference internal" href="#2-skills-do-thinking">2. Skills do thinking</a>
+    </li>
+    <li class="toctree-l3"><a class="reference internal" href="#3-mcp-tools-enforce-reality">3. MCP tools enforce reality</a>
+    </li>
+    <li class="toctree-l3"><a class="reference internal" href="#4-orchestrator-controls-flow">4. Orchestrator controls flow</a>
+    </li>
+    <li class="toctree-l3"><a class="reference internal" href="#5-optimize-for-performance-of-ai">5. Optimize for performance of AI</a>
+    </li>
+        </ul>
+    </li>
+    <li class="toctree-l2"><a class="reference internal" href="#final-insight">Final Insight</a>
+    </li>
+    </ul>
+                  </li>
+                  <li class="toctree-l1"><a class="reference internal" href="../workspace/">Workspace</a>
+                  </li>
+                  <li class="toctree-l1"><a class="reference internal" href="../methodology/">Methodology</a>
+                  </li>
+              </ul>
+              <ul>
+                <li class="toctree-l1"><a class="reference internal" href="../../lifecycle/">Lifecycle</a>
+                </li>
+              </ul>
+              <ul>
+                <li class="toctree-l1"><a class="reference internal" href="../../configuration/">Configuration</a>
+                </li>
+              </ul>
+              <p class="caption"><span class="caption-text">AI Instructions</span></p>
+              <ul>
+                  <li class="toctree-l1"><a class="reference internal" href="../../ai-instructions/">Overview</a>
+                  </li>
+                  <li class="toctree-l1"><a class="reference internal" href="../../ai-instructions/commands/">Commands</a>
+                  </li>
+                  <li class="toctree-l1"><a class="reference internal" href="../../ai-instructions/skills/">Skills</a>
+                  </li>
+              </ul>
+              <p class="caption"><span class="caption-text">Design</span></p>
+              <ul>
+                  <li class="toctree-l1"><a class="reference internal" href="../../design/system-design-process/">Process</a>
+                  </li>
+                  <li class="toctree-l1"><a class="reference internal" href="../../design/use-case-mapping/">Use-Case Mapping</a>
+                  </li>
+                  <li class="toctree-l1"><a class="reference internal" href="../../design/business-events/">Business Events</a>
+                  </li>
+                  <li class="toctree-l1"><a class="reference internal" href="../../design/business-app-layering/">App Layering</a>
+                  </li>
+              </ul>
+              <ul>
+                <li class="toctree-l1"><a class="reference internal" href="../../changes/">Changes</a>
+                </li>
+              </ul>
+      </div>
+    </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
+      <nav class="wy-nav-top" role="navigation" aria-label="Mobile navigation menu">
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../..">AI-MDE Docs</a>
+        
+      </nav>
+      <div class="wy-nav-content">
+        <div class="rst-content"><div role="navigation" aria-label="breadcrumbs navigation">
+  <ul class="wy-breadcrumbs">
+    <li><a href="../.." class="icon icon-home" aria-label="Docs"></a></li>
+          <li class="breadcrumb-item">Help</li>
+      <li class="breadcrumb-item active">Pipeline Commands</li>
+    <li class="wy-breadcrumbs-aside">
+          <a href="https://github.com/AI-MDE/ai-mde/edit/master/docs/help/ai_pipeline_commands.md">Edit on AI-MDE/ai-mde</a>
+    </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+            <div class="section" itemprop="articleBody">
+              
+                <h1 id="ai-driven-development-pipeline-a-commands-skills-mcp">AI-Driven Development Pipeline â€” Commands, Skills, MCP<a class="headerlink" href="#ai-driven-development-pipeline-a-commands-skills-mcp" title="Permanent link">&para;</a></h1>
+<h2 id="overview">Overview<a class="headerlink" href="#overview" title="Permanent link">&para;</a></h2>
+<p>This document captures the design for building a multi-phase AI-driven software engineering system using:</p>
+<ul>
+<li>Skills (AI reasoning units)</li>
+<li>MCP Tools (execution &amp; validation)</li>
+<li>Command Layer (user-driven workflow)</li>
+</ul>
+<hr />
+<h2 id="core-insight">Core Insight<a class="headerlink" href="#core-insight" title="Permanent link">&para;</a></h2>
+<p>This is NOT a chatbot.</p>
+<p>This is a:</p>
+<p><strong>Command-driven AI engineering workbench</strong></p>
+<hr />
+<h2 id="architecture-layers">Architecture Layers<a class="headerlink" href="#architecture-layers" title="Permanent link">&para;</a></h2>
+<h3 id="streamlined-commands">Streamlined Commands:<a class="headerlink" href="#streamlined-commands" title="Permanent link">&para;</a></h3>
+<p>┌────────────────────────────────────────────────────────────┐
+│                EXECUTION PIPELINE (AI-MDE)                 │
+│                                                            │
+│   1. refine-business-requirements                          │
+│        ↓                                                   │
+│   2. elaborate-system-design                               │
+│        ↓                                                   │
+│   3. generate-source-code                                  │
+│        ↓                                                   │
+│   4. package-application                                   │
+│        ↓                                                   │
+│   5. deploy-and-test                                       │
+│                                                            │
+└────────────────────────────────────────────────────────────┘</p>
+<p>These are NOT prompts â€” they are structured commands.</p>
+<hr />
+<h3 id="2-orchestrator">2. Orchestrator<a class="headerlink" href="#2-orchestrator" title="Permanent link">&para;</a></h3>
+<p>Responsible for:</p>
+<ul>
+<li>Mapping user command â†’ internal command</li>
+<li>Checking prerequisites</li>
+<li>Calling skills</li>
+<li>Invoking MCP tools</li>
+<li>Writing artifacts</li>
+<li>Updating project state</li>
+</ul>
+<hr />
+<h3 id="3-skills-ai-reasoning">3. Skills (AI Reasoning)<a class="headerlink" href="#3-skills-ai-reasoning" title="Permanent link">&para;</a></h3>
+<p>Examples:</p>
+<ul>
+<li>business_analysis</li>
+<li>system_design</li>
+<li>module_definition</li>
+<li>module_spec</li>
+<li>validation</li>
+</ul>
+<p>Responsibilities:</p>
+<ul>
+<li>interpret inputs</li>
+<li>generate structured outputs</li>
+<li>enforce methodology rules</li>
+</ul>
+<hr />
+<h3 id="4-mcp-tools-execution-layer">4. MCP Tools (Execution Layer)<a class="headerlink" href="#4-mcp-tools-execution-layer" title="Permanent link">&para;</a></h3>
+<p>Examples:</p>
+<ul>
+<li>file_manager</li>
+<li>json_validator</li>
+<li>traceability_engine</li>
+<li>architecture_validator</li>
+<li>code_generator</li>
+</ul>
+<p>Responsibilities:</p>
+<ul>
+<li>read/write files</li>
+<li>validate schemas</li>
+<li>enforce rules</li>
+<li>generate outputs</li>
+</ul>
+<hr />
+<h2 id="command-registry">Command Registry<a class="headerlink" href="#command-registry" title="Permanent link">&para;</a></h2>
+<p>Define all commands in:</p>
+<ul>
+<li>commands.json (machine)</li>
+<li>commands.md (human)</li>
+</ul>
+<hr />
+<h2 id="command-schema">Command Schema<a class="headerlink" href="#command-schema" title="Permanent link">&para;</a></h2>
+<pre><code class="language-json">{
+  &quot;name&quot;: &quot;generate_ldm&quot;,
+  &quot;label&quot;: &quot;Generate LDM&quot;,
+  &quot;phase&quot;: &quot;system_design&quot;,
+  &quot;intent&quot;: &quot;generate&quot;,
+  &quot;requires&quot;: [
+    &quot;requirements.json&quot;,
+    &quot;architecture.json&quot;
+  ],
+  &quot;produces&quot;: [
+    &quot;ldm.md&quot;,
+    &quot;ldm.json&quot;
+  ],
+  &quot;calls&quot;: [
+    &quot;ldm_skill&quot;
+  ]
+}
+</code></pre>
+<hr />
+<h2 id="command-categories">Command Categories<a class="headerlink" href="#command-categories" title="Permanent link">&para;</a></h2>
+<h3 id="validation">Validation<a class="headerlink" href="#validation" title="Permanent link">&para;</a></h3>
+<ul>
+<li>Validate Requirements</li>
+<li>Validate Architecture</li>
+<li>Validate Module Spec</li>
+<li>Validate Traceability</li>
+</ul>
+<h3 id="generation">Generation<a class="headerlink" href="#generation" title="Permanent link">&para;</a></h3>
+<ul>
+<li>Build System Design</li>
+<li>Generate LDM</li>
+<li>Generate PDM</li>
+<li>Generate SQL Schema</li>
+<li>Generate Module Spec</li>
+<li>Generate Module source code</li>
+<li>Generate document</li>
+</ul>
+<h3 id="refinement">Refinement<a class="headerlink" href="#refinement" title="Permanent link">&para;</a></h3>
+<ul>
+<li>Refine Use Cases</li>
+<li>Refine Module Charter</li>
+</ul>
+<h3 id="governance">Governance<a class="headerlink" href="#governance" title="Permanent link">&para;</a></h3>
+<ul>
+<li>Show Phase Status</li>
+<li>Show Missing Artifacts</li>
+<li>Show TOGAF Coverage</li>
+<li>Show Zackman Coverage</li>
+</ul>
+<hr />
+<h2 id="example-flow">Example Flow<a class="headerlink" href="#example-flow" title="Permanent link">&para;</a></h2>
+<p>User:</p>
+<blockquote>
+<p>Validate Requirements</p>
+</blockquote>
+<p>Orchestrator:
+1. Resolve command
+2. Check requirements exist
+3. Call validation skill
+4. Run json_validator
+5. Generate report</p>
+<hr />
+<p>User:</p>
+<blockquote>
+<p>Build System Design</p>
+</blockquote>
+<p>Orchestrator:
+1. Check requirements complete
+2. Call system_design skill
+3. Generate architecture.json / architecture.json</p>
+<hr />
+<p>User:</p>
+<blockquote>
+<p>Generate LDM</p>
+</blockquote>
+<p>Orchestrator:
+1. Check architecture exists
+2. Call LDM skill
+3. Generate data model artifacts</p>
+<hr />
+<h2 id="project-state-tracking">Project State Tracking<a class="headerlink" href="#project-state-tracking" title="Permanent link">&para;</a></h2>
+<p>File: <code>project-state.json</code></p>
+<pre><code class="language-json">{
+  &quot;current_phase&quot;: &quot;system_design&quot;,
+  &quot;completed_commands&quot;: [
+    &quot;validate_requirements&quot;,
+    &quot;build_system_design&quot;
+  ],
+  &quot;artifacts&quot;: {
+    &quot;requirements&quot;: &quot;complete&quot;,
+    &quot;architecture&quot;: &quot;complete&quot;,
+    &quot;ldm&quot;: &quot;missing&quot;
+  }
+}
+</code></pre>
+<hr />
+<h2 id="key-design-principles">Key Design Principles<a class="headerlink" href="#key-design-principles" title="Permanent link">&para;</a></h2>
+<h3 id="1-commands-are-first-class">1. Commands are first-class<a class="headerlink" href="#1-commands-are-first-class" title="Permanent link">&para;</a></h3>
+<p>Users explicitly control the pipeline.</p>
+<h3 id="2-skills-do-thinking">2. Skills do thinking<a class="headerlink" href="#2-skills-do-thinking" title="Permanent link">&para;</a></h3>
+<p>They generate and interpret.</p>
+<h3 id="3-mcp-tools-enforce-reality">3. MCP tools enforce reality<a class="headerlink" href="#3-mcp-tools-enforce-reality" title="Permanent link">&para;</a></h3>
+<p>They validate, persist, and execute.</p>
+<h3 id="4-orchestrator-controls-flow">4. Orchestrator controls flow<a class="headerlink" href="#4-orchestrator-controls-flow" title="Permanent link">&para;</a></h3>
+<p>It ensures correctness and sequence.</p>
+<h3 id="5-optimize-for-performance-of-ai">5. Optimize for performance of AI<a class="headerlink" href="#5-optimize-for-performance-of-ai" title="Permanent link">&para;</a></h3>
+<p>An important consideration of AI is to minimize tokens sent and received through the following:</p>
+<ol>
+<li>Send only what is required</li>
+<li>
+<p>Utilize cached input whenever possible by keeping the input in same order of priority </p>
+<ul>
+<li><code>AGNET.md</code></li>
+<li><code>orchestrator.md</code></li>
+<li>compiled <code>commands-list</code></li>
+<li>common needed files for all phases
+-- <code>configuration.json</code></li>
+</ul>
+<p>For BA relatd
+-- <code>ba-methodlogy</code></p>
+<p>For Design related
+-- <code>design-methodology</code>
+-- <code>architecture</code></p>
+</li>
+<li>
+<p>Code generation is conducted in two passes:
+    A) Identify and outline modules (done in Design phase)</p>
+<p>B) for each module:
+-- send the above list +
+    <code>architecture</code>
+    <code>coding-standards</code> 
+    <code>test-coverage</code>
+--  module specification </p>
+</li>
+</ol>
+<hr />
+<h2 id="final-insight">Final Insight<a class="headerlink" href="#final-insight" title="Permanent link">&para;</a></h2>
+<p>This system becomes:</p>
+<blockquote>
+<p><strong>AI-Orchestrated Model-Driven Engineering Platform</strong></p>
+</blockquote>
+<p>Not:
+- a chatbot
+- not just prompts
+- not just tools</p>
+<p>But a structured, controllable, extensible engineering system.</p>
+              
+            </div>
+          </div><footer>
+    <div class="rst-footer-buttons" role="navigation" aria-label="Footer Navigation">
+        <a href="../how-to-use-mde/" class="btn btn-neutral float-left" title="How To Use MDE"><span class="icon icon-circle-arrow-left"></span> Previous</a>
+        <a href="../workspace/" class="btn btn-neutral float-right" title="Workspace">Next <span class="icon icon-circle-arrow-right"></span></a>
+    </div>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <!-- Copyright etc -->
+  </div>
+
+  Built with <a href="https://www.mkdocs.org/">MkDocs</a> using a <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a> provided by <a href="https://readthedocs.org">Read the Docs</a>.
+</footer>
+          
+        </div>
+      </div>
+
+    </section>
+
+  </div>
+
+  <div class="rst-versions" role="note" aria-label="Versions">
+  <span class="rst-current-version" data-toggle="rst-current-version">
+    
+    
+      <span><a href="../how-to-use-mde/" style="color: #fcfcfc">&laquo; Previous</a></span>
+    
+    
+      <span><a href="../workspace/" style="color: #fcfcfc">Next &raquo;</a></span>
+    
+  </span>
+</div>
+    <script src="../../js/jquery-3.6.0.min.js"></script>
+    <script>var base_url = "../..";</script>
+    <script src="../../js/theme_extra.js"></script>
+    <script src="../../js/theme.js"></script>
+      <script src="../../search/main.js"></script>
+    <script>
+        jQuery(function () {
+            SphinxRtdTheme.Navigation.enable(true);
+        });
+    </script>
+
+</body>
+</html>

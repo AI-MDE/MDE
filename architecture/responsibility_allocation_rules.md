@@ -58,6 +58,8 @@ This document defines where key concerns must be implemented in the system archi
 ## 12. Audit & Logging
 - Audit: business events (immutable)
 - Logging: diagnostics
+- Master entities that represent business state must record lifecycle attribution (`createdAt`, `createdByUserId`, `updatedAt`, `updatedByUserId`).
+- Decision actor attribution (approve/reject/cancel) belongs in immutable audit/history entries, not as decision-specific columns on master entities.
 
 ## 13. Notifications
 - Via notification module

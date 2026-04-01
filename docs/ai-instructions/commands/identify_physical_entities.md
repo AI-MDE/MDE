@@ -13,17 +13,6 @@
 
 - physical_entity_identification
 
-## Requires
-
-- ../../ba/data-model/logical-data-model.json
-- ../../ba/requirements.md
-- ../../design/application_architecture.json
-- ../../mde/architecture/
-
-## Produces
-
-- ../../design/entities/ent-{entity}.json
-
 ## Tools
 
 - file_manager

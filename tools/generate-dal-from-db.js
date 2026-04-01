@@ -1,4 +1,7 @@
 #!/usr/bin/env node
+/**
+ * Purpose: Generates DAL artifacts by introspecting an existing database schema and mapping it to project structures.
+ */
 const fs = require('fs');
 const path = require('path');
 const { createRequire } = require('module');

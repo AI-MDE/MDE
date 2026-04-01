@@ -1,4 +1,7 @@
 #!/usr/bin/env node
+/**
+ * Purpose: Runs document viewer tests to validate document loading and rendering behavior.
+ */
 'use strict';
 
 /**

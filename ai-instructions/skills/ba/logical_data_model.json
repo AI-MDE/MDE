@@ -1,0 +1,44 @@
+{
+  "name": "logical_data_model",
+  "purpose": "Generate a logical data model grounded in requirements, glossary, and architecture",
+  "inputs": {
+    "requirements": {
+      "from": "config.ba.requirements",
+      "default": "ba/"
+    },
+    "glossary": {
+      "from": "config.ba.glossary",
+      "default": "ba/glossary.md"
+    },
+    "appArchitecture": {
+      "from": "config.design.appArchitecture",
+      "default": "design/application_architecture.json"
+    }
+  },
+  "outputs": {
+    "ldm": {
+      "from": "config.ba.ldmFile",
+      "default": "ba/data-model/logical-data-model.json"
+    }
+  },
+  "artifacts": [
+    {
+      "from": "config.ba.ldmFolder",
+      "default": "ba/data-model"
+    }
+  ],
+  "rules": [
+    "Use business vocabulary",
+    "Name entities using business-facing terms that describe business object boundaries and intent; avoid mechanical/storage-oriented names in display labels.",
+    "When a technical/database name must exist, keep it as an alias/mapping field while preserving a business-first canonical name.",
+    "Separate conceptual entities from physical implementation",
+    "Record ownership and relationships explicitly",
+    "For each business-state entity, require lifecycle attribution fields (createdAt, createdByUserId, updatedAt, updatedByUserId). Keep decision actor attribution in immutable audit/history entries and do not add decision-specific actor columns on master entities."
+  ],
+  "uses_tools": [
+    "file_manager",
+    "json_validator"
+  ],
+  "next_phase": "module_definition"
+}
+

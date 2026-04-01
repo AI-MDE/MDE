@@ -1,0 +1,287 @@
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" >
+<head>
+    <meta charset="utf-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" /><link rel="canonical" href="https://ai-mde.github.io/docs/help/mdt-guide/" />
+      <link rel="shortcut icon" href="../../img/favicon.ico" />
+    <title>MDT â€” Model-Driven Tooling Guide - AI-MDE Docs</title>
+    <link rel="stylesheet" href="../../css/theme.css" />
+    <link rel="stylesheet" href="../../css/theme_extra.css" />
+        <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.8.0/styles/github.min.css" />
+    
+      <script>
+        // Current page data
+        var mkdocs_page_name = "MDT \u00e2\u20ac\u201d Model-Driven Tooling Guide";
+        var mkdocs_page_input_path = "help\\mdt-guide.md";
+        var mkdocs_page_url = "/docs/help/mdt-guide/";
+      </script>
+    
+    <!--[if lt IE 9]>
+      <script src="../../js/html5shiv.min.js"></script>
+    <![endif]-->
+      <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.8.0/highlight.min.js"></script>
+      <script>hljs.highlightAll();</script> 
+</head>
+
+<body class="wy-body-for-nav" role="document">
+
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side stickynav">
+    <div class="wy-side-scroll">
+      <div class="wy-side-nav-search">
+          <a href="../.." class="icon icon-home"> AI-MDE Docs
+        </a><div role="search">
+  <form id ="rtd-search-form" class="wy-form" action="../../search.html" method="get">
+      <input type="text" name="q" placeholder="Search docs" aria-label="Search docs" title="Type search term here" />
+  </form>
+</div>
+      </div>
+
+      <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+              <ul>
+                <li class="toctree-l1"><a class="reference internal" href="../..">Home</a>
+                </li>
+              </ul>
+              <ul>
+                <li class="toctree-l1"><a class="reference internal" href="../install/">Install</a>
+                </li>
+              </ul>
+              <p class="caption"><span class="caption-text">Help</span></p>
+              <ul>
+                  <li class="toctree-l1"><a class="reference internal" href="../how-to-use-mde/">How To Use MDE</a>
+                  </li>
+                  <li class="toctree-l1"><a class="reference internal" href="../ai_pipeline_commands/">Pipeline Commands</a>
+                  </li>
+                  <li class="toctree-l1"><a class="reference internal" href="../workspace/">Workspace</a>
+                  </li>
+                  <li class="toctree-l1"><a class="reference internal" href="../methodology/">Methodology</a>
+                  </li>
+              </ul>
+              <ul>
+                <li class="toctree-l1"><a class="reference internal" href="../../lifecycle/">Lifecycle</a>
+                </li>
+              </ul>
+              <ul>
+                <li class="toctree-l1"><a class="reference internal" href="../../configuration/">Configuration</a>
+                </li>
+              </ul>
+              <p class="caption"><span class="caption-text">AI Instructions</span></p>
+              <ul>
+                  <li class="toctree-l1"><a class="reference internal" href="../../ai-instructions/">Overview</a>
+                  </li>
+                  <li class="toctree-l1"><a class="reference internal" href="../../ai-instructions/commands/">Commands</a>
+                  </li>
+                  <li class="toctree-l1"><a class="reference internal" href="../../ai-instructions/skills/">Skills</a>
+                  </li>
+              </ul>
+              <p class="caption"><span class="caption-text">Design</span></p>
+              <ul>
+                  <li class="toctree-l1"><a class="reference internal" href="../../design/system-design-process/">Process</a>
+                  </li>
+                  <li class="toctree-l1"><a class="reference internal" href="../../design/use-case-mapping/">Use-Case Mapping</a>
+                  </li>
+                  <li class="toctree-l1"><a class="reference internal" href="../../design/business-events/">Business Events</a>
+                  </li>
+                  <li class="toctree-l1"><a class="reference internal" href="../../design/business-app-layering/">App Layering</a>
+                  </li>
+              </ul>
+              <ul>
+                <li class="toctree-l1"><a class="reference internal" href="../../changes/">Changes</a>
+                </li>
+              </ul>
+      </div>
+    </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
+      <nav class="wy-nav-top" role="navigation" aria-label="Mobile navigation menu">
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../..">AI-MDE Docs</a>
+        
+      </nav>
+      <div class="wy-nav-content">
+        <div class="rst-content"><div role="navigation" aria-label="breadcrumbs navigation">
+  <ul class="wy-breadcrumbs">
+    <li><a href="../.." class="icon icon-home" aria-label="Docs"></a></li>
+      <li class="breadcrumb-item active">MDT â€” Model-Driven Tooling Guide</li>
+    <li class="wy-breadcrumbs-aside">
+          <a href="https://github.com/AI-MDE/ai-mde/edit/master/docs/help/mdt-guide.md">Edit on AI-MDE/ai-mde</a>
+    </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+            <div class="section" itemprop="articleBody">
+              
+                <h1 id="mdt-a-model-driven-tooling-guide">MDT â€” Model-Driven Tooling Guide<a class="headerlink" href="#mdt-a-model-driven-tooling-guide" title="Permanent link">&para;</a></h1>
+<p>MDT is a pure engine. It owns no project data. It reads three files from the project root and adapts entirely to what it finds there.</p>
+<hr />
+<h2 id="the-three-project-files">The Three Project Files<a class="headerlink" href="#the-three-project-files" title="Permanent link">&para;</a></h2>
+<p>Every MDT-compatible project has three files at its root:</p>
+<pre><code>&lt;project&gt;/
+  configuration.json    â† where artifacts live
+  architecture.json     â† rules to validate against
+                        - defines the project architecture and dependencies
+                        - Tells MDT what kind of modules to generate and how to validate them
+  methodology.json      â† completeness checklist per phase
+                        - defines the project workflow
+                        - Tells MDT what artifacts are required and when
+</code></pre>
+<h3 id="configurationjson-a-where-artifacts-live">configuration.json â€” Where artifacts live<a class="headerlink" href="#configurationjson-a-where-artifacts-live" title="Permanent link">&para;</a></h3>
+<p>Tells MDT tools where to find and write every artifact. Controls folder paths, file naming patterns, and project identity.</p>
+<pre><code class="language-json">{
+  &quot;Project-Name&quot;: &quot;...&quot;,
+  &quot;paths&quot;: {
+    &quot;methodology&quot;:       &quot;methodology.json&quot;,
+    &quot;architecture&quot;:      &quot;architecture.json&quot;,
+    &quot;mdt-guide&quot;:         &quot;mdt-guide.md&quot;,
+    &quot;requirements-json&quot;: &quot;1-BA/requirements.json&quot;,
+    &quot;use-cases-dir&quot;:     &quot;1-BA/use-cases&quot;,
+    &quot;entities-dir&quot;:      &quot;2 Design/entities&quot;,
+    &quot;modules-dir&quot;:       &quot;2 Design/modules&quot;,
+    &quot;sql-dir&quot;:           &quot;3-SQL&quot;
+  },
+  &quot;patterns&quot;: {
+    &quot;entities&quot;: &quot;^ent-.*[.]json$&quot;,
+    &quot;modules&quot;:  &quot;^mod-[0-9]+.*[.]json$&quot;
+  }
+}
+</code></pre>
+<p>If a folder is renamed, update <code>configuration.json</code> â€” no tool code changes needed.</p>
+<hr />
+<h3 id="tooling">Tooling<a class="headerlink" href="#tooling" title="Permanent link">&para;</a></h3>
+<p>The pipeline is driven by a set of tools that operate on the project's artifacts. Each tool reads canonical sources and produces either derived artifacts or executable outputs.</p>
+<table>
+<thead>
+<tr>
+<th>Tool</th>
+<th>Input</th>
+<th>Output</th>
+<th>Phase</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><strong>Viewer / Navigator</strong></td>
+<td><code>configuration.json</code> + all artifacts</td>
+<td>Interactive documentation browser</td>
+<td>all</td>
+</tr>
+<tr>
+<td><strong>Validator</strong></td>
+<td>all artifacts + <code>configuration.json</code></td>
+<td><code>validation-report.json</code></td>
+<td>all</td>
+</tr>
+<tr>
+<td><strong>Generator</strong></td>
+<td>module specs (<code>srv-*.json</code>, <code>dal-*.json</code>)</td>
+<td>source files + <code>generated-manifest.json</code></td>
+<td>Development</td>
+</tr>
+<tr>
+<td><strong>Trace Generator</strong></td>
+<td>requirements + use cases + entities + modules</td>
+<td><code>trace-matrix.json</code></td>
+<td>Traceability</td>
+</tr>
+</tbody>
+</table>
+<h4 id="validators">Validators<a class="headerlink" href="#validators" title="Permanent link">&para;</a></h4>
+<p>The Validator runs two classes of checks:
+- BA Validator - check BA against Business Architecture
+- Design Validatior - check Design Architecture against BA and Architecture
+- Module Validator - based on module type against Design Architecture
+- Generate Missing Modules (if asked)</p>
+<h3 id="architecturejson-a-rules-to-validate-against">architecture.json â€” Rules to validate against<a class="headerlink" href="#architecturejson-a-rules-to-validate-against" title="Permanent link">&para;</a></h3>
+<p>Defines the architectural constraints for this project: layer taxonomy, dependency rules, component structure. Tools use this to validate that modules are correctly classified and that dependency directions are respected.</p>
+<blockquote>
+<p><strong>Status:</strong> <code>architecture.json</code> is canonical; <code>architecture.json</code> is optional for structured tech settings.</p>
+</blockquote>
+<hr />
+<h3 id="methodologyjson-a-completeness-checklist-per-phase">methodology.json â€” Completeness checklist per phase<a class="headerlink" href="#methodologyjson-a-completeness-checklist-per-phase" title="Permanent link">&para;</a></h3>
+<p>Defines the phases of the project pipeline and the artifacts each phase must produce. Tools use this to check whether a phase is complete and what is still missing.</p>
+<blockquote>
+<p><strong>Status:</strong> <code>methodology.json</code> is canonical for completeness validation.</p>
+</blockquote>
+<hr />
+<h2 id="mdt-tools-more-to-come-later-how-to-use-mdt-not-here">MDT Tools (more to come later - how to use MDT not here)<a class="headerlink" href="#mdt-tools-more-to-come-later-how-to-use-mdt-not-here" title="Permanent link">&para;</a></h2>
+<hr />
+<h2 id="ai-navigation-flow">AI Navigation Flow<a class="headerlink" href="#ai-navigation-flow" title="Permanent link">&para;</a></h2>
+<p>The AI engine should treat the project as self-describing and navigate in a deterministic order.</p>
+<h3 id="start-here">Start Here<a class="headerlink" href="#start-here" title="Permanent link">&para;</a></h3>
+<ol>
+<li><strong><code>configuration.json</code></strong> Ã¢â‚¬â€ resolve all paths and naming patterns.</li>
+<li><strong><code>methodology.json</code></strong> Ã¢â‚¬â€ understand phases, required artifacts, and subject rules.</li>
+<li><strong><code>architecture.json</code></strong> Ã¢â‚¬â€ load layer rules, dependency constraints, and system boundaries.</li>
+</ol>
+<h3 id="discovery-flow">Discovery Flow<a class="headerlink" href="#discovery-flow" title="Permanent link">&para;</a></h3>
+<ol>
+<li><strong>Scan Root files</strong> this one, configuration.json, architecture.json, and methodology.json. and application.md.</li>
+<li><strong>Scan subject structure</strong> (if subject folders or tags exist) and map subjects to artifact locations.</li>
+<li><strong>Load Business Analysis artifacts</strong> Ã¢â‚¬â€ <code>application.md</code>, requirements, and use cases.</li>
+<li><strong>Load Design artifacts</strong> Ã¢â‚¬â€ entities, modules, and trace matrix.</li>
+<li><strong>Load Build artifacts</strong> Ã¢â‚¬â€ SQL outputs and generated-manifest (if present).</li>
+<li><strong>Load Work items</strong> Ã¢â‚¬â€ open work items to pick up current tasks or gaps.</li>
+</ol>
+<h3 id="validation-loop">Validation Loop<a class="headerlink" href="#validation-loop" title="Permanent link">&para;</a></h3>
+<ol>
+<li><strong>Completeness</strong> Ã¢â‚¬â€ check all required artifacts for the current phase.</li>
+<li><strong>Compliance</strong> Ã¢â‚¬â€ enforce naming, location, and cross-reference rules.</li>
+<li><strong>Traceability</strong> Ã¢â‚¬â€ ensure requirements map to use cases, entities, modules, tests, and code.</li>
+<li><strong>Report</strong> Ã¢â‚¬â€ write a <code>validation-report.json</code> with findings and suggested fixes.</li>
+</ol>
+<h3 id="output-rules">Output Rules<a class="headerlink" href="#output-rules" title="Permanent link">&para;</a></h3>
+<ul>
+<li>Never assume folder names; always follow <code>configuration.json</code>.</li>
+<li>Prefer canonical JSON artifacts; treat Markdown as narrative or published outputs unless explicitly canonical.</li>
+<li>If artifacts are missing, report gaps rather than inventing content.</li>
+</ul>
+<h2 id="design-principle">Design Principle<a class="headerlink" href="#design-principle" title="Permanent link">&para;</a></h2>
+<p>MDT is intentionally stateless with respect to projects. The project is self-describing. The tool is interchangeable. This means:</p>
+<ul>
+<li>A project can be validated by any MDT version.</li>
+<li>The tool can be upgraded without touching project files.</li>
+<li>Teams can fork and customise <code>methodology.json</code> and <code>architecture.json</code> to fit their process â€” MDT adapts.</li>
+</ul>
+              
+            </div>
+          </div><footer>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <!-- Copyright etc -->
+  </div>
+
+  Built with <a href="https://www.mkdocs.org/">MkDocs</a> using a <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a> provided by <a href="https://readthedocs.org">Read the Docs</a>.
+</footer>
+          
+        </div>
+      </div>
+
+    </section>
+
+  </div>
+
+  <div class="rst-versions" role="note" aria-label="Versions">
+  <span class="rst-current-version" data-toggle="rst-current-version">
+    
+    
+    
+  </span>
+</div>
+    <script src="../../js/jquery-3.6.0.min.js"></script>
+    <script>var base_url = "../..";</script>
+    <script src="../../js/theme_extra.js"></script>
+    <script src="../../js/theme.js"></script>
+      <script src="../../search/main.js"></script>
+    <script>
+        jQuery(function () {
+            SphinxRtdTheme.Navigation.enable(true);
+        });
+    </script>
+
+</body>
+</html>

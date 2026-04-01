@@ -17,21 +17,6 @@ Validate that BA nouns are represented in the logical data model as entities, at
 - When BA terms seem unmatched in data model artifacts
 - Before moving from BA/system design to module definition
 
-### Required
-
-- ../../ba/requirements.md
-- ../../ba/data-model/logical-data-model.json
-
-### Optional
-
-- ../../ba/business-functions.json
-- ../../ba/use-cases/*.md
-- ../../project/project-state.json
-
-## Outputs
-
-- ../../work/ldm-coverage-report.json
-
 ## Methodology
 
 - Extract canonical noun terms from BA artifacts (requirements, use cases, business functions).

@@ -1,0 +1,204 @@
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" >
+<head>
+    <meta charset="utf-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" /><link rel="canonical" href="https://ai-mde.github.io/docs/ai-instructions/skills/ldm_coverage_validation/" />
+      <link rel="shortcut icon" href="../../../img/favicon.ico" />
+    <title>LDM Coverage Validation - AI-MDE Docs</title>
+    <link rel="stylesheet" href="../../../css/theme.css" />
+    <link rel="stylesheet" href="../../../css/theme_extra.css" />
+        <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.8.0/styles/github.min.css" />
+    
+      <script>
+        // Current page data
+        var mkdocs_page_name = "LDM Coverage Validation";
+        var mkdocs_page_input_path = "ai-instructions\\skills\\ldm_coverage_validation.md";
+        var mkdocs_page_url = "/docs/ai-instructions/skills/ldm_coverage_validation/";
+      </script>
+    
+    <!--[if lt IE 9]>
+      <script src="../../../js/html5shiv.min.js"></script>
+    <![endif]-->
+      <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.8.0/highlight.min.js"></script>
+      <script>hljs.highlightAll();</script> 
+</head>
+
+<body class="wy-body-for-nav" role="document">
+
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side stickynav">
+    <div class="wy-side-scroll">
+      <div class="wy-side-nav-search">
+          <a href="../../.." class="icon icon-home"> AI-MDE Docs
+        </a><div role="search">
+  <form id ="rtd-search-form" class="wy-form" action="../../../search.html" method="get">
+      <input type="text" name="q" placeholder="Search docs" aria-label="Search docs" title="Type search term here" />
+  </form>
+</div>
+      </div>
+
+      <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+              <ul>
+                <li class="toctree-l1"><a class="reference internal" href="../../..">Home</a>
+                </li>
+              </ul>
+              <ul>
+                <li class="toctree-l1"><a class="reference internal" href="../../../help/install/">Install</a>
+                </li>
+              </ul>
+              <p class="caption"><span class="caption-text">Help</span></p>
+              <ul>
+                  <li class="toctree-l1"><a class="reference internal" href="../../../help/how-to-use-mde/">How To Use MDE</a>
+                  </li>
+                  <li class="toctree-l1"><a class="reference internal" href="../../../help/ai_pipeline_commands/">Pipeline Commands</a>
+                  </li>
+                  <li class="toctree-l1"><a class="reference internal" href="../../../help/workspace/">Workspace</a>
+                  </li>
+                  <li class="toctree-l1"><a class="reference internal" href="../../../help/methodology/">Methodology</a>
+                  </li>
+              </ul>
+              <ul>
+                <li class="toctree-l1"><a class="reference internal" href="../../../lifecycle/">Lifecycle</a>
+                </li>
+              </ul>
+              <ul>
+                <li class="toctree-l1"><a class="reference internal" href="../../../configuration/">Configuration</a>
+                </li>
+              </ul>
+              <p class="caption"><span class="caption-text">AI Instructions</span></p>
+              <ul>
+                  <li class="toctree-l1"><a class="reference internal" href="../../">Overview</a>
+                  </li>
+                  <li class="toctree-l1"><a class="reference internal" href="../../commands/">Commands</a>
+                  </li>
+                  <li class="toctree-l1"><a class="reference internal" href="../">Skills</a>
+                  </li>
+              </ul>
+              <p class="caption"><span class="caption-text">Design</span></p>
+              <ul>
+                  <li class="toctree-l1"><a class="reference internal" href="../../../design/system-design-process/">Process</a>
+                  </li>
+                  <li class="toctree-l1"><a class="reference internal" href="../../../design/use-case-mapping/">Use-Case Mapping</a>
+                  </li>
+                  <li class="toctree-l1"><a class="reference internal" href="../../../design/business-events/">Business Events</a>
+                  </li>
+                  <li class="toctree-l1"><a class="reference internal" href="../../../design/business-app-layering/">App Layering</a>
+                  </li>
+              </ul>
+              <ul>
+                <li class="toctree-l1"><a class="reference internal" href="../../../changes/">Changes</a>
+                </li>
+              </ul>
+      </div>
+    </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
+      <nav class="wy-nav-top" role="navigation" aria-label="Mobile navigation menu">
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../../..">AI-MDE Docs</a>
+        
+      </nav>
+      <div class="wy-nav-content">
+        <div class="rst-content"><div role="navigation" aria-label="breadcrumbs navigation">
+  <ul class="wy-breadcrumbs">
+    <li><a href="../../.." class="icon icon-home" aria-label="Docs"></a></li>
+      <li class="breadcrumb-item active">LDM Coverage Validation</li>
+    <li class="wy-breadcrumbs-aside">
+          <a href="https://github.com/AI-MDE/ai-mde/edit/master/docs/ai-instructions/skills/ldm_coverage_validation.md">Edit on AI-MDE/ai-mde</a>
+    </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+            <div class="section" itemprop="articleBody">
+              
+                <h1 id="ldm-coverage-validation">LDM Coverage Validation<a class="headerlink" href="#ldm-coverage-validation" title="Permanent link">&para;</a></h1>
+<table>
+<thead>
+<tr>
+<th>Field</th>
+<th>Value</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>name</code></td>
+<td><code>ldm_coverage_validation</code></td>
+</tr>
+<tr>
+<td><code>category</code></td>
+<td>system_design</td>
+</tr>
+</tbody>
+</table>
+<hr />
+<h2 id="purpose">Purpose<a class="headerlink" href="#purpose" title="Permanent link">&para;</a></h2>
+<p>Validate that BA nouns are represented in the logical data model as entities, attributes, relationships, roles/actors, or explicit synonyms.</p>
+<h2 id="when-to-use">When to Use<a class="headerlink" href="#when-to-use" title="Permanent link">&para;</a></h2>
+<ul>
+<li>After LDM generation in system design</li>
+<li>When BA terms seem unmatched in data model artifacts</li>
+<li>Before moving from BA/system design to module definition</li>
+</ul>
+<h2 id="methodology">Methodology<a class="headerlink" href="#methodology" title="Permanent link">&para;</a></h2>
+<ul>
+<li>Extract canonical noun terms from BA artifacts (requirements, use cases, business functions).</li>
+<li>Normalize term variants and detect semantic equivalence.</li>
+<li>Match terms to LDM coverage classes: entity, attribute, relationship, role_actor, synonym.</li>
+<li>Produce explicit missing-term list with recommended target class and candidate mapping.</li>
+<li>Flag ambiguous mappings separately from clear misses.</li>
+</ul>
+<h2 id="constraints">Constraints<a class="headerlink" href="#constraints" title="Permanent link">&para;</a></h2>
+<ul>
+<li>Do not auto-edit LDM during validation.</li>
+<li>Do not rely only on lexical token matches; include semantic matching.</li>
+<li>Do not suppress unresolved terms.</li>
+</ul>
+<h2 id="completion-criteria">Completion Criteria<a class="headerlink" href="#completion-criteria" title="Permanent link">&para;</a></h2>
+<ul>
+<li>Coverage report generated with clear totals and percentages.</li>
+<li>Every missing term has a recommended mapping target.</li>
+<li>Ambiguous terms are explicitly listed for analyst decision.</li>
+</ul>
+              
+            </div>
+          </div><footer>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <!-- Copyright etc -->
+  </div>
+
+  Built with <a href="https://www.mkdocs.org/">MkDocs</a> using a <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a> provided by <a href="https://readthedocs.org">Read the Docs</a>.
+</footer>
+          
+        </div>
+      </div>
+
+    </section>
+
+  </div>
+
+  <div class="rst-versions" role="note" aria-label="Versions">
+  <span class="rst-current-version" data-toggle="rst-current-version">
+    
+    
+    
+  </span>
+</div>
+    <script src="../../../js/jquery-3.6.0.min.js"></script>
+    <script>var base_url = "../../..";</script>
+    <script src="../../../js/theme_extra.js"></script>
+    <script src="../../../js/theme.js"></script>
+      <script src="../../../search/main.js"></script>
+    <script>
+        jQuery(function () {
+            SphinxRtdTheme.Navigation.enable(true);
+        });
+    </script>
+
+</body>
+</html>

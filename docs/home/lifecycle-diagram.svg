@@ -1,0 +1,56 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1100 345" role="img" aria-label="AI-MDE lifecycle diagram">
+  <style>
+    .box  { fill:#0f172a; stroke:#334155; stroke-width:2 }
+    .gov  { fill:#0a1a2e; stroke:#38bdf8; stroke-width:1.5; stroke-dasharray:6 3 }
+    .t    { font:600 20px Arial,sans-serif; fill:#e2e8f0 }
+    .s    { font:500 13px Arial,sans-serif; fill:#94a3b8 }
+    .gt   { font:600 14px Arial,sans-serif; fill:#38bdf8 }
+    .gs   { font:500 12px Arial,sans-serif; fill:#64748b }
+    .arrow { stroke:#38bdf8; stroke-width:4; fill:none; marker-end:url(#ma) }
+    .loop  { stroke:#475569; stroke-width:2; fill:none; marker-end:url(#ml) }
+  </style>
+  <defs>
+    <marker id="ma" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse">
+      <path d="M0 0L10 5L0 10z" fill="#38bdf8"/>
+    </marker>
+    <marker id="ml" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse">
+      <path d="M0 0L10 5L0 10z" fill="#475569"/>
+    </marker>
+  </defs>
+
+  <!-- Background -->
+  <rect width="1100" height="345" fill="#020617"/>
+
+  <!-- Governance & Validation — continuous banner -->
+  <rect class="gov" x="20" y="15" width="1060" height="52" rx="10"/>
+  <text class="gt" x="550" y="37" text-anchor="middle">Governance &amp; Validation — continuous throughout</text>
+  <text class="gs" x="550" y="55" text-anchor="middle">validate · assess · trace · compliance · change impact</text>
+
+  <!-- Phase boxes -->
+  <rect class="box" x="20"  y="97" width="235" height="130" rx="16"/>
+  <text class="t"  x="137" y="149" text-anchor="middle">Business</text>
+  <text class="t"  x="137" y="174" text-anchor="middle">Analysis</text>
+  <text class="s"  x="137" y="204" text-anchor="middle">Reqs · Rules · Use Cases</text>
+
+  <rect class="box" x="295" y="97" width="235" height="130" rx="16"/>
+  <text class="t"  x="412" y="149" text-anchor="middle">System</text>
+  <text class="t"  x="412" y="174" text-anchor="middle">Design</text>
+  <text class="s"  x="412" y="204" text-anchor="middle">Arch · LDM · Modules</text>
+
+  <rect class="box" x="570" y="97" width="235" height="130" rx="16"/>
+  <text class="t"  x="687" y="157" text-anchor="middle">Development</text>
+  <text class="s"  x="687" y="187" text-anchor="middle">Code · Tests · Data</text>
+
+  <rect class="box" x="845" y="97" width="235" height="130" rx="16"/>
+  <text class="t"  x="962" y="157" text-anchor="middle">Deployment</text>
+  <text class="s"  x="962" y="187" text-anchor="middle">Release · Monitor · Ops</text>
+
+  <!-- Forward arrows -->
+  <path class="arrow" d="M255 162H295"/>
+  <path class="arrow" d="M530 162H570"/>
+  <path class="arrow" d="M805 162H845"/>
+
+  <!-- Agile loop back -->
+  <path class="loop" d="M1080 227 L1080 290 L20 290 L20 227"/>
+  <text class="gs" x="550" y="308" text-anchor="middle">agile — iterate</text>
+</svg>

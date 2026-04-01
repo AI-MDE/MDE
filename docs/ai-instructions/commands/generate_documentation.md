@@ -13,14 +13,6 @@
 
 - documentation_generation
 
-## Requires
-
-- ../../configuration.json
-
-## Produces
-
-- ../../output/docs/*.md
-
 ## Tools
 
 - file_manager

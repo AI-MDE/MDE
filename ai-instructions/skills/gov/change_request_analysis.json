@@ -35,8 +35,29 @@
     }
   },
   "outputs": {
+    "requestFolder": {
+      "default": "project/change-requests/{request-slug}/"
+    },
+    "requestCopy": {
+      "default": "project/change-requests/{request-slug}/request.md"
+    },
+    "aiResponse": {
+      "default": "project/change-requests/{request-slug}/ai/01-evaluate-change-request.md"
+    },
     "impactReport": {
-      "default": "project/change-requests/change-impact-report.md"
+      "default": "project/change-requests/{request-slug}/impact/impact-report.md"
+    },
+    "clarificationQuestionsDoc": {
+      "default": "project/change-requests/{request-slug}/impact/clarification-questions.md"
+    },
+    "changeManifest": {
+      "default": "project/change-requests/{request-slug}/manifest.json"
+    },
+    "docChanges": {
+      "default": "project/change-requests/{request-slug}/changes/doc-changes.md"
+    },
+    "codeChanges": {
+      "default": "project/change-requests/{request-slug}/changes/code-changes.md"
     },
     "clarificationQuestions": {
       "from": "config.project_state.questions",
@@ -62,11 +83,14 @@
     ]
   },
   "rules": [
+    "Create request folder bundle under project/change-requests/{request-slug}/ when analysis starts",
+    "Copy source request file into request.md and maintain manifest.json",
     "Identify impacted artifacts: BA requirements, use cases, entities, modules, architecture, source code, and tests",
     "Classify impact by severity: high, medium, low",
     "Separate gaps requiring clarification from deterministic implementation tasks",
     "Prefer requirement-level statements in analysis; avoid jumping to implementation details prematurely",
-    "Do not modify design/source artifacts during this analysis command"
+    "Do not modify design/source artifacts during this analysis command",
+    "Write AI analysis response into ai/01-evaluate-change-request.md and clarification questions into impact/clarification-questions.md"
   ],
   "uses_tools": [
     "traceability_engine",

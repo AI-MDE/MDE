@@ -1,0 +1,517 @@
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" >
+<head>
+    <meta charset="utf-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" /><link rel="canonical" href="https://ai-mde.github.io/docs/ai-instructions/skills/business_analysis_from_sources/" />
+      <link rel="shortcut icon" href="../../../img/favicon.ico" />
+    <title>Business Analysis from Source Documents - AI-MDE Docs</title>
+    <link rel="stylesheet" href="../../../css/theme.css" />
+    <link rel="stylesheet" href="../../../css/theme_extra.css" />
+        <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.8.0/styles/github.min.css" />
+    
+      <script>
+        // Current page data
+        var mkdocs_page_name = "Business Analysis from Source Documents";
+        var mkdocs_page_input_path = "ai-instructions\\skills\\business_analysis_from_sources.md";
+        var mkdocs_page_url = "/docs/ai-instructions/skills/business_analysis_from_sources/";
+      </script>
+    
+    <!--[if lt IE 9]>
+      <script src="../../../js/html5shiv.min.js"></script>
+    <![endif]-->
+      <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.8.0/highlight.min.js"></script>
+      <script>hljs.highlightAll();</script> 
+</head>
+
+<body class="wy-body-for-nav" role="document">
+
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side stickynav">
+    <div class="wy-side-scroll">
+      <div class="wy-side-nav-search">
+          <a href="../../.." class="icon icon-home"> AI-MDE Docs
+        </a><div role="search">
+  <form id ="rtd-search-form" class="wy-form" action="../../../search.html" method="get">
+      <input type="text" name="q" placeholder="Search docs" aria-label="Search docs" title="Type search term here" />
+  </form>
+</div>
+      </div>
+
+      <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+              <ul>
+                <li class="toctree-l1"><a class="reference internal" href="../../..">Home</a>
+                </li>
+              </ul>
+              <ul>
+                <li class="toctree-l1"><a class="reference internal" href="../../../help/install/">Install</a>
+                </li>
+              </ul>
+              <p class="caption"><span class="caption-text">Help</span></p>
+              <ul>
+                  <li class="toctree-l1"><a class="reference internal" href="../../../help/how-to-use-mde/">How To Use MDE</a>
+                  </li>
+                  <li class="toctree-l1"><a class="reference internal" href="../../../help/ai_pipeline_commands/">Pipeline Commands</a>
+                  </li>
+                  <li class="toctree-l1"><a class="reference internal" href="../../../help/workspace/">Workspace</a>
+                  </li>
+                  <li class="toctree-l1"><a class="reference internal" href="../../../help/methodology/">Methodology</a>
+                  </li>
+              </ul>
+              <ul>
+                <li class="toctree-l1"><a class="reference internal" href="../../../lifecycle/">Lifecycle</a>
+                </li>
+              </ul>
+              <ul>
+                <li class="toctree-l1"><a class="reference internal" href="../../../configuration/">Configuration</a>
+                </li>
+              </ul>
+              <p class="caption"><span class="caption-text">AI Instructions</span></p>
+              <ul>
+                  <li class="toctree-l1"><a class="reference internal" href="../../">Overview</a>
+                  </li>
+                  <li class="toctree-l1"><a class="reference internal" href="../../commands/">Commands</a>
+                  </li>
+                  <li class="toctree-l1"><a class="reference internal" href="../">Skills</a>
+                  </li>
+              </ul>
+              <p class="caption"><span class="caption-text">Design</span></p>
+              <ul>
+                  <li class="toctree-l1"><a class="reference internal" href="../../../design/system-design-process/">Process</a>
+                  </li>
+                  <li class="toctree-l1"><a class="reference internal" href="../../../design/use-case-mapping/">Use-Case Mapping</a>
+                  </li>
+                  <li class="toctree-l1"><a class="reference internal" href="../../../design/business-events/">Business Events</a>
+                  </li>
+                  <li class="toctree-l1"><a class="reference internal" href="../../../design/business-app-layering/">App Layering</a>
+                  </li>
+              </ul>
+              <ul>
+                <li class="toctree-l1"><a class="reference internal" href="../../../changes/">Changes</a>
+                </li>
+              </ul>
+      </div>
+    </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
+      <nav class="wy-nav-top" role="navigation" aria-label="Mobile navigation menu">
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../../..">AI-MDE Docs</a>
+        
+      </nav>
+      <div class="wy-nav-content">
+        <div class="rst-content"><div role="navigation" aria-label="breadcrumbs navigation">
+  <ul class="wy-breadcrumbs">
+    <li><a href="../../.." class="icon icon-home" aria-label="Docs"></a></li>
+      <li class="breadcrumb-item active">Business Analysis from Source Documents</li>
+    <li class="wy-breadcrumbs-aside">
+          <a href="https://github.com/AI-MDE/ai-mde/edit/master/docs/ai-instructions/skills/business_analysis_from_sources.md">Edit on AI-MDE/ai-mde</a>
+    </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+            <div class="section" itemprop="articleBody">
+              
+                <h1 id="business-analysis-from-source-documents">Business Analysis from Source Documents<a class="headerlink" href="#business-analysis-from-source-documents" title="Permanent link">&para;</a></h1>
+<table>
+<thead>
+<tr>
+<th>Field</th>
+<th>Value</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>name</code></td>
+<td><code>business_analysis_from_sources</code></td>
+</tr>
+<tr>
+<td><code>category</code></td>
+<td>business_analysis</td>
+</tr>
+</tbody>
+</table>
+<hr />
+<h2 id="purpose">Purpose<a class="headerlink" href="#purpose" title="Permanent link">&para;</a></h2>
+<p>Analyze mixed project inputs, derive a clean requirements baseline, maintain a separate analysis status record for sources, history, and open issues, and generate targeted clarification questions with prefilled default answers the user can keep, edit, or delete.</p>
+<h2 id="when-to-use">When to Use<a class="headerlink" href="#when-to-use" title="Permanent link">&para;</a></h2>
+<ul>
+<li>Project starts from raw notes, docs, spreadsheets, screenshots, forms, reports, emails, or process descriptions</li>
+<li>Requirements are incomplete or unclear</li>
+<li>The user cannot articulate a formal requirements document</li>
+<li>The system needs to guide discovery before architecture or design</li>
+</ul>
+<h2 id="input-types">Input Types<a class="headerlink" href="#input-types" title="Permanent link">&para;</a></h2>
+<table>
+<thead>
+<tr>
+<th>Input</th>
+<th>Details</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>source-documents</code></td>
+<td><strong>required</strong>, multiple — Primary business source materials such as markdown docs, notes, spreadsheets, screenshots, forms, reports, SOPs, and sample outputs</td>
+</tr>
+<tr>
+<td><code>application-definition</code></td>
+<td><strong>required</strong> — Structured application definition covering the app, business domain, subjects, scope, and current release intent</td>
+</tr>
+<tr>
+<td><code>existing-ba-artifacts</code></td>
+<td>optional, multiple — Previously generated BA outputs that should be updated rather than recreated</td>
+</tr>
+<tr>
+<td><code>requirements-json</code></td>
+<td>optional — Existing normalized requirements baseline, if available</td>
+</tr>
+<tr>
+<td><code>business-functions</code></td>
+<td>optional — Known business capability/function list, if available</td>
+</tr>
+<tr>
+<td><code>open-issues-json</code></td>
+<td>optional — Current unresolved issues or deferred questions</td>
+</tr>
+<tr>
+<td><code>clarification-queue-json</code></td>
+<td>optional — Pending or previously unanswered clarification items</td>
+</tr>
+<tr>
+<td><code>clarification-question-batch-json</code></td>
+<td>optional — Question batch file containing user responses that must be examined and incorporated into updated BA outputs on subsequent runs</td>
+</tr>
+<tr>
+<td><code>completed-questions-json</code></td>
+<td>optional — Archive of satisfactorily answered questions that were accepted into the BA baseline in prior runs</td>
+</tr>
+</tbody>
+</table>
+<h3 id="required">Required<a class="headerlink" href="#required" title="Permanent link">&para;</a></h3>
+<ul>
+<li>source-documents</li>
+</ul>
+<h3 id="optional">Optional<a class="headerlink" href="#optional" title="Permanent link">&para;</a></h3>
+<ul>
+<li>requirements.json</li>
+<li>use-cases.md</li>
+<li>business-functions.json</li>
+<li>open-issues.json</li>
+<li>clarification-queue.json</li>
+<li>questions.json</li>
+</ul>
+<h2 id="outputs">Outputs<a class="headerlink" href="#outputs" title="Permanent link">&para;</a></h2>
+<table>
+<thead>
+<tr>
+<th>Output</th>
+<th>Format</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>source_inventory</code></td>
+<td>—</td>
+</tr>
+<tr>
+<td><code>discovery_findings</code></td>
+<td>—</td>
+</tr>
+<tr>
+<td><code>terminology_map</code></td>
+<td>—</td>
+</tr>
+<tr>
+<td><code>domain_context</code></td>
+<td>—</td>
+</tr>
+<tr>
+<td><code>business_capability_candidates</code></td>
+<td>—</td>
+</tr>
+<tr>
+<td><code>business_event_catalog_updates</code></td>
+<td>—</td>
+</tr>
+<tr>
+<td><code>role_actor_stakeholder_map</code></td>
+<td>—</td>
+</tr>
+<tr>
+<td><code>clarification_question_batch</code></td>
+<td>json</td>
+</tr>
+<tr>
+<td><code>clarification_queue_updates</code></td>
+<td>json</td>
+</tr>
+<tr>
+<td><code>completed_questions_archive_updates</code></td>
+<td>json</td>
+</tr>
+<tr>
+<td><code>assumptions_register</code></td>
+<td>—</td>
+</tr>
+<tr>
+<td><code>conflict_register</code></td>
+<td>—</td>
+</tr>
+<tr>
+<td><code>traceability_matrix_updates</code></td>
+<td>—</td>
+</tr>
+<tr>
+<td><code>change_log_updates</code></td>
+<td>—</td>
+</tr>
+<tr>
+<td><code>requirements_baseline_updates</code></td>
+<td>json</td>
+</tr>
+<tr>
+<td><code>business_rules_catalog_updates</code></td>
+<td>json</td>
+</tr>
+<tr>
+<td><code>entity_artifact_catalog_updates</code></td>
+<td>—</td>
+</tr>
+<tr>
+<td><code>business_analysis_document_updates</code></td>
+<td>markdown</td>
+</tr>
+<tr>
+<td><code>business_analysis_status_document_updates</code></td>
+<td>markdown</td>
+</tr>
+<tr>
+<td><code>design_readiness_summary</code></td>
+<td>json</td>
+</tr>
+</tbody>
+</table>
+<h2 id="objectives">Objectives<a class="headerlink" href="#objectives" title="Permanent link">&para;</a></h2>
+<ul>
+<li>Extract business goals, actors, workflows, rules, artifacts, entities, constraints, pain points, integrations, and ambiguities</li>
+<li>Normalize terminology across inconsistent source material</li>
+<li>Infer and record business domain context with confidence, then ask targeted domain clarification only when confidence is insufficient or domain appears mixed</li>
+<li>Classify hybrid source fragments by evidence type and preserve non-BA content for downstream phases</li>
+<li>Derive business capability candidates before detailed use-case elaboration</li>
+<li>Distinguish business events from technical/system events and keep both classifications visible</li>
+<li>Identify roles, actors, and stakeholders with traceability to source evidence</li>
+<li>Record likely downstream design impact for each major BA element</li>
+<li>Separate explicit facts from inference, assumptions, and unresolved issues</li>
+<li>Examine user responses captured in project/questions.json and use accepted answers to update BA outputs before generating new questions</li>
+<li>Archive only satisfactorily answered question items in project/completed-Questions.json so active questions.json contains only still-open or not-yet-accepted clarification work</li>
+<li>Generate the next highest-value clarification questions</li>
+<li>Prefill the response field with the best default answer or answer set when confidence is sufficient</li>
+<li>Allow unresolved items to remain in queue rather than forcing guesses</li>
+<li>Produce a design-ready BA baseline incrementally</li>
+<li>Keep requirements.md focused on baseline requirements while recording source inventory, clarification history, blockers, and readiness in a separate status artifact</li>
+</ul>
+<h2 id="methodology">Methodology<a class="headerlink" href="#methodology" title="Permanent link">&para;</a></h2>
+<ul>
+<li>Follow the discovery_loop workflow pattern defined in methodology.json</li>
+<li>Use source artifacts as the primary evidence base</li>
+<li>Do not assume the user can provide a formal requirements document</li>
+<li>Start with discovery, not architecture</li>
+<li>Apply BA progression: Domain -&gt; Capabilities -&gt; Use Cases -&gt; Rules/Events/Roles/Entities -&gt; Data Model Readiness -&gt; Architecture Readiness</li>
+<li>Extract what is explicit first</li>
+<li>For hybrid documentation, classify each significant fragment as business evidence, architecture/design evidence, technical implementation evidence, sample/reference data, or ambiguous/mixed</li>
+<li>Preserve non-BA artifacts for later phases instead of discarding them</li>
+<li>Derive business capabilities from validated findings before refining detailed use cases</li>
+<li>Classify candidate events as business events, technical/system events, user actions/tasks, process steps, or unresolved</li>
+<li>Link major BA elements to downstream design impact areas (data model, architecture, workflow, integration, security, validation, UI)</li>
+<li>Label each significant item as explicit, inferred, assumed, conflicting, or unresolved</li>
+<li>Ask only the next highest-value questions, not an exhaustive questionnaire</li>
+<li>For each question, explain why it matters and what gap it resolves</li>
+<li>When possible, prefill the response field with the best default answer or answer set to reduce user effort</li>
+<li>Allow the user to keep, edit, partially delete, fully clear, or defer the prefilled response</li>
+<li>Track unresolved items in a queue instead of inventing certainty</li>
+<li>Preserve traceability between sources, findings, questions, answers, requirements, and BA sections</li>
+<li>Keep the requirements document focused on requirements content and store source inventory, history, blockers, and status in a separate BA status document</li>
+<li>Do not move to architecture recommendations unless BA readiness is sufficient</li>
+</ul>
+<h2 id="constraints">Constraints<a class="headerlink" href="#constraints" title="Permanent link">&para;</a></h2>
+<ul>
+<li>Do not jump directly to architecture or implementation</li>
+<li>Do not fabricate requirements that are not supported by evidence or clarified by the user</li>
+<li>Do not overwhelm the user with broad questionnaires</li>
+<li>Do not hide uncertainty</li>
+<li>Do not treat technical implementation fragments as automatically approved business requirements</li>
+<li>Do not ignore populated responses in questions.json on subsequent runs</li>
+<li>Do not emit a separate suggested_answers field in questions.json; use response as the default answer payload</li>
+<li>Do not move questions to completed-Questions.json unless accepted is true</li>
+<li>Do not set accepted to true â€” only the user sets accepted</li>
+<li>Do not keep questions with accepted: true in active questions.json; move them to completed-Questions.json</li>
+<li>Do not discard unanswered questions; queue them</li>
+</ul>
+<h2 id="question-strategy">Question Strategy<a class="headerlink" href="#question-strategy" title="Permanent link">&para;</a></h2>
+<ul>
+<li>Batch size: 3–7 (default 5)</li>
+</ul>
+<h3 id="prioritization">Prioritization<a class="headerlink" href="#prioritization" title="Permanent link">&para;</a></h3>
+<ul>
+<li>Architecture impact</li>
+<li>Business criticality</li>
+<li>Uncertainty level</li>
+<li>Dependency on other answers</li>
+<li>Ability to reduce multiple downstream ambiguities</li>
+</ul>
+<h3 id="categories">Categories<a class="headerlink" href="#categories" title="Permanent link">&para;</a></h3>
+<ul>
+<li>business_problem</li>
+<li>scope</li>
+<li>stakeholders_roles</li>
+<li>workflow_process</li>
+<li>business_rules</li>
+<li>data_artifacts</li>
+<li>integrations</li>
+<li>reporting_outputs</li>
+<li>non_functional_constraints</li>
+<li>open_issues</li>
+</ul>
+<h3 id="answer-modes">Answer Modes<a class="headerlink" href="#answer-modes" title="Permanent link">&para;</a></h3>
+<ul>
+<li>single_select_or_edit</li>
+<li>multi_select_or_edit</li>
+<li>free_text</li>
+<li>defer_to_queue</li>
+</ul>
+<h2 id="default-response-policy">Default Response Policy<a class="headerlink" href="#default-response-policy" title="Permanent link">&para;</a></h2>
+<ul>
+<li>Enabled: true</li>
+<li>Minimum confidence: medium</li>
+<li>Max prefilled items: 6</li>
+</ul>
+<h3 id="rules">Rules<a class="headerlink" href="#rules" title="Permanent link">&para;</a></h3>
+<ul>
+<li>Do not present prefilled responses as facts</li>
+<li>Use the response field itself for defaults rather than a separate suggested_answers field</li>
+<li>Prefer domain-neutral patterns unless project evidence suggests otherwise</li>
+<li>Allow the user to edit, trim, replace, or clear the prefilled response</li>
+</ul>
+<h2 id="gap-detection">Gap Detection<a class="headerlink" href="#gap-detection" title="Permanent link">&para;</a></h2>
+<h3 id="coverage-areas">Coverage Areas<a class="headerlink" href="#coverage-areas" title="Permanent link">&para;</a></h3>
+<ul>
+<li>business_domain_context</li>
+<li>business_problem_and_goals</li>
+<li>scope_and_out_of_scope</li>
+<li>stakeholders_and_roles</li>
+<li>business_capabilities_and_functions</li>
+<li>use_cases_and_user_stories</li>
+<li>business_events</li>
+<li>hybrid_documentation_classification</li>
+<li>current_state_process</li>
+<li>pain_points_and_gaps</li>
+<li>target_capabilities</li>
+<li>business_rules_and_decision_logic</li>
+<li>functional_requirements</li>
+<li>non_functional_requirements</li>
+<li>data_and_business_entities</li>
+<li>inputs_outputs_and_artifacts</li>
+<li>external_integrations</li>
+<li>risks_assumptions_dependencies</li>
+<li>open_questions</li>
+</ul>
+<h3 id="handlers">Handlers<a class="headerlink" href="#handlers" title="Permanent link">&para;</a></h3>
+<ul>
+<li>Missing required context → <code>generate_clarification_questions</code></li>
+<li>Conflict → <code>record_conflict_and_ask_for_resolution</code></li>
+<li>Partial information → <code>continue_with_labeled_assumptions</code></li>
+</ul>
+<h2 id="traceability-rules">Traceability Rules<a class="headerlink" href="#traceability-rules" title="Permanent link">&para;</a></h2>
+<ul>
+<li>Every major finding should reference one or more source artifacts when available</li>
+<li>Every clarification question should identify the gap it is resolving</li>
+<li>Every accepted answer should update one or more BA objects explicitly</li>
+<li>Every unresolved issue should remain visible in the queue or open issues register</li>
+<li>Questions accepted as complete should be preserved in project/completed-Questions.json rather than disappearing from traceability</li>
+<li>Maintain trace chain: Source artifact -&gt; Discovery finding -&gt; Clarification question -&gt; User answer -&gt; Requirement update -&gt; BA section -&gt; Design driver</li>
+<li>When a document is moved to analyzed, preserve enough path metadata to trace findings back to the original source file</li>
+<li>Do not silently overwrite prior assumptions without recording the change</li>
+</ul>
+<h2 id="completion-criteria">Completion Criteria<a class="headerlink" href="#completion-criteria" title="Permanent link">&para;</a></h2>
+<ul>
+<li>Business domain context and confidence are explicit</li>
+<li>Business problem is clear enough for structured analysis</li>
+<li>Business capabilities are identified and linked to use-case intent</li>
+<li>Main actors and workflow are identified</li>
+<li>Business events are classified as business vs technical/system where relevant</li>
+<li>Key artifacts and entities are known</li>
+<li>Major business rules are captured or explicitly queued</li>
+<li>Core functional and non-functional requirements are at least draftable</li>
+<li>Major ambiguities are either resolved or visible in queue</li>
+<li>BA baseline is stable enough to support architecture</li>
+</ul>
+<h2 id="failure-behavior">Failure Behavior<a class="headerlink" href="#failure-behavior" title="Permanent link">&para;</a></h2>
+<table>
+<thead>
+<tr>
+<th>Condition</th>
+<th>Action</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>on_insufficient_sources</code></td>
+<td><code>ask_for_more_source_material_or_application_definition</code></td>
+</tr>
+<tr>
+<td><code>on_heavy_conflict</code></td>
+<td><code>produce_conflict_register_and_targeted_resolution_questions</code></td>
+</tr>
+<tr>
+<td><code>on_missing_answers</code></td>
+<td><code>continue_with_queue_and_labeled_assumptions</code></td>
+</tr>
+<tr>
+<td><code>on_low_confidence</code></td>
+<td><code>avoid overcommitting_and_raise_clarification</code></td>
+</tr>
+</tbody>
+</table>
+              
+            </div>
+          </div><footer>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <!-- Copyright etc -->
+  </div>
+
+  Built with <a href="https://www.mkdocs.org/">MkDocs</a> using a <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a> provided by <a href="https://readthedocs.org">Read the Docs</a>.
+</footer>
+          
+        </div>
+      </div>
+
+    </section>
+
+  </div>
+
+  <div class="rst-versions" role="note" aria-label="Versions">
+  <span class="rst-current-version" data-toggle="rst-current-version">
+    
+    
+    
+  </span>
+</div>
+    <script src="../../../js/jquery-3.6.0.min.js"></script>
+    <script>var base_url = "../../..";</script>
+    <script src="../../../js/theme_extra.js"></script>
+    <script src="../../../js/theme.js"></script>
+      <script src="../../../search/main.js"></script>
+    <script>
+        jQuery(function () {
+            SphinxRtdTheme.Navigation.enable(true);
+        });
+    </script>
+
+</body>
+</html>

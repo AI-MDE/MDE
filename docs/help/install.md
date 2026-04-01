@@ -2,25 +2,28 @@
 
 ## Install ai-mde
 1.  go to a folder that want to install ai-mde under
+
 2.  git clone https://github.com/AI-MDE/ai-mde.git
+
 3.  an ai-mde folder will be created with the install
+
 4.  cd ai-mde
+
 5.  npm install
 
 ## Create a project
-1.  create a new folder that you want to house your application
+1.  cd ai-mde or where you installed above
+
 ```
-    cd myApp
+  npm run create-project -- NEW-PROJECT-PATH
+
 ```
-2.  npm run ..?
-```
-```
+
 the abouve routine will create some files that are seed files point
 >   CLAUDE.md   from app-template
 >   AGENT.md
 >   configuration.json
 But will modify these files to point to ai-mde installation above
-
 
 
 ## Pre-requisites
@@ -34,29 +37,12 @@ But will modify these files to point to ai-mde installation above
 4.  node installed
 
 
-## No Viewer Install
-1.  Select your target folder
-```bash
-    mkdir \sample-project
-    cd \sample-project
-
-    ## the line below clones the repo into current folder notice .
-    git https://github.com/AI-MDE/ai-mde.git . 
-
-```
-That is all is required, your folder sample-project is now your working directory ai-mde is installed as a subdirectory 'mde'
-
-## Viewer Install
+## app doc Viewer
 
 The viewer is a simple nodejs app to allow you to view and browse your documents
 
-1.  run npm install
 ```bash
-    npm install
-```
-2.  start the viewer
-```bash
-    npm run viewer
+    npm run viewer -- <PROJECT-PATH>
 ```
 ```text
 > claims-management-system@0.1.0 viewer
@@ -74,7 +60,8 @@ Viewer log level: info
 [viewer] Press Ctrl+C to stop.
 
 ```
-3.  open the browser @ http://localhost:4000
+  open the browser @ http://localhost:4000
+
 
 
 

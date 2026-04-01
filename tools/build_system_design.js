@@ -1,4 +1,7 @@
 #!/usr/bin/env node
+/**
+ * Purpose: Generates or refreshes high-level system design artifacts from BA inputs and project configuration.
+ */
 const fs = require('fs');
 const path = require('path');
 const argv = process.argv.slice(2);

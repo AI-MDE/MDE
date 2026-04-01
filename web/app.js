@@ -29,13 +29,23 @@ const net = __importStar(require("net"));
 const child_process_1 = require("child_process");
 /**
  * CLI wrapper for viewer.js to run from a project directory.
- * Usage: ts-node mde/web/app.ts --root=<project-root>
+ * Usage:
+ *   ts-node web/app.ts <project-root> <port>
+ *   ts-node web/app.ts --root=<project-root> --port=<port>
  */
 const viewerPath = path.join(__dirname, 'viewer.ts');
-const rootArg = process.argv.find(a => a.startsWith('--root='));
-const projectRoot = rootArg ? path.resolve(rootArg.replace('--root=', '')) : process.cwd();
-const viewerUrl = 'http://localhost:4000/';
-const viewerPort = 4000;
+const argv = process.argv.slice(2);
+const parseArg = (prefix) => { var _a; return (_a = argv.find(a => a.startsWith(prefix))) === null || _a === void 0 ? void 0 : _a.slice(prefix.length); };
+const positionalArgs = argv.filter(a => !a.startsWith('--'));
+const rootArg = positionalArgs[0] || parseArg('--root=');
+const portArg = positionalArgs[1] || parseArg('--port=');
+const projectRoot = rootArg ? path.resolve(rootArg) : process.cwd();
+const viewerPort = parseInt(portArg || '4000', 10);
+if (!Number.isFinite(viewerPort) || viewerPort <= 0) {
+    console.error(`[viewer] Invalid port: ${portArg}`);
+    process.exit(1);
+}
+const viewerUrl = `http://localhost:${viewerPort}/`;
 const checkPortAvailable = (port) => new Promise((resolve) => {
     const server = net.createServer();
     server.unref();
@@ -77,7 +87,7 @@ checkPortAvailable(viewerPort).then((available) => {
         console.error(`[viewer] Port ${viewerPort} is already in use. Stop the existing viewer/process and retry.`);
         process.exit(1);
     }
-    const child = (0, child_process_1.spawn)(process.execPath, [viewerPath, `--root=${projectRoot}`], {
+    const child = (0, child_process_1.spawn)(process.execPath, [viewerPath, `--root=${projectRoot}`, `--port=${viewerPort}`], {
         stdio: 'inherit',
     });
     child.on('error', (err) => {

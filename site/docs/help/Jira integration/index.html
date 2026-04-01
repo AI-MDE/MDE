@@ -1,0 +1,419 @@
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" >
+<head>
+    <meta charset="utf-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" /><link rel="canonical" href="https://ai-mde.github.io/docs/help/Jira%20integration/" />
+      <link rel="shortcut icon" href="../../img/favicon.ico" />
+    <title>AI-MDE ↔ Jira Integration Model - AI-MDE Docs</title>
+    <link rel="stylesheet" href="../../css/theme.css" />
+    <link rel="stylesheet" href="../../css/theme_extra.css" />
+        <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.8.0/styles/github.min.css" />
+    
+      <script>
+        // Current page data
+        var mkdocs_page_name = "AI-MDE \u2194 Jira Integration Model";
+        var mkdocs_page_input_path = "help\\Jira integration.md";
+        var mkdocs_page_url = "/docs/help/Jira%20integration/";
+      </script>
+    
+    <!--[if lt IE 9]>
+      <script src="../../js/html5shiv.min.js"></script>
+    <![endif]-->
+      <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.8.0/highlight.min.js"></script>
+      <script>hljs.highlightAll();</script> 
+</head>
+
+<body class="wy-body-for-nav" role="document">
+
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side stickynav">
+    <div class="wy-side-scroll">
+      <div class="wy-side-nav-search">
+          <a href="../.." class="icon icon-home"> AI-MDE Docs
+        </a><div role="search">
+  <form id ="rtd-search-form" class="wy-form" action="../../search.html" method="get">
+      <input type="text" name="q" placeholder="Search docs" aria-label="Search docs" title="Type search term here" />
+  </form>
+</div>
+      </div>
+
+      <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+              <ul>
+                <li class="toctree-l1"><a class="reference internal" href="../..">Home</a>
+                </li>
+              </ul>
+              <ul>
+                <li class="toctree-l1"><a class="reference internal" href="../install/">Install</a>
+                </li>
+              </ul>
+              <p class="caption"><span class="caption-text">Help</span></p>
+              <ul>
+                  <li class="toctree-l1"><a class="reference internal" href="../how-to-use-mde/">How To Use MDE</a>
+                  </li>
+                  <li class="toctree-l1"><a class="reference internal" href="../ai_pipeline_commands/">Pipeline Commands</a>
+                  </li>
+                  <li class="toctree-l1"><a class="reference internal" href="../workspace/">Workspace</a>
+                  </li>
+                  <li class="toctree-l1"><a class="reference internal" href="../methodology/">Methodology</a>
+                  </li>
+              </ul>
+              <ul>
+                <li class="toctree-l1"><a class="reference internal" href="../../lifecycle/">Lifecycle</a>
+                </li>
+              </ul>
+              <ul>
+                <li class="toctree-l1"><a class="reference internal" href="../../configuration/">Configuration</a>
+                </li>
+              </ul>
+              <p class="caption"><span class="caption-text">AI Instructions</span></p>
+              <ul>
+                  <li class="toctree-l1"><a class="reference internal" href="../../ai-instructions/">Overview</a>
+                  </li>
+                  <li class="toctree-l1"><a class="reference internal" href="../../ai-instructions/commands/">Commands</a>
+                  </li>
+                  <li class="toctree-l1"><a class="reference internal" href="../../ai-instructions/skills/">Skills</a>
+                  </li>
+              </ul>
+              <p class="caption"><span class="caption-text">Design</span></p>
+              <ul>
+                  <li class="toctree-l1"><a class="reference internal" href="../../design/system-design-process/">Process</a>
+                  </li>
+                  <li class="toctree-l1"><a class="reference internal" href="../../design/use-case-mapping/">Use-Case Mapping</a>
+                  </li>
+                  <li class="toctree-l1"><a class="reference internal" href="../../design/business-events/">Business Events</a>
+                  </li>
+                  <li class="toctree-l1"><a class="reference internal" href="../../design/business-app-layering/">App Layering</a>
+                  </li>
+              </ul>
+              <ul>
+                <li class="toctree-l1"><a class="reference internal" href="../../changes/">Changes</a>
+                </li>
+              </ul>
+      </div>
+    </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
+      <nav class="wy-nav-top" role="navigation" aria-label="Mobile navigation menu">
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../..">AI-MDE Docs</a>
+        
+      </nav>
+      <div class="wy-nav-content">
+        <div class="rst-content"><div role="navigation" aria-label="breadcrumbs navigation">
+  <ul class="wy-breadcrumbs">
+    <li><a href="../.." class="icon icon-home" aria-label="Docs"></a></li>
+      <li class="breadcrumb-item active">AI-MDE ↔ Jira Integration Model</li>
+    <li class="wy-breadcrumbs-aside">
+          <a href="https://github.com/AI-MDE/ai-mde/edit/master/docs/help/Jira integration.md">Edit on AI-MDE/ai-mde</a>
+    </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+            <div class="section" itemprop="articleBody">
+              
+                <h1 id="ai-mde-jira-integration-model">AI-MDE ↔ Jira Integration Model<a class="headerlink" href="#ai-mde-jira-integration-model" title="Permanent link">&para;</a></h1>
+<h2 id="purpose">🎯 Purpose<a class="headerlink" href="#purpose" title="Permanent link">&para;</a></h2>
+<p>This document defines how the <strong>AI-MDE command model</strong> integrates with <strong>Jira workflows</strong>, aligning business analysis, design, development, and deployment with Agile/Scrum practices.</p>
+<hr />
+<h1 id="1-ai-mde-command-model">🧭 1. AI-MDE Command Model<a class="headerlink" href="#1-ai-mde-command-model" title="Permanent link">&para;</a></h1>
+<h2 id="adaptive-governance">Adaptive Governance<a class="headerlink" href="#adaptive-governance" title="Permanent link">&para;</a></h2>
+<ul>
+<li><code>adapt-architecture</code></li>
+<li><code>adapt-methodology</code></li>
+</ul>
+<h2 id="execution-pipeline">Execution Pipeline<a class="headerlink" href="#execution-pipeline" title="Permanent link">&para;</a></h2>
+<ul>
+<li><code>refine-business-requirements</code></li>
+<li><code>elaborate-system-design</code></li>
+<li><code>generate-source-code</code></li>
+<li><code>package-application</code></li>
+<li><code>deploy-and-test</code></li>
+</ul>
+<hr />
+<h1 id="2-jira-issue-hierarchy">🔷 2. Jira Issue Hierarchy<a class="headerlink" href="#2-jira-issue-hierarchy" title="Permanent link">&para;</a></h1>
+<pre><code class="language-mermaid">flowchart TD
+    E[&quot;Epic&lt;br/&gt;Business Capability&quot;]
+    S[&quot;Story&lt;br/&gt;Use Case / Requirement&quot;]
+    T[&quot;Task&lt;br/&gt;Technical Work&quot;]
+    ST[&quot;Sub-task&lt;br/&gt;Implementation Step&quot;]
+    B[&quot;Bug&quot;]
+    CR[&quot;Change Request&quot;]
+
+    E --&gt; S
+    S --&gt; T
+    T --&gt; ST
+    S -.-&gt; CR
+    T -.-&gt; B
+</code></pre>
+<h2 id="mapping">Mapping<a class="headerlink" href="#mapping" title="Permanent link">&para;</a></h2>
+<table>
+<thead>
+<tr>
+<th>Jira Type</th>
+<th>Meaning</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Epic</td>
+<td>Business Capability</td>
+</tr>
+<tr>
+<td>Story</td>
+<td>Use Case / Requirement</td>
+</tr>
+<tr>
+<td>Task</td>
+<td>Design / Code / Build work</td>
+</tr>
+<tr>
+<td>Sub-task</td>
+<td>Implementation detail</td>
+</tr>
+<tr>
+<td>Bug</td>
+<td>Defect</td>
+</tr>
+<tr>
+<td>Change Request</td>
+<td>Requirement change</td>
+</tr>
+</tbody>
+</table>
+<hr />
+<h1 id="3-workflow-states">🔷 3. Workflow States<a class="headerlink" href="#3-workflow-states" title="Permanent link">&para;</a></h1>
+<pre><code class="language-mermaid">flowchart LR
+    A[&quot;Backlog&quot;] --&gt; B[&quot;Refining Requirements&quot;]
+    B --&gt; C[&quot;Ready for Design&quot;]
+    C --&gt; D[&quot;Elaborating Design&quot;]
+    D --&gt; E[&quot;Ready for Build&quot;]
+    E --&gt; F[&quot;Generating Code&quot;]
+    F --&gt; G[&quot;Packaging&quot;]
+    G --&gt; H[&quot;Deploying &amp; Testing&quot;]
+    H --&gt; I[&quot;Done&quot;]
+
+    H -. defect .-&gt; J[&quot;Bug / Rework&quot;]
+    J --&gt; B
+
+    H -. change needed .-&gt; K[&quot;Change Request&quot;]
+    K --&gt; B
+</code></pre>
+<hr />
+<h1 id="4-adaptive-governance-overlay">🔷 4. Adaptive Governance Overlay<a class="headerlink" href="#4-adaptive-governance-overlay" title="Permanent link">&para;</a></h1>
+<pre><code class="language-mermaid">flowchart TD
+    subgraph GOV[&quot;Adaptive Governance&quot;]
+        M[&quot;adapt-methodology&quot;]
+        A[&quot;adapt-architecture&quot;]
+    end
+
+    subgraph FLOW[&quot;Execution Flow&quot;]
+        B[&quot;Refining Requirements&quot;]
+        D[&quot;Elaborating Design&quot;]
+        F[&quot;Generating Code&quot;]
+        G[&quot;Packaging&quot;]
+        H[&quot;Deploying &amp; Testing&quot;]
+    end
+
+    M -.-&gt; B
+    M -.-&gt; D
+    M -.-&gt; F
+    M -.-&gt; G
+    M -.-&gt; H
+
+    A -.-&gt; D
+    A -.-&gt; F
+    A -.-&gt; G
+    A -.-&gt; H
+</code></pre>
+<hr />
+<h1 id="5-recommended-jira-status-model">🔷 5. Recommended Jira Status Model<a class="headerlink" href="#5-recommended-jira-status-model" title="Permanent link">&para;</a></h1>
+<pre><code class="language-text">Backlog
+Refining Requirements
+Ready for Design
+Elaborating Design
+Ready for Build
+Generating Code
+Packaging
+Deploying &amp; Testing
+Done
+Blocked
+</code></pre>
+<p>Optional:</p>
+<pre><code class="language-text">Bug / Rework
+Change Requested
+</code></pre>
+<hr />
+<h1 id="6-transition-rules">🔷 6. Transition Rules<a class="headerlink" href="#6-transition-rules" title="Permanent link">&para;</a></h1>
+<ul>
+<li>Backlog → Refining Requirements</li>
+<li>Refining Requirements → Ready for Design</li>
+<li>Ready for Design → Elaborating Design</li>
+<li>Elaborating Design → Ready for Build</li>
+<li>Ready for Build → Generating Code</li>
+<li>Generating Code → Packaging</li>
+<li>Packaging → Deploying &amp; Testing</li>
+<li>Deploying &amp; Testing → Done</li>
+</ul>
+<h3 id="exceptions">Exceptions:<a class="headerlink" href="#exceptions" title="Permanent link">&para;</a></h3>
+<ul>
+<li>Deploying &amp; Testing → Bug / Rework</li>
+<li>Deploying &amp; Testing → Change Requested</li>
+</ul>
+<hr />
+<h1 id="7-field-mapping">🔷 7. Field Mapping<a class="headerlink" href="#7-field-mapping" title="Permanent link">&para;</a></h1>
+<h2 id="epic">Epic<a class="headerlink" href="#epic" title="Permanent link">&para;</a></h2>
+<ul>
+<li>Capability Name</li>
+<li>Business Goal</li>
+<li>Stakeholders</li>
+<li>Constraints</li>
+</ul>
+<h2 id="story">Story<a class="headerlink" href="#story" title="Permanent link">&para;</a></h2>
+<ul>
+<li>Use Case</li>
+<li>Acceptance Criteria</li>
+<li>Business Rules</li>
+<li>Assumptions</li>
+<li>Dependencies</li>
+</ul>
+<h2 id="task">Task<a class="headerlink" href="#task" title="Permanent link">&para;</a></h2>
+<ul>
+<li>Module</li>
+<li>Interfaces</li>
+<li>Technical Notes</li>
+</ul>
+<h2 id="bug">Bug<a class="headerlink" href="#bug" title="Permanent link">&para;</a></h2>
+<ul>
+<li>Steps to Reproduce</li>
+<li>Expected vs Actual</li>
+<li>Severity</li>
+</ul>
+<h2 id="change-request">Change Request<a class="headerlink" href="#change-request" title="Permanent link">&para;</a></h2>
+<ul>
+<li>Description</li>
+<li>Reason</li>
+<li>Impact Analysis</li>
+</ul>
+<hr />
+<h1 id="8-scrum-mapping">🔷 8. Scrum Mapping<a class="headerlink" href="#8-scrum-mapping" title="Permanent link">&para;</a></h1>
+<table>
+<thead>
+<tr>
+<th>Scrum Event</th>
+<th>AI-MDE Command</th>
+<th>Jira Stage</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Backlog Refinement</td>
+<td>refine-business-requirements</td>
+<td>Refining Requirements</td>
+</tr>
+<tr>
+<td>Sprint Planning</td>
+<td>elaborate-system-design</td>
+<td>Elaborating Design</td>
+</tr>
+<tr>
+<td>Development</td>
+<td>generate-source-code</td>
+<td>Generating Code</td>
+</tr>
+<tr>
+<td>Build</td>
+<td>package-application</td>
+<td>Packaging</td>
+</tr>
+<tr>
+<td>Review / QA</td>
+<td>deploy-and-test</td>
+<td>Deploying &amp; Testing</td>
+</tr>
+<tr>
+<td>Retrospective</td>
+<td>adapt-*</td>
+<td>Governance</td>
+</tr>
+</tbody>
+</table>
+<hr />
+<h1 id="9-end-to-end-flow">🔷 9. End-to-End Flow<a class="headerlink" href="#9-end-to-end-flow" title="Permanent link">&para;</a></h1>
+<pre><code class="language-mermaid">flowchart TD
+    E[&quot;Epic&quot;] --&gt; S[&quot;Story&quot;]
+    S --&gt; R[&quot;Refining Requirements&quot;]
+    R --&gt; D[&quot;Elaborating Design&quot;]
+    D --&gt; C[&quot;Generating Code&quot;]
+    C --&gt; P[&quot;Packaging&quot;]
+    P --&gt; T[&quot;Deploying &amp; Testing&quot;]
+    T --&gt; X[&quot;Done&quot;]
+
+    T -.-&gt; B[&quot;Bug&quot;]
+    B --&gt; C
+
+    T -.-&gt; CR[&quot;Change Request&quot;]
+    CR --&gt; R
+
+    AM[&quot;adapt-methodology&quot;] -.-&gt; R
+    AM -.-&gt; D
+
+    AA[&quot;adapt-architecture&quot;] -.-&gt; D
+    AA -.-&gt; C
+    AA -.-&gt; P
+</code></pre>
+<hr />
+<h1 id="10-summary">🚀 10. Summary<a class="headerlink" href="#10-summary" title="Permanent link">&para;</a></h1>
+<p>This model aligns:</p>
+<ul>
+<li><strong>AI-MDE</strong> → engineering discipline</li>
+<li><strong>Jira</strong> → execution tracking</li>
+<li><strong>Scrum</strong> → delivery cadence</li>
+</ul>
+<h3 id="core-idea">Core idea:<a class="headerlink" href="#core-idea" title="Permanent link">&para;</a></h3>
+<blockquote>
+<p>Adapt → Refine → Elaborate → Generate → Package → Deploy → Repeat</p>
+</blockquote>
+<p>This creates a <strong>continuous, controlled, and traceable software engineering lifecycle</strong>.</p>
+              
+            </div>
+          </div><footer>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <!-- Copyright etc -->
+  </div>
+
+  Built with <a href="https://www.mkdocs.org/">MkDocs</a> using a <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a> provided by <a href="https://readthedocs.org">Read the Docs</a>.
+</footer>
+          
+        </div>
+      </div>
+
+    </section>
+
+  </div>
+
+  <div class="rst-versions" role="note" aria-label="Versions">
+  <span class="rst-current-version" data-toggle="rst-current-version">
+    
+    
+    
+  </span>
+</div>
+    <script src="../../js/jquery-3.6.0.min.js"></script>
+    <script>var base_url = "../..";</script>
+    <script src="../../js/theme_extra.js"></script>
+    <script src="../../js/theme.js"></script>
+      <script src="../../search/main.js"></script>
+    <script>
+        jQuery(function () {
+            SphinxRtdTheme.Navigation.enable(true);
+        });
+    </script>
+
+</body>
+</html>

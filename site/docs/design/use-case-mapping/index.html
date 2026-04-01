@@ -1,0 +1,369 @@
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" >
+<head>
+    <meta charset="utf-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" /><link rel="canonical" href="https://ai-mde.github.io/docs/design/use-case-mapping/" />
+      <link rel="shortcut icon" href="../../img/favicon.ico" />
+    <title>Use-Case Mapping - AI-MDE Docs</title>
+    <link rel="stylesheet" href="../../css/theme.css" />
+    <link rel="stylesheet" href="../../css/theme_extra.css" />
+        <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.8.0/styles/github.min.css" />
+    
+      <script>
+        // Current page data
+        var mkdocs_page_name = "Use-Case Mapping";
+        var mkdocs_page_input_path = "design\\use-case-mapping.md";
+        var mkdocs_page_url = "/docs/design/use-case-mapping/";
+      </script>
+    
+    <!--[if lt IE 9]>
+      <script src="../../js/html5shiv.min.js"></script>
+    <![endif]-->
+      <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.8.0/highlight.min.js"></script>
+      <script>hljs.highlightAll();</script> 
+</head>
+
+<body class="wy-body-for-nav" role="document">
+
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side stickynav">
+    <div class="wy-side-scroll">
+      <div class="wy-side-nav-search">
+          <a href="../.." class="icon icon-home"> AI-MDE Docs
+        </a><div role="search">
+  <form id ="rtd-search-form" class="wy-form" action="../../search.html" method="get">
+      <input type="text" name="q" placeholder="Search docs" aria-label="Search docs" title="Type search term here" />
+  </form>
+</div>
+      </div>
+
+      <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+              <ul>
+                <li class="toctree-l1"><a class="reference internal" href="../..">Home</a>
+                </li>
+              </ul>
+              <ul>
+                <li class="toctree-l1"><a class="reference internal" href="../../help/install/">Install</a>
+                </li>
+              </ul>
+              <p class="caption"><span class="caption-text">Help</span></p>
+              <ul>
+                  <li class="toctree-l1"><a class="reference internal" href="../../help/how-to-use-mde/">How To Use MDE</a>
+                  </li>
+                  <li class="toctree-l1"><a class="reference internal" href="../../help/ai_pipeline_commands/">Pipeline Commands</a>
+                  </li>
+                  <li class="toctree-l1"><a class="reference internal" href="../../help/workspace/">Workspace</a>
+                  </li>
+                  <li class="toctree-l1"><a class="reference internal" href="../../help/methodology/">Methodology</a>
+                  </li>
+              </ul>
+              <ul>
+                <li class="toctree-l1"><a class="reference internal" href="../../lifecycle/">Lifecycle</a>
+                </li>
+              </ul>
+              <ul>
+                <li class="toctree-l1"><a class="reference internal" href="../../configuration/">Configuration</a>
+                </li>
+              </ul>
+              <p class="caption"><span class="caption-text">AI Instructions</span></p>
+              <ul>
+                  <li class="toctree-l1"><a class="reference internal" href="../../ai-instructions/">Overview</a>
+                  </li>
+                  <li class="toctree-l1"><a class="reference internal" href="../../ai-instructions/commands/">Commands</a>
+                  </li>
+                  <li class="toctree-l1"><a class="reference internal" href="../../ai-instructions/skills/">Skills</a>
+                  </li>
+              </ul>
+              <p class="caption"><span class="caption-text">Design</span></p>
+              <ul class="current">
+                  <li class="toctree-l1"><a class="reference internal" href="../system-design-process/">Process</a>
+                  </li>
+                  <li class="toctree-l1 current"><a class="reference internal current" href="./">Use-Case Mapping</a>
+    <ul class="current">
+    <li class="toctree-l2"><a class="reference internal" href="#scope">Scope</a>
+    </li>
+    <li class="toctree-l2"><a class="reference internal" href="#purpose">Purpose</a>
+    </li>
+    <li class="toctree-l2"><a class="reference internal" href="#the-core-distinction">The core distinction</a>
+    </li>
+    <li class="toctree-l2"><a class="reference internal" href="#how-a-business-use-case-breaks-down">How a business use case breaks down</a>
+    </li>
+    <li class="toctree-l2"><a class="reference internal" href="#example-handle-a-claim-assignment">Example: "Handle a Claim Assignment"</a>
+    </li>
+    <li class="toctree-l2"><a class="reference internal" href="#example-process-a-claim-denial">Example: "Process a Claim Denial"</a>
+    </li>
+    <li class="toctree-l2"><a class="reference internal" href="#what-a-usecase-class-contains">What a UseCase class contains</a>
+    </li>
+    <li class="toctree-l2"><a class="reference internal" href="#what-a-usecase-class-never-contains">What a UseCase class never contains</a>
+    </li>
+    <li class="toctree-l2"><a class="reference internal" href="#why-each-write-action-gets-its-own-usecase-class">Why each write action gets its own UseCase class</a>
+    </li>
+    <li class="toctree-l2"><a class="reference internal" href="#how-to-identify-usecase-classes-from-a-business-use-case">How to identify UseCase classes from a business use case</a>
+    </li>
+    <li class="toctree-l2"><a class="reference internal" href="#summary">Summary</a>
+    </li>
+    <li class="toctree-l2"><a class="reference internal" href="#reference">Reference</a>
+    </li>
+    </ul>
+                  </li>
+                  <li class="toctree-l1"><a class="reference internal" href="../business-events/">Business Events</a>
+                  </li>
+                  <li class="toctree-l1"><a class="reference internal" href="../business-app-layering/">App Layering</a>
+                  </li>
+              </ul>
+              <ul>
+                <li class="toctree-l1"><a class="reference internal" href="../../changes/">Changes</a>
+                </li>
+              </ul>
+      </div>
+    </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
+      <nav class="wy-nav-top" role="navigation" aria-label="Mobile navigation menu">
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../..">AI-MDE Docs</a>
+        
+      </nav>
+      <div class="wy-nav-content">
+        <div class="rst-content"><div role="navigation" aria-label="breadcrumbs navigation">
+  <ul class="wy-breadcrumbs">
+    <li><a href="../.." class="icon icon-home" aria-label="Docs"></a></li>
+          <li class="breadcrumb-item">Design</li>
+      <li class="breadcrumb-item active">Use-Case Mapping</li>
+    <li class="wy-breadcrumbs-aside">
+          <a href="https://github.com/AI-MDE/ai-mde/edit/master/docs/design/use-case-mapping.md">Edit on AI-MDE/ai-mde</a>
+    </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+            <div class="section" itemprop="articleBody">
+              
+                <h1 id="use-case-mapping">Use Case Mapping<a class="headerlink" href="#use-case-mapping" title="Permanent link">&para;</a></h1>
+<h2 id="scope">Scope<a class="headerlink" href="#scope" title="Permanent link">&para;</a></h2>
+<p>This document maps <strong>Business Use Case Items</strong>: bounded application actions such as Submit Claim, Assign Claim, Approve Claim, and Deny Claim.</p>
+<p>It does <strong>not</strong> attempt to define the full end-to-end business workflow or process lifecycle.</p>
+<p>A broader <strong>Business Use Case</strong> may optionally be modeled later as a workflow, case-management process, or orchestration layer composed of multiple Use Case Items.</p>
+<h2 id="purpose">Purpose<a class="headerlink" href="#purpose" title="Permanent link">&para;</a></h2>
+<p>This document explains how business use cases map to application architecture classes — specifically UseCase classes, QueryServices, and Domain Entity methods.</p>
+<hr />
+<h2 id="the-core-distinction">The core distinction<a class="headerlink" href="#the-core-distinction" title="Permanent link">&para;</a></h2>
+<p>"Use case" means two different things depending on context:</p>
+<table>
+<thead>
+<tr>
+<th>Context</th>
+<th>Meaning</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Business analysis</td>
+<td>A complete user goal — actor, steps, preconditions</td>
+</tr>
+<tr>
+<td>Application architecture</td>
+<td>A single class owning one write operation</td>
+</tr>
+</tbody>
+</table>
+<p>They are <strong>not 1:1</strong>. A business use case produces multiple architecture classes.</p>
+<hr />
+<h2 id="how-a-business-use-case-breaks-down">How a business use case breaks down<a class="headerlink" href="#how-a-business-use-case-breaks-down" title="Permanent link">&para;</a></h2>
+<p>A business use case describes a user journey. Inside that journey:</p>
+<table>
+<thead>
+<tr>
+<th>Step type</th>
+<th>Maps to</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>User views / searches / lists something</td>
+<td><code>QueryService</code></td>
+</tr>
+<tr>
+<td>User commits a write action</td>
+<td><code>UseCase class</code></td>
+</tr>
+<tr>
+<td>System does something as a result</td>
+<td>Side effect inside the <code>UseCase</code></td>
+</tr>
+</tbody>
+</table>
+<p>One business use case typically produces:
+- <strong>1 or more UseCase classes</strong> (one per write action)
+- <strong>2 or more QueryService calls</strong> (the reads around the actions)</p>
+<p>Some business use cases are pure reads — they produce no UseCase class at all, only QueryService calls.</p>
+<hr />
+<h2 id="example-handle-a-claim-assignment">Example: "Handle a Claim Assignment"<a class="headerlink" href="#example-handle-a-claim-assignment" title="Permanent link">&para;</a></h2>
+<pre><code>1. Supervisor views unassigned claims         → QueryService
+2. Supervisor selects a claim                 → QueryService (get by id)
+3. Supervisor assigns claim to agent          → AssignClaimUseCase
+4. Agent is overloaded — supervisor reassigns → ReassignClaimUseCase
+5. Agent rejects the assignment               → RejectAssignmentUseCase
+</code></pre>
+<p>One business use case → three UseCase classes + two QueryService calls.</p>
+<hr />
+<h2 id="example-process-a-claim-denial">Example: "Process a Claim Denial"<a class="headerlink" href="#example-process-a-claim-denial" title="Permanent link">&para;</a></h2>
+<pre><code>1. Agent views the claim details              → QueryService
+2. Agent reviews supporting documents         → QueryService
+3. Agent denies the claim with a reason       → DenyClaimUseCase
+4. System notifies the claimant               → side effect inside DenyClaimUseCase
+5. Claim appears in denied list               → QueryService
+</code></pre>
+<p>One business use case → one UseCase class + three QueryService calls + one side effect.</p>
+<hr />
+<h2 id="what-a-usecase-class-contains">What a UseCase class contains<a class="headerlink" href="#what-a-usecase-class-contains" title="Permanent link">&para;</a></h2>
+<p>A UseCase class owns exactly one write operation. The structure is always:</p>
+<pre><code class="language-ts">class DenyClaimUseCase {
+  constructor(
+    private readonly claimRepo: ClaimRepository,
+    private readonly authz: AuthorizationService
+  ) {}
+
+  async execute(command: DenyClaimCommand, actor: ActorContext): Promise&lt;void&gt; {
+    // 1. authorize
+    this.authz.require(actor, &quot;claim.deny&quot;);
+
+    // 2. load
+    const claim = await this.claimRepo.findById(command.claimId);
+    if (!claim) throw new NotFoundError(&quot;Claim&quot;, command.claimId);
+
+    // 3. domain behavior
+    claim.deny();
+
+    // 4. persist
+    await this.claimRepo.save(claim);
+  }
+}
+</code></pre>
+<table>
+<thead>
+<tr>
+<th>Step</th>
+<th>Responsibility</th>
+<th>Owned by</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Authorize</td>
+<td>Is this actor allowed?</td>
+<td><code>AuthorizationService</code></td>
+</tr>
+<tr>
+<td>Load</td>
+<td>Fetch the aggregate</td>
+<td><code>Repository</code></td>
+</tr>
+<tr>
+<td>Act</td>
+<td>Apply business operation</td>
+<td><code>Domain Entity</code> method</td>
+</tr>
+<tr>
+<td>Save</td>
+<td>Persist changed state</td>
+<td><code>Repository</code></td>
+</tr>
+</tbody>
+</table>
+<p>The UseCase coordinates and owns application/workflow logic for one bounded business action, but not core object invariants.</p>
+<hr />
+<h2 id="what-a-usecase-class-never-contains">What a UseCase class never contains<a class="headerlink" href="#what-a-usecase-class-never-contains" title="Permanent link">&para;</a></h2>
+<ul>
+<li>SQL queries</li>
+<li>HTTP request/response handling</li>
+<li>Business rule enforcement (belongs in the entity)</li>
+<li>Read model shaping (belongs in QueryService)</li>
+<li>Multiple unrelated operations</li>
+</ul>
+<hr />
+<h2 id="why-each-write-action-gets-its-own-usecase-class">Why each write action gets its own UseCase class<a class="headerlink" href="#why-each-write-action-gets-its-own-usecase-class" title="Permanent link">&para;</a></h2>
+<p>Each write action has its own:
+- preconditions (can only reassign if already assigned)
+- Command input shape
+- authorization rule
+- domain entity method</p>
+<p>Merging multiple write actions into one class because they share a business use case creates a bloated service with blurred responsibilities.</p>
+<hr />
+<h2 id="how-to-identify-usecase-classes-from-a-business-use-case">How to identify UseCase classes from a business use case<a class="headerlink" href="#how-to-identify-usecase-classes-from-a-business-use-case" title="Permanent link">&para;</a></h2>
+<p>Scan the business use case for <strong>verbs the user commits</strong>:</p>
+<pre><code>assign    → AssignClaimUseCase
+reassign  → ReassignClaimUseCase
+reject    → RejectAssignmentUseCase
+approve   → ApproveClaimUseCase
+deny      → DenyClaimUseCase
+submit    → SubmitClaimUseCase
+</code></pre>
+<p>Each committed verb → one UseCase class candidate.</p>
+<p>The nouns that get read around those verbs → QueryService candidates.</p>
+<hr />
+<h2 id="summary">Summary<a class="headerlink" href="#summary" title="Permanent link">&para;</a></h2>
+<pre><code>Business Use Case (user goal)
+  ├── read steps          → QueryService calls
+  ├── write action 1      → UseCase class + Command
+  ├── write action 2      → UseCase class + Command
+  └── write action 3      → UseCase class + Command
+</code></pre>
+<p>The UseCase class maps to the <strong>moment the user commits an action</strong>, not to the whole user journey around it.</p>
+<hr />
+<h2 id="reference">Reference<a class="headerlink" href="#reference" title="Permanent link">&para;</a></h2>
+<ul>
+<li>Layer responsibilities: <code>mde/docs/design/business-app-layering.md</code></li>
+<li>Design process: <code>mde/docs/system-design-process.md</code></li>
+<li>Example implementation: <code>sample-app/src/</code></li>
+</ul>
+              
+            </div>
+          </div><footer>
+    <div class="rst-footer-buttons" role="navigation" aria-label="Footer Navigation">
+        <a href="../system-design-process/" class="btn btn-neutral float-left" title="Process"><span class="icon icon-circle-arrow-left"></span> Previous</a>
+        <a href="../business-events/" class="btn btn-neutral float-right" title="Business Events">Next <span class="icon icon-circle-arrow-right"></span></a>
+    </div>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <!-- Copyright etc -->
+  </div>
+
+  Built with <a href="https://www.mkdocs.org/">MkDocs</a> using a <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a> provided by <a href="https://readthedocs.org">Read the Docs</a>.
+</footer>
+          
+        </div>
+      </div>
+
+    </section>
+
+  </div>
+
+  <div class="rst-versions" role="note" aria-label="Versions">
+  <span class="rst-current-version" data-toggle="rst-current-version">
+    
+    
+      <span><a href="../system-design-process/" style="color: #fcfcfc">&laquo; Previous</a></span>
+    
+    
+      <span><a href="../business-events/" style="color: #fcfcfc">Next &raquo;</a></span>
+    
+  </span>
+</div>
+    <script src="../../js/jquery-3.6.0.min.js"></script>
+    <script>var base_url = "../..";</script>
+    <script src="../../js/theme_extra.js"></script>
+    <script src="../../js/theme.js"></script>
+      <script src="../../search/main.js"></script>
+    <script>
+        jQuery(function () {
+            SphinxRtdTheme.Navigation.enable(true);
+        });
+    </script>
+
+</body>
+</html>

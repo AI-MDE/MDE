@@ -14,15 +14,6 @@
 
 Delegates to skill: `architecture_validation`
 
-## Requires
-
-- ../../design/application_architecture.json
-- ../../design/modules/module-catalog.json
-
-## Produces
-
-- ../../work/architecture-validation-report.json
-
 ## Tools
 
 - file_manager

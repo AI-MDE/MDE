@@ -1,0 +1,629 @@
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" >
+<head>
+    <meta charset="utf-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" /><link rel="canonical" href="https://ai-mde.github.io/docs/design/ui-module-definition-example/" />
+      <link rel="shortcut icon" href="../../img/favicon.ico" />
+    <title>UI Module Definition - AI-MDE Docs</title>
+    <link rel="stylesheet" href="../../css/theme.css" />
+    <link rel="stylesheet" href="../../css/theme_extra.css" />
+        <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.8.0/styles/github.min.css" />
+    
+      <script>
+        // Current page data
+        var mkdocs_page_name = "UI Module Definition";
+        var mkdocs_page_input_path = "design\\ui-module-definition-example.md";
+        var mkdocs_page_url = "/docs/design/ui-module-definition-example/";
+      </script>
+    
+    <!--[if lt IE 9]>
+      <script src="../../js/html5shiv.min.js"></script>
+    <![endif]-->
+      <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.8.0/highlight.min.js"></script>
+      <script>hljs.highlightAll();</script> 
+</head>
+
+<body class="wy-body-for-nav" role="document">
+
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side stickynav">
+    <div class="wy-side-scroll">
+      <div class="wy-side-nav-search">
+          <a href="../.." class="icon icon-home"> AI-MDE Docs
+        </a><div role="search">
+  <form id ="rtd-search-form" class="wy-form" action="../../search.html" method="get">
+      <input type="text" name="q" placeholder="Search docs" aria-label="Search docs" title="Type search term here" />
+  </form>
+</div>
+      </div>
+
+      <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+              <ul>
+                <li class="toctree-l1"><a class="reference internal" href="../..">Home</a>
+                </li>
+              </ul>
+              <ul>
+                <li class="toctree-l1"><a class="reference internal" href="../../help/install/">Install</a>
+                </li>
+              </ul>
+              <p class="caption"><span class="caption-text">Help</span></p>
+              <ul>
+                  <li class="toctree-l1"><a class="reference internal" href="../../help/how-to-use-mde/">How To Use MDE</a>
+                  </li>
+                  <li class="toctree-l1"><a class="reference internal" href="../../help/ai_pipeline_commands/">Pipeline Commands</a>
+                  </li>
+                  <li class="toctree-l1"><a class="reference internal" href="../../help/workspace/">Workspace</a>
+                  </li>
+                  <li class="toctree-l1"><a class="reference internal" href="../../help/methodology/">Methodology</a>
+                  </li>
+              </ul>
+              <ul>
+                <li class="toctree-l1"><a class="reference internal" href="../../lifecycle/">Lifecycle</a>
+                </li>
+              </ul>
+              <ul>
+                <li class="toctree-l1"><a class="reference internal" href="../../configuration/">Configuration</a>
+                </li>
+              </ul>
+              <p class="caption"><span class="caption-text">AI Instructions</span></p>
+              <ul>
+                  <li class="toctree-l1"><a class="reference internal" href="../../ai-instructions/">Overview</a>
+                  </li>
+                  <li class="toctree-l1"><a class="reference internal" href="../../ai-instructions/commands/">Commands</a>
+                  </li>
+                  <li class="toctree-l1"><a class="reference internal" href="../../ai-instructions/skills/">Skills</a>
+                  </li>
+              </ul>
+              <p class="caption"><span class="caption-text">Design</span></p>
+              <ul>
+                  <li class="toctree-l1"><a class="reference internal" href="../system-design-process/">Process</a>
+                  </li>
+                  <li class="toctree-l1"><a class="reference internal" href="../use-case-mapping/">Use-Case Mapping</a>
+                  </li>
+                  <li class="toctree-l1"><a class="reference internal" href="../business-events/">Business Events</a>
+                  </li>
+                  <li class="toctree-l1"><a class="reference internal" href="../business-app-layering/">App Layering</a>
+                  </li>
+              </ul>
+              <ul>
+                <li class="toctree-l1"><a class="reference internal" href="../../changes/">Changes</a>
+                </li>
+              </ul>
+      </div>
+    </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
+      <nav class="wy-nav-top" role="navigation" aria-label="Mobile navigation menu">
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../..">AI-MDE Docs</a>
+        
+      </nav>
+      <div class="wy-nav-content">
+        <div class="rst-content"><div role="navigation" aria-label="breadcrumbs navigation">
+  <ul class="wy-breadcrumbs">
+    <li><a href="../.." class="icon icon-home" aria-label="Docs"></a></li>
+      <li class="breadcrumb-item active">UI Module Definition</li>
+    <li class="wy-breadcrumbs-aside">
+          <a href="https://github.com/AI-MDE/ai-mde/edit/master/docs/design/ui-module-definition-example.md">Edit on AI-MDE/ai-mde</a>
+    </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+            <div class="section" itemprop="articleBody">
+              
+                <h1 id="ui-module-definition">UI Module Definition<a class="headerlink" href="#ui-module-definition" title="Permanent link">&para;</a></h1>
+<h2 id="purpose">Purpose<a class="headerlink" href="#purpose" title="Permanent link">&para;</a></h2>
+<p>This document defines what a <strong>UI Module</strong> is, how it differs from a page or a component, and provides a complete example that can be used as a template for future module specifications.</p>
+<hr />
+<h1 id="1-ui-terminology">1. UI terminology<a class="headerlink" href="#1-ui-terminology" title="Permanent link">&para;</a></h1>
+<h2 id="ui-domain-area">UI Domain Area<a class="headerlink" href="#ui-domain-area" title="Permanent link">&para;</a></h2>
+<p>A <strong>UI Domain Area</strong> is a large user-facing section of the application.</p>
+<p>Examples:
+- Claimant Portal
+- Claims Operations
+- Decisioning
+- Settlement
+- Admin</p>
+<p>A UI Domain Area usually contains multiple UI Modules.</p>
+<hr />
+<h2 id="ui-module">UI Module<a class="headerlink" href="#ui-module" title="Permanent link">&para;</a></h2>
+<p>A <strong>UI Module</strong> is a bounded front-end capability area organized around a coherent <strong>user goal</strong> or <strong>work area</strong>.</p>
+<p>A UI Module may contain:</p>
+<ul>
+<li>one or more pages</li>
+<li>feature-specific components</li>
+<li>local state</li>
+<li>permission/visibility rules</li>
+<li>backend interactions</li>
+<li>view models</li>
+<li>navigation entry points</li>
+</ul>
+<p>A UI Module is <strong>not</strong> defined by:</p>
+<ul>
+<li>a database table</li>
+<li>a backend entity</li>
+<li>a repository</li>
+<li>a DTO</li>
+<li>a single API endpoint</li>
+</ul>
+<p>A UI Module is usually defined by:</p>
+<ul>
+<li>actor</li>
+<li>user goal</li>
+<li>work context</li>
+<li>navigation boundary</li>
+<li>permission boundary</li>
+<li>task cohesion</li>
+</ul>
+<h3 id="short-definition">Short definition<a class="headerlink" href="#short-definition" title="Permanent link">&para;</a></h3>
+<blockquote>
+<p>A UI Module is a bounded user-facing capability area that supports one coherent work goal and may contain multiple pages, components, state, permissions, and backend dependencies.</p>
+</blockquote>
+<hr />
+<h2 id="page">Page<a class="headerlink" href="#page" title="Permanent link">&para;</a></h2>
+<p>A <strong>Page</strong> is a route-level screen inside a UI Module.</p>
+<p>A page is a specific visual screen or route context.</p>
+<p>Examples:
+- <code>ClaimSearchPage</code>
+- <code>ClaimDetailsPage</code>
+- <code>ClaimDecisionPage</code></p>
+<p>A Page is usually narrower than a UI Module.</p>
+<hr />
+<h2 id="component">Component<a class="headerlink" href="#component" title="Permanent link">&para;</a></h2>
+<p>A <strong>Component</strong> is a reusable or feature-specific UI building block used inside a page or module.</p>
+<p>Examples:
+- <code>ClaimSummaryCard</code>
+- <code>DecisionForm</code>
+- <code>StatusBadge</code>
+- <code>AssignAgentPanel</code></p>
+<hr />
+<h2 id="recommended-hierarchy">Recommended hierarchy<a class="headerlink" href="#recommended-hierarchy" title="Permanent link">&para;</a></h2>
+<pre><code class="language-text">UI Domain Area
+  -&gt; UI Module
+      -&gt; Page
+          -&gt; Component
+</code></pre>
+<hr />
+<h1 id="2-is-a-page-a-module">2. Is a page a module?<a class="headerlink" href="#2-is-a-page-a-module" title="Permanent link">&para;</a></h1>
+<p>Usually, <strong>no</strong>.</p>
+<p>A page is normally one screen inside a module.</p>
+<p>A module is usually larger than a page and groups together:</p>
+<ul>
+<li>related screens</li>
+<li>related actions</li>
+<li>shared state</li>
+<li>shared backend interactions</li>
+<li>shared permission rules</li>
+</ul>
+<h2 id="exception">Exception<a class="headerlink" href="#exception" title="Permanent link">&para;</a></h2>
+<p>In a very small feature, a module may currently have only one page.</p>
+<p>Even then, it is still better to think of:</p>
+<ul>
+<li>module = capability</li>
+<li>page = screen</li>
+</ul>
+<p>That keeps the design scalable.</p>
+<hr />
+<h1 id="3-how-to-define-a-ui-module">3. How to define a UI Module<a class="headerlink" href="#3-how-to-define-a-ui-module" title="Permanent link">&para;</a></h1>
+<p>A UI Module should be defined by:</p>
+<ul>
+<li><strong>who uses it</strong></li>
+<li><strong>what goal it supports</strong></li>
+<li><strong>which Business Use Case Items it includes</strong></li>
+<li><strong>which screens/pages it owns</strong></li>
+<li><strong>which components it uses</strong></li>
+<li><strong>which backend capabilities it depends on</strong></li>
+<li><strong>which permissions affect it</strong></li>
+<li><strong>which state it manages</strong></li>
+<li><strong>which assumptions are being made</strong></li>
+</ul>
+<hr />
+<h1 id="4-complete-ui-module-definition-example">4. Complete UI Module definition example<a class="headerlink" href="#4-complete-ui-module-definition-example" title="Permanent link">&para;</a></h1>
+<p>Below is a full example for a module called <strong>Claim Decisioning</strong>.</p>
+<hr />
+<h2 id="ui-module-spec-claim-decisioning">UI Module Spec: Claim Decisioning<a class="headerlink" href="#ui-module-spec-claim-decisioning" title="Permanent link">&para;</a></h2>
+<h3 id="identity">Identity<a class="headerlink" href="#identity" title="Permanent link">&para;</a></h3>
+<ul>
+<li><strong>Module Name</strong>: Claim Decisioning</li>
+<li><strong>Module Key</strong>: <code>claim-decisioning</code></li>
+<li><strong>UI Domain Area</strong>: Decisioning</li>
+<li><strong>Status</strong>: Draft</li>
+</ul>
+<hr />
+<h3 id="purpose_1">Purpose<a class="headerlink" href="#purpose_1" title="Permanent link">&para;</a></h3>
+<ul>
+<li><strong>Primary User Goal</strong>: allow authorized internal users to review a claim and make a decision</li>
+<li><strong>Description</strong>: this module supports the decision stage of claim handling, where a claim can be approved or denied after review</li>
+</ul>
+<hr />
+<h3 id="actors">Actors<a class="headerlink" href="#actors" title="Permanent link">&para;</a></h3>
+<ul>
+<li><strong>Primary Actors</strong>:</li>
+<li>supervisor</li>
+<li>
+<p>adjuster</p>
+</li>
+<li>
+<p><strong>Secondary Actors</strong>:</p>
+</li>
+<li>
+<p>claim agent (view-only in some cases)</p>
+</li>
+<li>
+<p><strong>Excluded Actors</strong>:</p>
+</li>
+<li>claimant portal user</li>
+<li>finance admin</li>
+</ul>
+<hr />
+<h3 id="included-business-use-case-items">Included Business Use Case Items<a class="headerlink" href="#included-business-use-case-items" title="Permanent link">&para;</a></h3>
+<ul>
+<li>View Claim</li>
+<li>Approve Claim</li>
+<li>Deny Claim</li>
+</ul>
+<h3 id="optional-related-items">Optional Related Items<a class="headerlink" href="#optional-related-items" title="Permanent link">&para;</a></h3>
+<ul>
+<li>View Claimant</li>
+<li>View Claim History</li>
+<li>View Review Notes</li>
+</ul>
+<h3 id="out-of-scope-items">Out of Scope Items<a class="headerlink" href="#out-of-scope-items" title="Permanent link">&para;</a></h3>
+<ul>
+<li>Submit Claim</li>
+<li>Assign Claim</li>
+<li>Mark Paid</li>
+<li>Close Claim</li>
+<li>Admin rule maintenance</li>
+</ul>
+<hr />
+<h3 id="owned-pages">Owned Pages<a class="headerlink" href="#owned-pages" title="Permanent link">&para;</a></h3>
+<ul>
+<li><code>ClaimDecisionPage</code></li>
+<li><code>ClaimDecisionResultPage</code> (optional)</li>
+<li><code>ClaimDecisionHistoryPage</code> (optional)</li>
+</ul>
+<h3 id="entry-page">Entry Page<a class="headerlink" href="#entry-page" title="Permanent link">&para;</a></h3>
+<ul>
+<li><code>ClaimDecisionPage</code></li>
+</ul>
+<h3 id="candidate-dialogs-panels">Candidate Dialogs / Panels<a class="headerlink" href="#candidate-dialogs-panels" title="Permanent link">&para;</a></h3>
+<ul>
+<li><code>ApproveClaimPanel</code></li>
+<li><code>DenyClaimPanel</code></li>
+<li><code>SupervisorApprovalWarningPanel</code></li>
+<li><code>ClaimSummarySidePanel</code></li>
+</ul>
+<hr />
+<h3 id="main-components">Main Components<a class="headerlink" href="#main-components" title="Permanent link">&para;</a></h3>
+<h4 id="feature-specific-components">Feature-specific components<a class="headerlink" href="#feature-specific-components" title="Permanent link">&para;</a></h4>
+<ul>
+<li><code>DecisionSummaryCard</code></li>
+<li><code>ApproveClaimForm</code></li>
+<li><code>DenyClaimForm</code></li>
+<li><code>ClaimDecisionToolbar</code></li>
+<li><code>SupervisorApprovalNotice</code></li>
+</ul>
+<h4 id="shared-components-used">Shared components used<a class="headerlink" href="#shared-components-used" title="Permanent link">&para;</a></h4>
+<ul>
+<li><code>StatusBadge</code></li>
+<li><code>MoneyDisplay</code></li>
+<li><code>DateDisplay</code></li>
+<li><code>PageHeader</code></li>
+<li><code>ConfirmDialog</code></li>
+<li><code>ErrorBanner</code></li>
+</ul>
+<hr />
+<h3 id="navigation">Navigation<a class="headerlink" href="#navigation" title="Permanent link">&para;</a></h3>
+<ul>
+<li><strong>Navigation Area</strong>: Decisioning</li>
+<li><strong>Primary Routes</strong>:</li>
+<li><code>/decision/claims/:id</code></li>
+<li>
+<p><code>/decision/claims/:id/history</code></p>
+</li>
+<li>
+<p><strong>Entry Points</strong>:</p>
+</li>
+<li>claim review queue</li>
+<li>supervisor decision queue</li>
+<li>
+<p>direct link from claim workbench</p>
+</li>
+<li>
+<p><strong>Related Modules</strong>:</p>
+</li>
+<li><code>claim-workbench</code></li>
+<li><code>claim-search</code></li>
+</ul>
+<hr />
+<h3 id="permissions-visibility">Permissions / Visibility<a class="headerlink" href="#permissions-visibility" title="Permanent link">&para;</a></h3>
+<ul>
+<li><strong>View Permission</strong>:</li>
+<li><code>claim.view</code></li>
+<li>
+<p><code>claim.decision.view</code></p>
+</li>
+<li>
+<p><strong>Action Permissions</strong>:</p>
+</li>
+<li><code>claim.approve</code></li>
+<li>
+<p><code>claim.deny</code></p>
+</li>
+<li>
+<p><strong>Conditional Visibility Rules</strong>:</p>
+</li>
+<li>approval controls shown only when claim status allows approval</li>
+<li>denial controls shown only when claim status allows denial</li>
+<li>supervisor approval notice shown when claim requires supervisor approval</li>
+<li>users without decision permission see read-only mode</li>
+</ul>
+<hr />
+<h3 id="backend-dependencies">Backend Dependencies<a class="headerlink" href="#backend-dependencies" title="Permanent link">&para;</a></h3>
+<h4 id="queries">Queries<a class="headerlink" href="#queries" title="Permanent link">&para;</a></h4>
+<ul>
+<li><code>GetClaim</code></li>
+<li><code>GetClaimant</code> (optional)</li>
+<li><code>GetClaimHistory</code> (optional)</li>
+</ul>
+<h4 id="commands">Commands<a class="headerlink" href="#commands" title="Permanent link">&para;</a></h4>
+<ul>
+<li><code>ApproveClaim</code></li>
+<li><code>DenyClaim</code></li>
+</ul>
+<h4 id="events-observed-indirectly">Events observed indirectly<a class="headerlink" href="#events-observed-indirectly" title="Permanent link">&para;</a></h4>
+<ul>
+<li><code>ClaimApproved</code></li>
+<li><code>ClaimDenied</code></li>
+</ul>
+<h4 id="apis-endpoints">APIs / endpoints<a class="headerlink" href="#apis-endpoints" title="Permanent link">&para;</a></h4>
+<ul>
+<li><code>GET /claims/:id</code></li>
+<li><code>POST /claims/:id/approve</code></li>
+<li><code>POST /claims/:id/deny</code></li>
+</ul>
+<hr />
+<h3 id="view-model">View Model<a class="headerlink" href="#view-model" title="Permanent link">&para;</a></h3>
+<ul>
+<li><strong>Primary View Model</strong>: <code>ClaimDecisionVm</code></li>
+</ul>
+<h4 id="key-displayed-fields">Key displayed fields<a class="headerlink" href="#key-displayed-fields" title="Permanent link">&para;</a></h4>
+<ul>
+<li>claim number</li>
+<li>claim status</li>
+<li>claim amount</li>
+<li>approved amount</li>
+<li>claimant name</li>
+<li>incident date</li>
+<li>assigned agent</li>
+<li>supervisor approval required flag</li>
+</ul>
+<h4 id="editable-fields">Editable fields<a class="headerlink" href="#editable-fields" title="Permanent link">&para;</a></h4>
+<ul>
+<li>approved amount (approval path)</li>
+<li>denial note / reason if supported</li>
+<li>decision comment if supported</li>
+</ul>
+<h4 id="derived-fields">Derived fields<a class="headerlink" href="#derived-fields" title="Permanent link">&para;</a></h4>
+<ul>
+<li>canApprove</li>
+<li>canDeny</li>
+<li>requiresSupervisorApproval</li>
+<li>isReadOnly</li>
+</ul>
+<hr />
+<h3 id="state-management">State Management<a class="headerlink" href="#state-management" title="Permanent link">&para;</a></h3>
+<h4 id="local-ui-state">Local UI state<a class="headerlink" href="#local-ui-state" title="Permanent link">&para;</a></h4>
+<ul>
+<li>selected decision action</li>
+<li>confirmation dialog open/closed</li>
+<li>active tab</li>
+<li>form dirty state</li>
+</ul>
+<h4 id="server-state">Server state<a class="headerlink" href="#server-state" title="Permanent link">&para;</a></h4>
+<ul>
+<li>current claim</li>
+<li>optional claim history</li>
+<li>action mutation status</li>
+</ul>
+<h4 id="concurrency-state">Concurrency state<a class="headerlink" href="#concurrency-state" title="Permanent link">&para;</a></h4>
+<ul>
+<li>current <code>versionNo</code></li>
+<li>stale-data warning after mutation conflict</li>
+</ul>
+<hr />
+<h3 id="ux-behavior">UX Behavior<a class="headerlink" href="#ux-behavior" title="Permanent link">&para;</a></h3>
+<ul>
+<li>open the page and load claim summary first</li>
+<li>show available actions based on permissions and claim status</li>
+<li>when user chooses approve:</li>
+<li>validate input</li>
+<li>confirm action</li>
+<li>submit command</li>
+<li>refresh claim details</li>
+<li>show success feedback</li>
+<li>when user chooses deny:</li>
+<li>validate input</li>
+<li>confirm action</li>
+<li>submit command</li>
+<li>refresh claim details</li>
+<li>show success feedback</li>
+</ul>
+<h4 id="success-behavior">Success behavior<a class="headerlink" href="#success-behavior" title="Permanent link">&para;</a></h4>
+<ul>
+<li>show toast/banner</li>
+<li>refresh claim summary</li>
+<li>optionally navigate to result/history state</li>
+</ul>
+<h4 id="error-behavior">Error behavior<a class="headerlink" href="#error-behavior" title="Permanent link">&para;</a></h4>
+<ul>
+<li>show business-rule error from backend</li>
+<li>show concurrency conflict and offer refresh</li>
+<li>show generic failure fallback</li>
+</ul>
+<h4 id="loading-behavior">Loading behavior<a class="headerlink" href="#loading-behavior" title="Permanent link">&para;</a></h4>
+<ul>
+<li>skeleton or loading panel while fetching claim</li>
+<li>disable action buttons during mutation</li>
+</ul>
+<h4 id="empty-invalid-state">Empty / invalid state<a class="headerlink" href="#empty-invalid-state" title="Permanent link">&para;</a></h4>
+<ul>
+<li>not found state if claim does not exist</li>
+<li>unauthorized state if actor lacks permission</li>
+</ul>
+<hr />
+<h3 id="validation">Validation<a class="headerlink" href="#validation" title="Permanent link">&para;</a></h3>
+<h4 id="client-side-validation">Client-side validation<a class="headerlink" href="#client-side-validation" title="Permanent link">&para;</a></h4>
+<ul>
+<li>approved amount required when approving</li>
+<li>approved amount must be numeric</li>
+<li>denial comment/reason required only if policy requires it</li>
+</ul>
+<h4 id="expected-server-side-enforcement">Expected server-side enforcement<a class="headerlink" href="#expected-server-side-enforcement" title="Permanent link">&para;</a></h4>
+<ul>
+<li>only allowed statuses can be approved or denied</li>
+<li>approved amount cannot exceed claim amount</li>
+<li>supervisor role required where applicable</li>
+<li>stale version rejected by concurrency checks</li>
+</ul>
+<hr />
+<h3 id="assumptions">Assumptions<a class="headerlink" href="#assumptions" title="Permanent link">&para;</a></h3>
+<ul>
+<li>claim approval and denial are part of one user work area</li>
+<li>supervisors and adjusters share enough common screen behavior to remain in one module</li>
+<li>claim history is read-only and does not require a separate module initially</li>
+<li>a single claim decision page is enough for first implementation</li>
+</ul>
+<hr />
+<h3 id="open-questions">Open Questions<a class="headerlink" href="#open-questions" title="Permanent link">&para;</a></h3>
+<ul>
+<li>should approval and denial be separate pages or one combined decision page?</li>
+<li>does denial require a reason in the business model?</li>
+<li>should claim history remain inside this module or move to a shared claim details module?</li>
+<li>do supervisors need extra controls beyond approve/deny?</li>
+</ul>
+<hr />
+<h3 id="notes">Notes<a class="headerlink" href="#notes" title="Permanent link">&para;</a></h3>
+<ul>
+<li>this module is defined by the <strong>decisioning work boundary</strong>, not by the <code>claim</code> table alone</li>
+<li>it uses claim backend capabilities, but it is a user-facing module, not a mirror of backend package structure</li>
+</ul>
+<hr />
+<h1 id="5-minimal-reusable-ui-module-template">5. Minimal reusable UI Module template<a class="headerlink" href="#5-minimal-reusable-ui-module-template" title="Permanent link">&para;</a></h1>
+<pre><code class="language-yaml">name:
+key:
+area:
+status:
+
+purpose:
+primary_user_goal:
+description:
+
+actors:
+  primary: []
+  secondary: []
+  excluded: []
+
+included_use_case_items: []
+optional_related_items: []
+out_of_scope_items: []
+
+pages: []
+routes: []
+entry_points: []
+
+permissions:
+  view: []
+  actions: []
+  conditional_visibility: []
+
+backend_dependencies:
+  queries: []
+  commands: []
+  events: []
+  apis: []
+
+main_components: []
+shared_components: []
+
+view_model:
+  primary:
+  key_fields: []
+  editable_fields: []
+  derived_fields: []
+
+state:
+  local: []
+  server: []
+  concurrency: []
+
+ux_behavior:
+  main_flow:
+  success_behavior:
+  error_behavior:
+  loading_behavior:
+  empty_state:
+
+validation:
+  client_side: []
+  expected_server_rules: []
+
+assumptions: []
+open_questions: []
+notes: []
+</code></pre>
+<hr />
+<h1 id="6-final-takeaway">6. Final takeaway<a class="headerlink" href="#6-final-takeaway" title="Permanent link">&para;</a></h1>
+<p>A UI Module is:</p>
+<ul>
+<li>larger than a page</li>
+<li>centered on a user-facing capability</li>
+<li>defined by user work, not backend tables</li>
+<li>allowed to contain multiple pages, components, permissions, and backend interactions</li>
+</ul>
+<p>A page is just one screen inside that module.</p>
+<p>That distinction is essential for generating good UI architecture.</p>
+              
+            </div>
+          </div><footer>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <!-- Copyright etc -->
+  </div>
+
+  Built with <a href="https://www.mkdocs.org/">MkDocs</a> using a <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a> provided by <a href="https://readthedocs.org">Read the Docs</a>.
+</footer>
+          
+        </div>
+      </div>
+
+    </section>
+
+  </div>
+
+  <div class="rst-versions" role="note" aria-label="Versions">
+  <span class="rst-current-version" data-toggle="rst-current-version">
+    
+    
+    
+  </span>
+</div>
+    <script src="../../js/jquery-3.6.0.min.js"></script>
+    <script>var base_url = "../..";</script>
+    <script src="../../js/theme_extra.js"></script>
+    <script src="../../js/theme.js"></script>
+      <script src="../../search/main.js"></script>
+    <script>
+        jQuery(function () {
+            SphinxRtdTheme.Navigation.enable(true);
+        });
+    </script>
+
+</body>
+</html>

@@ -34,6 +34,12 @@
     "report": {
       "from": "config.design.designComplianceReport",
       "default": "design/design-compliance-report.json"
+    },
+    "changeRequestAiResponse": {
+      "default": "project/change-requests/{request-slug}/ai/04-validate-design-compliance.md"
+    },
+    "changeRequestDocChanges": {
+      "default": "project/change-requests/{request-slug}/changes/doc-changes.md"
     }
   },
   "calls": [
@@ -47,6 +53,7 @@
   "rules": [
     "Validate BA-to-design consistency for requirements, rules, entities, and modules",
     "Validate naming and structural standards across design artifacts",
-    "Report gaps, ambiguities, and non-compliant artifacts with severity"
+    "Report gaps, ambiguities, and non-compliant artifacts with severity",
+    "In change-request mode, write command response to ai/04-validate-design-compliance.md and append any resulting documentation/design fixes to changes/doc-changes.md."
   ]
 }

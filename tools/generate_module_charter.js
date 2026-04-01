@@ -1,4 +1,7 @@
 #!/usr/bin/env node
+/**
+ * Purpose: Generates module charter documentation for module purpose, scope, and responsibilities.
+ */
 const fs = require('fs');
 const path = require('path');
 const argv = process.argv.slice(2);

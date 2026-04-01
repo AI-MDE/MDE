@@ -1,0 +1,467 @@
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" >
+<head>
+    <meta charset="utf-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" /><link rel="canonical" href="https://ai-mde.github.io/docs/ai-instructions/orchestrator/" />
+      <link rel="shortcut icon" href="../../img/favicon.ico" />
+    <title>Orchestrator Reference - AI-MDE Docs</title>
+    <link rel="stylesheet" href="../../css/theme.css" />
+    <link rel="stylesheet" href="../../css/theme_extra.css" />
+        <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.8.0/styles/github.min.css" />
+    
+      <script>
+        // Current page data
+        var mkdocs_page_name = "Orchestrator Reference";
+        var mkdocs_page_input_path = "ai-instructions\\orchestrator.md";
+        var mkdocs_page_url = "/docs/ai-instructions/orchestrator/";
+      </script>
+    
+    <!--[if lt IE 9]>
+      <script src="../../js/html5shiv.min.js"></script>
+    <![endif]-->
+      <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.8.0/highlight.min.js"></script>
+      <script>hljs.highlightAll();</script> 
+</head>
+
+<body class="wy-body-for-nav" role="document">
+
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side stickynav">
+    <div class="wy-side-scroll">
+      <div class="wy-side-nav-search">
+          <a href="../.." class="icon icon-home"> AI-MDE Docs
+        </a><div role="search">
+  <form id ="rtd-search-form" class="wy-form" action="../../search.html" method="get">
+      <input type="text" name="q" placeholder="Search docs" aria-label="Search docs" title="Type search term here" />
+  </form>
+</div>
+      </div>
+
+      <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+              <ul>
+                <li class="toctree-l1"><a class="reference internal" href="../..">Home</a>
+                </li>
+              </ul>
+              <ul>
+                <li class="toctree-l1"><a class="reference internal" href="../../help/install/">Install</a>
+                </li>
+              </ul>
+              <p class="caption"><span class="caption-text">Help</span></p>
+              <ul>
+                  <li class="toctree-l1"><a class="reference internal" href="../../help/how-to-use-mde/">How To Use MDE</a>
+                  </li>
+                  <li class="toctree-l1"><a class="reference internal" href="../../help/ai_pipeline_commands/">Pipeline Commands</a>
+                  </li>
+                  <li class="toctree-l1"><a class="reference internal" href="../../help/workspace/">Workspace</a>
+                  </li>
+                  <li class="toctree-l1"><a class="reference internal" href="../../help/methodology/">Methodology</a>
+                  </li>
+              </ul>
+              <ul>
+                <li class="toctree-l1"><a class="reference internal" href="../../lifecycle/">Lifecycle</a>
+                </li>
+              </ul>
+              <ul>
+                <li class="toctree-l1"><a class="reference internal" href="../../configuration/">Configuration</a>
+                </li>
+              </ul>
+              <p class="caption"><span class="caption-text">AI Instructions</span></p>
+              <ul>
+                  <li class="toctree-l1"><a class="reference internal" href="../">Overview</a>
+                  </li>
+                  <li class="toctree-l1"><a class="reference internal" href="../commands/">Commands</a>
+                  </li>
+                  <li class="toctree-l1"><a class="reference internal" href="../skills/">Skills</a>
+                  </li>
+              </ul>
+              <p class="caption"><span class="caption-text">Design</span></p>
+              <ul>
+                  <li class="toctree-l1"><a class="reference internal" href="../../design/system-design-process/">Process</a>
+                  </li>
+                  <li class="toctree-l1"><a class="reference internal" href="../../design/use-case-mapping/">Use-Case Mapping</a>
+                  </li>
+                  <li class="toctree-l1"><a class="reference internal" href="../../design/business-events/">Business Events</a>
+                  </li>
+                  <li class="toctree-l1"><a class="reference internal" href="../../design/business-app-layering/">App Layering</a>
+                  </li>
+              </ul>
+              <ul>
+                <li class="toctree-l1"><a class="reference internal" href="../../changes/">Changes</a>
+                </li>
+              </ul>
+      </div>
+    </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
+      <nav class="wy-nav-top" role="navigation" aria-label="Mobile navigation menu">
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../..">AI-MDE Docs</a>
+        
+      </nav>
+      <div class="wy-nav-content">
+        <div class="rst-content"><div role="navigation" aria-label="breadcrumbs navigation">
+  <ul class="wy-breadcrumbs">
+    <li><a href="../.." class="icon icon-home" aria-label="Docs"></a></li>
+      <li class="breadcrumb-item active">Orchestrator Reference</li>
+    <li class="wy-breadcrumbs-aside">
+          <a href="https://github.com/AI-MDE/ai-mde/edit/master/docs/ai-instructions/orchestrator.md">Edit on AI-MDE/ai-mde</a>
+    </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+            <div class="section" itemprop="articleBody">
+              
+                <h1 id="orchestrator-reference">Orchestrator Reference<a class="headerlink" href="#orchestrator-reference" title="Permanent link">&para;</a></h1>
+<table>
+<thead>
+<tr>
+<th>Field</th>
+<th>Value</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>file</code></td>
+<td><code>orchestrator.json</code></td>
+</tr>
+<tr>
+<td><code>name</code></td>
+<td><code>mde_orchestrator</code></td>
+</tr>
+<tr>
+<td><code>version</code></td>
+<td>1.1</td>
+</tr>
+<tr>
+<td><code>description</code></td>
+<td>Command-driven orchestrator for this workspace's AI-assisted model-driven engineering workflow.</td>
+</tr>
+</tbody>
+</table>
+<hr />
+<h2 id="significance-and-ai-adherence">Significance and AI Adherence<a class="headerlink" href="#significance-and-ai-adherence" title="Permanent link">&para;</a></h2>
+<p><code>orchestrator.json</code> is not executable code. There is no runtime engine that parses and enforces it. It is a structured instruction document designed to be read by an AI model and used to govern the AI's own behavior during a session.</p>
+<p>The chain is:</p>
+<ol>
+<li><code>CLAUDE.md</code> (or <code>AGENT.md</code>) is auto-loaded at session start — it tells the AI to read <code>orchestrator.json</code> and the command/skill registries as the source of truth.</li>
+<li>The AI reads the orchestrator into its context window.</li>
+<li>From that point forward, the AI self-governs according to those rules.</li>
+</ol>
+<p>A capable model will generally respect the phase rules, execution pipeline, and response contract, but there is no enforcement mechanism. Adherence depends entirely on the model's instruction-following fidelity. This is also the file to edit when AI behavior needs to change.</p>
+<hr />
+<h2 id="state-model">State Model<a class="headerlink" href="#state-model" title="Permanent link">&para;</a></h2>
+<p>State is persisted to <code>project-state.json</code>.</p>
+<table>
+<thead>
+<tr>
+<th>Field</th>
+<th>Type</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>current_phase</code></td>
+<td>string</td>
+</tr>
+<tr>
+<td><code>completed_commands</code></td>
+<td>string[]</td>
+</tr>
+<tr>
+<td><code>failed_commands</code></td>
+<td>string[]</td>
+</tr>
+<tr>
+<td><code>artifacts</code></td>
+<td>"object"</td>
+</tr>
+<tr>
+<td><code>last_command</code></td>
+<td>string</td>
+</tr>
+<tr>
+<td><code>last_run_at</code></td>
+<td>datetime</td>
+</tr>
+<tr>
+<td><code>recommended_next_command</code></td>
+<td>string</td>
+</tr>
+<tr>
+<td><code>next_valid_commands</code></td>
+<td><code>{ command: string, reason: string }[]</code></td>
+</tr>
+</tbody>
+</table>
+<h2 id="execution-mode">Execution Mode<a class="headerlink" href="#execution-mode" title="Permanent link">&para;</a></h2>
+<p><code>execution_mode: one_command_per_turn</code></p>
+<h2 id="interaction-policy">Interaction Policy<a class="headerlink" href="#interaction-policy" title="Permanent link">&para;</a></h2>
+<ul>
+<li>Execute exactly one command per user turn — never chain commands automatically.</li>
+<li>After a command completes, stop. Report results and <code>next_valid_commands</code>, then wait for the user.</li>
+<li>Ambiguous input like "continue" must be resolved by showing <code>next_valid_commands</code> and asking the user to pick — never infer and auto-execute.</li>
+<li>Do not infer intent to run multiple commands from vague instructions. Ask instead.</li>
+<li>The user must explicitly invoke each next command.</li>
+</ul>
+<h2 id="command-resolution">Command Resolution<a class="headerlink" href="#command-resolution" title="Permanent link">&para;</a></h2>
+<p><strong>Mode:</strong> <code>explicit_first</code></p>
+<h3 id="rules">Rules<a class="headerlink" href="#rules" title="Permanent link">&para;</a></h3>
+<ul>
+<li>If the user input matches a command label exactly, use that command.</li>
+<li>If the user input matches a canonical command name, use that command.</li>
+<li>If the user input is close to multiple commands, return ranked candidates.</li>
+<li>Never guess destructive or phase-skipping commands.</li>
+<li>Normalize user text to verb + target where possible.</li>
+</ul>
+<h3 id="examples">Examples<a class="headerlink" href="#examples" title="Permanent link">&para;</a></h3>
+<table>
+<thead>
+<tr>
+<th>User Input</th>
+<th>Resolved Command</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Perform Business Analysis</td>
+<td><code>perform_business_analysis</code></td>
+</tr>
+<tr>
+<td>Validate Requirements</td>
+<td><code>validate_requirements</code></td>
+</tr>
+<tr>
+<td>Build System Design</td>
+<td><code>build_system_design</code></td>
+</tr>
+<tr>
+<td>Generate Modules</td>
+<td><code>generate_modules</code></td>
+</tr>
+</tbody>
+</table>
+<h2 id="execution-pipeline">Execution Pipeline<a class="headerlink" href="#execution-pipeline" title="Permanent link">&para;</a></h2>
+<table>
+<thead>
+<tr>
+<th>Step</th>
+<th>Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>1. <code>resolve_command</code></td>
+<td>Map user input to a canonical command in <code>mde/ai-instructions/commands/*.json</code></td>
+</tr>
+<tr>
+<td>2. <code>load_context</code></td>
+<td>Load <code>AGENT.md</code>, orchestration registries, BA artifacts, and optional project state/configuration files</td>
+</tr>
+<tr>
+<td>3. <code>check_prerequisites</code></td>
+<td>Verify that all required artifacts for the command exist</td>
+</tr>
+<tr>
+<td>4. <code>validate_phase_rules</code></td>
+<td>Ensure the command is valid for the current phase or explicitly allowed cross-phase</td>
+</tr>
+<tr>
+<td>5. <code>select_skills_and_tools</code></td>
+<td>Read the command definition and determine which skills and tools to invoke</td>
+</tr>
+<tr>
+<td>6. <code>execute_skill_flow</code></td>
+<td>Invoke skill flows in order and let each skill call its permitted tools</td>
+</tr>
+<tr>
+<td>7. <code>persist_outputs</code></td>
+<td>Write generated or validated artifacts to the configured BA and project paths. <strong>Must complete before steps 8 and 9.</strong></td>
+</tr>
+<tr>
+<td>8. <code>update_project_state</code></td>
+<td><strong>MANDATORY.</strong> Update <code>project/project-state.json</code> — set <code>current_phase</code>, <code>last_command</code>, <code>last_run_at</code>, <code>recommended_next_command</code>, <code>next_valid_commands</code>, and <code>artifacts</code>. Create the file if it does not exist. Never skip.</td>
+</tr>
+<tr>
+<td>9. <code>append_command_log</code></td>
+<td><strong>MANDATORY.</strong> Append one entry to <code>project/logs/command-log.jsonl</code> per logging policy. Create the file if it does not exist. Never skip, even on failure or partial output.</td>
+</tr>
+<tr>
+<td>10. <code>return_result</code></td>
+<td>Return the <code>response_contract</code> payload. Do not return until steps 8 and 9 are complete.</td>
+</tr>
+</tbody>
+</table>
+<h2 id="phase-rules">Phase Rules<a class="headerlink" href="#phase-rules" title="Permanent link">&para;</a></h2>
+<p><code>exit_conditions_all</code> — every condition in the array must be satisfied before the phase is considered complete.</p>
+<h3 id="project_initiation">project_initiation<a class="headerlink" href="#project_initiation" title="Permanent link">&para;</a></h3>
+<p><strong>Allowed:</strong> <code>initiate_project</code>, <code>select_methodology</code>, <code>select_architecture</code></p>
+<p><strong>Exit conditions:</strong>
+- <code>config.project_state.state</code> exists or initialization was intentionally skipped</p>
+<h3 id="business_analysis">business_analysis<a class="headerlink" href="#business_analysis" title="Permanent link">&para;</a></h3>
+<p><strong>Allowed:</strong> <code>identify_domain</code>, <code>identify_external_references</code>, <code>perform_business_analysis</code>, <code>generate_business_functions</code>, <code>generate_use_cases</code>, <code>validate_requirements</code></p>
+<p><strong>Exit conditions:</strong>
+- <code>config.ba.requirements</code> exists
+- <code>config.ba.analysisStatus</code> exists
+- <code>config.project_state.questions</code> exists
+- <code>config.project_state.openQueue</code> exists</p>
+<h3 id="system_design">system_design<a class="headerlink" href="#system_design" title="Permanent link">&para;</a></h3>
+<p><strong>Allowed:</strong> <code>build_system_design</code>, <code>generate_ldm</code>, <code>validate_ldm_coverage</code>, <code>generate_modules</code>, <code>validate_architecture</code></p>
+<p><strong>Exit conditions:</strong>
+- <code>config.design.appArchitecture</code> exists
+- <code>config.design.moduleCatalog</code> exists
+- at least one module definition exists in <code>config.design.modules</code></p>
+<h3 id="development">development<a class="headerlink" href="#development" title="Permanent link">&para;</a></h3>
+<p><strong>Allowed:</strong> <code>generate_source_code</code>, <code>generate_sample_data</code></p>
+<p><strong>Exit conditions:</strong>
+- development artifacts exist for the target command</p>
+<h3 id="governance">governance<a class="headerlink" href="#governance" title="Permanent link">&para;</a></h3>
+<p><strong>Allowed:</strong> <code>assess_methodology</code>, <code>assess_architecture</code>, <code>identify_external_references</code>, <code>validate_traceability</code>, <code>show_phase_status</code>, <code>generate_diagrams</code>, <code>generate_documentation</code></p>
+<p><strong>Exit conditions:</strong> <em>(none)</em></p>
+<h2 id="skill-invocation-policy">Skill Invocation Policy<a class="headerlink" href="#skill-invocation-policy" title="Permanent link">&para;</a></h2>
+<ul>
+<li>A command may call one or more skills in sequence.</li>
+<li>A skill may only use tools declared in mde/ai-instructions/skills/*.json and allowed by the command.</li>
+<li>Skills must not invent missing upstream artifacts.</li>
+<li>Validation skills may report missing artifacts but must not create them unless explicitly allowed.</li>
+</ul>
+<h2 id="tool-invocation-policy">Tool Invocation Policy<a class="headerlink" href="#tool-invocation-policy" title="Permanent link">&para;</a></h2>
+<ul>
+<li>file_manager is the default tool for artifact I/O.</li>
+<li>json_validator must be used when a command produces or validates JSON artifacts.</li>
+<li>traceability_engine must be used for end-to-end trace checks.</li>
+<li>architecture_validator must be used for architecture conformance checks.</li>
+<li>No tool may write outside configured project paths.</li>
+</ul>
+<h2 id="error-handling">Error Handling<a class="headerlink" href="#error-handling" title="Permanent link">&para;</a></h2>
+<table>
+<thead>
+<tr>
+<th>Condition</th>
+<th>Action &amp; Response</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>on_missing_prerequisites</code></td>
+<td><strong>block_execution</strong> — Return missing artifacts and recommended preceding commands.</td>
+</tr>
+<tr>
+<td><code>on_validation_failure</code></td>
+<td><strong>complete_with_warnings</strong> — Return validation report and keep command status as failed or warning depending on severity.</td>
+</tr>
+<tr>
+<td><code>on_tool_failure</code></td>
+<td><strong>stop_current_command</strong> — Log tool failure, mark command failed, preserve partial outputs only if explicitly allowed.</td>
+</tr>
+<tr>
+<td><code>on_phase_mismatch</code></td>
+<td><strong>reject_or_offer_override</strong> — Explain phase mismatch and show valid commands for the current state.</td>
+</tr>
+</tbody>
+</table>
+<h2 id="response-contract">Response Contract<a class="headerlink" href="#response-contract" title="Permanent link">&para;</a></h2>
+<h3 id="required-fields">Required Fields<a class="headerlink" href="#required-fields" title="Permanent link">&para;</a></h3>
+<ul>
+<li>command</li>
+<li>status</li>
+<li>summary</li>
+<li>outputs</li>
+<li>warnings</li>
+<li>blockers</li>
+<li>next_valid_commands</li>
+</ul>
+<h3 id="status-values">Status Values<a class="headerlink" href="#status-values" title="Permanent link">&para;</a></h3>
+<ul>
+<li>success</li>
+<li>warning</li>
+<li>blocked</li>
+<li>failed</li>
+</ul>
+<h2 id="post-command-obligations">Post-Command Obligations<a class="headerlink" href="#post-command-obligations" title="Permanent link">&para;</a></h2>
+<p>These actions are <strong>required</strong> at the end of every command execution, success or failure. A command is not considered complete until both are fulfilled.</p>
+<table>
+<thead>
+<tr>
+<th>Action</th>
+<th>File</th>
+<th>Required Fields</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>update_project_state</code></td>
+<td><code>project/project-state.json</code></td>
+<td><code>current_phase</code>, <code>last_command</code>, <code>last_run_at</code>, <code>recommended_next_command</code>, <code>next_valid_commands</code>, <code>artifacts</code></td>
+</tr>
+<tr>
+<td><code>append_command_log</code></td>
+<td><code>project/logs/command-log.jsonl</code></td>
+<td><code>command</code>, <code>label</code>, <code>ai</code>, <code>ran_at</code>, <code>status</code>, <code>outputs</code></td>
+</tr>
+</tbody>
+</table>
+<h2 id="logging-policy">Logging Policy<a class="headerlink" href="#logging-policy" title="Permanent link">&para;</a></h2>
+<p>Log file: <code>project/logs/command-log.jsonl</code> (resolved from <code>config.project_state.commandLog</code>)</p>
+<ul>
+<li>After completing or failing any AI command, append one entry to the log file.</li>
+<li>If the file does not exist, create it as an empty file.</li>
+<li>Append one newline-delimited JSON line per command — never overwrite existing lines.</li>
+<li>Entry schema: <code>{ command, label, ai: true, ran_at (ISO 8601), status (success|warning|failed), cost_estimate ({ input_tokens, output_tokens } or null), outputs (array of files written) }</code></li>
+<li><code>cost_estimate</code> should be filled when token counts are available; otherwise set to <code>null</code>.</li>
+<li>Mandatory — do not skip even if the command produced warnings or partial output.</li>
+</ul>
+<h2 id="next-command-policy">Next Command Policy<a class="headerlink" href="#next-command-policy" title="Permanent link">&para;</a></h2>
+<p>The AI derives <code>next_valid_commands</code> by combining two sources:</p>
+<ol>
+<li><strong><code>phase_rules</code></strong> — each phase declares <code>allowed_commands</code> and <code>exit_conditions</code>. The AI checks which conditions are met to determine if the current phase is complete and which commands are valid.</li>
+<li><strong><code>next_command_policy</code></strong> — filters and ranks candidates from the current phase against <code>project-state.json</code> (current phase, completed commands, artifact statuses).</li>
+</ol>
+<h3 id="rules_1">Rules<a class="headerlink" href="#rules_1" title="Permanent link">&para;</a></h3>
+<ul>
+<li>Recommend only commands whose prerequisites are satisfied.</li>
+<li>Prefer commands in the current phase before cross-phase commands.</li>
+<li>Always include at least one validation or inspection command when available.</li>
+</ul>
+              
+            </div>
+          </div><footer>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <!-- Copyright etc -->
+  </div>
+
+  Built with <a href="https://www.mkdocs.org/">MkDocs</a> using a <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a> provided by <a href="https://readthedocs.org">Read the Docs</a>.
+</footer>
+          
+        </div>
+      </div>
+
+    </section>
+
+  </div>
+
+  <div class="rst-versions" role="note" aria-label="Versions">
+  <span class="rst-current-version" data-toggle="rst-current-version">
+    
+    
+    
+  </span>
+</div>
+    <script src="../../js/jquery-3.6.0.min.js"></script>
+    <script>var base_url = "../..";</script>
+    <script src="../../js/theme_extra.js"></script>
+    <script src="../../js/theme.js"></script>
+      <script src="../../search/main.js"></script>
+    <script>
+        jQuery(function () {
+            SphinxRtdTheme.Navigation.enable(true);
+        });
+    </script>
+
+</body>
+</html>

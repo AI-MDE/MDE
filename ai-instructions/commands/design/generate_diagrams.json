@@ -1,0 +1,49 @@
+{
+  "name": "generate_diagrams",
+  "label": "Generate Diagrams",
+  "phase": "governance",
+  "intent": "generate",
+  "ai": "optional",
+  "requires": {
+    "ldm": {
+      "from": "config.ba.ldmFile",
+      "default": "ba/data-model/logical-data-model.json"
+    },
+    "appArchitecture": {
+      "from": "config.design.appArchitecture",
+      "default": "design/application_architecture.json"
+    },
+    "catalog": {
+      "from": "config.design.moduleCatalog",
+      "default": "design/modules/module-catalog.json"
+    }
+  },
+  "produces": {
+    "diagrams": {
+      "to": "config.output.docs",
+      "pattern": "diagrams/*.md"
+    },
+    "moduleInteractionDiagram": {
+      "to": "config.output.docs",
+      "pattern": "diagrams/module-interaction-by-name.md"
+    },
+    "changeRequestAiResponse": {
+      "default": "project/change-requests/{request-slug}/ai/06-generate-diagrams.md"
+    },
+    "changeRequestDocChanges": {
+      "default": "project/change-requests/{request-slug}/changes/doc-changes.md"
+    }
+  },
+  "calls": [
+    "diagram_generation"
+  ],
+  "tools": [
+    "file_manager"
+  ],
+  "rules": [
+    "Produce LDM, architecture, interaction, and dataflow diagrams",
+    "Produce a dedicated module interaction diagram that shows module-to-module links using module names (not only IDs)",
+    "Keep diagrams derived from canonical artifacts",
+    "In change-request mode, write command response to ai/06-generate-diagrams.md and append generated/updated diagram files to changes/doc-changes.md."
+  ]
+}

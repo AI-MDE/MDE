@@ -52,11 +52,17 @@ Analyze mixed project inputs, derive a clean requirements baseline, maintain a s
 | `source_inventory`                          | —        |
 | `discovery_findings`                        | —        |
 | `terminology_map`                           | —        |
+| `domain_context`                            | —        |
+| `business_capability_candidates`            | —        |
+| `business_event_catalog_updates`            | —        |
+| `role_actor_stakeholder_map`                | —        |
 | `clarification_question_batch`              | json     |
 | `clarification_queue_updates`               | json     |
 | `completed_questions_archive_updates`       | json     |
 | `assumptions_register`                      | —        |
 | `conflict_register`                         | —        |
+| `traceability_matrix_updates`               | —        |
+| `change_log_updates`                        | —        |
 | `requirements_baseline_updates`             | json     |
 | `business_rules_catalog_updates`            | json     |
 | `entity_artifact_catalog_updates`           | —        |
@@ -68,9 +74,15 @@ Analyze mixed project inputs, derive a clean requirements baseline, maintain a s
 
 - Extract business goals, actors, workflows, rules, artifacts, entities, constraints, pain points, integrations, and ambiguities
 - Normalize terminology across inconsistent source material
+- Infer and record business domain context with confidence, then ask targeted domain clarification only when confidence is insufficient or domain appears mixed
+- Classify hybrid source fragments by evidence type and preserve non-BA content for downstream phases
+- Derive business capability candidates before detailed use-case elaboration
+- Distinguish business events from technical/system events and keep both classifications visible
+- Identify roles, actors, and stakeholders with traceability to source evidence
+- Record likely downstream design impact for each major BA element
 - Separate explicit facts from inference, assumptions, and unresolved issues
-- Examine user responses captured in ../../project/questions.json and use accepted answers to update BA outputs before generating new questions
-- Archive only satisfactorily answered question items in ../../project/completed-Questions.json so active questions.json contains only still-open or not-yet-accepted clarification work
+- Examine user responses captured in project/questions.json and use accepted answers to update BA outputs before generating new questions
+- Archive only satisfactorily answered question items in project/completed-Questions.json so active questions.json contains only still-open or not-yet-accepted clarification work
 - Generate the next highest-value clarification questions
 - Prefill the response field with the best default answer or answer set when confidence is sufficient
 - Allow unresolved items to remain in queue rather than forcing guesses
@@ -83,7 +95,13 @@ Analyze mixed project inputs, derive a clean requirements baseline, maintain a s
 - Use source artifacts as the primary evidence base
 - Do not assume the user can provide a formal requirements document
 - Start with discovery, not architecture
+- Apply BA progression: Domain -> Capabilities -> Use Cases -> Rules/Events/Roles/Entities -> Data Model Readiness -> Architecture Readiness
 - Extract what is explicit first
+- For hybrid documentation, classify each significant fragment as business evidence, architecture/design evidence, technical implementation evidence, sample/reference data, or ambiguous/mixed
+- Preserve non-BA artifacts for later phases instead of discarding them
+- Derive business capabilities from validated findings before refining detailed use cases
+- Classify candidate events as business events, technical/system events, user actions/tasks, process steps, or unresolved
+- Link major BA elements to downstream design impact areas (data model, architecture, workflow, integration, security, validation, UI)
 - Label each significant item as explicit, inferred, assumed, conflicting, or unresolved
 - Ask only the next highest-value questions, not an exhaustive questionnaire
 - For each question, explain why it matters and what gap it resolves
@@ -100,10 +118,11 @@ Analyze mixed project inputs, derive a clean requirements baseline, maintain a s
 - Do not fabricate requirements that are not supported by evidence or clarified by the user
 - Do not overwhelm the user with broad questionnaires
 - Do not hide uncertainty
+- Do not treat technical implementation fragments as automatically approved business requirements
 - Do not ignore populated responses in questions.json on subsequent runs
 - Do not emit a separate suggested_answers field in questions.json; use response as the default answer payload
 - Do not move questions to completed-Questions.json unless accepted is true
-- Do not set accepted to true — only the user sets accepted
+- Do not set accepted to true â€” only the user sets accepted
 - Do not keep questions with accepted: true in active questions.json; move them to completed-Questions.json
 - Do not discard unanswered questions; queue them
 
@@ -157,11 +176,14 @@ Analyze mixed project inputs, derive a clean requirements baseline, maintain a s
 
 ### Coverage Areas
 
+- business_domain_context
 - business_problem_and_goals
 - scope_and_out_of_scope
 - stakeholders_and_roles
 - business_capabilities_and_functions
 - use_cases_and_user_stories
+- business_events
+- hybrid_documentation_classification
 - current_state_process
 - pain_points_and_gaps
 - target_capabilities
@@ -186,14 +208,18 @@ Analyze mixed project inputs, derive a clean requirements baseline, maintain a s
 - Every clarification question should identify the gap it is resolving
 - Every accepted answer should update one or more BA objects explicitly
 - Every unresolved issue should remain visible in the queue or open issues register
-- Questions accepted as complete should be preserved in ../../project/completed-Questions.json rather than disappearing from traceability
+- Questions accepted as complete should be preserved in project/completed-Questions.json rather than disappearing from traceability
+- Maintain trace chain: Source artifact -> Discovery finding -> Clarification question -> User answer -> Requirement update -> BA section -> Design driver
 - When a document is moved to analyzed, preserve enough path metadata to trace findings back to the original source file
 - Do not silently overwrite prior assumptions without recording the change
 
 ## Completion Criteria
 
+- Business domain context and confidence are explicit
 - Business problem is clear enough for structured analysis
+- Business capabilities are identified and linked to use-case intent
 - Main actors and workflow are identified
+- Business events are classified as business vs technical/system where relevant
 - Key artifacts and entities are known
 - Major business rules are captured or explicitly queued
 - Core functional and non-functional requirements are at least draftable

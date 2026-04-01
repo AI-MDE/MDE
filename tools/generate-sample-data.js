@@ -1,4 +1,7 @@
 #!/usr/bin/env node
+/**
+ * Purpose: Generates deterministic sample data aligned with schema and model constraints.
+ */
 const path = require('path');
 const { ConfigurationManager } = require('./lib/config-manager');
 const argv = process.argv.slice(2);
