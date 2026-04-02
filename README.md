@@ -119,16 +119,10 @@ A Git repository holds all lifecycle artifacts — BA, design, code, tests, chan
 
 ---
 
-## Project viewer
-
-A local browser dashboard (`npm run viewer -- --root=<project>` → `http://localhost:4000`) shows phase status, artifact library, command history, open questions, and traceability.
-
----
-
 ## Install and Quick Guide
 [Install instructions](./docs/help/install.md)
 
-[How to use](./docs/help/how-to-use-mde.md)
+[getting started](./docs/help/getting-started.md)
 
 [Lifecycle](./docs/help/lifecycle.md)
 
