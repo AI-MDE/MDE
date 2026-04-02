@@ -128,6 +128,10 @@ A Git repository holds all lifecycle artifacts — BA, design, code, tests, chan
 
 [MDE glossary](./docs/help/mde-glossary.md)
 
+[To see sample applicaton](https://github.com/AI-MDE/leaveManagement)
+
+[To see sample application documentation](https://ai-mde.github.io/leaveManagement)
+
 ---
 
 ## Summary

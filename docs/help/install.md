@@ -62,6 +62,12 @@ Viewer log level: info
 ```
   open the browser @ http://localhost:4000
 
+---
+
+## Next steps
+
+→ [Getting Started](./getting-started.md)
+
 
 
 
