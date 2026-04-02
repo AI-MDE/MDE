@@ -1,6 +1,6 @@
 <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1060 560" role="img" aria-label="AI-MDE parts diagram">
   <style>
-    .bg     { fill:#020617 }
+    .bg     { fill:#0d1f35 }
     .box    { fill:#0f172a; stroke:#334155; stroke-width:2 }
     .ai     { fill:#0f172a; stroke:#38bdf8; stroke-width:2 }
     .dash   { fill:none;    stroke:#334155; stroke-width:1.5; stroke-dasharray:6 3 }
