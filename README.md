@@ -74,56 +74,20 @@ AI-MDE treats the lifecycle as a connected flow of derivation and validation:
   <img src="docs/home/lifecycle-diagram.svg" width="100%"/>
 </p>
 
-```mermaid
-flowchart LR
+### Solution Parts
 
-    subgraph AIMDE["  ai-mde  "]
-        direction TB
-        subgraph KNOW["Knowledge"]
-            direction TB
-            INSTR["AI Instructions\nai-instructions/\norchestrator · commands · skills"]
-            METH["Methodology & SE Knowhow\nmethodology/ · architecture/ · schemas/\nphase rules · layer rules · patterns"]
-        end
-        VIEWER["Viewer"]
-        SCRIPTS["Scripts"]
-    end
+1. **ai-mde** — the framework repo: AI instructions and a knowledge base of methodology, architecture rules, and SE patterns that guide every decision the AI makes
 
-    AI(["🧠  AI"])
+2. **🧠 AI** — your AI engine, Claude-code, Codex, Gemini etc, with aorchestrated reasoning engine that reads the knowledge base and generates all lifecycle artifacts
 
-    subgraph PROJECT["  project  "]
-        direction TB
-        BA["ba/\nrequirements · use-cases · glossary · analysis"]
-        DES["design/\narchitecture · LDM · modules · entities · SQL · UI"]
-        SRC["src/\ngenerated source code"]
-        TST["tests/\ntest artifacts"]
-        DOCS["docs/ · output/\ndiagrams · exports · validation reports"]
-        STATE["project/\nphase state · questions · logs · change-requests"]
+3. **project** — a Git repository holding every artifact the AI produces: requirements, design, code, tests, docs, and change records
 
-        BA --> |"drives"| DES
-        DES --> |"generates"| SRC
-        DES --> |"defines"| TST
-        SRC --> |"documented in"| DOCS
-        TST --> |"reported in"| DOCS
-        DOCS --> |"tracked in"| STATE
-    end
-
-    INSTR --> |"instructs"| AI
-    METH --> |"informs"| AI
-    AI --> |"generates"| PROJECT
-    VIEWER --> |"reads · displays"| PROJECT
-    SCRIPTS --> |"validate · setup · sync"| PROJECT
-
-    style AIMDE stroke-dasharray: 5 5
-    style PROJECT stroke-dasharray: 5 5
-```
-
-- **ai-mde** — the framework repo: AI instructions and a knowledge base of methodology, architecture rules, and SE patterns that guide every decision the AI makes
-- **🧠 AI** — orchestrated reasoning engine that reads the knowledge base and generates all lifecycle artifacts
-- **project** — a Git repository holding every artifact the AI produces: requirements, design, code, tests, docs, and change records
+<p align="center">
+  <img src="docs/home/parts-diagram.svg" width="100%"/>
+</p>
 
 > See [Tool Parts](./docs/help/tool-parts.md) for a full breakdown.
 
----
 
 ## Role of AI orchestration
 
